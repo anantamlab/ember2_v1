@@ -22,8 +22,15 @@ def provenance(**overrides):
         "model_name": "unsloth/Qwen3.5-2B",
         "model_revision": f"unsloth/Qwen3.5-2B@{COMMIT}",
         "tokenizer_revision": f"unsloth/Qwen3.5-2B@{COMMIT}",
+        "tokenizer_sha256": "1" * 64,
+        "encoder_config_sha256": "2" * 64,
+        "head_sha256": "3" * 64,
+        "decision_config": {"layout": "clef", "max_len": 16384},
+        "ember_v1_source_sha256": "4" * 64,
         "runtime_versions": {"torch": "2.8.0", "transformers": "5.2.0", "unsloth": "fake"},
+        "cuda": "12.8",
         "gpu": "NVIDIA L4 (fake)",
+        "gpu_capability": "8.9",
         "head_path": "fake.ClefDecisionModel+fake.JointSchemaHead",
         "kernel_backend": {"detected_packages": [], "executed": ["fake_kernel"], "evidence": "torch_profiler"},
         "precision": "bf16",
@@ -68,7 +75,7 @@ def encode_record(tokenizer, record, max_length=16384):
         schema += tokenizer(str(q.get("instructions") or qid)).input_ids
         options = tuple(sorted(q["criteria"]))
         for option in options:
-            schema += tokenizer(f"OPTION {option}\n").input_ids
+            schema += tokenizer(f"OPTION {option}: {q['criteria'][option]}\n").input_ids
         questions.append((qid, start, options))
     prefix = tokenizer("STATE:\n").input_ids
     suffix = tokenizer("\nDECISIONS:").input_ids
@@ -93,7 +100,9 @@ class FakeModel:
     """`decision_config` as upstream. Other attributes inject upstream misbehaviour."""
 
     def __init__(self, max_len=16384, predict_output=None, *, drop_question=False, alter_state=False,
-                 report_truncated="computed"):
+                 report_truncated="computed", mutate_source=None):
+        self.mutate_source = mutate_source  # callable(source) that edits what gets encoded
+        self.build_calls = 0
         self.decision_config = {"max_len": max_len} if max_len is not None else {}
         self.predict_output = predict_output  # callable(questions) -> raw predict() result
         self.predict_calls = 0
@@ -105,11 +114,16 @@ class FakeModel:
 class FastDecisionModel:
     @staticmethod
     def build_dataset(rows, tokenizer, model):
-        row = rows[0]
-        questions = dict(row["questions"])
+        model.build_calls += 1
+        row = copy.deepcopy(rows[0])
+        # Upstream _clef_question for a dict-criteria choice: same type/instructions/criteria.
+        questions = {str(k): {"type": q["type"], "instructions": q.get("instructions"), "criteria": q["criteria"]}
+                     for k, q in row["questions"].items()}
         if model.drop_question:
             questions = dict(list(questions.items())[1:])
         source = {"state": row["state"] + (" " if model.alter_state else ""), "questions": questions}
+        if model.mutate_source is not None:
+            model.mutate_source(source)
         max_len = model.decision_config.get("max_len", 512)  # upstream default
         record = encode_record(tokenizer, source, max_length=max_len)
         report = {"total": len(row["questions"]), "skipped": 0, "reason": None}

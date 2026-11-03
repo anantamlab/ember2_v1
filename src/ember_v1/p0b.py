@@ -26,16 +26,19 @@ passes a gate.
 from __future__ import annotations
 
 import hashlib
+import hmac
 import json
 import math
 import re
+import secrets
 import sys
 import time
+from pathlib import Path
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
 from .contract import ACTIONS
-from .dataset import build_decision_row
+from .dataset import QUESTION_STYLES, build_decision_row, question_style_of
 from .padding_gate import assess_padding_parity, validate_provenance
 from .synthetic import make_synthetic_observation
 
@@ -48,8 +51,13 @@ AUDITED_SERVE_MAX_LEN = 16384  # unsloth/models/_decision_common.py CLEF_SERVE_M
 
 PADDING_ORDERS = ("short_first", "short_last", "short_middle")
 # Stack identity that batched-forward evidence must share with the serving runtime.
-EVIDENCE_MATCH_KEYS = ("model_revision", "tokenizer_revision", "runtime_versions", "gpu", "precision",
-                       "max_seq", "token_limit", "head_path", "upstream_contract")
+EVIDENCE_MATCH_KEYS = ("model_name", "model_revision", "tokenizer_revision", "tokenizer_sha256",
+                       "encoder_config_sha256", "head_sha256", "decision_config", "ember_v1_source_sha256",
+                       "runtime_versions", "cuda", "gpu", "gpu_capability", "precision", "max_seq", "token_limit",
+                       "head_path", "upstream_contract")
+# Implementation identity that must be KNOWN (non-null) before the fast path may start.
+REQUIRED_IDENTITY_KEYS = ("model_revision", "tokenizer_sha256", "encoder_config_sha256", "head_sha256",
+                          "ember_v1_source_sha256")
 P95_MIN_SAMPLES = 20
 P99_MIN_SAMPLES = 100
 # predict() rounds each probability to 4 decimals: worst-case sum error is 5 x 5e-5.
@@ -116,6 +124,52 @@ def _upstream_contract() -> dict[str, Any]:
             "decision_sha256": decision, "decision_matches_audited": decision == AUDITED_DECISION_SHA256}
 
 
+def package_source_sha256() -> str:
+    """Identity of the ember_v1 code that encodes, serves and gates (all package .py files).
+
+    CRLF is normalized so a Windows and a Linux checkout of one commit hash the same.
+    """
+    digest = hashlib.sha256()
+    for path in sorted(Path(__file__).resolve().parent.glob("*.py")):
+        digest.update(path.name.encode("utf-8") + b"\0")
+        digest.update(path.read_bytes().replace(b"\r\n", b"\n") + b"\0")
+    return digest.hexdigest()
+
+
+def _sha256_text(text: Any) -> str | None:
+    return hashlib.sha256(text.encode("utf-8")).hexdigest() if isinstance(text, str) and text else None
+
+
+def _encoder_config_sha256(config: Any) -> str | None:
+    try:
+        return _sha256_text(config.to_json_string(use_diff=False))
+    except Exception:  # noqa: BLE001 - unknown identity stays None
+        return None
+
+
+def _head_sha256(head: Any) -> str | None:
+    """Hash of the decision-head weights (names, shapes, dtypes, bytes)."""
+    import torch
+
+    try:
+        digest = hashlib.sha256()
+        for name, tensor in sorted(head.state_dict().items()):
+            t = tensor.detach().cpu().contiguous()
+            digest.update(f"{name}|{tuple(t.shape)}|{t.dtype}".encode("utf-8"))
+            digest.update(t.view(-1).view(torch.uint8).numpy().tobytes())
+        return digest.hexdigest()
+    except Exception:  # noqa: BLE001 - unknown identity stays None
+        return None
+
+
+def _tokenizer_sha256(tokenizer: Any) -> str | None:
+    """Hash of the fast tokenizer's full serialized state (vocab, merges, added tokens)."""
+    try:
+        return _sha256_text(_tok(tokenizer).backend_tokenizer.to_str())
+    except Exception:  # noqa: BLE001 - unknown identity stays None
+        return None
+
+
 def runtime_metadata(model: Any, tokenizer: Any, model_name: str, precision: str, max_seq: int, *,
                      evidence_source: str, code_commit: str | None = None) -> dict[str, Any]:
     """Provenance for result files. Unknown values stay None; the gate rejects them."""
@@ -125,6 +179,7 @@ def runtime_metadata(model: Any, tokenizer: Any, model_name: str, precision: str
 
     config = getattr(model, "config", None) or getattr(getattr(model, "encoder", None), "config", None)
     init_kwargs = getattr(_tok(tokenizer), "init_kwargs", None) or {}
+    decision_config = getattr(model, "decision_config", None)
     gpu, capability = None, None
     if torch.cuda.is_available():
         props = torch.cuda.get_device_properties(0)
@@ -135,6 +190,12 @@ def runtime_metadata(model: Any, tokenizer: Any, model_name: str, precision: str
         "model_name": model_name,
         "model_revision": model_revision(model_name, getattr(config, "_commit_hash", None)),
         "tokenizer_revision": model_revision(model_name, init_kwargs.get("_commit_hash")),
+        "tokenizer_sha256": _tokenizer_sha256(tokenizer),
+        "encoder_config_sha256": _encoder_config_sha256(config),
+        "head_sha256": _head_sha256(head) if head is not None else None,
+        "decision_config": json.loads(json.dumps(dict(decision_config), sort_keys=True, default=str))
+        if isinstance(decision_config, Mapping) else None,
+        "ember_v1_source_sha256": package_source_sha256(),
         "runtime_versions": {p: _version(p) for p in (
             "unsloth", "unsloth_zoo", "transformers", "tokenizers", "torch", "triton", "xformers", "peft",
             "flash-linear-attention", "causal-conv1d", "bitsandbytes")},
@@ -174,8 +235,15 @@ def _pad_id(tokenizer: Any) -> int:
     return pad
 
 
+QUESTION_KEYS = frozenset(("type", "instructions", "criteria"))
+
+
 def validate_questions(questions: Any) -> dict[str, Any]:
-    """Exactly one five-action choice question per person ID. No repair."""
+    """Exactly one five-action choice question per person ID. No repair.
+
+    Only `type`, `instructions` and `criteria` are allowed: upstream `_clef_question`
+    drops any other key, so an extra key would be silently ignored, not encoded.
+    """
     if not isinstance(questions, Mapping) or not questions:
         raise ValueError("questions must be a nonempty mapping of person ID to question")
     for pid, question in questions.items():
@@ -183,10 +251,51 @@ def validate_questions(questions: Any) -> dict[str, Any]:
             raise ValueError(f"invalid person ID {pid!r}")
         if not isinstance(question, Mapping) or question.get("type") != "choice":
             raise ValueError(f"question for {pid} is not a choice question")
-        criteria = question.get("criteria")
+        if set(question) != QUESTION_KEYS:
+            raise ValueError(f"question for {pid} must have exactly the keys {sorted(QUESTION_KEYS)}")
+        if type(question["instructions"]) is not str or not question["instructions"]:
+            # An empty instruction is replaced by the ID inside encode_record.
+            raise ValueError(f"question for {pid} needs nonempty string instructions")
+        criteria = question["criteria"]
         if not isinstance(criteria, Mapping) or set(criteria) != set(ACTIONS):
             raise ValueError(f"question for {pid} must offer exactly the options {list(ACTIONS)}")
+        if any(type(text) is not str for text in criteria.values()):
+            raise ValueError(f"option descriptions for {pid} must be strings")
     return dict(questions)
+
+
+def _native_questions(questions: Mapping[str, Any]) -> dict[str, dict[str, Any]]:
+    """The request in the form `build_dataset` hands to `encode_record`.
+
+    Upstream (`_decision_common._clef_question`, audited commit): a `choice` with dict
+    criteria becomes `{"type", "instructions", "criteria"}` with the same criteria
+    mapping, keyed by `str(name)`, in request order.
+    """
+    return {str(pid): {"type": q["type"], "instructions": q["instructions"], "criteria": dict(q["criteria"])}
+            for pid, q in questions.items()}
+
+
+def _question_changes(source_questions: Any, expected: Mapping[str, Mapping[str, Any]]) -> list[str]:
+    """Exact comparison of the encoded questions with the request: IDs, order, type,
+    instructions, option IDs, option order and every option description."""
+    if not isinstance(source_questions, Mapping):
+        return ["encoded questions are not a mapping"]
+    if list(source_questions) != list(expected):
+        return [f"question IDs/order {list(source_questions)} != {list(expected)}"]
+    changes = []
+    for pid, want in expected.items():
+        got = source_questions[pid]
+        if not isinstance(got, Mapping) or set(got) != QUESTION_KEYS:
+            changes.append(f"{pid}: keys differ")
+            continue
+        for key in ("type", "instructions"):
+            if type(got[key]) is not str or got[key] != want[key]:
+                changes.append(f"{pid}: {key} differs")
+        criteria = got["criteria"]
+        if not isinstance(criteria, Mapping) or list(criteria.items()) != list(want["criteria"].items()) or any(
+                type(text) is not str for text in criteria.values()):
+            changes.append(f"{pid}: options or option descriptions differ")
+    return changes
 
 
 def inference_row(request: Mapping[str, Any]) -> dict[str, Any]:
@@ -205,6 +314,27 @@ def _row_digest(row: Mapping[str, Any]) -> str:
     # Question order changes the encoding, so keep it (sort_keys sorts only inner dicts).
     payload = json.dumps([row["state"], list(row["questions"].items())], sort_keys=True, ensure_ascii=False)
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+# Per-process key: evidence is reusable only inside the process whose encode_one made it.
+# A dict typed by a caller (status="OK", truncated=False, matching digest) has no valid seal.
+_EVIDENCE_KEY = secrets.token_bytes(32)
+
+
+def _seal_of(evidence: Mapping[str, Any]) -> str:
+    body = {k: v for k, v in evidence.items() if k != "seal"}
+    payload = json.dumps(body, sort_keys=True, default=repr, ensure_ascii=False).encode("utf-8")
+    return hmac.new(_EVIDENCE_KEY, payload, hashlib.sha256).hexdigest()
+
+
+def _sealed(evidence: dict[str, Any]) -> dict[str, Any]:
+    return {**evidence, "seal": _seal_of(evidence)}
+
+
+def _check_seal(evidence: Any) -> None:
+    if not isinstance(evidence, Mapping) or not isinstance(evidence.get("seal"), str) or not hmac.compare_digest(
+            evidence["seal"], _seal_of(evidence)):
+        raise ValueError("encoding evidence was not produced by encode_one in this process (or was modified)")
 
 
 def _clef_encoder() -> tuple[Callable[..., Any] | None, str]:
@@ -272,11 +402,13 @@ def encode_one(row: Mapping[str, Any], tokenizer: Any, model: Any) -> tuple[Any,
 
     questions = validate_questions(row.get("questions"))
     digest = _row_digest(row)
+    expected = _native_questions(questions)
     encode_record, contract = _clef_encoder()
     items, report = FastDecisionModel.build_dataset([dict(row)], tokenizer, model)
     report = dict(report)
     if report.get("skipped") or len(items) != 1:
-        return None, {"status": "FAIL_ENCODE_SKIPPED", "truncated": None, "report": report, "row_sha256": digest}
+        return None, _sealed({"status": "FAIL_ENCODE_SKIPPED", "truncated": None, "report": report,
+                              "row_sha256": digest})
     item, record, limit = items[0], _record(items[0]), _token_limit(model)
     source = item.get("source") if isinstance(item, Mapping) else None
     reasons = [r for r, bad in (
@@ -287,16 +419,23 @@ def encode_one(row: Mapping[str, Any], tokenizer: Any, model: Any) -> tuple[Any,
         ("build_dataset changed the state text",
          isinstance(source, Mapping) and source.get("state") != row["state"]),
     ) if bad]
-    if not reasons:
-        try:
-            reference = encode_record(_tok(tokenizer), dict(source), max_length=sys.maxsize)
-        except Exception as exc:  # noqa: BLE001 - no reference means no proof
-            reasons.append(f"reference encoding failed: {type(exc).__name__}: {exc}"[:300])
     if reasons:
-        return None, {"status": "UNVERIFIED", "truncated": None, "reason": "; ".join(reasons),
-                      "report": report, "row_sha256": digest}
+        return None, _sealed({"status": "UNVERIFIED", "truncated": None, "reason": "; ".join(reasons),
+                              "report": report, "row_sha256": digest})
+    changes = _question_changes(source.get("questions"), expected)
+    if changes:
+        return None, _sealed({"status": "FAIL_QUESTION_CHANGED", "truncated": None, "report": report,
+                              "reason": "; ".join(changes)[:500], "row_sha256": digest})
+    try:
+        # Reference from the REQUEST (not from item["source"]): equal records then prove
+        # that the requested state and questions were encoded, uncut.
+        reference = encode_record(_tok(tokenizer), {"state": row["state"], "questions": expected},
+                                  max_length=sys.maxsize)
+    except Exception as exc:  # noqa: BLE001 - no reference means no proof
+        return None, _sealed({"status": "UNVERIFIED", "truncated": None, "report": report, "row_sha256": digest,
+                              "reason": f"reference encoding failed: {type(exc).__name__}: {exc}"[:300]})
     evidence = {**encoding_evidence(record, reference, questions, limit=limit, report=report), "row_sha256": digest}
-    return (record if evidence["status"] == "OK" else None), evidence
+    return (record if evidence["status"] == "OK" else None), _sealed(evidence)
 
 
 def _question_names(record: Any, questions: Mapping[str, Any]) -> list[str]:
@@ -354,16 +493,20 @@ def predict_answers(model: Any, tokenizer: Any, request: Mapping[str, Any], *,
                     evidence: Mapping[str, Any] | None = None) -> dict[str, Any]:
     """Native `predict()` behind positive preservation evidence.
 
-    Returns `answers` only when `status == "OK"`; otherwise `answers` is None and
-    `predict()` is not called. Malformed predictions raise.
+    `evidence` may be reused only if it is the unmodified result of `encode_one` in
+    this process for the same state and questions (HMAC seal + row digest);
+    otherwise this raises. Returns `answers` only when `status == "OK"`; otherwise
+    `answers` is None and `predict()` is not called. Malformed predictions raise.
     """
     from unsloth import FastDecisionModel
 
     row = inference_row(request)
     if evidence is None:
         _, evidence = encode_one(row, tokenizer, model)
-    elif evidence.get("row_sha256") != _row_digest(row):
-        raise ValueError("encoding evidence belongs to a different state/questions")
+    else:
+        _check_seal(evidence)
+        if evidence.get("row_sha256") != _row_digest(row):
+            raise ValueError("encoding evidence belongs to a different state/questions")
     evidence = dict(evidence)
     if evidence.get("status") != "OK" or evidence.get("truncated") is not False:
         return {"status": evidence.get("status") or "UNVERIFIED", "truncated": evidence.get("truncated"),
@@ -437,6 +580,14 @@ def verify_batched_forward_evidence(evidence: Any, runtime: Mapping[str, Any]) -
     if not isinstance(evidence, Mapping) or evidence.get("task") != "padding":
         raise ValueError("batched_forward evidence must be the full `padding` task result, not a verdict")
     validate_provenance(dict(runtime), require_kernel_profile=False)
+    unknown = [k for k in REQUIRED_IDENTITY_KEYS if not runtime.get(k)]
+    if unknown:
+        raise ValueError(f"serving implementation identity unknown: {unknown}; the fast path stays off")
+    if not (runtime.get("upstream_contract") or {}).get("clef_matches_audited"):
+        raise ValueError("installed Clef encoder is not the audited file; the fast path stays off")
+    style = evidence.get("question_style")
+    if style not in QUESTION_STYLES:
+        raise ValueError("padding evidence does not record a known question_style")
     docs = evidence.get("gate_inputs")
     if not isinstance(docs, Mapping) or set(docs) != set(PADDING_ORDERS):
         raise ValueError(f"padding evidence needs raw gate inputs for exactly {list(PADDING_ORDERS)}")
@@ -449,19 +600,41 @@ def verify_batched_forward_evidence(evidence: Any, runtime: Mapping[str, Any]) -
             not isinstance(e, Mapping) or e.get("status") != "OK" or e.get("truncated") is not False
             for e in encodings):
         raise ValueError("padding evidence contains unverified or truncated encodings")
-    verdicts = {}
+    verdicts, tokens, batch_sizes = {}, [], []
     for order in PADDING_ORDERS:
         verdict = assess_padding_parity(docs[order])  # raises on invalid evidence
         if verdict["status"] != "PASS":
             raise ValueError(f"padding parity FAILS for order {order}")
         meta = docs[order]["metadata"]
         diff = [k for k in EVIDENCE_MATCH_KEYS if meta.get(k) != runtime.get(k)]
+        detected = (meta.get("kernel_backend") or {}).get("detected_packages")
+        if detected != (runtime.get("kernel_backend") or {}).get("detected_packages"):
+            diff.append("kernel_backend.detected_packages")
         if diff:
             raise ValueError(f"padding evidence was measured on a different stack: {diff}")
         verdicts[order] = verdict["status"]
+        tokens += [c["input_tokens"] for c in docs[order]["cases"]]
+        batch_sizes.append(verdict["environments"])
     canonical = json.dumps(evidence, sort_keys=True, default=str).encode("utf-8")
-    return {"status": "VERIFIED", "orders": verdicts, "question_style": evidence.get("question_style"),
+    return {"status": "VERIFIED", "orders": verdicts,
+            # Only this regime was measured; decide_batch refuses anything outside it.
+            "scope": {"question_style": style, "min_input_tokens": min(tokens), "max_input_tokens": max(tokens),
+                      "max_batch_size": min(batch_sizes)},
             "evidence_sha256": hashlib.sha256(canonical).hexdigest()}
+
+
+def _check_batched_scope(scope: Mapping[str, Any], rows: Sequence[Mapping[str, Any]],
+                         encodings: Sequence[Mapping[str, Any]]) -> None:
+    """Refuse (never silently serve) requests outside the measured padding regime."""
+    if len(rows) > scope["max_batch_size"]:
+        raise RuntimeError(f"batch of {len(rows)} exceeds the {scope['max_batch_size']} environments "
+                           "the padding evidence measured")
+    for i, (row, entry) in enumerate(zip(rows, encodings)):
+        if question_style_of(row["questions"]) != scope["question_style"]:
+            raise RuntimeError(f"request {i}: question style is not the validated {scope['question_style']!r}")
+        if not scope["min_input_tokens"] <= entry["input_tokens"] <= scope["max_input_tokens"]:
+            raise RuntimeError(f"request {i}: {entry['input_tokens']} tokens outside the validated range "
+                               f"[{scope['min_input_tokens']}, {scope['max_input_tokens']}]")
 
 
 def decide_batch(model: Any, tokenizer: Any, requests: Sequence[Mapping[str, Any]], *,
@@ -469,7 +642,8 @@ def decide_batch(model: Any, tokenizer: Any, requests: Sequence[Mapping[str, Any
                  batched_evidence: Mapping[str, Any] | None = None,
                  sync: Callable[[], bool] | None = None) -> list[dict[str, Any]]:
     """Serve one Modal batch. Fails closed: any unverified request raises for the batch."""
-    if batched_forward and (not isinstance(batched_evidence, Mapping) or batched_evidence.get("status") != "VERIFIED"):
+    if batched_forward and (not isinstance(batched_evidence, Mapping) or batched_evidence.get("status") != "VERIFIED"
+                            or not isinstance(batched_evidence.get("scope"), Mapping)):
         raise RuntimeError("batched_forward needs evidence from verify_batched_forward_evidence; refusing")
     sync = sync or _sync
     rows = [inference_row(req) for req in requests]
@@ -491,6 +665,7 @@ def decide_batch(model: Any, tokenizer: Any, requests: Sequence[Mapping[str, Any
                 raise RuntimeError(f"request {i}: {entry['status']}: fail closed, no fallback action")
             records.append(record)
             encodings.append(entry)
+        _check_batched_scope(batched_evidence["scope"], rows, encodings)
         probs = batched_probabilities(model, tokenizer, records, [r["questions"] for r in rows])
         out = []
         for row, per, entry in zip(rows, probs, encodings):
@@ -581,51 +756,122 @@ def _overall(statuses: Sequence[str]) -> str:
     return "FAIL" if any(s.startswith("FAIL") for s in statuses) else "UNVERIFIED"
 
 
+def result_exit_code(result: Any) -> int:
+    """Process exit code for a task result: 0 only for an explicit PASS, else 2."""
+    return 0 if isinstance(result, Mapping) and result.get("status") == "PASS" else 2
+
+
+# Every check must be PASS for inspect to PASS; a missing check is UNVERIFIED.
+INSPECT_CHECKS = ("item_shape", "clef_encoder", "encoding", "native_predict", "batched_adapter",
+                  "adapter_agreement", "kernel_profile", "provenance")
+
+
+def inspection_status(checks: Mapping[str, str]) -> str:
+    values = [checks.get(name) for name in INSPECT_CHECKS]
+    if any(v == "FAIL" for v in values):
+        return "FAIL"
+    return "PASS" if all(v == "PASS" for v in values) else "UNVERIFIED"
+
+
+def _check_of(status: Any) -> str:
+    if status == "OK":
+        return "PASS"
+    return "FAIL" if isinstance(status, str) and status.startswith("FAIL") else "UNVERIFIED"
+
+
+def _cuda_mem_reserved_gb() -> float | None:
+    try:
+        import torch
+    except ImportError:
+        return None
+    return round(torch.cuda.memory_reserved() / 2**30, 3) if torch.cuda.is_available() else None
+
+
 # ---------------------------------------------------------------- tasks
-def task_inspect(model: Any, tokenizer: Any, question_style: str = "compact") -> dict[str, Any]:
-    """Characterize the upstream internals the harness relies on."""
+def task_inspect(model: Any, tokenizer: Any, question_style: str = "compact",
+                 metadata: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    """Check the upstream internals the harness relies on.
+
+    Returns the full report with per-check PASS/FAIL/UNVERIFIED and an overall
+    `status`. Errors are recorded, never raised, so the report survives a failure.
+    """
     import inspect
 
-    import torch
-    from unsloth import FastDecisionModel
+    checks: dict[str, str] = {}
+    errors: dict[str, str] = {}
+    info: dict[str, Any] = {"task": "inspect", "question_style": question_style, "checks": checks, "errors": errors,
+                            "required_checks": list(INSPECT_CHECKS)}
+
+    def failed(name: str, exc: Exception) -> None:
+        checks[name] = "FAIL"
+        errors[name] = f"{type(exc).__name__}: {exc}"[:500]
 
     def attrs(obj: Any) -> list[str]:
         return sorted(a for a in dir(obj) if not a.startswith("_"))[:60]
 
     row = synthetic_row(3, question_style)
-    items, report = FastDecisionModel.build_dataset([row], tokenizer, model)
-    item = items[0] if items else None
-    record = _record(item)
-    info: dict[str, Any] = {
-        "model_type": f"{type(model).__module__}.{type(model).__name__}",
-        "has_head": hasattr(model, "head"), "has_encoder": hasattr(model, "encoder"),
-        "forward_signature": str(inspect.signature(type(model).forward)) if hasattr(type(model), "forward") else None,
-        "decision_config": {k: str(v)[:100] for k, v in dict(getattr(model, "decision_config", None) or {}).items()},
-        "report": {k: str(v)[:200] for k, v in dict(report).items()},
-        "item_type": type(item).__name__ if item is not None else None,
-        "item_keys": sorted(map(str, item)) if isinstance(item, Mapping) else None,
-        "record_attrs": attrs(record) if record is not None else None,
-        "question_attrs": attrs(record.questions[0]) if record is not None and record.questions else None,
-        "upstream_contract": _upstream_contract(),
-        "clef_encoder": _clef_encoder()[1],
-    }
-    rec, evidence = encode_one(row, tokenizer, model)
-    info["encoding"] = evidence
+    info["model_type"] = f"{type(model).__module__}.{type(model).__name__}"
+    info["has_head"], info["has_encoder"] = hasattr(model, "head"), hasattr(model, "encoder")
     try:
-        raw = FastDecisionModel.predict(model, tokenizer, row["state"], row["questions"])
-        info["predict_top_keys"] = sorted(map(str, raw))[:10]
-        checked = predict_answers(model, tokenizer, row, evidence=evidence)
-        info["predict_status"] = checked["status"]
-        if rec is None or checked["status"] != "OK":
-            raise RuntimeError(f"encoding {evidence['status']}, predict {checked['status']}")
-        probs = batched_probabilities(model, tokenizer, [rec], [row["questions"]])
-        info["batched_adapter"] = "OK"
-        info["batched_vs_predict_argmax_equal"] = all(
-            _argmax(p) == checked["answers"][pid]["answer"] for pid, p in probs[0].items())
-        info["kernels"] = _profile_kernels(lambda: batched_probabilities(model, tokenizer, [rec], [row["questions"]]))
-    except Exception as exc:  # report, do not hide: inspect is a characterization task
-        info["batched_adapter"] = f"FAILED: {type(exc).__name__}: {exc}"[:500]
-    info["cuda_mem_reserved_gb"] = round(torch.cuda.memory_reserved() / 2**30, 3) if torch.cuda.is_available() else None
+        info["forward_signature"] = str(inspect.signature(type(model).forward))
+    except (TypeError, ValueError, AttributeError):
+        info["forward_signature"] = None
+    info["decision_config"] = {k: str(v)[:100] for k, v in dict(getattr(model, "decision_config", None) or {}).items()}
+    try:
+        from unsloth import FastDecisionModel
+
+        items, report = FastDecisionModel.build_dataset([row], tokenizer, model)
+        item = items[0] if len(items) == 1 else None
+        record = _record(item)
+        info.update(report={k: str(v)[:200] for k, v in dict(report).items()},
+                    item_type=type(item).__name__ if item is not None else None,
+                    item_keys=sorted(map(str, item)) if isinstance(item, Mapping) else None,
+                    record_attrs=attrs(record) if record is not None else None,
+                    question_attrs=attrs(record.questions[0]) if record is not None and record.questions else None)
+        checks["item_shape"] = "PASS" if record is not None and isinstance(item.get("source"), Mapping) else "FAIL"
+    except Exception as exc:  # noqa: BLE001 - recorded in the report
+        failed("item_shape", exc)
+    info["upstream_contract"] = _upstream_contract()
+    encoder, info["clef_encoder"] = _clef_encoder()
+    checks["clef_encoder"] = "PASS" if encoder is not None else "FAIL"
+
+    rec, evidence, checked = None, None, None
+    try:
+        rec, evidence = encode_one(row, tokenizer, model)
+        info["encoding"] = evidence
+        checks["encoding"] = _check_of(evidence["status"])
+    except Exception as exc:  # noqa: BLE001
+        failed("encoding", exc)
+    if evidence is not None:
+        try:
+            checked = predict_answers(model, tokenizer, row, evidence=evidence)
+            info["predict_status"] = checked["status"]
+            checks["native_predict"] = _check_of(checked["status"])
+        except Exception as exc:  # noqa: BLE001 - malformed native output is a FAIL
+            failed("native_predict", exc)
+    if rec is not None and checked is not None and checked["status"] == "OK":
+        try:
+            probs = batched_probabilities(model, tokenizer, [rec], [row["questions"]])
+            checks["batched_adapter"] = "PASS"
+            equal = all(_argmax(p) == checked["answers"][pid]["answer"] for pid, p in probs[0].items())
+            info["batched_vs_predict_argmax_equal"] = equal
+            checks["adapter_agreement"] = "PASS" if equal else "FAIL"
+        except Exception as exc:  # noqa: BLE001
+            failed("batched_adapter", exc)
+        if checks.get("batched_adapter") == "PASS":
+            info["kernels"] = _profile_kernels(
+                lambda: batched_probabilities(model, tokenizer, [rec], [row["questions"]]))
+            checks["kernel_profile"] = "PASS" if info["kernels"]["evidence"] == "torch_profiler" else "UNVERIFIED"
+    if metadata is None:
+        checks["provenance"] = "UNVERIFIED"
+    else:
+        try:
+            info["provenance_gaps"] = validate_provenance(dict(metadata), require_kernel_profile=False)
+            checks["provenance"] = "PASS"
+        except ValueError as exc:
+            failed("provenance", exc)
+    info["cuda_mem_reserved_gb"] = _cuda_mem_reserved_gb()
+    info["status"] = inspection_status(checks)
     return info
 
 
@@ -699,6 +945,12 @@ def task_padding(model: Any, tokenizer: Any, ns: Sequence[int], question_style: 
             "encodings": enc, "adapter_agreement_with_predict": agreement, "gate_inputs": docs}
 
 
+def throughput_status(results: Sequence[Mapping[str, Any]]) -> str:
+    """PASS = at least one measured batch; OOM only as the recorded capacity limit."""
+    statuses = [r.get("status") for r in results]
+    return "PASS" if "OK" in statuses and set(statuses) <= {"OK", "OOM"} else "FAIL"
+
+
 def task_throughput(model: Any, tokenizer: Any, batch_sizes: Sequence[int], ns: Sequence[int],
                     repeats: int, question_style: str) -> dict[str, Any]:
     """Real cross-environment GPU batching: one forward per batch of pre-encoded states."""
@@ -730,5 +982,6 @@ def task_throughput(model: Any, tokenizer: Any, batch_sizes: Sequence[int], ns: 
             "peak_reserved_gb": round(torch.cuda.max_memory_reserved() / 2**30, 3),
         })
     return {"task": "throughput", "question_style": question_style, "crowd_sizes": list(ns), "results": results,
+            "status": throughput_status(results),
             "scope": "one right-padded forward per batch on pre-encoded records; excludes tokenization, "
                      "preservation checks, Modal queueing and network. Path B is not parity-cleared by this task."}

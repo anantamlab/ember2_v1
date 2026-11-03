@@ -91,7 +91,7 @@ def test_skipped_question_fails(monkeypatch):
 def test_silently_dropped_question_fails(monkeypatch):
     fakes.install(monkeypatch)
     record, ev = p0b.encode_one(_row(), TOK, FakeModel(drop_question=True))
-    assert ev["status"] == "FAIL_QUESTION_MISMATCH" and record is None
+    assert ev["status"] == "FAIL_QUESTION_CHANGED" and record is None
 
 
 def test_report_conflict_is_not_resolved_in_our_favour(monkeypatch):
@@ -249,7 +249,7 @@ def test_batched_forward_refused_without_verified_evidence(monkeypatch, evidence
     assert not called
 
 
-RUNTIME = provenance(kernel_backend={"detected_packages": ["fla"], "executed": None, "evidence": "import_check_only"})
+RUNTIME = provenance(kernel_backend={"detected_packages": [], "executed": None, "evidence": "import_check_only"})
 
 
 def test_complete_matching_padding_evidence_is_accepted(monkeypatch):

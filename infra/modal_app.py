@@ -72,7 +72,8 @@ class P0BHarness:
     def inspect(self, question_style: str) -> dict:
         from ember_v1 import p0b
 
-        return {"metadata": self.metadata, **p0b.task_inspect(self.model, self.tokenizer, question_style)}
+        return {"metadata": self.metadata,
+                **p0b.task_inspect(self.model, self.tokenizer, question_style, metadata=self.metadata)}
 
     @modal.method()
     def smoke(self, ns: list[int], repeats: int, question_style: str) -> dict:
@@ -170,7 +171,10 @@ def main(task: str = "smoke", gpu: str = "L4", model: str = DEFAULT_MODEL, preci
         verdicts = {}
         for order, doc in result["gate_inputs"].items():
             (out / f"{tag}-{order}-input.json").write_text(json.dumps(doc, indent=2), encoding="utf-8")
-            verdicts[order] = assess_padding_parity(doc)
+            try:
+                verdicts[order] = assess_padding_parity(doc)
+            except ValueError as exc:  # invalid evidence: keep the report, never PASS
+                verdicts[order] = {"status": "INVALID", "error": str(exc)}
         result["verdicts"] = verdicts
         result["status"] = "PASS" if all(v["status"] == "PASS" for v in verdicts.values()) and all(
             a == 1.0 for a in result["adapter_agreement_with_predict"].values()) else "FAIL"
@@ -178,7 +182,10 @@ def main(task: str = "smoke", gpu: str = "L4", model: str = DEFAULT_MODEL, preci
         raise SystemExit(f"unknown task {task!r}: use inspect|smoke|padding|throughput")
     path = out / f"{tag}.json"
     path.write_text(json.dumps(result, indent=2, default=str), encoding="utf-8")
-    status = result.get("status", "SEE_FILE")
-    print(json.dumps({"task": task, "gpu": gpu, "status": status, "file": str(path)}))
-    if status not in ("PASS", "SEE_FILE"):  # FAIL and UNVERIFIED both stop the run order
-        raise SystemExit(2)
+    from ember_v1.p0b import result_exit_code
+
+    # The report is written above first, so it survives a FAIL or UNVERIFIED exit.
+    print(json.dumps({"task": task, "gpu": gpu, "status": result.get("status"), "file": str(path)}))
+    code = result_exit_code(result)  # 0 only for an explicit PASS
+    if code:
+        raise SystemExit(code)
