@@ -1,0 +1,26 @@
+# P0B GPU image inputs (issue #2). Do not install this file directly: the Modal image
+# installs the hash-locked output `p0b-requirements.lock.txt`.
+#
+# Regenerate (CPU only, no Modal):
+#   uv pip compile infra/p0b-requirements.in --python-version 3.11 \
+#     --python-platform x86_64-manylinux_2_28 --generate-hashes --no-header \
+#     -o infra/p0b-requirements.lock.txt
+#
+# Audit (docs/P0B_GPU_INSPECT.md section 2):
+# - unsloth 2026.10.11 (PyPI wheel) has the audited Clef joint_schema_model.py,
+#   decision.py, decision_from_lm.py and _decision_common.py sha256 of
+#   unslothai/unsloth@fa2a5e7. The image build re-checks them (verify-install).
+# - torch/torchvision/xformers/transformers/trl/tokenizers follow the Unsloth
+#   Qwen3.5 Decision notebook. All are inside the unsloth/unsloth_zoo ranges.
+# - torchao: the notebook asks for >=0.16.0, but 0.16.0 is built for torch 2.10 and
+#   skips its C++ extensions on torch 2.8. 0.14.0 is the last build for torch 2.8.0.
+torch==2.8.0
+torchvision==0.23.0
+xformers==0.0.32.post2
+bitsandbytes
+unsloth[huggingface]==2026.10.11
+unsloth_zoo==2026.10.11
+transformers==5.2.0
+trl==0.22.2
+tokenizers>=0.22.0,<=0.23.0
+torchao==0.14.0

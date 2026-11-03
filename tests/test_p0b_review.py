@@ -89,8 +89,11 @@ def test_unchanged_questions_still_pass(monkeypatch):
 
 
 # ------------------------------------------------------------ 2. inspect fails closed
-def _inspect(monkeypatch, *, contract_ok=True, model=None, batched=None, kernels=None, metadata="default"):
+def _inspect(monkeypatch, *, contract_ok=True, model=None, batched=None, kernels=None, metadata="default",
+             upstream=None):
     fakes.install(monkeypatch, contract_ok=contract_ok)
+    if upstream is not None:
+        monkeypatch.setattr(p0b, "_upstream_contract", lambda: upstream)
     monkeypatch.setattr(p0b, "batched_probabilities", batched or (
         lambda m, t, records, qs: [{pid: a["probabilities"] for pid, a in answers_for(q).items()} for q in qs]))
     monkeypatch.setattr(p0b, "_profile_kernels",
@@ -120,6 +123,10 @@ def _raise(*args):
     ("bad_provenance", "FAIL", "provenance"),
     ("no_provenance", "UNVERIFIED", "provenance"),
     ("profiler_failed", "UNVERIFIED", "kernel_profile"),
+    ("upstream_drift", "UNVERIFIED", "upstream_contract"),
+    ("forward_signature_drift", "FAIL", "decision_head"),
+    ("no_head", "FAIL", "decision_head"),
+    ("other_model_commit", "FAIL", "model_pin"),
 ])
 def test_failed_inspect_is_never_pass_and_keeps_its_report(monkeypatch, case, status, failed_check):
     kwargs = {}
@@ -141,6 +148,20 @@ def test_failed_inspect_is_never_pass_and_keeps_its_report(monkeypatch, case, st
         kwargs["metadata"] = None
     elif case == "profiler_failed":
         kwargs["kernels"] = {"executed": None, "evidence": "profiler_failed: RuntimeError"}
+    elif case == "upstream_drift":
+        kwargs["upstream"] = {**fakes.audited_contract(), "decision_from_lm_matches_audited": False,
+                              "all_match_audited": False}
+    elif case == "forward_signature_drift":
+        class OldForward(FakeModel):
+            def forward(self, batch):
+                return batch
+        kwargs["model"] = OldForward()
+    elif case == "no_head":
+        model = FakeModel()
+        model.head = None
+        kwargs["model"] = model
+    elif case == "other_model_commit":
+        kwargs["metadata"] = provenance(model_revision="unsloth/Qwen3.5-2B@" + "a" * 40)
     report = _inspect(monkeypatch, **kwargs)
     assert report["status"] == status and p0b.result_exit_code(report) == 2
     assert report["checks"][failed_check] == status

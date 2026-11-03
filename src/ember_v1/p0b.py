@@ -49,6 +49,63 @@ AUDITED_CLEF_REVISION = "6a3ac5fc030a3f33f7fa860a1271886b64a6606d"
 AUDITED_CLEF_SHA256 = "0e304cf7c6500e8bb59bef7e2afd2c6373f82596dfb3b57d1aa93c175e2dc3a3"
 AUDITED_DECISION_SHA256 = "784a0a36f50f82c1608b6ef53392249a585e8d16859c2ec3cfe7f4d64fbf56b0"
 AUDITED_SERVE_MAX_LEN = 16384  # unsloth/models/_decision_common.py CLEF_SERVE_MAX_LEN
+# sha256 of every upstream file on the audited encode/load/predict path. The PyPI wheel
+# unsloth==2026.10.11 has these exact bytes (checked 2026-11-03, docs/P0B_GPU_INSPECT.md).
+AUDITED_UPSTREAM_FILES = {
+    "clef": ("unsloth/_vendor/clef/joint_schema_model.py", AUDITED_CLEF_SHA256),
+    "decision": ("unsloth/models/decision.py", AUDITED_DECISION_SHA256),
+    # A plain LM (Qwen3.5-2B) loads here: fresh Clef head, seeded with random_state=3407.
+    "decision_from_lm": ("unsloth/models/decision_from_lm.py",
+                         "1236b0ec42c05687702e3ef813eaf0ae44b9280477d2ec6df2a1828754455153"),
+    "decision_common": ("unsloth/models/_decision_common.py",
+                        "6dbfab4ed887fff660cdeda7fcfdafc035566ad1da3ad5b6e91e212a7bde8f4c"),
+}
+
+# D1 backbone lock. P0B loads only this exact Hugging Face commit (HF API sha, 2026-11-03).
+PINNED_MODEL = "unsloth/Qwen3.5-2B"
+PINNED_MODEL_COMMIT = "fffbc0d8711cf87df6d1f97938c5e50ef94aadc7"
+# Exact versions the image lock installs (infra/p0b-requirements.lock.txt).
+PINNED_RUNTIME = {"unsloth": "2026.10.11", "unsloth_zoo": "2026.10.11", "torch": "2.8.0", "transformers": "5.2.0",
+                  "trl": "0.22.2", "xformers": "0.0.32.post2", "triton": "3.4.0", "torchao": "0.14.0"}
+
+# ---- GPU spend guard (infra/modal_app.py). Pure Python so CPU CI tests it without Modal.
+ALLOWED_GPUS = ("L4", "L40S")
+# Per-call limit. Modal applies it separately to container start (download + load) and to the
+# call, so one command holds the GPU for at most STARTUP_TIMEOUT_S + TASK_TIMEOUT_S[task].
+STARTUP_TIMEOUT_S = 900
+TASK_TIMEOUT_S = {"inspect": 600, "smoke": 1800, "padding": 1800, "throughput": 3600}
+# modal.com/pricing, read 2026-11-03 (GPU only; CPU and memory are billed on top).
+GPU_USD_PER_S = {"L4": 0.000222, "L40S": 0.000542}
+CPU_CORE_USD_PER_S = 0.0000131
+MEM_GIB_USD_PER_S = 0.00000222
+# Bound for the CPU/memory part of the estimate: what the container may hold while loading.
+EST_CORES, EST_MEM_GIB = 4, 32
+P0B_CAP_USD = 10.0  # HLD 5.3
+
+
+def gpu_run_plan(task: str, gpu: str, model: str, precision: str, authorize: str,
+                 code_commit: str) -> dict[str, Any]:
+    """Refuse a GPU run unless it is explicitly authorized, on the pinned model, from a clean
+    commit, and bounded. Returns the limits the Modal entrypoint applies and the worst-case cost.
+    """
+    if task not in TASK_TIMEOUT_S:
+        raise ValueError(f"unknown task {task!r}: use {'|'.join(TASK_TIMEOUT_S)}")
+    if authorize != task:
+        raise PermissionError(f"GPU spend needs explicit authorization: pass --authorize {task}")
+    if not _COMMIT.match(code_commit or ""):
+        raise ValueError("GPU runs need a clean git checkout (no uncommitted changes): results must map to a commit")
+    if gpu not in ALLOWED_GPUS:
+        raise ValueError(f"gpu must be one of {ALLOWED_GPUS}")
+    if model != PINNED_MODEL:
+        raise ValueError(f"D1 backbone lock: P0B runs only {PINNED_MODEL}")
+    if precision != "bf16":
+        raise ValueError("P0B runs bf16 first (HLD D5)")
+    worst_s = STARTUP_TIMEOUT_S + TASK_TIMEOUT_S[task]
+    per_s = GPU_USD_PER_S[gpu] + EST_CORES * CPU_CORE_USD_PER_S + EST_MEM_GIB * MEM_GIB_USD_PER_S
+    return {"task": task, "gpu": gpu, "model": PINNED_MODEL, "revision": PINNED_MODEL_COMMIT, "code_commit": code_commit,
+            "startup_timeout_s": STARTUP_TIMEOUT_S, "timeout_s": TASK_TIMEOUT_S[task], "retries": 0,
+            "max_containers": 1, "worst_case_gpu_s": worst_s, "worst_case_usd": round(worst_s * per_s, 2),
+            "phase_cap_usd": P0B_CAP_USD}
 
 PADDING_ORDERS = ("short_first", "short_last", "short_middle")
 # Stack identity that batched-forward evidence must share with the serving runtime.
@@ -73,13 +130,17 @@ LEFT_UNSUPPORTED_REASON = (
 
 
 # ---------------------------------------------------------------- loading
-def load_model(model_name: str, max_seq: int, precision: str):
-    from unsloth import FastDecisionModel
-
+def load_model(model_name: str, max_seq: int, precision: str, revision: str | None = None):
+    """`revision` (40-hex) pins the Hugging Face commit; upstream passes it to the backbone load."""
     if precision not in ("bf16", "4bit"):
         raise ValueError("precision must be bf16 or 4bit")
+    if revision is not None and not _COMMIT.match(revision):
+        raise ValueError("revision must be a 40-hex commit")
+    from unsloth import FastDecisionModel
+
     model, tokenizer = FastDecisionModel.from_pretrained(
-        model_name=model_name, max_seq_length=max_seq, load_in_4bit=precision == "4bit")
+        model_name=model_name, max_seq_length=max_seq, load_in_4bit=precision == "4bit",
+        **({"revision": revision} if revision else {}))
     FastDecisionModel.for_inference(model)
     return model, tokenizer
 
@@ -108,21 +169,46 @@ def model_revision(model_name: str, commit: Any) -> str | None:
     return f"{model_name}@{commit}" if isinstance(commit, str) and _COMMIT.match(commit) else None
 
 
+def _installed_file(relative: str) -> str | None:
+    """Path of a file of the installed `unsloth` distribution, found WITHOUT importing it.
+
+    Importing unsloth needs a GPU; this lookup also works in a CPU image build step.
+    """
+    import importlib.metadata as md
+
+    try:
+        path = md.distribution("unsloth").locate_file(relative)
+    except md.PackageNotFoundError:
+        return None
+    return str(path) if Path(str(path)).is_file() else None
+
+
 def _upstream_contract() -> dict[str, Any]:
-    import importlib.util
+    out: dict[str, Any] = {"audited_unsloth_commit": AUDITED_UNSLOTH_COMMIT,
+                           "audited_clef_revision": AUDITED_CLEF_REVISION}
+    for name, (relative, audited) in AUDITED_UPSTREAM_FILES.items():
+        digest = _sha256_file(_installed_file(relative))
+        out[f"{name}_sha256"] = digest
+        out[f"{name}_matches_audited"] = digest == audited
+    out["all_match_audited"] = all(out[f"{name}_matches_audited"] for name in AUDITED_UPSTREAM_FILES)
+    return out
 
-    def origin(name: str) -> str | None:
-        try:
-            spec = importlib.util.find_spec(name)
-        except (ImportError, ValueError):
-            return None
-        return getattr(spec, "origin", None)
 
-    clef = _sha256_file(origin("unsloth._vendor.clef.joint_schema_model"))
-    decision = _sha256_file(origin("unsloth.models.decision"))
-    return {"audited_unsloth_commit": AUDITED_UNSLOTH_COMMIT, "audited_clef_revision": AUDITED_CLEF_REVISION,
-            "clef_sha256": clef, "clef_matches_audited": clef == AUDITED_CLEF_SHA256,
-            "decision_sha256": decision, "decision_matches_audited": decision == AUDITED_DECISION_SHA256}
+def verify_install() -> dict[str, Any]:
+    """CPU check of the installed stack: audited upstream bytes and exact pinned versions.
+
+    Runs as the last Modal image build step, so a drifted install fails the build
+    before any GPU container starts. `status` is PASS only if everything matches.
+    """
+    import platform
+
+    versions = {pkg: _version(pkg) for pkg in PINNED_RUNTIME}
+    contract = _upstream_contract()
+    mismatched = sorted(pkg for pkg, want in PINNED_RUNTIME.items() if versions[pkg] != want)
+    ok = contract["all_match_audited"] and not mismatched
+    return {"task": "verify_install", "status": "PASS" if ok else "FAIL", "python": platform.python_version(),
+            "runtime_versions": versions, "pinned_runtime": dict(PINNED_RUNTIME),
+            "version_mismatches": mismatched, "upstream_contract": contract}
 
 
 def package_source_sha256() -> str:
@@ -171,8 +257,39 @@ def _tokenizer_sha256(tokenizer: Any) -> str | None:
         return None
 
 
+def _host_runtime() -> dict[str, Any]:
+    """Host facts that are not package versions. Unknown values stay None."""
+    import os
+    import platform
+    import subprocess
+
+    import torch
+
+    driver = None
+    try:
+        driver = subprocess.run(["nvidia-smi", "--query-gpu=driver_version", "--format=csv,noheader"],
+                                capture_output=True, text=True, timeout=30, check=True).stdout.strip() or None
+    except (OSError, subprocess.SubprocessError):
+        pass
+    try:
+        cudnn = torch.backends.cudnn.version()
+    except Exception:  # noqa: BLE001 - unknown stays None
+        cudnn = None
+    return {"python": platform.python_version(), "platform": platform.platform(), "nvidia_driver": driver,
+            "cudnn": cudnn, "image_lock_sha256": os.environ.get("EMBER_IMAGE_LOCK_SHA256") or None}
+
+
+def _pip_freeze() -> list[str]:
+    """Sorted `name==version` of every installed distribution (the environment lock to freeze)."""
+    import importlib.metadata as md
+
+    return sorted({f"{d.metadata['Name']}=={d.version}" for d in md.distributions() if d.metadata["Name"]},
+                  key=str.lower)
+
+
 def runtime_metadata(model: Any, tokenizer: Any, model_name: str, precision: str, max_seq: int, *,
-                     evidence_source: str, code_commit: str | None = None) -> dict[str, Any]:
+                     evidence_source: str, code_commit: str | None = None,
+                     requested_revision: str | None = None) -> dict[str, Any]:
     """Provenance for result files. Unknown values stay None; the gate rejects them."""
     import importlib.util
 
@@ -198,8 +315,8 @@ def runtime_metadata(model: Any, tokenizer: Any, model_name: str, precision: str
         if isinstance(decision_config, Mapping) else None,
         "ember_v1_source_sha256": package_source_sha256(),
         "runtime_versions": {p: _version(p) for p in (
-            "unsloth", "unsloth_zoo", "transformers", "tokenizers", "torch", "triton", "xformers", "peft",
-            "flash-linear-attention", "causal-conv1d", "bitsandbytes")},
+            "unsloth", "unsloth_zoo", "transformers", "tokenizers", "torch", "torchvision", "triton", "xformers",
+            "peft", "accelerate", "torchao", "flash-linear-attention", "causal-conv1d", "bitsandbytes")},
         "cuda": torch.version.cuda,
         "gpu": gpu,
         "gpu_capability": capability,
@@ -214,7 +331,25 @@ def runtime_metadata(model: Any, tokenizer: Any, model_name: str, precision: str
         "upstream_contract": _upstream_contract(),
         "code_commit": code_commit,
         "evidence_source": evidence_source,
+        # What was asked for; `model_revision` above is what the loaded config reports.
+        "requested_model_revision": model_revision(model_name, requested_revision),
+        "backbone": _backbone_info(model),
+        "host": _host_runtime(),
+        "pip_freeze_sha256": _sha256_text("\n".join(_pip_freeze())),
     }
+
+
+def _backbone_info(model: Any) -> dict[str, Any]:
+    encoder = getattr(model, "encoder", None)
+    dtypes: set[str] = set()
+    try:
+        dtypes = {str(p.dtype) for p in encoder.parameters()} if encoder is not None else set()
+    except Exception:  # noqa: BLE001 - unknown stays empty
+        pass
+    return {"class": f"{type(encoder).__module__}.{type(encoder).__name__}" if encoder is not None else None,
+            "param_dtypes": sorted(dtypes),
+            "unsloth_forced_float32": getattr(model, "_unsloth_forced_float32", None),
+            "unsloth_fast_backbone": getattr(model, "_unsloth_fast_backbone", None)}
 
 
 # ---------------------------------------------------------------- encoding
@@ -779,6 +914,18 @@ def _timed(fn: Callable[[], Any], repeats: int, warmup: int = 2,
     return latency_summary(times, warmup=warmup, cuda_synchronized=bool(synced), clock="time.perf_counter")
 
 
+# Name patterns of the optional DeltaNet fast kernels (HLD A5). Heuristic labels over the
+# profiled kernel names; the full name list is the evidence, not these labels.
+KERNEL_MARKERS = {"fla_gated_delta": re.compile(r"gated_delta|fused_recurrent|chunk_\w*fwd", re.I),
+                  "causal_conv1d": re.compile(r"causal_conv1d", re.I),
+                  "triton": re.compile(r"triton", re.I)}
+
+
+def kernel_markers(names: Sequence[str]) -> dict[str, list[str]]:
+    """Profiled kernel names that match each marker (at most 10 per marker)."""
+    return {label: [n for n in names if pattern.search(n)][:10] for label, pattern in KERNEL_MARKERS.items()}
+
+
 def _profile_kernels(fn: Callable[[], Any], top: int = 25) -> dict[str, Any]:
     """Device ops/kernels that actually ran, ranked by device time (torch.profiler)."""
     try:
@@ -791,7 +938,9 @@ def _profile_kernels(fn: Callable[[], Any], top: int = 25) -> dict[str, Any]:
         key = "device_time_total" if events and hasattr(events[0], "device_time_total") else "cuda_time_total"
         ran = sorted((e for e in events if getattr(e, key, 0) > 0), key=lambda e: -getattr(e, key, 0))
         names = [e.key[:120] for e in ran[:top]]
-        return {"executed": names, "evidence": "torch_profiler" if names else "torch_profiler_no_device_events"}
+        all_names = [e.key[:200] for e in ran]
+        return {"executed": names, "evidence": "torch_profiler" if names else "torch_profiler_no_device_events",
+                "device_event_count": len(all_names), "markers": kernel_markers(all_names)}
     except Exception as exc:  # noqa: BLE001 - report, never invent kernel evidence
         return {"executed": None, "evidence": f"profiler_failed: {type(exc).__name__}: {exc}"[:300]}
 
@@ -808,8 +957,12 @@ def result_exit_code(result: Any) -> int:
 
 
 # Every check must be PASS for inspect to PASS; a missing check is UNVERIFIED.
-INSPECT_CHECKS = ("item_shape", "clef_encoder", "encoding", "native_predict", "batched_adapter",
-                  "adapter_agreement", "kernel_profile", "provenance")
+INSPECT_CHECKS = ("item_shape", "clef_encoder", "upstream_contract", "decision_head", "encoding", "native_predict",
+                  "batched_adapter", "adapter_agreement", "kernel_profile", "provenance", "model_pin")
+# Audited ClefDecisionModel.forward(input_ids, attention_mask, records, **media).
+HEAD_FORWARD_PARAMS = ("input_ids", "attention_mask", "records")
+# Encoding-only probe sizes (no GPU work): records full-state preservation beyond the inspected row.
+PRESERVATION_PROBE_NS = (1, 200)
 
 
 def inspection_status(checks: Mapping[str, str]) -> str:
@@ -833,16 +986,58 @@ def _cuda_mem_reserved_gb() -> float | None:
     return round(torch.cuda.memory_reserved() / 2**30, 3) if torch.cuda.is_available() else None
 
 
+def _signature(fn: Any) -> Any:
+    import inspect
+
+    try:
+        return inspect.signature(fn)
+    except (TypeError, ValueError):
+        return None
+
+
+def head_compatibility(model: Any) -> tuple[str, dict[str, Any]]:
+    """Decision-head facts and a status: the audited forward signature and a head + encoder."""
+    head, encoder = getattr(model, "head", None), getattr(model, "encoder", None)
+    forward = _signature(getattr(type(model), "forward", None))
+    info: dict[str, Any] = {
+        "head_class": f"{type(head).__module__}.{type(head).__name__}" if head is not None else None,
+        "encoder_class": f"{type(encoder).__module__}.{type(encoder).__name__}" if encoder is not None else None,
+        "forward_signature": str(forward) if forward is not None else None,
+        "head_forward_signature": str(sig) if (sig := _signature(getattr(type(head), "forward", None))) else None,
+    }
+    try:
+        state = head.state_dict()
+        info["head_param_count"] = int(sum(t.numel() for t in state.values()))
+        info["head_param_dtypes"] = sorted({str(t.dtype) for t in state.values()})
+        info["head_state_shapes"] = {k: list(t.shape) for k, t in list(sorted(state.items()))[:40]}
+    except Exception as exc:  # noqa: BLE001 - recorded, the status below decides
+        info["head_state_error"] = f"{type(exc).__name__}: {exc}"[:200]
+    if head is None or encoder is None:
+        return "FAIL", info
+    if forward is None:
+        return "UNVERIFIED", info
+    missing = [p for p in HEAD_FORWARD_PARAMS if p not in forward.parameters]
+    info["forward_missing_params"] = missing
+    return ("FAIL" if missing else "PASS"), info
+
+
+def model_pin_status(metadata: Mapping[str, Any] | None, expected: str) -> str:
+    """PASS only if the loaded config reports the pinned model commit. Unknown never passes."""
+    if metadata is None or metadata.get("model_revision") is None:
+        return "UNVERIFIED"
+    return "PASS" if metadata.get("model_revision") == expected else "FAIL"
+
+
 # ---------------------------------------------------------------- tasks
 def task_inspect(model: Any, tokenizer: Any, question_style: str = "compact",
-                 metadata: Mapping[str, Any] | None = None) -> dict[str, Any]:
+                 metadata: Mapping[str, Any] | None = None,
+                 expected_revision: str | None = None) -> dict[str, Any]:
     """Check the upstream internals the harness relies on.
 
     Returns the full report with per-check PASS/FAIL/UNVERIFIED and an overall
     `status`. Errors are recorded, never raised, so the report survives a failure.
+    `expected_revision` defaults to the D1 lock `PINNED_MODEL@PINNED_MODEL_COMMIT`.
     """
-    import inspect
-
     checks: dict[str, str] = {}
     errors: dict[str, str] = {}
     info: dict[str, Any] = {"task": "inspect", "question_style": question_style, "checks": checks, "errors": errors,
@@ -858,10 +1053,8 @@ def task_inspect(model: Any, tokenizer: Any, question_style: str = "compact",
     row = synthetic_row(3, question_style)
     info["model_type"] = f"{type(model).__module__}.{type(model).__name__}"
     info["has_head"], info["has_encoder"] = hasattr(model, "head"), hasattr(model, "encoder")
-    try:
-        info["forward_signature"] = str(inspect.signature(type(model).forward))
-    except (TypeError, ValueError, AttributeError):
-        info["forward_signature"] = None
+    checks["decision_head"], info["decision_head"] = head_compatibility(model)
+    info["forward_signature"] = info["decision_head"]["forward_signature"]
     info["decision_config"] = {k: str(v)[:100] for k, v in dict(getattr(model, "decision_config", None) or {}).items()}
     try:
         from unsloth import FastDecisionModel
@@ -878,6 +1071,8 @@ def task_inspect(model: Any, tokenizer: Any, question_style: str = "compact",
     except Exception as exc:  # noqa: BLE001 - recorded in the report
         failed("item_shape", exc)
     info["upstream_contract"] = _upstream_contract()
+    # Every audited upstream file must be byte-identical; a drifted install is unverified, not failed.
+    checks["upstream_contract"] = "PASS" if info["upstream_contract"].get("all_match_audited") else "UNVERIFIED"
     encoder, info["clef_encoder"] = _clef_encoder()
     checks["clef_encoder"] = "PASS" if encoder is not None else "FAIL"
 
@@ -886,6 +1081,12 @@ def task_inspect(model: Any, tokenizer: Any, question_style: str = "compact",
         rec, evidence = encode_one(row, tokenizer, model)
         info["encoding"] = evidence
         checks["encoding"] = _check_of(evidence["status"])
+        if rec is not None:
+            info["record_type"] = f"{type(rec).__module__}.{type(rec).__name__}"
+            info["question_type"] = type(rec.questions[0]).__name__ if rec.questions else None
+            # Question/option association as encoded: question order and each option order.
+            info["question_options"] = [{"question_id": str(q.question_id), "option_ids": list(map(str, q.option_ids))}
+                                        for q in rec.questions]
     except Exception as exc:  # noqa: BLE001
         failed("encoding", exc)
     if evidence is not None:
@@ -905,9 +1106,13 @@ def task_inspect(model: Any, tokenizer: Any, question_style: str = "compact",
         except Exception as exc:  # noqa: BLE001
             failed("batched_adapter", exc)
         if checks.get("batched_adapter") == "PASS":
+            # Both serving paths: path A (native predict) and path B (batched adapter).
+            info["kernels_native_predict"] = _profile_kernels(
+                lambda: predict_answers(model, tokenizer, row, evidence=evidence))
             info["kernels"] = _profile_kernels(
                 lambda: batched_probabilities(model, tokenizer, [rec], [row["questions"]]))
-            checks["kernel_profile"] = "PASS" if info["kernels"]["evidence"] == "torch_profiler" else "UNVERIFIED"
+            profiled = all(info[k]["evidence"] == "torch_profiler" for k in ("kernels", "kernels_native_predict"))
+            checks["kernel_profile"] = "PASS" if profiled else "UNVERIFIED"
     if metadata is None:
         checks["provenance"] = "UNVERIFIED"
     else:
@@ -916,6 +1121,19 @@ def task_inspect(model: Any, tokenizer: Any, question_style: str = "compact",
             checks["provenance"] = "PASS"
         except ValueError as exc:
             failed("provenance", exc)
+    info["expected_model_revision"] = expected_revision or model_revision(PINNED_MODEL, PINNED_MODEL_COMMIT)
+    checks["model_pin"] = model_pin_status(metadata, info["expected_model_revision"])
+    # Encoding only (tokenizer work, no forward pass): recorded, not gating; `smoke` owns N<=200.
+    info["preservation_probe"] = []
+    for n in PRESERVATION_PROBE_NS:
+        try:
+            _, probe = encode_one(synthetic_row(n, question_style), tokenizer, model)
+            info["preservation_probe"].append({"n": n, **{k: probe.get(k) for k in (
+                "status", "truncated", "input_tokens", "full_tokens", "token_limit")}})
+        except Exception as exc:  # noqa: BLE001 - recorded only
+            info["preservation_probe"].append({"n": n, "status": "ERROR", "truncated": None,
+                                               "error": f"{type(exc).__name__}: {exc}"[:300]})
+    info["pip_freeze"] = _pip_freeze()  # the environment to freeze after a PASS (issue #2)
     info["cuda_mem_reserved_gb"] = _cuda_mem_reserved_gb()
     info["status"] = inspection_status(checks)
     return info
@@ -1031,3 +1249,18 @@ def task_throughput(model: Any, tokenizer: Any, batch_sizes: Sequence[int], ns: 
             "status": throughput_status(results),
             "scope": "one right-padded forward per batch on pre-encoded records; excludes tokenization, "
                      "preservation checks, Modal queueing and network. Path B is not parity-cleared by this task."}
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    """`python -m ember_v1.p0b verify-install`: CPU-only install check (Modal image build step)."""
+    args = list(sys.argv[1:] if argv is None else argv)
+    if args != ["verify-install"]:
+        print("usage: python -m ember_v1.p0b verify-install", file=sys.stderr)
+        return 64
+    result = verify_install()
+    print(json.dumps(result, indent=2))
+    return result_exit_code(result)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

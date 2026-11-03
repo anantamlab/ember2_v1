@@ -12,8 +12,16 @@ import types
 from dataclasses import dataclass
 
 from ember_v1.contract import ACTIONS
+from ember_v1.p0b import AUDITED_UPSTREAM_FILES, PINNED_MODEL_COMMIT
 
-COMMIT = "0123456789abcdef0123456789abcdef01234567"
+COMMIT = PINNED_MODEL_COMMIT
+
+
+def audited_contract():
+    """`_upstream_contract()` of an install whose upstream files all match the audit."""
+    out = {f"{name}_sha256": digest for name, (_, digest) in AUDITED_UPSTREAM_FILES.items()}
+    out.update({f"{name}_matches_audited": True for name in AUDITED_UPSTREAM_FILES}, all_match_audited=True)
+    return out
 
 
 def provenance(**overrides):
@@ -96,8 +104,19 @@ def answers_for(questions, top="south"):
     return {pid: {"answer": top, "probabilities": dict(probs), "choice": top} for pid in questions}
 
 
+class FakeHead:
+    def forward(self, hidden, records):
+        return hidden
+
+
 class FakeModel:
-    """`decision_config` as upstream. Other attributes inject upstream misbehaviour."""
+    """`decision_config` and `forward` signature as upstream. Other attributes inject upstream misbehaviour."""
+
+    head = FakeHead()
+    encoder = object()
+
+    def forward(self, input_ids, attention_mask, records, **media):
+        raise AssertionError("the fakes never run a forward pass")
 
     def __init__(self, max_len=16384, predict_output=None, *, drop_question=False, alter_state=False,
                  report_truncated="computed", mutate_source=None):
@@ -180,5 +199,6 @@ def install(monkeypatch, *, contract_ok=True):
     monkeypatch.setitem(sys.modules, "unsloth", module)
     if contract_ok:
         monkeypatch.setattr(p0b, "_clef_encoder", lambda: (encode_record, "MATCHES_AUDITED"))
+        monkeypatch.setattr(p0b, "_upstream_contract", audited_contract)
     else:
         monkeypatch.setattr(p0b, "_clef_encoder", lambda: (None, "UNVERIFIED: vendored Clef sha256 differs"))
