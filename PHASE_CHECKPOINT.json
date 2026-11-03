@@ -1,0 +1,40 @@
+{
+  "project": "ember_v1",
+  "phase": "P0A",
+  "status": "PASS_LOCAL",
+  "hld": "docs/HLD.md (v3.1)",
+  "checkpoints": {
+    "observation_whitelist": "implemented_and_tested",
+    "stable_person_id_mapping": "implemented_and_tested",
+    "ascii_vs_coordinate_encoding": "implemented_and_tested",
+    "question_styles_verbose_compact": "implemented_and_tested_cpu_only",
+    "unsloth_dataset_row_builder": "implemented_and_tested_with_synthetic_schema",
+    "prediction_to_action_adapter": "implemented_and_tested_with_fake_predictor",
+    "shield_ablation_arm": "implemented_and_tested_cpu_only_assumption_A4_open",
+    "raw_joint_action_diagnostics": "implemented_and_tested",
+    "synthetic_shape_1_10_50_100_200": "implemented_and_tested",
+    "padding_parity_verdict_logic": "implemented_and_tested_cpu_only",
+    "padding_gate_left_scope_exclusion": "implemented_and_tested_cpu_only",
+    "p0b_harness_schema": "tested_cpu_only_with_fakes",
+    "modal_app_definition": "imports_with_modal_1.6.3_not_run",
+    "gpu_unsloth_native_data_and_inference": "not_run",
+    "left_right_mixed_length_gpu_parity": "not_run",
+    "packed_varlen_cu_seqlens": "not_verified",
+    "environment_batching_gpu": "not_run",
+    "teacher_trajectories": "not_collected",
+    "trained_checkpoints": "none",
+    "benchmark_evaluations": "none",
+    "selected_backbone": "Qwen3.5-2B_only",
+    "data_source_registry_and_zip_ingest": "implemented_and_tested_cpu_only",
+    "source_S0_p0a_scaffold_fixtures": "ingested_synthetic_fixture_1_trace_2_decisions_not_training_eligible",
+    "s0_pipeline_smoke_training": "not_run"
+  },
+  "local_tests": "see `python -m pytest -q` output; CPU only",
+  "next_gate": "P0B: modal run infra/modal_app.py --task inspect, then smoke, padding, throughput (HLD v3 section 6.1)",
+  "limits": [
+    "No GPU run yet: every GPU-side check is unexecuted",
+    "Unsloth internals A1-A3 and A5 are unverified until `inspect` runs",
+    "No teacher source path or independent training simulator supplied",
+    "The CPU padding-parity verdict is not evidence of real CUDA/DeltaNet padding equivalence"
+  ]
+}

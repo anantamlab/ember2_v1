@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ember-v1"
+version = "0.1.0"
+description = "Phase 0: contract-safe data and decision-model feasibility tools for Qwen evacuation policies"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+probe = ["transformers>=4.50"]
+modal = ["modal==1.6.3"]
+test = ["pytest>=8"]
+
+[project.scripts]
+ember-v1 = "ember_v1.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,9 @@
+{
+  "observation_version":"1.0",
+  "step":8,
+  "map":{"width":6,"height":5,"obstacles":[[1,1],[2,1]],"exits":[{"id":"E1","position":[0,3]},{"id":"E2","position":[4,5]}]},
+  "rules":{"fire_model":"stochastic","spread_interval":2,"spread_probability":0.25,"exits_flammable":true,"enter_fire":"blocked","conflict_resolution":"lowest_id_wins","max_steps":100},
+  "people":[{"id":"P10","position":[2,3],"status":"active"},{"id":"P2","position":[2,4],"status":"active"},{"id":"P3","position":[0,3],"status":"evacuated"}],
+  "burning":[[0,0],[1,0]],
+  "allowed_actions":["stay","north","south","east","west"]
+}

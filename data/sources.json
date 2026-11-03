@@ -1,0 +1,17 @@
+{
+  "sources": [
+    {
+      "decisions": 2,
+      "groups": [
+        "p0a-scaffold-fixtures/example-independent-layout-family-A"
+      ],
+      "non_trace_json_members": 2,
+      "path": "evac-decision-p0a-padding-gate.zip",
+      "quality": "synthetic_fixture",
+      "sha256": "sha256:bb92468463714b80eeb8993cb05139764fc59cfcf77014c4c1d98a0e13157ded",
+      "source_id": "p0a-scaffold-fixtures",
+      "traces": 1,
+      "training_eligible": false
+    }
+  ]
+}
