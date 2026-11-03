@@ -12,17 +12,59 @@ Input schema: {"metadata": {...}, "cases": [{"env_id": "e1",
 
 "packed" is optional and must be a *real* varlen/cu_seqlens execution, not a
 renamed right-padded call. The harness also records kernel/packing proof.
+
+`metadata` must pass `validate_provenance` (pinned 40-hex model commit, library
+versions, GPU, precision, max_seq, token limit, head path, evidence source and
+profiled kernels). `truncated` must be exactly False: None (unverified) fails.
 """
 from __future__ import annotations
 
 import argparse
 import json
 import math
+import re
 from pathlib import Path
 from typing import Any
 
 ACTIONS = frozenset(("stay", "north", "south", "east", "west"))
 VARIANTS = frozenset(("single", "right", "left", "packed"))
+REQUIRED_LIBRARIES = ("torch", "transformers", "unsloth")
+_REVISION = re.compile(r"^.+@[0-9a-f]{40}$")
+
+
+def validate_provenance(metadata: Any, *, require_kernel_profile: bool = True) -> list[str]:
+    """Strict run provenance. Raise on absent or placeholder values.
+
+    Returns the recorded gaps that do not block a verdict but must be reported
+    (a None tokenizer revision or code commit). Import availability of a kernel
+    package is never evidence that the kernel ran.
+    """
+    if not isinstance(metadata, dict):
+        raise ValueError("missing provenance metadata")
+    revision = metadata.get("model_revision")
+    if not isinstance(revision, str) or not _REVISION.match(revision):
+        raise ValueError("model_revision must be '<model>@<40-hex commit>'; unknown revisions never pass")
+    versions = metadata.get("runtime_versions")
+    if not isinstance(versions, dict) or not all(isinstance(versions.get(k), str) and versions[k]
+                                                 for k in REQUIRED_LIBRARIES):
+        raise ValueError(f"runtime_versions must record {list(REQUIRED_LIBRARIES)}")
+    for key in ("gpu", "head_path", "evidence_source"):
+        if not isinstance(metadata.get(key), str) or not metadata[key].strip():
+            raise ValueError(f"missing provenance field {key}")
+    if metadata.get("precision") not in ("bf16", "4bit"):
+        raise ValueError("missing or unknown precision")
+    for key in ("max_seq", "token_limit"):
+        if type(metadata.get(key)) is not int or metadata[key] <= 0:
+            raise ValueError(f"missing provenance field {key}")
+    kernels = metadata.get("kernel_backend")
+    if not isinstance(kernels, dict) or not isinstance(kernels.get("detected_packages"), list):
+        raise ValueError("kernel_backend must separate detected packages from executed kernels")
+    if require_kernel_profile and (kernels.get("evidence") != "torch_profiler" or not kernels.get("executed")):
+        raise ValueError("no profiled kernel evidence; an importable package is not an executed kernel")
+    for key in ("tokenizer_revision", "code_commit"):
+        if key not in metadata:
+            raise ValueError(f"provenance field {key} is absent (record None if unknown)")
+    return [key for key in ("tokenizer_revision", "code_commit") if not metadata[key]]
 
 
 def _validate_case(case: dict[str, Any]) -> None:
@@ -62,8 +104,7 @@ def assess_padding_parity(
                for v in (max_abs_delta, max_l1_delta, confident_margin)):
         raise ValueError("invalid thresholds")
     metadata = data.get("metadata")
-    if not isinstance(metadata, dict) or not all(metadata.get(k) for k in ("model_revision", "runtime_versions", "gpu", "head_path", "kernel_backend")):
-        raise ValueError("missing model/runtime/GPU/head/kernel provenance")
+    provenance_gaps = validate_provenance(metadata)
     cases: dict[str, dict[str, dict[str, Any]]] = {}
     for case in data["cases"]:
         _validate_case(case)
@@ -126,6 +167,7 @@ def assess_padding_parity(
     return {"status": "PASS" if all(r["pass"] for r in results) else "FAIL",
             "environments": len(cases), "packed_tested": packed,
             "left_tested": not left_reason, "left_unsupported_reason": left_reason,
+            "provenance_gaps": provenance_gaps,
             "thresholds": {"max_abs_delta": max_abs_delta, "max_l1_delta": max_l1_delta,
                            "confident_margin": confident_margin}, "comparisons": results}
 

@@ -20,7 +20,7 @@ The current upstream `unsloth/_vendor/clef/joint_schema_model.py` `collate_recor
 
 ## Handoff to Modal harness
 
-Generate a JSON result file with metadata (`model_revision`, `runtime_versions`, `gpu`, `head_path`, `kernel_backend`, optional `packed_varlen_verified`), plus one case per `(env_id, variant)` with `variant ∈ {single,right,left,packed}`, `input_tokens`, `truncated: false`, and per-person normalized 5-action probabilities. Each env needs the singleton, left and right variant. Include two or more envs of differing length, recorded separately in the metadata. The checker enforces structural fidelity and score parity but cannot independently prove that upstream GPU processing, correct left-span shifts or real variable-length kernels were used. Save profiler traces/logs as separate artifacts.
+Generate a JSON result file with metadata that passes `padding_gate.validate_provenance` (`model_revision` as `<model>@<40-hex commit>`, `tokenizer_revision`, `runtime_versions`, `gpu`, `precision`, `max_seq`, `token_limit`, `head_path`, `evidence_source`, `code_commit`, and `kernel_backend` with `detected_packages` plus profiler-observed `executed` kernels; optional `packed_varlen_verified`), plus one case per `(env_id, variant)` with `variant ∈ {single,right,left,packed}`, `input_tokens`, `truncated: false`, and per-person normalized 5-action probabilities. Each env needs the singleton, left and right variant. Include two or more envs of differing length, recorded separately in the metadata. The checker enforces structural fidelity and score parity but cannot independently prove that upstream GPU processing, correct left-span shifts or real variable-length kernels were used. Save profiler traces/logs as separate artifacts.
 
 Run:
 
@@ -34,6 +34,13 @@ python -m ember_v1.padding_gate /path/to/modal-padding-results.json --output /pa
 - **`input_tokens` = unpadded valid tokens.** The gate fails closed if a variant's count differs from the singleton's (prompt rewrite or truncation).
 - **Left padding scope.** The Clef head takes `attention_mask.sum()` as the length, so left padding is unsupported. The project excludes it explicitly: the harness sets `metadata.left_unsupported_reason`. The gate then needs only `single` + `right`, reports `left_tested: false`, and fails if left results are also present.
 - **Tie-break.** Flip detection now uses the same alphabetical tie-break for the singleton and the batched top-1.
+
+## P0B-01 amendments (CPU preflight, see [P0B_PREFLIGHT.md](P0B_PREFLIGHT.md))
+
+- `truncated` must be exactly `false`, and the harness sets it only after positive preservation evidence. `null` (UNVERIFIED) fails.
+- Placeholder provenance fails: an `unknown-commit` revision, a kernel backend from import checks only, or an absent `evidence_source`.
+- `DecisionPolicy(batched_forward=True)` does not trust a verdict file. It re-runs this gate on the raw inputs of all three orders and requires the same stack.
+- Still NOT EXECUTED on a GPU.
 
 Exit code 0 means `PASS`; 2 means numeric parity `FAIL`; invalid/insufficient evidence raises a `ValueError` and is not a PASS. `PASS` here is only the **padding-equivalence subgate**: full P0B also requires model loading, no silent truncation, kernel verification, LoRA stability, throughput and resource limits.
 

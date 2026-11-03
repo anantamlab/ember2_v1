@@ -50,27 +50,26 @@ S0 (`p0a-scaffold-fixtures`) holds 1 hand-written trace (2 decisions). It is for
 
 `ember_v1` is a standalone project, not part of `anantamlab/EMBERBench`. EMBERBench stays the evaluation instrument.
 
-## P0B on Modal (**not executed yet**)
+## P0B on Modal (**NOT RUN**)
 
-Design: [HLD v3 §5](docs/HLD.md#5-modal-deployment). Logic lives in `src/ember_v1/p0b.py`; `infra/modal_app.py` runs it on Modal GPUs.
+Design: [HLD v3 §5](docs/HLD.md#5-modal-deployment). Logic lives in `src/ember_v1/p0b.py`; `infra/modal_app.py` runs it on Modal GPUs. The harness is preflight-hardened on CPU only (P0B-01). The upstream audit, open GPU-only assumptions, the full run checklist and the budget are in [docs/P0B_PREFLIGHT.md](docs/P0B_PREFLIGHT.md).
 
 ```bash
 python -m pip install -e '.[test,modal]'
 modal setup
 modal run infra/modal_app.py --task inspect                          # check Unsloth internals first
-modal run infra/modal_app.py --task smoke --question-style verbose
-modal run infra/modal_app.py --task smoke --question-style compact
+modal run infra/modal_app.py --task smoke --question-style compact --repeats 100
 modal run infra/modal_app.py --task padding --ns 1,10,50,200        # writes gate inputs + verdicts
-modal run infra/modal_app.py --task throughput --gpu L40S
-EMBER_FAST_KERNELS=1 modal run infra/modal_app.py --task inspect     # opt-in fla/causal-conv1d layer
+modal run infra/modal_app.py --task throughput --gpu L40S --repeats 100
 ```
 
-Results go to `results/` (git-ignored). Exit code 2 means a gate FAIL.
+Results go to `results/` (git-ignored). Exit code 2 means `FAIL` or `UNVERIFIED`. A row passes only with positive evidence that the whole state and every question were encoded; unknown means fail.
 
 Serving for rollouts: `modal deploy infra/modal_app.py`, then
 `DecisionAgent(modal_predictor(), question_style="compact")`. Modal batches concurrent
 `decide` calls from many simulator workers into one GPU batch. The padded single-forward path
-(`batched_forward=True`) stays off until the padding gate passes.
+(`batched_forward=True`) stays off. It starts only with `padding_evidence_path` set to a full `padding`
+result that passes the re-run gate on the same stack.
 
 A local CUDA host can run the same smoke: `python experiments/phase0b_unsloth_smoke.py`.
 
@@ -82,7 +81,7 @@ A local CUDA host can run the same smoke: `python experiments/phase0b_unsloth_sm
 
 Read [the DeltaNet/Clef padding-equivalence test spec](docs/P0B_PADDING_EQUIVALENCE.md) before writing the Modal batching harness. The Qwen3.5-2B backbone combines gated DeltaNet, causal convolution and attention; masking semantics of the entire encoder **and** Clef decision head must be verified in real GPU batches. The current upstream Clef collator right-pads; packed `cu_seqlens` support is unverified.
 
-The harness should emit actual singleton, right-padded, left-padded and (if proven supported) packed probabilities for unequal-length environments. Then run:
+The harness emits actual singleton and right-padded probabilities for unequal-length environments. Left padding is out of scope (HLD D3) and recorded as such; packed varlen is unverified. To re-check a gate input, run:
 
 ```bash
 python -m ember_v1.padding_gate results/modal-padding-results.json --output results/padding-verdict.json
@@ -92,4 +91,4 @@ The checker fails on absent IDs, truncated inputs, large score differences and h
 
 **Backbone lock:** Qwen3.5-2B only. The older HLD originally explored 0.8B/4B, but backbone selection is now frozen for this project; future changes require an explicit separate decision.
 
-**GitHub status:** not published. Push to a dedicated repository (e.g., `anantamlab/ember-v1`), not EMBERBench.
+**GitHub:** [`anantamlab/ember_v1`](https://github.com/anantamlab/ember_v1), a dedicated repository separate from EMBERBench.

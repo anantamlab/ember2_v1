@@ -16,6 +16,11 @@
     "padding_parity_verdict_logic": "implemented_and_tested_cpu_only",
     "padding_gate_left_scope_exclusion": "implemented_and_tested_cpu_only",
     "p0b_harness_schema": "tested_cpu_only_with_fakes",
+    "p0b_preflight_hardening": "implemented_and_tested_cpu_only_with_fakes (P0B-01)",
+    "p0b_upstream_contract_audit": "source_read_unsloth_fa2a5e714955ecc5ffcae555432036deeb52c37c_clef_6a3ac5fc030a3f33f7fa860a1271886b64a6606d_not_confirmed_on_installed_stack",
+    "p0b_truncation_proof": "unbounded_reference_reencode_cpu_tested_not_run_on_gpu",
+    "p0b_batched_forward_guard": "requires_recomputed_full_padding_evidence_cpu_tested",
+    "p0b_gpu_feasibility": "NOT_RUN",
     "modal_app_definition": "imports_with_modal_1.6.3_not_run",
     "gpu_unsloth_native_data_and_inference": "not_run",
     "left_right_mixed_length_gpu_parity": "not_run",
@@ -30,10 +35,12 @@
     "s0_pipeline_smoke_training": "not_run"
   },
   "local_tests": "see `python -m pytest -q` output; CPU only",
-  "next_gate": "P0B: modal run infra/modal_app.py --task inspect, then smoke, padding, throughput (HLD v3 section 6.1)",
+  "next_gate": "P0B (authorized GPU run only): checklist in docs/P0B_PREFLIGHT.md section 4; inspect, then smoke, padding, throughput (HLD v3 section 6.1)",
+  "gpu_spend_usd": 0,
   "limits": [
     "No GPU run yet: every GPU-side check is unexecuted",
-    "Unsloth internals A1-A3 and A5 are unverified until `inspect` runs",
+    "Unsloth internals A1-A3, A5 and A8 (U1-U8 in docs/P0B_PREFLIGHT.md) are unverified until `inspect` runs",
+    "The Modal image installs unsloth unpinned from PyPI; it may differ from the audited main commit",
     "No teacher source path or independent training simulator supplied",
     "The CPU padding-parity verdict is not evidence of real CUDA/DeltaNet padding equivalence"
   ]

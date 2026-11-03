@@ -15,11 +15,13 @@ Serving (CPU simulator/agent locally or in CPU containers, GPU inference here):
 Fast DeltaNet/causal-conv kernels are an opt-in image layer because
 causal-conv1d compiles from source:  EMBER_FAST_KERNELS=1 modal run ...
 Run P0B both with and without it; record which backend actually executed.
+
+Checklist, exit codes and budget: docs/P0B_PREFLIGHT.md.
 """
 # No `from __future__ import annotations`: Modal reads real class-parameter types.
 import json
 import os
-import time
+import subprocess
 from pathlib import Path
 
 import modal
@@ -54,13 +56,16 @@ class P0BHarness:
     model_name: str = modal.parameter(default=DEFAULT_MODEL)
     precision: str = modal.parameter(default="bf16")
     max_seq: int = modal.parameter(default=16384)
+    code_commit: str = modal.parameter(default="")
 
     @modal.enter()
     def load(self):
         from ember_v1 import p0b
 
         self.model, self.tokenizer = p0b.load_model(self.model_name, self.max_seq, self.precision)
-        self.metadata = p0b.runtime_metadata(self.model, self.model_name, self.precision, self.max_seq)
+        self.metadata = p0b.runtime_metadata(
+            self.model, self.tokenizer, self.model_name, self.precision, self.max_seq,
+            evidence_source="modal:P0BHarness", code_commit=self.code_commit or None)
         hf_cache.commit()
 
     @modal.method()
@@ -95,61 +100,60 @@ class DecisionPolicy:
     many simulator workers into one GPU batch (real cross-environment batching).
 
     `batched_forward=False` (default) loops the verified `predict()` path inside
-    the Modal batch. Set True ONLY after the P0B padding gate PASSes for the
-    pinned stack; the padded path then runs one forward per batch.
+    the Modal batch. `batched_forward=True` also needs `padding_evidence_path`: the
+    full `padding` task result (on the /ckpt volume). `load()` re-runs the gate on
+    its raw measurements and checks they match this exact stack; otherwise the
+    container refuses to start. A verdict file alone is not accepted.
     `model_name` may be a LoRA checkpoint dir under /ckpt (P3+, verify loading).
     """
     model_name: str = modal.parameter(default=DEFAULT_MODEL)
     precision: str = modal.parameter(default="bf16")
     max_seq: int = modal.parameter(default=16384)
     batched_forward: bool = modal.parameter(default=False)
+    padding_evidence_path: str = modal.parameter(default="")
 
     @modal.enter()
     def load(self):
         from ember_v1 import p0b
 
         self.model, self.tokenizer = p0b.load_model(self.model_name, self.max_seq, self.precision)
-        self.metadata = p0b.runtime_metadata(self.model, self.model_name, self.precision, self.max_seq)
+        self.metadata = p0b.runtime_metadata(self.model, self.tokenizer, self.model_name, self.precision,
+                                             self.max_seq, evidence_source="modal:DecisionPolicy")
+        self.batched_evidence = None
+        if self.batched_forward:
+            if not self.padding_evidence_path:
+                raise RuntimeError("batched_forward=True needs padding_evidence_path; refusing to start")
+            evidence = json.loads(Path(self.padding_evidence_path).read_text(encoding="utf-8"))
+            self.batched_evidence = p0b.verify_batched_forward_evidence(evidence, self.metadata)
 
     @modal.batched(max_batch_size=32, wait_ms=10)
     def decide(self, requests: list[dict]) -> list[dict]:
         from ember_v1 import p0b
 
-        t0 = time.perf_counter()
-        if not self.batched_forward:
-            out = []
-            for req in requests:
-                res = p0b.predict_answers(self.model, self.tokenizer, req)
-                if res["truncated"]:
-                    raise RuntimeError("input truncated: fail closed")
-                out.append({"answers": res["answers"], "path": "predict"})
-        else:
-            records = []
-            for req in requests:
-                # gold is a dummy needed only by build_dataset; it does not affect scores.
-                row = {**req, "gold": {pid: "stay" for pid in req["questions"]}}
-                record, entry = p0b.encode_one(row, self.tokenizer, self.model)
-                if record is None or entry["truncated"]:
-                    raise RuntimeError(f"encoding failed or truncated: {entry['status']}")
-                records.append(record)
-            probs = p0b.batched_probabilities(self.model, self.tokenizer, records, [r["questions"] for r in requests])
-            out = [{"answers": {pid: {"answer": min(p, key=lambda a: (-p[a], a)), "probabilities": p}
-                                for pid, p in per.items()}, "path": "batched_right_pad"} for per in probs]
-        gpu_s = time.perf_counter() - t0
-        for item in out:
-            item.update(batch_size=len(requests), server_s=gpu_s, model_revision=self.metadata["model_revision"])
-        return out
+        return p0b.decide_batch(self.model, self.tokenizer, requests, metadata=self.metadata,
+                                batched_forward=self.batched_forward, batched_evidence=self.batched_evidence)
 
 
 def _ints(text: str) -> list[int]:
     return [int(x) for x in text.split(",") if x.strip()]
 
 
+def _code_commit() -> str:
+    """Local git HEAD (+ "-dirty" for uncommitted changes); "" when git is unavailable."""
+    try:
+        head = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
+        dirty = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True, check=True).stdout
+    except (OSError, subprocess.CalledProcessError):
+        return ""
+    return head + ("-dirty" if dirty.strip() else "")
+
+
 @app.local_entrypoint()
 def main(task: str = "smoke", gpu: str = "L4", model: str = DEFAULT_MODEL, precision: str = "bf16",
          max_seq: int = 16384, question_style: str = "compact", repeats: int = 25,
          ns: str = "1,10,50,100,200", batch_sizes: str = "1,4,8,16,32,64", out_dir: str = "results"):
-    harness = P0BHarness.with_options(gpu=gpu)(model_name=model, precision=precision, max_seq=max_seq)
+    harness = P0BHarness.with_options(gpu=gpu)(model_name=model, precision=precision, max_seq=max_seq,
+                                               code_commit=_code_commit())
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     tag = f"{task}-{gpu}-{precision}-{question_style}"
@@ -174,6 +178,7 @@ def main(task: str = "smoke", gpu: str = "L4", model: str = DEFAULT_MODEL, preci
         raise SystemExit(f"unknown task {task!r}: use inspect|smoke|padding|throughput")
     path = out / f"{tag}.json"
     path.write_text(json.dumps(result, indent=2, default=str), encoding="utf-8")
-    print(json.dumps({"task": task, "gpu": gpu, "status": result.get("status", "SEE_FILE"), "file": str(path)}))
-    if result.get("status") == "FAIL":
+    status = result.get("status", "SEE_FILE")
+    print(json.dumps({"task": task, "gpu": gpu, "status": status, "file": str(path)}))
+    if status not in ("PASS", "SEE_FILE"):  # FAIL and UNVERIFIED both stop the run order
         raise SystemExit(2)
