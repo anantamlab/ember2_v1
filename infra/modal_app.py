@@ -183,7 +183,7 @@ def main(task: str = "inspect", gpu: str = "L4", model: str = DEFAULT_MODEL, pre
         plan = gpu_run_plan(task, gpu, model, precision, authorize, _code_commit())
     except (ValueError, PermissionError) as exc:
         raise SystemExit(f"refused: {exc}")
-    from ember_v1.run_report import call_remote_reported, write_json_atomic
+    from ember_v1.run_report import watch_remote_call, write_json_atomic
 
     print(json.dumps({"plan": plan}))
     harness = P0BHarness.with_options(
@@ -195,13 +195,19 @@ def main(task: str = "inspect", gpu: str = "L4", model: str = DEFAULT_MODEL, pre
     out.mkdir(parents=True, exist_ok=True)
     tag = f"{task}-{gpu}-{precision}-{question_style}"
     path = out / f"{tag}.json"
-    calls = {"inspect": lambda: harness.inspect.remote(question_style),
-             "smoke": lambda: harness.smoke.remote(_ints(ns), repeats, question_style),
-             "throughput": lambda: harness.throughput.remote(_ints(batch_sizes), _ints(ns), repeats, question_style),
-             "padding": lambda: harness.padding.remote(_ints(ns), question_style)}
-    # The container starts on this call. Load errors, remote exceptions, timeouts and Ctrl-C
-    # give a FAIL/UNVERIFIED report at `path` (replacing any older result for this tag).
-    result, elapsed = call_remote_reported(calls[task], plan=plan, path=path)
+    submits = {"inspect": lambda: harness.inspect.spawn(question_style),
+               "smoke": lambda: harness.smoke.spawn(_ints(ns), repeats, question_style),
+               "throughput": lambda: harness.throughput.spawn(_ints(batch_sizes), _ints(ns), repeats, question_style),
+               "padding": lambda: harness.padding.spawn(_ints(ns), question_style)}
+    # One spawn(), then bounded get(timeout=) polls with get_current_stats() snapshots of this
+    # variant (public Modal 1.6.3 APIs). A confirmed queue wait over 300 s, or the overall client
+    # deadline, cancels the call explicitly (terminate_containers=True). Load errors, remote
+    # exceptions, timeouts and Ctrl-C give a FAIL/UNVERIFIED report at `path`; a provisional
+    # record with the FunctionCall ID replaces any older result right after submission.
+    result, watch = watch_remote_call(submits[task], plan=plan, path=path,
+                                      current_stats=getattr(harness, task).get_current_stats,
+                                      app_id=app.app_id, log=print)
+    elapsed = watch["elapsed_s"]
     if result is None:
         print(json.dumps({"task": task, "gpu": gpu, "status": "NOT_PASS", "file": str(path)}))
         raise SystemExit(2)
@@ -220,7 +226,7 @@ def main(task: str = "inspect", gpu: str = "L4", model: str = DEFAULT_MODEL, pre
             a == 1.0 for a in result["adapter_agreement_with_predict"].values()) else "FAIL"
     # Client wall clock of the remote call (excludes image build). Compare it with the Modal
     # usage page; `plan.cost_estimate` is an estimate, not a bill.
-    result["run"] = {"plan": plan, "client_elapsed_s": round(elapsed, 1)}
+    result["run"] = {"plan": plan, "client_elapsed_s": round(elapsed, 1), "watchdog": watch}
     write_json_atomic(path, result)
     from ember_v1.p0b import result_exit_code
 

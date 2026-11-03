@@ -22,6 +22,8 @@
     "p0b_batched_forward_guard": "requires_recomputed_full_padding_evidence_known_matching_implementation_identity_and_in_scope_requests_cpu_tested; path_B_off_no_evidence",
     "p0b_inspect_status": "fail_closed_pass_only_if_all_checks_pass_cpu_tested",
     "p0b_gpu_feasibility": "NOT_RUN",
+    "p0b_gpu_inspect_attempts": "3_attempts_2026-11-03_all_UNVERIFIED_no_GPU_container_$0_GPU: 1_image_build_import_path(fixed_b3e10f3), 2_app_creation_payment_method, 3_queued_2069s_never_started_stopped_by_hand; all_11_checks_NOT_RUN; image_install_and_verify_install_PASS_on_Modal",
+    "p0b_client_watchdog": "spawn_once_bounded_get_polls_queue_limit_300s_if_confirmed_else_client_deadline_cancel_terminate_containers_cpu_tested_not_run_on_modal",
     "p0b_gpu_inspect_preparation": "prepared_not_run (P0B-02): hash_locked_image_unsloth_2026.10.11_audited_bytes, model_unsloth/Qwen3.5-2B@fffbc0d8711cf87df6d1f97938c5e50ef94aadc7, authorize_flag_and_timeouts, docs/P0B_GPU_INSPECT.md",
     "modal_app_definition": "imports_with_modal_1.6.3_not_run",
     "gpu_unsloth_native_data_and_inference": "not_run",

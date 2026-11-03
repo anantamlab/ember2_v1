@@ -135,9 +135,12 @@ def test_modal_app_uses_the_plan_limits():
     for needle in ("startup_timeout=STARTUP_TIMEOUT_S", "retries=RETRIES", "max_containers=MAX_CONTAINERS",
                    "scaledown_window=SCALEDOWN_WINDOW_S", 'timeout=plan["timeout_s"]', 'retries=plan["retries"]',
                    'max_containers=plan["max_containers"]', 'scaledown_window=plan["scaledown_window_s"]',
-                   "call_remote_reported(", "write_json_atomic(path, result)"):
+                   "watch_remote_call(", "get_current_stats", "app_id=app.app_id", "write_json_atomic(path, result)"):
         assert needle in src, needle
     assert "batched_forward: bool = modal.parameter(default=False)" in src
+    # Harness tasks are submitted once with spawn() (bounded wait), never with a blocking remote().
+    for task in ("inspect", "smoke", "throughput", "padding"):
+        assert f"harness.{task}.spawn(" in src and f"harness.{task}.remote(" not in src
 
 
 VERIFY_CMD = '.run_commands("PYTHONPATH=/root python -m ember_v1.p0b verify-install")'

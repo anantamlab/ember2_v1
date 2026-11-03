@@ -107,34 +107,70 @@ P0B phase budget: $10 (HLD 5.3), a planning number that Modal does not enforce. 
 Automatic, in the order they occur:
 
 1. **Image build fails, no GPU container:** a wheel hash differs, `pip check` fails, or `verify-install` is `FAIL` (upstream bytes or versions drifted). `modal run` builds the image when it creates the app, before the entrypoint runs.
-2. **Entrypoint refusal, no GPU container:** no `--authorize inspect`, uncommitted changes, model not `unsloth/Qwen3.5-2B`, GPU not L4/L40S, precision not bf16 (`p0b.gpu_run_plan`). The ephemeral app exists and the image build may already have run at this point.
-3. **Container start > 900 s** (`startup_timeout`): Modal stops it. `retries=0`, `max_containers=1`.
-4. **`inspect` call > 600 s** (`timeout`): Modal stops it.
-5. **Any check not `PASS`, or a failed call:** exit code 2. The report is written first. Do not run `smoke`.
-6. Container idle: `scaledown_window=2` s. `modal run` stops the ephemeral app when the entrypoint returns.
+2. **App creation refused, no GPU container:** for example `InvalidError: Please add a payment method to use L4 GPU functions` (attempt 2). The entrypoint does not run.
+3. **Entrypoint refusal, no GPU container:** no `--authorize inspect`, uncommitted changes, model not `unsloth/Qwen3.5-2B`, GPU not L4/L40S, precision not bf16 (`p0b.gpu_run_plan`). The ephemeral app exists and the image build may already have run at this point.
+4. **Confirmed queue wait > 300 s** (client watchdog, section 6): the call is cancelled. Modal's own timeouts do not cover queue time.
+5. **Container start > 900 s** (`startup_timeout`): Modal stops it. `retries=0`, `max_containers=1`.
+6. **`inspect` call > 600 s** (`timeout`): Modal stops it.
+7. **Client deadline 1860 s** (300 + 900 + 600 + 60 grace, section 6): the call is cancelled when the queue state was not confirmed.
+8. **Any check not `PASS`, or a failed call:** exit code 2. The report is written first. Do not run `smoke`.
+9. Container idle: `scaledown_window=2` s. `modal run` stops the ephemeral app when the entrypoint returns.
 
-## 6. Failure reports
+## 6. Bounded wait and failure reports
 
-The entrypoint runs the remote call through `ember_v1.run_report.call_remote_reported`. If the call raises (model load error, remote exception, Modal timeout, Ctrl-C), it writes `results/inspect-L4-bf16-compact.json` atomically (temp file, fsync, rename) and exits 2. The report replaces any older result for that tag, so no stale `PASS` remains. Fields:
+Attempt 3 (app `ap-WB7GlV2CTIyIJ2WQRX7xYF`, 2026-11-03) waited 2069 s with no container: the old entrypoint used a blocking `.remote()` call, and Modal's startup and execution timeouts start only when a container exists. The entrypoint now uses `ember_v1.run_report.watch_remote_call`.
+
+### 6.1 Watchdog
+
+| Step | Behavior (Modal 1.6.3 public APIs only) |
+|---|---|
+| Submit | `harness.<task>.spawn(...)` exactly once. No resubmission on any path. |
+| Record | Right after submission, a provisional `UNVERIFIED`/`in_progress` report with the FunctionCall ID, app ID and manual cleanup steps replaces any older result. |
+| Wait | `FunctionCall.get(timeout=30)` in a loop. An empty poll raises the builtin `TimeoutError` (Modal job-queue guide); it does **not** cancel the call. |
+| Queue state | After each empty poll: `get_current_stats()` of this instance's variant (`backlog`, `num_total_runners`, `num_running_inputs`). `queued` = backlog >= 1, 0 runners, 0 running inputs. |
+| Queue timeout | Cancel at 300 s only if every reading since submission was `queued` (at least 3 readings, no stats error, no container seen). Stage `queue_timeout`. |
+| Client deadline | Otherwise cancel at `client_deadline_s` = 300 + startup 900 + task timeout 600 + 60 = 1860 s for inspect. Stage `client_deadline`, with `execution_state` `unknown` or `started_observed`; the report never claims the call stayed queued. |
+| Poll errors | A client `ConnectionError` while polling is counted. 3 in a row: cancel, stage `poll_failed`. |
+| Ctrl-C | Cancel, stage `interrupted`. |
+| Cancel | `FunctionCall.cancel(terminate_containers=True)`, then one `get(timeout=15)`: a terminal error = `confirmed`; no answer = `unverified`; an error from `cancel()` = `failed`. If the result arrives instead, it is kept (`completed_before_cancel`). |
+
+`FunctionCall.get_call_graph()` is not used: Modal documents its data as best-effort and not real-time. `FunctionCurrentStats` has no per-call state, so the queue rule assumes this ephemeral app's variant has only this one input (true for `modal run` with `max_containers=1`).
+
+### 6.2 Report
+
+Every non-success writes `results/<tag>.json` atomically (temp file, fsync, rename) and exits 2. The report replaces any older result for that tag, so no stale `PASS` remains.
 
 | Field | Content |
 |---|---|
-| `schema` | `ember_v1.p0b.run_failure/1` |
+| `schema` | `ember_v1.p0b.run_failure/2` |
 | `task`, `gpu`, `code_commit`, `model_revision` | from the plan (`unsloth/Qwen3.5-2B@fffbc0d8…`) |
-| `status`, `stage` | `FAIL` + `model_load` or `remote_task` (an exception from the remote code); `UNVERIFIED` + `timeout`, `interrupted` or `unknown` |
-| `error` | exception type and a sanitized message (max 500 characters) |
+| `status`, `stage` | `FAIL` + `model_load` or `remote_task` (an exception carrying remote load/task frames). `UNVERIFIED` + `in_progress`, `submit_failed`, `queue_timeout`, `client_deadline`, `interrupted`, `poll_failed`, `remote_timeout` or `unknown`. A call that never reached the model is never `FAIL`. |
+| `error` | exception type and a sanitized message (max 500 characters), or `null` for a deadline |
 | `remote_frames` | function names only, no file paths |
-| `local_elapsed_s` | client wall clock of the call |
+| `local_elapsed_s` | client wall clock from submission |
+| `function_call_id`, `app_id` | Modal IDs (not secrets) |
+| `watchdog` | limits, poll and error counts, last 20 stats readings, `execution_state`, `first_start_evidence_s`, `cancellation` |
+| `outstanding_function_call_id`, `manual_cleanup` | set when cancellation `failed` or is `unverified` (and in the provisional record) |
 | `cost_estimate` | the plan estimate, `kind: ESTIMATE_NOT_A_BILLING_CAP` |
 | `compatibility_pass_established` | always `false` |
 
-The stage comes from function names in the traceback that Modal returns. If those frames are missing, the stage is `unknown` and the status is `UNVERIFIED`. The message is sanitized: Hugging Face and Modal tokens, `Bearer` values, `token=`/`secret=`/`password=`/`api_key=` values, URL credentials and home or `/root` paths are replaced. No environment variables are written.
+The message is sanitized: Hugging Face and Modal tokens, `Bearer` values, `token=`/`secret=`/`password=`/`api_key=` values, URL credentials and home or `/root` paths are replaced. No environment variables are written.
 
-**No local report is possible** if the local process is killed abruptly (SIGKILL, closed terminal, power loss), or if `modal run` fails while it builds the image (the entrypoint never runs). Then Modal logs (`modal app logs <app-id>`, the Modal dashboard) are the evidence. Record that case by hand as `UNVERIFIED`.
+**No local report is possible** if `modal run` fails while it creates the app (image build, GPU access refused): the entrypoint never runs. If the local process is killed abruptly (SIGKILL, closed terminal, power loss), only the provisional record remains, and this code does not cancel the call. Then Modal logs (`modal app logs <app-id>`, `modal function calls <function-id>`, the dashboard) are the evidence. Record that case by hand as `UNVERIFIED`.
 
-Manual: `modal app list` and `modal app stop <app-id>` stop a stuck run.
+Manual cleanup: `python -c "import modal; modal.FunctionCall.from_id('<fc-id>').cancel(terminate_containers=True)"`, or `modal app stop --yes <app-id>`; then `modal app list` and `modal container list`.
 
-## 6. Remaining GPU-only uncertainties
+### 6.3 Attempt log
+
+| # | App | Result | Stage |
+|---|---|---|---|
+| 1 | `ap-3xQNSAAuF38oW9Y9O3CQHJ` | image build failed: `ModuleNotFoundError: ember_v1` in `verify-install` | image build (fixed in `b3e10f3`) |
+| 2 | `ap-Ct45UWWa05s5Bdj2daPyQK` | `verify-install` PASS; `InvalidError: Please add a payment method to use L4 GPU functions` | app creation |
+| 3 | `ap-WB7GlV2CTIyIJ2WQRX7xYF` | call `fc-01M6GFMPN4FEN4YYWVV5P9M24W` enqueued 10:35:24 UTC, never started, no container; stopped by hand after 2069 s; `UNVERIFIED` | queue (reason unknown) |
+
+GPU spend for all three: $0. All 11 checks: NOT RUN.
+
+## 7. Remaining GPU-only uncertainties
 
 | # | Question | Evidence in the inspect result |
 |---|---|---|
@@ -146,5 +182,5 @@ Manual: `modal app list` and `modal app stop <app-id>` stop a stuck run.
 | G6 | Which DeltaNet kernels run (A5)? fla and causal-conv1d are not in the base image, so the transformers torch fallback is expected. | `kernels*.markers`, `executed` |
 | G7 | Does the profiler see CUDA kernels in a Modal container (CUPTI)? | `kernel_profile` |
 | G8 | Are the identity hashes computable (U9), and is `head_sha256` reproducible across runs (seed 3407)? | `metadata` hashes; compare two runs later |
-| G9 | Does the hash-checked install of 107 wheels succeed on the Modal builder? (CPU, before GPU) | image build log |
+| G9 | Does the hash-checked install of 107 wheels succeed on the Modal builder? (CPU, before GPU) | **Resolved 2026-11-03: yes.** Attempt 1: 107 wheels, `pip check` clean. Attempt 2: `verify-install` PASS, all audited hashes. |
 | G10 | Real compact token count at N=200 versus 16384. | `preservation_probe` |
