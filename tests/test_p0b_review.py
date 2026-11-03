@@ -300,3 +300,112 @@ def test_genuine_evidence_reuse_skips_re_encoding_and_stays_correct(monkeypatch)
     _, conflict = p0b.encode_one(row, TOK, unverified_model)
     assert p0b.predict_answers(unverified_model, TOK, row, evidence=conflict)["status"] == \
         "UNVERIFIED_REPORT_CONFLICT"
+
+
+# ------------------------------------------------------------ review round 2: ordered digest
+def _reorder_criteria(row, pid="P1"):
+    out = copy.deepcopy(row)
+    criteria = out["questions"][pid]["criteria"]
+    out["questions"][pid]["criteria"] = dict(reversed(list(criteria.items())))
+    return out
+
+
+def test_criteria_reorder_cannot_reuse_old_evidence(monkeypatch):
+    fakes.install(monkeypatch)
+    model, row = FakeModel(), _row()
+    _, evidence = p0b.encode_one(row, TOK, model)
+    assert evidence["status"] == "OK"
+    reordered = _reorder_criteria(row)
+    assert list(reordered["questions"]["P1"]["criteria"]) != list(row["questions"]["P1"]["criteria"])
+    with pytest.raises(ValueError, match="different state/questions"):
+        p0b.predict_answers(model, TOK, reordered, evidence=evidence)
+    assert model.predict_calls == 0
+
+
+def _changed(row, kind):
+    out = copy.deepcopy(row)
+    q = out["questions"]
+    if kind == "criteria_order":
+        return _reorder_criteria(row)
+    if kind == "question_order":
+        out["questions"] = dict(reversed(list(q.items())))
+    elif kind == "description":
+        q["P0"]["criteria"]["stay"] += " "
+    elif kind == "instructions":
+        q["P0"]["instructions"] += " "
+    elif kind == "type":
+        q["P0"]["type"] = "multi_choice"
+    elif kind == "state":
+        out["state"] += " "
+    elif kind == "question_id":
+        out["questions"] = {("Q0" if k == "P0" else k): v for k, v in q.items()}
+    return out
+
+
+@pytest.mark.parametrize("kind", ["criteria_order", "question_order", "description", "instructions", "type",
+                                  "state", "question_id"])
+def test_row_digest_changes_with_every_model_relevant_part(kind):
+    row = _row()
+    assert p0b._row_digest(_changed(row, kind)) != p0b._row_digest(row)
+
+
+def test_row_digest_is_stable_for_an_unchanged_row():
+    row = _row()
+    assert p0b._row_digest(row) == p0b._row_digest(copy.deepcopy(row)) == p0b._row_digest(_row())
+    assert re.fullmatch(r"[0-9a-f]{64}", p0b._row_digest(row))
+
+
+# ------------------------------------------------------------ review round 2: environment binding
+def _bound_evidence(monkeypatch):
+    fakes.install(monkeypatch)
+    model, tokenizer, row = FakeModel(), CharTokenizer(), _row()
+    _, evidence = p0b.encode_one(row, tokenizer, model)
+    assert evidence["status"] == "OK" and evidence["binding"] is not None
+    return model, tokenizer, row, evidence
+
+
+def _rejects(model, tokenizer, row, evidence):
+    with pytest.raises(ValueError, match="different model/tokenizer/encoding configuration"):
+        p0b.predict_answers(model, tokenizer, row, evidence=evidence)
+    assert model.predict_calls == 0
+
+
+def test_evidence_is_not_reusable_with_another_model_instance(monkeypatch):
+    model, tokenizer, row, evidence = _bound_evidence(monkeypatch)
+    _rejects(FakeModel(), tokenizer, row, evidence)
+    assert model.predict_calls == 0
+
+
+def test_evidence_is_not_reusable_with_another_tokenizer_instance(monkeypatch):
+    model, tokenizer, row, evidence = _bound_evidence(monkeypatch)
+    _rejects(model, CharTokenizer(), row, evidence)
+
+
+@pytest.mark.parametrize("change", ["max_len_down", "max_len_up", "extra_key"])
+def test_evidence_is_not_reusable_after_an_encoding_config_change(monkeypatch, change):
+    model, tokenizer, row, evidence = _bound_evidence(monkeypatch)
+    if change == "max_len_down":
+        model.decision_config["max_len"] = evidence["full_tokens"]  # the row no longer fits
+    elif change == "max_len_up":
+        model.decision_config["max_len"] = 32768
+    else:
+        model.decision_config["chat_template"] = "other"
+    _rejects(model, tokenizer, row, evidence)
+
+
+def test_evidence_is_reusable_with_the_same_model_tokenizer_and_row(monkeypatch):
+    model, tokenizer, row, evidence = _bound_evidence(monkeypatch)
+    for _ in range(2):
+        res = p0b.predict_answers(model, tokenizer, copy.deepcopy(row), evidence=evidence)
+        assert res["status"] == "OK" and res["encoding"] == evidence
+    assert model.build_calls == 1 and model.predict_calls == 2
+
+
+def test_untrackable_identity_recomputes_the_proof(monkeypatch):
+    assert p0b._object_token(7) is None  # an int can not be weak-referenced
+    a, b = CharTokenizer(), CharTokenizer()
+    assert p0b._object_token(a) == p0b._object_token(a) != p0b._object_token(b)
+    model, tokenizer, row, evidence = _bound_evidence(monkeypatch)
+    monkeypatch.setattr(p0b, "_encoding_binding", lambda m, t: None)
+    res = p0b.predict_answers(model, tokenizer, row, evidence=evidence)
+    assert res["status"] == "OK" and model.build_calls == 2 and res["encoding"]["binding"] is None

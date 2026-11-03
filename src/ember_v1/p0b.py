@@ -33,6 +33,7 @@ import re
 import secrets
 import sys
 import time
+import weakref
 from pathlib import Path
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
@@ -311,8 +312,15 @@ def inference_row(request: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def _row_digest(row: Mapping[str, Any]) -> str:
-    # Question order changes the encoding, so keep it (sort_keys sorts only inner dicts).
-    payload = json.dumps([row["state"], list(row["questions"].items())], sort_keys=True, ensure_ascii=False)
+    """Order-preserving digest of everything the model reads from a request.
+
+    Nested lists only (no dict, no `sort_keys`), so question order and option order
+    stay significant: [state, [[id, type, instructions, [[option, description], ...]], ...]].
+    """
+    questions = [[pid, q.get("type"), q.get("instructions"), [[option, text] for option, text in
+                                                             q.get("criteria", {}).items()]]
+                 for pid, q in row["questions"].items()]
+    payload = json.dumps([row["state"], questions], ensure_ascii=False, separators=(",", ":"))
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
@@ -335,6 +343,37 @@ def _check_seal(evidence: Any) -> None:
     if not isinstance(evidence, Mapping) or not isinstance(evidence.get("seal"), str) or not hmac.compare_digest(
             evidence["seal"], _seal_of(evidence)):
         raise ValueError("encoding evidence was not produced by encode_one in this process (or was modified)")
+
+
+# id(obj) -> (weakref, random token). The weakref check means a reused id of a dead
+# object never inherits the old token. Objects that can not be weak-referenced get None.
+_OBJECT_TOKENS: dict[int, tuple[Any, str]] = {}
+
+
+def _object_token(obj: Any) -> str | None:
+    entry = _OBJECT_TOKENS.get(id(obj))
+    if entry is not None and entry[0]() is obj:
+        return entry[1]
+    key = id(obj)
+    try:
+        ref = weakref.ref(obj, lambda _r, k=key: _OBJECT_TOKENS.pop(k, None))
+    except TypeError:
+        return None
+    token = secrets.token_hex(16)
+    _OBJECT_TOKENS[key] = (ref, token)
+    return token
+
+
+def _encoding_binding(model: Any, tokenizer: Any) -> dict[str, Any] | None:
+    """Cheap identity of what produced an encoding: these model and tokenizer objects
+    and the encoding-relevant config (token limit, decision_config). No weight hashing."""
+    model_token, tokenizer_token = _object_token(model), _object_token(tokenizer)
+    if model_token is None or tokenizer_token is None:
+        return None
+    config = getattr(model, "decision_config", None)
+    config_text = json.dumps(dict(config), sort_keys=True, default=repr) if isinstance(config, Mapping) else None
+    return {"model": model_token, "tokenizer": tokenizer_token, "token_limit": _token_limit(model),
+            "decision_config_sha256": _sha256_text(config_text)}
 
 
 def _clef_encoder() -> tuple[Callable[..., Any] | None, str]:
@@ -401,14 +440,15 @@ def encode_one(row: Mapping[str, Any], tokenizer: Any, model: Any) -> tuple[Any,
     from unsloth import FastDecisionModel
 
     questions = validate_questions(row.get("questions"))
-    digest = _row_digest(row)
+    # Every evidence dict names its row and its encoding environment (model, tokenizer, config).
+    stamp = {"row_sha256": _row_digest(row), "binding": _encoding_binding(model, tokenizer)}
     expected = _native_questions(questions)
     encode_record, contract = _clef_encoder()
     items, report = FastDecisionModel.build_dataset([dict(row)], tokenizer, model)
     report = dict(report)
     if report.get("skipped") or len(items) != 1:
         return None, _sealed({"status": "FAIL_ENCODE_SKIPPED", "truncated": None, "report": report,
-                              "row_sha256": digest})
+                              **stamp})
     item, record, limit = items[0], _record(items[0]), _token_limit(model)
     source = item.get("source") if isinstance(item, Mapping) else None
     reasons = [r for r, bad in (
@@ -421,20 +461,20 @@ def encode_one(row: Mapping[str, Any], tokenizer: Any, model: Any) -> tuple[Any,
     ) if bad]
     if reasons:
         return None, _sealed({"status": "UNVERIFIED", "truncated": None, "reason": "; ".join(reasons),
-                              "report": report, "row_sha256": digest})
+                              "report": report, **stamp})
     changes = _question_changes(source.get("questions"), expected)
     if changes:
         return None, _sealed({"status": "FAIL_QUESTION_CHANGED", "truncated": None, "report": report,
-                              "reason": "; ".join(changes)[:500], "row_sha256": digest})
+                              "reason": "; ".join(changes)[:500], **stamp})
     try:
         # Reference from the REQUEST (not from item["source"]): equal records then prove
         # that the requested state and questions were encoded, uncut.
         reference = encode_record(_tok(tokenizer), {"state": row["state"], "questions": expected},
                                   max_length=sys.maxsize)
     except Exception as exc:  # noqa: BLE001 - no reference means no proof
-        return None, _sealed({"status": "UNVERIFIED", "truncated": None, "report": report, "row_sha256": digest,
+        return None, _sealed({"status": "UNVERIFIED", "truncated": None, "report": report, **stamp,
                               "reason": f"reference encoding failed: {type(exc).__name__}: {exc}"[:300]})
-    evidence = {**encoding_evidence(record, reference, questions, limit=limit, report=report), "row_sha256": digest}
+    evidence = {**encoding_evidence(record, reference, questions, limit=limit, report=report), **stamp}
     return (record if evidence["status"] == "OK" else None), _sealed(evidence)
 
 
@@ -494,8 +534,9 @@ def predict_answers(model: Any, tokenizer: Any, request: Mapping[str, Any], *,
     """Native `predict()` behind positive preservation evidence.
 
     `evidence` may be reused only if it is the unmodified result of `encode_one` in
-    this process for the same state and questions (HMAC seal + row digest);
-    otherwise this raises. Returns `answers` only when `status == "OK"`; otherwise
+    this process for the same state and questions (HMAC seal + ordered row digest)
+    and for the same model and tokenizer objects and encoding config (binding);
+    otherwise this raises. If the objects can not be tracked, the proof is recomputed. Returns `answers` only when `status == "OK"`; otherwise
     `answers` is None and `predict()` is not called. Malformed predictions raise.
     """
     from unsloth import FastDecisionModel
@@ -507,6 +548,11 @@ def predict_answers(model: Any, tokenizer: Any, request: Mapping[str, Any], *,
         _check_seal(evidence)
         if evidence.get("row_sha256") != _row_digest(row):
             raise ValueError("encoding evidence belongs to a different state/questions")
+        current = _encoding_binding(model, tokenizer)
+        if evidence.get("binding") is None or current is None:
+            _, evidence = encode_one(row, tokenizer, model)  # identity not trackable: prove again
+        elif evidence["binding"] != current:
+            raise ValueError("encoding evidence was produced for a different model/tokenizer/encoding configuration")
     evidence = dict(evidence)
     if evidence.get("status") != "OK" or evidence.get("truncated") is not False:
         return {"status": evidence.get("status") or "UNVERIFIED", "truncated": evidence.get("truncated"),
