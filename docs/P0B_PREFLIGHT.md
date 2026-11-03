@@ -78,5 +78,5 @@ modal volume put ember-v1-checkpoints results/padding-L4-bf16-compact.json /p0b/
 ## 5. Spend
 
 - This PR: **$0 GPU**, no Modal calls.
-- First `inspect` (P0B-02): about $0.10–$0.20 expected, $0.52 hard bound ([P0B_GPU_INSPECT.md](P0B_GPU_INSPECT.md) section 4).
-- Next phase estimate: about 2–3 GPU-hours (mostly L4, about 1 hour L40S, including model download, image build with the optional kernel layer, and the runs above). Check current Modal prices before the run. Hard cap: **$10** (HLD §5.3). Stop and report if a run reaches the cap.
+- First `inspect` (P0B-02): about $0.10–$0.20 expected; estimated GPU-runtime envelope $0.52 at the configured timeouts and assumed resources. These are estimates, not a billing cap; image build and storage are charged apart ([P0B_GPU_INSPECT.md](P0B_GPU_INSPECT.md) section 4).
+- Next phase estimate: about 2–3 GPU-hours (mostly L4, about 1 hour L40S, including model download, image build with the optional kernel layer, and the runs above). Check current Modal prices before the run. Phase budget: **$10** (HLD §5.3), tracked by hand from the Modal usage page; the code does not enforce it. Stop and report if spend reaches the budget.

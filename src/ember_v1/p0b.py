@@ -70,23 +70,58 @@ PINNED_RUNTIME = {"unsloth": "2026.10.11", "unsloth_zoo": "2026.10.11", "torch":
 
 # ---- GPU spend guard (infra/modal_app.py). Pure Python so CPU CI tests it without Modal.
 ALLOWED_GPUS = ("L4", "L40S")
-# Per-call limit. Modal applies it separately to container start (download + load) and to the
-# call, so one command holds the GPU for at most STARTUP_TIMEOUT_S + TASK_TIMEOUT_S[task].
+# Modal limits per attempt: container start (download + load) and the method call are timed
+# separately, so with retries=0 the configured container time is STARTUP_TIMEOUT_S + TASK_TIMEOUT_S.
 STARTUP_TIMEOUT_S = 900
 TASK_TIMEOUT_S = {"inspect": 600, "smoke": 1800, "padding": 1800, "throughput": 3600}
-# modal.com/pricing, read 2026-11-03 (GPU only; CPU and memory are billed on top).
+RETRIES = 0
+MAX_CONTAINERS = 1
+SCALEDOWN_WINDOW_S = 2
+# modal.com/pricing, read 2026-11-03. Prices can change; they are inputs to an estimate only.
+PRICES_READ = "modal.com/pricing, 2026-11-03"
 GPU_USD_PER_S = {"L4": 0.000222, "L40S": 0.000542}
 CPU_CORE_USD_PER_S = 0.0000131
 MEM_GIB_USD_PER_S = 0.00000222
-# Bound for the CPU/memory part of the estimate: what the container may hold while loading.
+# Assumed CPU/memory held by the container (not measured, not a Modal limit).
 EST_CORES, EST_MEM_GIB = 4, 32
-P0B_CAP_USD = 10.0  # HLD 5.3
+P0B_CAP_USD = 10.0  # HLD 5.3 phase budget (a planning number, not enforced by Modal)
+ESTIMATE_KIND = "ESTIMATE_NOT_A_BILLING_CAP"
+# Charges the estimate does not cover. No billing evidence exists for them yet.
+ESTIMATE_EXCLUDES = (
+    "image build on the Modal builder (CPU, or GPU for the optional EMBER_FAST_KERNELS layer)",
+    "volume storage (ember-v1-hf-cache, ember-v1-checkpoints)",
+    "network or egress charges, if any",
+    "local client time and Modal queueing before the container starts",
+)
+ESTIMATE_ASSUMES = (
+    "the container ends within the configured startup and call timeouts (one attempt, retries=0)",
+    f"CPU and memory stay at or below {EST_CORES} cores and {EST_MEM_GIB} GiB; more usage costs more",
+    "the listed prices apply to this workspace and region",
+    "no platform-initiated restart (for example a host preemption) adds a second container",
+)
+
+
+def cost_estimate(task: str, gpu: str) -> dict[str, Any]:
+    """Estimated GPU-container runtime cost of one attempt at the configured limits.
+
+    This is an estimate conditional on ESTIMATE_ASSUMES. It is not a billing cap: nothing
+    stops Modal charges at this value, and it excludes ESTIMATE_EXCLUDES.
+    """
+    seconds = STARTUP_TIMEOUT_S + TASK_TIMEOUT_S[task]
+    gpu_usd = seconds * GPU_USD_PER_S[gpu]
+    cpu_usd = seconds * EST_CORES * CPU_CORE_USD_PER_S
+    mem_usd = seconds * EST_MEM_GIB * MEM_GIB_USD_PER_S
+    return {"kind": ESTIMATE_KIND, "scope": "GPU container runtime of one attempt",
+            "prices": PRICES_READ, "configured_container_s": seconds,
+            "gpu_usd": round(gpu_usd, 3), "cpu_usd_assumed": round(cpu_usd, 3),
+            "memory_usd_assumed": round(mem_usd, 3), "envelope_usd": round(gpu_usd + cpu_usd + mem_usd, 2),
+            "assumes": list(ESTIMATE_ASSUMES), "excludes": list(ESTIMATE_EXCLUDES)}
 
 
 def gpu_run_plan(task: str, gpu: str, model: str, precision: str, authorize: str,
                  code_commit: str) -> dict[str, Any]:
     """Refuse a GPU run unless it is explicitly authorized, on the pinned model, from a clean
-    commit, and bounded. Returns the limits the Modal entrypoint applies and the worst-case cost.
+    commit, and bounded. Returns the Modal limits the entrypoint applies and a cost ESTIMATE.
     """
     if task not in TASK_TIMEOUT_S:
         raise ValueError(f"unknown task {task!r}: use {'|'.join(TASK_TIMEOUT_S)}")
@@ -100,12 +135,10 @@ def gpu_run_plan(task: str, gpu: str, model: str, precision: str, authorize: str
         raise ValueError(f"D1 backbone lock: P0B runs only {PINNED_MODEL}")
     if precision != "bf16":
         raise ValueError("P0B runs bf16 first (HLD D5)")
-    worst_s = STARTUP_TIMEOUT_S + TASK_TIMEOUT_S[task]
-    per_s = GPU_USD_PER_S[gpu] + EST_CORES * CPU_CORE_USD_PER_S + EST_MEM_GIB * MEM_GIB_USD_PER_S
     return {"task": task, "gpu": gpu, "model": PINNED_MODEL, "revision": PINNED_MODEL_COMMIT, "code_commit": code_commit,
-            "startup_timeout_s": STARTUP_TIMEOUT_S, "timeout_s": TASK_TIMEOUT_S[task], "retries": 0,
-            "max_containers": 1, "worst_case_gpu_s": worst_s, "worst_case_usd": round(worst_s * per_s, 2),
-            "phase_cap_usd": P0B_CAP_USD}
+            "startup_timeout_s": STARTUP_TIMEOUT_S, "timeout_s": TASK_TIMEOUT_S[task], "retries": RETRIES,
+            "max_containers": MAX_CONTAINERS, "scaledown_window_s": SCALEDOWN_WINDOW_S,
+            "cost_estimate": cost_estimate(task, gpu), "phase_budget_usd": P0B_CAP_USD}
 
 PADDING_ORDERS = ("short_first", "short_last", "short_middle")
 # Stack identity that batched-forward evidence must share with the serving runtime.

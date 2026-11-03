@@ -99,12 +99,45 @@ def test_verify_install_cli_rejects_other_arguments():
 
 
 # ------------------------------------------------------------ GPU spend guard
-def test_inspect_plan_is_bounded_and_pinned():
+def test_inspect_plan_keeps_the_reviewed_resource_limits():
     plan = p0b.gpu_run_plan("inspect", "L4", p0b.PINNED_MODEL, "bf16", "inspect", CLEAN)
-    assert plan["revision"] == p0b.PINNED_MODEL_COMMIT and plan["code_commit"] == CLEAN
-    assert plan["retries"] == 0 and plan["max_containers"] == 1
-    assert plan["worst_case_gpu_s"] == p0b.STARTUP_TIMEOUT_S + p0b.TASK_TIMEOUT_S["inspect"] <= 1800
-    assert 0 < plan["worst_case_usd"] <= 1.0 < p0b.P0B_CAP_USD
+    assert plan["model"] == "unsloth/Qwen3.5-2B" and plan["revision"] == "fffbc0d8711cf87df6d1f97938c5e50ef94aadc7"
+    assert plan["gpu"] == "L4" and plan["code_commit"] == CLEAN
+    assert (plan["startup_timeout_s"], plan["timeout_s"]) == (900, 600)
+    assert (plan["retries"], plan["max_containers"], plan["scaledown_window_s"]) == (0, 1, 2)
+    assert "worst_case_usd" not in plan and "hard_cap_usd" not in plan  # no cap wording
+
+
+def test_cost_estimate_is_labeled_and_separated():
+    est = p0b.gpu_run_plan("inspect", "L4", p0b.PINNED_MODEL, "bf16", "inspect", CLEAN)["cost_estimate"]
+    assert est["kind"] == "ESTIMATE_NOT_A_BILLING_CAP" and "2026-11-03" in est["prices"]
+    assert est["configured_container_s"] == 1500
+    assert est["gpu_usd"] == pytest.approx(1500 * 0.000222, abs=1e-3)
+    assert est["cpu_usd_assumed"] == pytest.approx(1500 * 4 * 0.0000131, abs=1e-3)
+    assert est["memory_usd_assumed"] == pytest.approx(1500 * 32 * 0.00000222, abs=1e-3)
+    assert est["envelope_usd"] == pytest.approx(est["gpu_usd"] + est["cpu_usd_assumed"] + est["memory_usd_assumed"],
+                                                abs=0.01)
+    assert est["envelope_usd"] == 0.52 < p0b.P0B_CAP_USD
+    excluded = " ".join(est["excludes"])
+    assert "image build" in excluded and "storage" in excluded  # charged apart, not estimated here
+    assert any("retries=0" in a for a in est["assumes"]) and any("preemption" in a for a in est["assumes"])
+
+
+def test_l40s_estimate_uses_its_own_price():
+    l4 = p0b.cost_estimate("inspect", "L4")
+    l40s = p0b.cost_estimate("inspect", "L40S")
+    assert l40s["gpu_usd"] == pytest.approx(1500 * 0.000542, abs=1e-3) and l40s["envelope_usd"] > l4["envelope_usd"]
+
+
+def test_modal_app_uses_the_plan_limits():
+    # Source check (CI has no modal): the decorator and with_options take the shared constants.
+    src = (ROOT / "infra" / "modal_app.py").read_text(encoding="utf-8")
+    for needle in ("startup_timeout=STARTUP_TIMEOUT_S", "retries=RETRIES", "max_containers=MAX_CONTAINERS",
+                   "scaledown_window=SCALEDOWN_WINDOW_S", 'timeout=plan["timeout_s"]', 'retries=plan["retries"]',
+                   'max_containers=plan["max_containers"]', 'scaledown_window=plan["scaledown_window_s"]',
+                   "call_remote_reported(", "write_json_atomic(path, result)"):
+        assert needle in src, needle
+    assert "batched_forward: bool = modal.parameter(default=False)" in src
 
 
 @pytest.mark.parametrize("args, error", [

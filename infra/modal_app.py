@@ -4,7 +4,9 @@ Prerequisites (local): `pip install -e '.[modal]'` then `modal setup`.
 
 P0B tasks (results land in ./results, padding verdicts are computed locally). Every GPU
 task needs `--authorize <task>` (the same task name), a clean git checkout, the pinned
-model, and runs under the timeouts of `p0b.gpu_run_plan`. First command (issue #2):
+model, and runs under the timeouts of `p0b.gpu_run_plan`. A failed remote call writes a
+FAIL/UNVERIFIED report (`ember_v1.run_report`); an abrupt kill or a failed image build
+writes none (use Modal logs). First command (issue #2):
   modal run infra/modal_app.py --task inspect --gpu L4 --authorize inspect
 Later tasks need their own written authorization (docs/P0B_GPU_INSPECT.md):
   modal run infra/modal_app.py --task smoke --gpu L4 --authorize smoke
@@ -26,12 +28,12 @@ import hashlib
 import json
 import os
 import subprocess
-import time
 from pathlib import Path
 
 import modal
 
-from ember_v1.p0b import PINNED_MODEL, PINNED_MODEL_COMMIT, STARTUP_TIMEOUT_S
+from ember_v1.p0b import (MAX_CONTAINERS, PINNED_MODEL, PINNED_MODEL_COMMIT, RETRIES, SCALEDOWN_WINDOW_S,
+                          STARTUP_TIMEOUT_S, TASK_TIMEOUT_S)
 
 APP_NAME = "ember-v1"
 DEFAULT_MODEL = PINNED_MODEL
@@ -63,9 +65,9 @@ checkpoints = modal.Volume.from_name("ember-v1-checkpoints", create_if_missing=T
 VOLUMES = {"/cache": hf_cache, "/ckpt": checkpoints}
 
 
-# Bounds for direct callers too; the entrypoint narrows `timeout` per task (p0b.gpu_run_plan).
-@app.cls(image=image, gpu="L4", volumes=VOLUMES, timeout=600, startup_timeout=STARTUP_TIMEOUT_S,
-         scaledown_window=2, retries=0, max_containers=1)
+# Bounds for direct callers too; the entrypoint sets `timeout` per task (p0b.gpu_run_plan).
+@app.cls(image=image, gpu="L4", volumes=VOLUMES, timeout=TASK_TIMEOUT_S["inspect"], startup_timeout=STARTUP_TIMEOUT_S,
+         scaledown_window=SCALEDOWN_WINDOW_S, retries=RETRIES, max_containers=MAX_CONTAINERS)
 class P0BHarness:
     model_name: str = modal.parameter(default=DEFAULT_MODEL)
     revision: str = modal.parameter(default=PINNED_MODEL_COMMIT)
@@ -173,29 +175,37 @@ def main(task: str = "inspect", gpu: str = "L4", model: str = DEFAULT_MODEL, pre
          authorize: str = ""):
     from ember_v1.p0b import gpu_run_plan
 
-    try:  # refuse BEFORE any container starts: authorization, clean commit, pinned model, GPU allowlist
+    # Runs after `modal run` has created the ephemeral app (the CPU image build may already have
+    # happened) but before any GPU container starts: authorization, clean commit, pinned model, GPU.
+    try:
         plan = gpu_run_plan(task, gpu, model, precision, authorize, _code_commit())
     except (ValueError, PermissionError) as exc:
         raise SystemExit(f"refused: {exc}")
+    from ember_v1.run_report import call_remote_reported, write_json_atomic
+
     print(json.dumps({"plan": plan}))
     harness = P0BHarness.with_options(
         gpu=gpu, timeout=plan["timeout_s"], retries=plan["retries"], max_containers=plan["max_containers"],
-        scaledown_window=2)(model_name=model, revision=plan["revision"], precision=precision, max_seq=max_seq,
-                            code_commit=plan["code_commit"])
+        scaledown_window=plan["scaledown_window_s"])(model_name=model, revision=plan["revision"],
+                                                     precision=precision, max_seq=max_seq,
+                                                     code_commit=plan["code_commit"])
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     tag = f"{task}-{gpu}-{precision}-{question_style}"
-    started = time.monotonic()
-    if task == "inspect":
-        result = harness.inspect.remote(question_style)
-    elif task == "smoke":
-        result = harness.smoke.remote(_ints(ns), repeats, question_style)
-    elif task == "throughput":
-        result = harness.throughput.remote(_ints(batch_sizes), _ints(ns), repeats, question_style)
-    elif task == "padding":
+    path = out / f"{tag}.json"
+    calls = {"inspect": lambda: harness.inspect.remote(question_style),
+             "smoke": lambda: harness.smoke.remote(_ints(ns), repeats, question_style),
+             "throughput": lambda: harness.throughput.remote(_ints(batch_sizes), _ints(ns), repeats, question_style),
+             "padding": lambda: harness.padding.remote(_ints(ns), question_style)}
+    # The container starts on this call. Load errors, remote exceptions, timeouts and Ctrl-C
+    # give a FAIL/UNVERIFIED report at `path` (replacing any older result for this tag).
+    result, elapsed = call_remote_reported(calls[task], plan=plan, path=path)
+    if result is None:
+        print(json.dumps({"task": task, "gpu": gpu, "status": "NOT_PASS", "file": str(path)}))
+        raise SystemExit(2)
+    if task == "padding":
         from ember_v1.padding_gate import assess_padding_parity
 
-        result = harness.padding.remote(_ints(ns), question_style)
         verdicts = {}
         for order, doc in result["gate_inputs"].items():
             (out / f"{tag}-{order}-input.json").write_text(json.dumps(doc, indent=2), encoding="utf-8")
@@ -206,13 +216,10 @@ def main(task: str = "inspect", gpu: str = "L4", model: str = DEFAULT_MODEL, pre
         result["verdicts"] = verdicts
         result["status"] = "PASS" if all(v["status"] == "PASS" for v in verdicts.values()) and all(
             a == 1.0 for a in result["adapter_agreement_with_predict"].values()) else "FAIL"
-    else:
-        raise SystemExit(f"unknown task {task!r}: use inspect|smoke|padding|throughput")
-    # Client wall clock from the first remote call (excludes image build). The container lives
-    # inside this window plus scaledown_window=2 s: use it to bound the billed GPU time.
-    result["run"] = {"plan": plan, "client_elapsed_s": round(time.monotonic() - started, 1)}
-    path = out / f"{tag}.json"
-    path.write_text(json.dumps(result, indent=2, default=str), encoding="utf-8")
+    # Client wall clock of the remote call (excludes image build). Compare it with the Modal
+    # usage page; `plan.cost_estimate` is an estimate, not a bill.
+    result["run"] = {"plan": plan, "client_elapsed_s": round(elapsed, 1)}
+    write_json_atomic(path, result)
     from ember_v1.p0b import result_exit_code
 
     # The report is written above first, so it survives a FAIL or UNVERIFIED exit.

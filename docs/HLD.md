@@ -190,7 +190,7 @@ Many CPU workers call `decide.remote()` at the same time. Modal groups those cal
 | P5–P6 | $35 | DAgger / AWR only if a gate needs them |
 | Reserve | $40 | Not spent without a written reason |
 
-Track GPU-seconds from `timing.batch_exec_s` (once per Modal batch, not per request), simulator CPU time separately. Never convert dollars to episodes before measurement.
+Caps are planning budgets, tracked from the Modal usage page; the code does not enforce them. Per-run figures from `gpu_run_plan` are estimates (`ESTIMATE_NOT_A_BILLING_CAP`). Track GPU-seconds from `timing.batch_exec_s` (once per Modal batch, not per request), simulator CPU time separately. Never convert dollars to episodes before measurement.
 
 ## 6. Phases and gates
 
