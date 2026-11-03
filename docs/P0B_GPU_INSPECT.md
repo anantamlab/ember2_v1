@@ -126,13 +126,14 @@ Attempt 3 (app `ap-WB7GlV2CTIyIJ2WQRX7xYF`, 2026-11-03) waited 2069 s with no co
 |---|---|
 | Submit | `harness.<task>.spawn(...)` exactly once. No resubmission on any path. |
 | Record | Right after submission, a provisional `UNVERIFIED`/`in_progress` report with the FunctionCall ID, app ID and manual cleanup steps replaces any older result. |
+| Post-submit guard | Supervision starts when `spawn()` returns. If the provisional write, the log callback or Ctrl-C fails before the first poll, or any other BaseException (for example `SystemExit`, a failed report write) leaves the wait loop: cancel the call, write the report if possible (else delete an older result, so no stale `PASS` stays), print one JSON line with the FunctionCall ID, app ID, cancel outcome and cleanup steps to stderr, and re-raise the original error. A failed stderr write is ignored. Stage `post_submit_error` (or `interrupted`). |
 | Wait | `FunctionCall.get(timeout=30)` in a loop. An empty poll raises the builtin `TimeoutError` (Modal job-queue guide); it does **not** cancel the call. |
 | Queue state | After each empty poll: `get_current_stats()` of this instance's variant (`backlog`, `num_total_runners`, `num_running_inputs`). `queued` = backlog >= 1, 0 runners, 0 running inputs. |
 | Queue timeout | Cancel at 300 s only if every reading since submission was `queued` (at least 3 readings, no stats error, no container seen). Stage `queue_timeout`. |
 | Client deadline | Otherwise cancel at `client_deadline_s` = 300 + startup 900 + task timeout 600 + 60 = 1860 s for inspect. Stage `client_deadline`, with `execution_state` `unknown` or `started_observed`; the report never claims the call stayed queued. |
 | Poll errors | A client `ConnectionError` while polling is counted. 3 in a row: cancel, stage `poll_failed`. |
 | Ctrl-C | Cancel, stage `interrupted`. |
-| Cancel | `FunctionCall.cancel(terminate_containers=True)`, then one `get(timeout=15)`: a terminal error = `confirmed`; no answer = `unverified`; an error from `cancel()` = `failed`. If the result arrives instead, it is kept (`completed_before_cancel`). |
+| Cancel | `FunctionCall.cancel(terminate_containers=True)`, then one `get(timeout=15)`. Outcomes: `failed` (`cancel()` raised); `terminal_error_observed` (`get()` then raised a non-timeout error); `unverified` (no terminal state, or the check was interrupted); `completed_before_cancel` (the result arrived; it is kept). There is no `confirmed` outcome: in Modal 1.6.3 a terminated input reaches the client as a generic `RemoteError` (`_process_result`), the same class as other failures, and `InputCancellation` exists only inside the container. |
 
 `FunctionCall.get_call_graph()` is not used: Modal documents its data as best-effort and not real-time. `FunctionCurrentStats` has no per-call state, so the queue rule assumes this ephemeral app's variant has only this one input (true for `modal run` with `max_containers=1`).
 
@@ -144,13 +145,13 @@ Every non-success writes `results/<tag>.json` atomically (temp file, fsync, rena
 |---|---|
 | `schema` | `ember_v1.p0b.run_failure/2` |
 | `task`, `gpu`, `code_commit`, `model_revision` | from the plan (`unsloth/Qwen3.5-2B@fffbc0d8…`) |
-| `status`, `stage` | `FAIL` + `model_load` or `remote_task` (an exception carrying remote load/task frames). `UNVERIFIED` + `in_progress`, `submit_failed`, `queue_timeout`, `client_deadline`, `interrupted`, `poll_failed`, `remote_timeout` or `unknown`. A call that never reached the model is never `FAIL`. |
+| `status`, `stage` | `FAIL` + `model_load` or `remote_task` (an exception carrying remote load/task frames). `UNVERIFIED` + `in_progress`, `submit_failed`, `post_submit_error`, `queue_timeout`, `client_deadline`, `interrupted`, `poll_failed`, `remote_timeout` or `unknown`. A call that never reached the model is never `FAIL`. |
 | `error` | exception type and a sanitized message (max 500 characters), or `null` for a deadline |
 | `remote_frames` | function names only, no file paths |
 | `local_elapsed_s` | client wall clock from submission |
 | `function_call_id`, `app_id` | Modal IDs (not secrets) |
 | `watchdog` | limits, poll and error counts, last 20 stats readings, `execution_state`, `first_start_evidence_s`, `cancellation` |
-| `outstanding_function_call_id`, `manual_cleanup` | set when cancellation `failed` or is `unverified` (and in the provisional record) |
+| `outstanding_function_call_id`, `manual_cleanup` | set after every cancel except `completed_before_cancel` (outcomes `failed`, `unverified`, `terminal_error_observed`), and in the provisional record |
 | `cost_estimate` | the plan estimate, `kind: ESTIMATE_NOT_A_BILLING_CAP` |
 | `compatibility_pass_established` | always `false` |
 

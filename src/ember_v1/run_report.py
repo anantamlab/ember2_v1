@@ -13,9 +13,17 @@ drive it with fake call handles, without Modal.
   timeout + Modal execution timeout + grace. The report then says the execution state is unknown
   (or that a start was observed); it never claims the call stayed queued.
 - A timed-out `get()` does not cancel the remote call. Cancellation is an explicit
-  `FunctionCall.cancel(terminate_containers=True)`, then one more bounded `get()` checks it:
-  a terminal error means "confirmed", no answer means "unverified", an error from cancel() means
-  "failed". If not confirmed, the report keeps the FunctionCall ID and the manual cleanup steps.
+  `FunctionCall.cancel(terminate_containers=True)`, then one more bounded `get()` looks at it.
+  Modal 1.6.3 gives the client no cancellation-specific response: a terminated input surfaces as a
+  generic `RemoteError` (`modal._utils.function_utils._process_result`), the same class as other
+  failures. So a cancel is never reported as confirmed. Outcomes: "failed" (cancel() raised),
+  "terminal_error_observed" (get() then raised a non-timeout error), "unverified" (no terminal
+  state), "completed_before_cancel" (the result arrived; it is kept). Except for the last one, the
+  report keeps the FunctionCall ID and the manual cleanup steps.
+- Supervision starts at submission: if anything fails between `spawn()` and the first poll
+  (provisional write, log callback, Ctrl-C), or a BaseException escapes the wait loop, the call is
+  cancelled, the call ID and cancel outcome go to stderr (and to the report when it can be written),
+  and the original exception is re-raised. The call is never resubmitted.
 
 Every non-success ends in a FAIL/UNVERIFIED report written atomically at `path`; a provisional
 UNVERIFIED record with the FunctionCall ID is written right after submission, so a stale PASS never
@@ -32,6 +40,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import sys
 import tempfile
 import time
 import traceback
@@ -58,8 +67,10 @@ CANCEL_VERIFY_S = 15
 MAX_CONSECUTIVE_POLL_ERRORS = 3
 MAX_SNAPSHOTS = 20
 
-UNVERIFIED_STAGES = ("in_progress", "submit_failed", "queue_timeout", "client_deadline", "interrupted",
-                     "poll_failed", "remote_timeout", "unknown")
+UNVERIFIED_STAGES = ("in_progress", "submit_failed", "post_submit_error", "queue_timeout", "client_deadline",
+                     "interrupted", "poll_failed", "remote_timeout", "unknown")
+# Cancel outcomes after which the call may still exist: keep its ID and the cleanup steps.
+UNCONFIRMED_CANCEL = ("failed", "unverified", "terminal_error_observed")
 FAIL_STAGES = ("model_load", "remote_task")
 
 _REDACTIONS = (
@@ -168,7 +179,7 @@ def failure_report(plan: Mapping[str, Any], exc: BaseException | None, elapsed_s
     watch = dict(watch or {})
     call_id = watch.get("function_call_id")
     cancel = watch.get("cancellation") or {}
-    outstanding = stage == "in_progress" or cancel.get("outcome") in ("failed", "unverified")
+    outstanding = stage == "in_progress" or cancel.get("outcome") in UNCONFIRMED_CANCEL
     return {
         "schema": SCHEMA,
         "task": plan.get("task"),
@@ -214,7 +225,10 @@ def _snapshot(current_stats: Callable[[], Any] | None, at: float) -> dict[str, A
 
 
 def _cancel(call: Any) -> tuple[dict[str, Any], Any, bool]:
-    """Explicit cancel, then one bounded get() to check it. Returns (record, late_result, has_late_result)."""
+    """Explicit cancel, then one bounded get(). Returns (record, late_result, has_late_result).
+
+    Never reports "confirmed": Modal 1.6.3 has no cancellation-specific client response.
+    """
     rec: dict[str, Any] = {"requested": True, "terminate_containers": True, "outcome": None, "error": None,
                            "verify": None}
     try:
@@ -229,12 +243,27 @@ def _cancel(call: Any) -> tuple[dict[str, Any], Any, bool]:
     except (Exception, KeyboardInterrupt) as exc:  # noqa: BLE001
         if isinstance(exc, KeyboardInterrupt) or _is_poll_error(exc):
             rec.update(outcome="unverified", verify="check interrupted or failed", error=_error(exc))
-        else:
-            rec.update(outcome="confirmed", verify=f"get() after cancel ended with {type(exc).__name__}")
+        else:  # a terminal error, but not proof that the cancel caused it
+            rec.update(outcome="terminal_error_observed", error=_error(exc),
+                       verify="get() after cancel raised a generic error; cancellation not confirmed")
     else:
         rec.update(outcome="completed_before_cancel", verify="the call returned its result before the cancel")
         return rec, late, True
     return rec, None, False
+
+
+def _diagnose(watch: Mapping[str, Any], stage: str, exc: BaseException | None) -> None:
+    """Last-resort record on stderr (IDs, stage, cancel outcome, cleanup). Never raises."""
+    try:
+        outcome = (watch.get("cancellation") or {}).get("outcome")
+        call_id, app_id = watch.get("function_call_id"), watch.get("app_id")
+        line = {"ember_v1_watchdog": stage, "function_call_id": call_id, "app_id": app_id, "cancellation": outcome,
+                "error": _error(exc),
+                "manual_cleanup": [] if outcome == "completed_before_cancel" else manual_cleanup(app_id, call_id)}
+        sys.stderr.write(json.dumps(line, default=str) + "\n")
+        sys.stderr.flush()
+    except Exception:  # noqa: BLE001, S110 - a diagnostic must not hide the original error
+        pass
 
 
 def watch_remote_call(submit: Callable[[], Any], *, plan: Mapping[str, Any], path: Path | str,
@@ -244,7 +273,8 @@ def watch_remote_call(submit: Callable[[], Any], *, plan: Mapping[str, Any], pat
     """Submit once and wait within bounds. Return (result, watch); result is None after a written report.
 
     `submit()` must return a FunctionCall-like object (`object_id`, `get(timeout=)`, `cancel(terminate_containers=)`).
-    SystemExit is not caught.
+    Any other exception after submission (including SystemExit, or a failed write or log) cancels the
+    call, is recorded on stderr and in the report when possible, and is re-raised.
     """
     started = clock()
 
@@ -267,6 +297,19 @@ def watch_remote_call(submit: Callable[[], Any], *, plan: Mapping[str, Any], pat
                             "cancellation": (watch["cancellation"] or {}).get("outcome")}))
         return None, watch
 
+    def abort(stage: str, exc: BaseException) -> None:
+        """Cancel after an unexpected error; record it where possible. The caller re-raises `exc`."""
+        watch["cancellation"] = _cancel(call)[0]  # a late result is dropped: the original error wins
+        watch["elapsed_s"] = round(elapsed(), 1)
+        try:
+            write_json_atomic(path, failure_report(plan, exc, elapsed(), stage=stage, watch=watch))
+        except BaseException:  # noqa: BLE001 - persistence is unavailable; never leave an older PASS
+            try:
+                Path(path).unlink(missing_ok=True)
+            except BaseException:  # noqa: BLE001, S110
+                pass
+        _diagnose(watch, stage, exc)
+
     try:
         watch["submissions"] += 1
         call = submit()
@@ -275,12 +318,16 @@ def watch_remote_call(submit: Callable[[], Any], *, plan: Mapping[str, Any], pat
     except Exception as exc:  # noqa: BLE001 - the input may or may not exist; nothing to cancel by ID
         watch["execution_state"] = "unknown"
         return finish("submit_failed", exc)
-    watch["function_call_id"] = getattr(call, "object_id", None)
-    watch["execution_state"] = "submitted"
-    # Provisional record: replaces any older result and keeps the call ID if this process dies.
-    write_json_atomic(path, failure_report(plan, None, elapsed(), stage="in_progress", watch=watch))
-    if log:
-        log(json.dumps({"submitted": watch["function_call_id"], "app_id": app_id, "client_deadline_s": deadline}))
+    try:  # supervised from here: any failure before the first poll cancels the call
+        watch["function_call_id"] = getattr(call, "object_id", None)
+        watch["execution_state"] = "submitted"
+        # Provisional record: replaces any older result and keeps the call ID if this process dies.
+        write_json_atomic(path, failure_report(plan, None, elapsed(), stage="in_progress", watch=watch))
+        if log:
+            log(json.dumps({"submitted": watch["function_call_id"], "app_id": app_id, "client_deadline_s": deadline}))
+    except BaseException as exc:
+        abort("interrupted" if isinstance(exc, KeyboardInterrupt) else "post_submit_error", exc)
+        raise
 
     trigger, cause, errors_in_row = None, None, 0
     try:
@@ -328,6 +375,9 @@ def watch_remote_call(submit: Callable[[], Any], *, plan: Mapping[str, Any], pat
                 break
     except KeyboardInterrupt as exc:
         trigger, cause = "interrupted", exc
+    except BaseException as exc:  # SystemExit, or a failed report write: cancel, record, re-raise
+        abort("post_submit_error", exc)
+        raise
 
     rec, late, has_late = _cancel(call)
     watch["cancellation"] = rec
@@ -335,4 +385,8 @@ def watch_remote_call(submit: Callable[[], Any], *, plan: Mapping[str, Any], pat
         watch["execution_state"] = "completed"
         watch["elapsed_s"] = round(elapsed(), 1)
         return late, watch
-    return finish(trigger, cause)
+    try:
+        return finish(trigger, cause)
+    except BaseException:
+        _diagnose(watch, trigger, cause)  # the cancel outcome survives a failed report write or log
+        raise

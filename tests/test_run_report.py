@@ -1,6 +1,7 @@
 """Bounded-wait watchdog and structured local reports for Modal runs (CPU only, fake call handles)."""
 import json
 from collections import namedtuple
+from pathlib import Path
 
 import pytest
 
@@ -178,10 +179,11 @@ def test_confirmed_queue_wait_is_cancelled_at_the_queue_limit(tmp_path):
     _assert_not_pass(report, "queue_timeout", path)
     assert report["local_elapsed_s"] == run_report.QUEUE_WAIT_LIMIT_S
     assert call.cancels == [True]  # explicit cancel, containers terminated
-    assert report["watchdog"]["cancellation"]["outcome"] == "confirmed"
+    # A generic terminal error after the cancel is not proof of cancellation: keep the ID and cleanup.
+    assert report["watchdog"]["cancellation"]["outcome"] == "terminal_error_observed"
     assert report["watchdog"]["execution_state"] == "queued"
     assert report["watchdog"]["queued_snapshots"] == run_report.QUEUE_WAIT_LIMIT_S // run_report.POLL_INTERVAL_S
-    assert report["outstanding_function_call_id"] is None and report["manual_cleanup"] == []
+    assert report["outstanding_function_call_id"] == CALL_ID and report["manual_cleanup"]
     assert report["function_call_id"] == CALL_ID and report["app_id"] == APP_ID
 
 
@@ -261,7 +263,7 @@ def test_user_interrupt_cancels_and_reports(tmp_path):
     result, _, report, submit, path = _watch(tmp_path, call, stats_seq(QUEUED))
     assert result is None and submit.count == 1
     _assert_not_pass(report, "interrupted", path)
-    assert call.cancels == [True] and report["watchdog"]["cancellation"]["outcome"] == "confirmed"
+    assert call.cancels == [True] and report["watchdog"]["cancellation"]["outcome"] == "terminal_error_observed"
 
 
 def test_submit_failure_is_unverified_without_a_call_id(tmp_path):
@@ -272,9 +274,155 @@ def test_submit_failure_is_unverified_without_a_call_id(tmp_path):
     assert report["function_call_id"] is None and watch["cancellation"] is None
 
 
-def test_system_exit_is_not_swallowed(tmp_path):
+def test_system_exit_is_re_raised_after_a_cancel(tmp_path, capsys):
+    call = FakeCall(Clock(), [SystemExit(3)])
+    submit = Submitter(call)
     with pytest.raises(SystemExit):
-        _watch(tmp_path, FakeCall(Clock(), [SystemExit(3)]))
+        _watch(tmp_path, call, submit=submit)
+    assert submit.count == 1 and call.cancels == [True] and CALL_ID in capsys.readouterr().err
+
+
+# --- the interval between spawn() and the first poll ---------------------------------------------
+
+def _stderr_record(capsys):
+    lines = [json.loads(line) for line in capsys.readouterr().err.splitlines() if line.startswith("{")]
+    assert len(lines) == 1
+    return lines[0]
+
+
+def test_provisional_write_failure_cancels_and_reports_on_stderr(tmp_path, monkeypatch, capsys):
+    path = tmp_path / "results" / "inspect-L4-bf16-compact.json"
+    run_report.write_json_atomic(path, {"status": "PASS"})  # stale result from an older run
+
+    def no_disk(*args, **kwargs):
+        raise OSError("No space left on device")
+
+    monkeypatch.setattr(run_report, "write_json_atomic", no_disk)
+    call = FakeCall(Clock())
+    submit = Submitter(call)
+    with pytest.raises(OSError, match="No space left"):  # the original error, not a later one
+        run_report.watch_remote_call(submit, plan=_plan(), path=path, app_id=APP_ID, clock=call.clock)
+    assert submit.count == 1 and call.cancels == [True]
+    record = _stderr_record(capsys)
+    assert record["function_call_id"] == CALL_ID and record["ember_v1_watchdog"] == "post_submit_error"
+    assert record["cancellation"] == "terminal_error_observed"
+    assert any(CALL_ID in step for step in record["manual_cleanup"])
+    assert not path.exists()  # the stale PASS is removed when no report can be written
+
+
+def test_log_failure_after_submit_cancels_and_writes_a_report(tmp_path, capsys):
+    path = tmp_path / "results" / "inspect-L4-bf16-compact.json"
+    call = FakeCall(Clock())
+    submit = Submitter(call)
+
+    def log(line):
+        raise BrokenPipeError("stdout closed")
+
+    with pytest.raises(BrokenPipeError):
+        run_report.watch_remote_call(submit, plan=_plan(), path=path, app_id=APP_ID, clock=call.clock, log=log)
+    assert submit.count == 1 and call.cancels == [True] and call.gets == [run_report.CANCEL_VERIFY_S]
+    report = json.loads(path.read_text(encoding="utf-8"))
+    _assert_not_pass(report, "post_submit_error", path)
+    assert report["outstanding_function_call_id"] == CALL_ID
+    assert report["error"]["type"].endswith("BrokenPipeError")
+    assert _stderr_record(capsys)["function_call_id"] == CALL_ID
+
+
+def test_interrupt_after_submit_cancels_and_re_raises(tmp_path):
+    path = tmp_path / "results" / "inspect-L4-bf16-compact.json"
+    call = FakeCall(Clock())
+    submit = Submitter(call)
+
+    def log(line):
+        raise KeyboardInterrupt()
+
+    with pytest.raises(KeyboardInterrupt):
+        run_report.watch_remote_call(submit, plan=_plan(), path=path, clock=call.clock, log=log)
+    assert submit.count == 1 and call.cancels == [True]
+    _assert_not_pass(json.loads(path.read_text(encoding="utf-8")), "interrupted", path)
+
+
+def test_cancel_failure_after_a_write_failure_keeps_the_original_error(tmp_path, monkeypatch, capsys):
+    def no_disk(*args, **kwargs):
+        raise PermissionError("read-only file system")
+
+    monkeypatch.setattr(run_report, "write_json_atomic", no_disk)
+    call = FakeCall(Clock(), cancel_error=ConnectionError("cancel rpc failed"))
+    submit = Submitter(call)
+    with pytest.raises(PermissionError, match="read-only"):
+        run_report.watch_remote_call(submit, plan=_plan(), path=tmp_path / "r.json", app_id=APP_ID,
+                                     clock=call.clock)
+    record = _stderr_record(capsys)
+    assert submit.count == 1 and call.cancels == [True] and call.gets == []
+    assert record["cancellation"] == "failed" and f"modal app stop --yes {APP_ID}" in record["manual_cleanup"]
+
+
+def test_broken_stderr_does_not_hide_the_original_error(tmp_path, monkeypatch):
+    class Broken:
+        def write(self, text):
+            raise OSError("stderr closed")
+
+        def flush(self):
+            raise OSError("stderr closed")
+
+    def no_disk(*args, **kwargs):
+        raise OSError("disk gone")
+
+    monkeypatch.setattr(run_report, "write_json_atomic", no_disk)
+    monkeypatch.setattr(run_report.sys, "stderr", Broken())
+    call = FakeCall(Clock())
+    with pytest.raises(OSError, match="disk gone"):
+        run_report.watch_remote_call(Submitter(call), plan=_plan(), path=tmp_path / "r.json", clock=call.clock)
+    assert call.cancels == [True]
+
+
+def test_final_report_write_failure_still_records_the_cancel_outcome(tmp_path, monkeypatch, capsys):
+    real = run_report.write_json_atomic
+    writes = []
+
+    def second_write_fails(path, doc):
+        writes.append(doc.get("stage"))
+        if len(writes) > 1:
+            raise OSError("disk full")
+        return real(path, doc)
+
+    monkeypatch.setattr(run_report, "write_json_atomic", second_write_fails)
+    call = FakeCall(Clock())
+    with pytest.raises(OSError, match="disk full"):
+        run_report.watch_remote_call(Submitter(call), plan=_plan(), path=tmp_path / "r.json",
+                                     current_stats=stats_seq(QUEUED), clock=call.clock)
+    record = _stderr_record(capsys)
+    assert call.cancels == [True] and record["ember_v1_watchdog"] == "queue_timeout"
+    assert record["cancellation"] == "terminal_error_observed" and record["function_call_id"] == CALL_ID
+
+
+# --- cancellation evidence -----------------------------------------------------------------------
+
+@pytest.mark.parametrize("after_cancel_error", [
+    RemoteError("Function call was cancelled"),  # wording alone is not cancellation-specific evidence
+    RuntimeError("CUDA error: an illegal memory access was encountered"),
+    InputCancellation("Input was cancelled by user"),
+])
+def test_no_error_after_cancel_counts_as_confirmed(tmp_path, after_cancel_error):
+    class Call(FakeCall):
+        def get(self, timeout=None):
+            if self.cancelled:
+                raise after_cancel_error
+            return super().get(timeout)
+
+    call = Call(Clock())
+    _, _, report, submit, path = _watch(tmp_path, call, stats_seq(QUEUED))
+    _assert_not_pass(report, "queue_timeout", path)
+    cancel = report["watchdog"]["cancellation"]
+    assert submit.count == 1 and cancel["outcome"] == "terminal_error_observed"
+    assert cancel["error"]["type"].endswith(type(after_cancel_error).__name__)
+    assert report["outstanding_function_call_id"] == CALL_ID and report["manual_cleanup"]
+
+
+def test_cancel_outcomes_never_include_confirmed():
+    src = Path(run_report.__file__).read_text(encoding="utf-8")
+    assert 'outcome="confirmed"' not in src
+    assert set(run_report.UNCONFIRMED_CANCEL) == {"failed", "unverified", "terminal_error_observed"}
 
 
 # --- remote outcomes ---------------------------------------------------------------------------
