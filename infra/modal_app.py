@@ -56,8 +56,10 @@ if os.environ.get("EMBER_FAST_KERNELS") == "1":
     # NOT locked and built on a GPU builder (billed). Not part of the first inspect.
     image = image.pip_install("flash-linear-attention", "causal-conv1d", gpu="L4")
 # Last build step, CPU only: audited upstream bytes + exact pinned versions, else the build fails.
+# The source is copied to /root/ember_v1. Modal adds /root to sys.path only at function run time,
+# not in builder RUN steps (first inspect, 2026-11-03: ModuleNotFoundError), so set PYTHONPATH here.
 image = (image.add_local_python_source("ember_v1", copy=True)
-         .run_commands("python -m ember_v1.p0b verify-install"))
+         .run_commands("PYTHONPATH=/root python -m ember_v1.p0b verify-install"))
 
 app = modal.App(APP_NAME)
 hf_cache = modal.Volume.from_name("ember-v1-hf-cache", create_if_missing=True)

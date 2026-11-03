@@ -45,7 +45,7 @@ Load path facts (source, wheel 2026.10.11): `Qwen3.5-2B` is a plain LM, so `Fast
 1. Base image by digest, Python 3.11, `git` + `build-essential` (triton needs gcc).
 2. `pip install -r infra/p0b-requirements.lock.txt`: 107 packages, exact versions, sha256 hashes (pip hash-checking mode). The lock comes from `uv pip compile infra/p0b-requirements.in --python-version 3.11 --python-platform x86_64-manylinux_2_28 --generate-hashes`.
 3. `python -m pip check`.
-4. `python -m ember_v1.p0b verify-install` (CPU, no unsloth import): the four upstream files must have the audited sha256, and `unsloth`, `unsloth_zoo`, `torch`, `transformers`, `trl`, `xformers`, `triton`, `torchao` must equal `PINNED_RUNTIME`. Else the build fails.
+4. `PYTHONPATH=/root python -m ember_v1.p0b verify-install` (CPU, no unsloth import). `add_local_python_source` copies the package to `/root/ember_v1`, and Modal puts `/root` on `sys.path` only at function run time, not in builder `RUN` steps. The first attempt (2026-11-03, app `ap-3xQNSAAuF38oW9Y9O3CQHJ`) failed here with `ModuleNotFoundError: No module named 'ember_v1'`, before any GPU container. The CPU test `test_verify_install_build_step_imports_from_pythonpath` checks only the import path; only a real Modal image build verifies this step. In this step: the four upstream files must have the audited sha256, and `unsloth`, `unsloth_zoo`, `torch`, `transformers`, `trl`, `xformers`, `triton`, `torchao` must equal `PINNED_RUNTIME`. Else the build fails.
 
 Steps 2–4 run on Modal's CPU image builder, before any GPU container. The lock sha256 is in the container env (`EMBER_IMAGE_LOCK_SHA256`) and in the result metadata (`host.image_lock_sha256`).
 

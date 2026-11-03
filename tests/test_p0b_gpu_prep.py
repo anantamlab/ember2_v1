@@ -140,6 +140,43 @@ def test_modal_app_uses_the_plan_limits():
     assert "batched_forward: bool = modal.parameter(default=False)" in src
 
 
+VERIFY_CMD = '.run_commands("PYTHONPATH=/root python -m ember_v1.p0b verify-install")'
+
+
+def test_modal_image_runs_verify_install_with_root_on_pythonpath():
+    # First inspect (2026-11-03) failed: the builder RUN step does not have /root on sys.path.
+    src = (ROOT / "infra" / "modal_app.py").read_text(encoding="utf-8")
+    copy = src.index('add_local_python_source("ember_v1", copy=True)')
+    assert src.count("verify-install") == 1 and src.index(VERIFY_CMD) > copy
+
+
+def _find_p0b(cwd, pythonpath):
+    import os
+    import subprocess
+    env = {k: v for k, v in os.environ.items() if k != "PYTHONPATH"}
+    if pythonpath:
+        env["PYTHONPATH"] = str(pythonpath)
+    code = "import importlib.util as u; print(u.find_spec('ember_v1.p0b').origin)"
+    out = subprocess.run([sys.executable, "-c", code], cwd=cwd, env=env, capture_output=True, text=True)
+    return out.stdout.strip() if out.returncode == 0 else None
+
+
+def test_verify_install_build_step_imports_from_pythonpath(tmp_path):
+    """The package copied to <root>/ember_v1 imports from another working directory with PYTHONPATH=<root>.
+
+    This checks only the import path on the CPU. It does not replace a real Modal image build.
+    """
+    import shutil
+    root, elsewhere = tmp_path / "root", tmp_path / "elsewhere"
+    elsewhere.mkdir()
+    shutil.copytree(Path(p0b.__file__).parent, root / "ember_v1", ignore=shutil.ignore_patterns("__pycache__"))
+    copied = root / "ember_v1" / "p0b.py"
+    with_path = _find_p0b(elsewhere, root)
+    assert with_path is not None and Path(with_path).resolve() == copied.resolve()
+    without = _find_p0b(elsewhere, None)  # no copy in the working directory: never the copied file
+    assert without is None or Path(without).resolve() != copied.resolve()
+
+
 @pytest.mark.parametrize("args, error", [
     (("inspect", "L4", p0b.PINNED_MODEL, "bf16", "", CLEAN), PermissionError),
     (("smoke", "L4", p0b.PINNED_MODEL, "bf16", "inspect", CLEAN), PermissionError),
