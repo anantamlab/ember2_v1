@@ -26,7 +26,8 @@ def main():
     args = parser.parse_args()
     model, tokenizer = p0b.load_model(args.model, args.max_seq, args.precision)
     report = p0b.task_smoke(model, tokenizer, (1, 10, 50, 100, 200), args.repeats, args.question_style)
-    report["metadata"] = p0b.runtime_metadata(model, args.model, args.precision, args.max_seq)
+    report["metadata"] = p0b.runtime_metadata(model, tokenizer, args.model, args.precision, args.max_seq,
+                                              evidence_source="local:experiments/phase0b_unsloth_smoke.py")
     print(json.dumps(report, indent=2))
     if report["status"] != "PASS":
         raise SystemExit(2)

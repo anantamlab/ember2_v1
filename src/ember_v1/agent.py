@@ -62,15 +62,34 @@ class DecisionAgent:
 
 
 def unsloth_predictor(model: Any, tokenizer: Any) -> Callable[[str, dict], Mapping[str, Any]]:
-    """Bind the existing Unsloth decision API; no bespoke neural network."""
+    """Bind the existing Unsloth decision API; no bespoke neural network.
+
+    Every call needs positive evidence that the full state was encoded
+    (`p0b.predict_answers`); unverified or truncated inputs raise.
+    """
     from unsloth import FastDecisionModel  # requires a configured compatible GPU environment
+
+    from .p0b import predict_answers
 
     FastDecisionModel.for_inference(model)
 
     def predict(state: str, questions: dict) -> Mapping[str, Any]:
-        return FastDecisionModel.predict(model, tokenizer, state, questions)
+        res = predict_answers(model, tokenizer, {"state": state, "questions": questions})
+        if res["status"] != "OK":
+            raise RuntimeError(f"decision input not verified ({res['status']}): fail closed")
+        return res["answers"]
 
     return predict
+
+
+def checked_response(response: Any, questions: Mapping[str, Any]) -> Mapping[str, Any]:
+    """Accept a `DecisionPolicy.decide` response only with explicit OK evidence."""
+    from .p0b import validate_answers
+
+    if not isinstance(response, Mapping) or response.get("status") != "OK" or response.get("truncated") is not False:
+        status = response.get("status") if isinstance(response, Mapping) else type(response).__name__
+        raise ValueError(f"decision service response not verified ({status}): fail closed")
+    return validate_answers(response.get("answers"), questions)
 
 
 def modal_predictor(app_name: str = "ember-v1", cls_name: str = "DecisionPolicy",
@@ -79,12 +98,22 @@ def modal_predictor(app_name: str = "ember-v1", cls_name: str = "DecisionPolicy"
 
     The simulator and this agent run on the CPU side; only inference is remote.
     Network errors raise: there is no silent fallback action.
+    `predict.timings` keeps client end-to-end time (network + Modal queue/batch
+    wait + server) next to the server-side batch execution timing.
     """
+    import time
+
     import modal
 
     policy = modal.Cls.from_name(app_name, cls_name)(**params)
+    timings: list[dict[str, Any]] = []
 
     def predict(state: str, questions: dict) -> Mapping[str, Any]:
-        return policy.decide.remote({"state": state, "questions": questions})["answers"]
+        t0 = time.perf_counter()
+        response = policy.decide.remote({"state": state, "questions": questions})
+        timings.append({"end_to_end_s": time.perf_counter() - t0,
+                        "server": response.get("timing") if isinstance(response, Mapping) else None})
+        return checked_response(response, questions)
 
+    predict.timings = timings  # type: ignore[attr-defined]
     return predict
