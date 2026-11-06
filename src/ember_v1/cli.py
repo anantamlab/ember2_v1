@@ -38,7 +38,24 @@ def main() -> None:
     p.add_argument("--quality", choices=QUALITIES, required=True)
     p.add_argument("--out", required=True, help="output JSONL of validated trace records")
     p.add_argument("--registry", default="data/sources.json")
+    p = sub.add_parser("gen-splits", help="build, audit and write immutable scenario split manifests (CPU only)")
+    p.add_argument("--plan", help="plan JSON (default: the built-in p1-02-v1 plan)")
+    p.add_argument("--out", required=True, help="public split directory (index, train, dev, calibration)")
+    p.add_argument("--sealed-dir", help="directory for the locked test manifest; must be outside --out")
+    p = sub.add_parser("verify-splits", help="rebuild a split index and compare every file with the rebuild")
+    p.add_argument("--dir", required=True, help="public split directory with index.json")
+    p.add_argument("--sealed-dir", help="also verify the locked test manifest in this directory")
     args = parser.parse_args()
+    if args.cmd in ("gen-splits", "verify-splits"):
+        from .gen.splits import SplitPlan, verify_split_files, write_split_files
+        if args.cmd == "gen-splits":
+            plan = SplitPlan.from_dict(_read(args.plan)) if args.plan else SplitPlan.default()
+            idx = write_split_files(plan, args.out, args.sealed_dir)
+            print(json.dumps({"plan_id": idx["plan"]["plan_id"], "index_hash": idx["index_hash"],
+                              "splits": idx["splits"], "audit_passed": idx["audit"]["passed"]}, indent=2, sort_keys=True))
+        else:
+            print(json.dumps(verify_split_files(args.dir, args.sealed_dir), indent=2, sort_keys=True))
+        return
     if args.cmd == "ingest":
         records, entry = ingest_zip(Path(args.zip), source_id=args.source_id, quality=args.quality)
         out = Path(args.out)

@@ -1,0 +1,659 @@
+{
+ "audit": {
+  "checks": {
+   "core_hashes_disjoint": {
+    "examples": [],
+    "passed": true,
+    "violations": 0
+   },
+   "family_ids_disjoint": {
+    "examples": [],
+    "passed": true,
+    "violations": 0
+   },
+   "family_single_split": {
+    "examples": [],
+    "passed": true,
+    "violations": 0
+   },
+   "lineage_ids_disjoint": {
+    "examples": [],
+    "passed": true,
+    "violations": 0
+   },
+   "lineage_ids_unique": {
+    "examples": [],
+    "passed": true,
+    "violations": 0
+   },
+   "near_duplicate_maps": {
+    "examples": [],
+    "passed": true,
+    "violations": 0
+   },
+   "scenario_hashes_disjoint": {
+    "examples": [],
+    "passed": true,
+    "violations": 0
+   },
+   "scenario_seeds_unique": {
+    "examples": [],
+    "passed": true,
+    "violations": 0
+   },
+   "seeds_disjoint": {
+    "examples": [],
+    "passed": true,
+    "violations": 0
+   },
+   "topology_disjoint": {
+    "examples": [],
+    "passed": true,
+    "violations": 0
+   }
+  },
+  "distinct_maps": 120,
+  "items": 355,
+  "map_pairs_compared": 7140,
+  "near_duplicate_thresholds": {
+   "area_ratio": 1.3,
+   "aspect_ratio": 1.15,
+   "coarse_grid": 16,
+   "exit_chamfer": 0.1,
+   "wall_mad": 0.03
+  },
+  "passed": true
+ },
+ "coverage": {
+  "calibration": {
+   "archetype": {
+    "corridor": 12,
+    "irregular": 12,
+    "multi_room": 9,
+    "open_room": 15
+   },
+   "area": {
+    "0-149": 3,
+    "150-299": 9,
+    "300-599": 15,
+    "600-1199": 21
+   },
+   "aspect": {
+    "100-124": 3,
+    "125-149": 6,
+    "150-199": 24,
+    "200-250": 15
+   },
+   "bottleneck_cells": {
+    "0-0": 27,
+    "1-2": 9,
+    "10-29": 6,
+    "3-9": 6
+   },
+   "crowd_placement": {
+    "clustered": 17,
+    "far_from_exits": 6,
+    "near_exits": 11,
+    "uniform": 14
+   },
+   "difficulty_reasons": {
+    "exit_capacity": 4,
+    "fire_race": 11
+   },
+   "enter_fire": {
+    "blocked": 23,
+    "casualty": 25
+   },
+   "exits": {
+    "1": 12,
+    "2": 18,
+    "3": 9,
+    "4": 9
+   },
+   "exits_flammable": {
+    "false": 20,
+    "true": 28
+   },
+   "failed_lineages": 0,
+   "families": 16,
+   "fire_model": {
+    "deterministic": 21,
+    "stochastic": 27
+   },
+   "flags": {
+    "bottleneck_on_route": 21,
+    "heterogeneous_urgency": 12,
+    "isolated_people": 3,
+    "multiple_reachable_exits": 34,
+    "nearest_exit_cut_by_fire": 7,
+    "nearest_exit_overload": 4,
+    "stochastic_fire": 27
+   },
+   "ignition_placement": {
+    "bottleneck": 5,
+    "far_from_crowd": 9,
+    "near_crowd": 9,
+    "near_exit": 7,
+    "random": 18
+   },
+   "ignitions": {
+    "1": 19,
+    "2": 16,
+    "3": 13
+   },
+   "label": {
+    "difficult": 12,
+    "feasible": 33,
+    "unreachable": 3
+   },
+   "max_steps": {
+    "120-199": 17,
+    "200-300": 6,
+    "40-79": 10,
+    "80-119": 15
+   },
+   "people": {
+    "1-1": 2,
+    "16-40": 23,
+    "2-5": 7,
+    "41-80": 7,
+    "6-15": 7,
+    ">=81": 2
+   },
+   "scenarios": 48,
+   "short_side": {
+    "12-15": 15,
+    "16-19": 3,
+    "20-24": 12,
+    "25-30": 9,
+    "8-11": 9
+   },
+   "spread_interval": {
+    "1": 12,
+    "2": 15,
+    "3": 10,
+    "4": 11
+   },
+   "spread_probability": {
+    "0-24": 3,
+    "25-49": 15,
+    "50-74": 5,
+    "75-100": 4,
+    "deterministic": 21
+   },
+   "unreachable_mechanism": {
+    "fire_cut": 2,
+    "pocket": 1
+   },
+   "wall_fraction_pct": {
+    "15-29": 15,
+    "30-49": 6,
+    "5-14": 12,
+    "50-69": 3,
+    ">=70": 12
+   }
+  },
+  "dev": {
+   "archetype": {
+    "corridor": 12,
+    "irregular": 12,
+    "multi_room": 9,
+    "open_room": 15
+   },
+   "area": {
+    "1200-2399": 6,
+    "150-299": 6,
+    "300-599": 18,
+    "600-1199": 18
+   },
+   "aspect": {
+    "100-124": 3,
+    "125-149": 6,
+    "150-199": 27,
+    "200-250": 12
+   },
+   "bottleneck_cells": {
+    "0-0": 23,
+    "1-2": 8,
+    "10-29": 8,
+    "3-9": 9
+   },
+   "crowd_placement": {
+    "clustered": 17,
+    "far_from_exits": 5,
+    "near_exits": 11,
+    "uniform": 15
+   },
+   "difficulty_reasons": {
+    "exit_capacity": 2,
+    "fire_race": 13
+   },
+   "enter_fire": {
+    "blocked": 29,
+    "casualty": 19
+   },
+   "exits": {
+    "1": 12,
+    "2": 15,
+    "3": 6,
+    "4": 15
+   },
+   "exits_flammable": {
+    "false": 24,
+    "true": 24
+   },
+   "failed_lineages": 0,
+   "families": 16,
+   "fire_model": {
+    "deterministic": 19,
+    "stochastic": 29
+   },
+   "flags": {
+    "bottleneck_on_route": 25,
+    "heterogeneous_urgency": 10,
+    "isolated_people": 6,
+    "multiple_reachable_exits": 33,
+    "nearest_exit_cut_by_fire": 3,
+    "nearest_exit_overload": 18,
+    "stochastic_fire": 29
+   },
+   "ignition_placement": {
+    "bottleneck": 10,
+    "far_from_crowd": 7,
+    "near_crowd": 7,
+    "near_exit": 4,
+    "random": 20
+   },
+   "ignitions": {
+    "1": 18,
+    "2": 10,
+    "3": 20
+   },
+   "label": {
+    "difficult": 14,
+    "feasible": 28,
+    "unreachable": 6
+   },
+   "max_steps": {
+    "120-199": 14,
+    "200-300": 10,
+    "40-79": 4,
+    "80-119": 20
+   },
+   "people": {
+    "1-1": 1,
+    "16-40": 13,
+    "2-5": 7,
+    "41-80": 10,
+    "6-15": 11,
+    ">=81": 6
+   },
+   "scenarios": 48,
+   "short_side": {
+    "12-15": 18,
+    "16-19": 9,
+    "20-24": 9,
+    "25-30": 9,
+    "8-11": 3
+   },
+   "spread_interval": {
+    "1": 14,
+    "2": 11,
+    "3": 11,
+    "4": 12
+   },
+   "spread_probability": {
+    "0-24": 3,
+    "25-49": 7,
+    "50-74": 11,
+    "75-100": 8,
+    "deterministic": 19
+   },
+   "unreachable_mechanism": {
+    "fire_cut": 6
+   },
+   "wall_fraction_pct": {
+    "0-4": 3,
+    "15-29": 12,
+    "30-49": 9,
+    "5-14": 9,
+    "50-69": 9,
+    ">=70": 6
+   }
+  },
+  "train": {
+   "archetype": {
+    "corridor": 41,
+    "irregular": 57,
+    "multi_room": 36,
+    "open_room": 55
+   },
+   "area": {
+    "0-149": 8,
+    "1200-2399": 39,
+    "150-299": 27,
+    "300-599": 31,
+    "600-1199": 84
+   },
+   "aspect": {
+    "100-124": 29,
+    "125-149": 32,
+    "150-199": 68,
+    "200-250": 60
+   },
+   "bottleneck_cells": {
+    "0-0": 96,
+    "1-2": 29,
+    "10-29": 17,
+    "3-9": 44,
+    ">=30": 3
+   },
+   "crowd_placement": {
+    "clustered": 66,
+    "far_from_exits": 31,
+    "near_exits": 34,
+    "uniform": 58
+   },
+   "difficulty_reasons": {
+    "exit_capacity": 29,
+    "fire_race": 52
+   },
+   "enter_fire": {
+    "blocked": 80,
+    "casualty": 109
+   },
+   "exits": {
+    "1": 48,
+    "2": 44,
+    "3": 60,
+    "4": 37
+   },
+   "exits_flammable": {
+    "false": 89,
+    "true": 100
+   },
+   "failed_lineages": 3,
+   "families": 64,
+   "fire_model": {
+    "deterministic": 82,
+    "stochastic": 107
+   },
+   "flags": {
+    "bottleneck_on_route": 93,
+    "heterogeneous_urgency": 51,
+    "isolated_people": 21,
+    "multiple_reachable_exits": 129,
+    "nearest_exit_cut_by_fire": 24,
+    "nearest_exit_overload": 43,
+    "stochastic_fire": 107
+   },
+   "ignition_placement": {
+    "bottleneck": 25,
+    "far_from_crowd": 34,
+    "near_crowd": 28,
+    "near_exit": 30,
+    "random": 72
+   },
+   "ignitions": {
+    "1": 73,
+    "2": 55,
+    "3": 61
+   },
+   "label": {
+    "difficult": 59,
+    "feasible": 109,
+    "unreachable": 21
+   },
+   "max_steps": {
+    "0-39": 1,
+    "120-199": 89,
+    "200-300": 40,
+    "40-79": 15,
+    "80-119": 44
+   },
+   "people": {
+    "1-1": 8,
+    "16-40": 51,
+    "2-5": 14,
+    "41-80": 43,
+    "6-15": 34,
+    ">=81": 39
+   },
+   "scenarios": 189,
+   "short_side": {
+    "12-15": 21,
+    "16-19": 11,
+    "20-24": 71,
+    "25-30": 63,
+    "8-11": 23
+   },
+   "spread_interval": {
+    "1": 51,
+    "2": 61,
+    "3": 44,
+    "4": 33
+   },
+   "spread_probability": {
+    "0-24": 19,
+    "25-49": 27,
+    "50-74": 38,
+    "75-100": 23,
+    "deterministic": 82
+   },
+   "unreachable_mechanism": {
+    "fire_cut": 13,
+    "pocket": 8
+   },
+   "wall_fraction_pct": {
+    "0-4": 19,
+    "15-29": 48,
+    "30-49": 42,
+    "5-14": 27,
+    "50-69": 23,
+    ">=70": 30
+   }
+  }
+ },
+ "generator_revision": "gen-1.0.0",
+ "index_hash": "sha256:277f098d858b44ce790433f96d8cfe9eb21bec8addee4957cf882070aea74a1c",
+ "index_version": "1.0",
+ "lineage_rejections_all_splits": {
+  "label_mismatch:difficult": 369,
+  "label_mismatch:feasible": 564,
+  "label_mismatch:unreachable": 103,
+  "no_ignition_cells:bottleneck": 4
+ },
+ "plan": {
+  "families": {
+   "calibration": 16,
+   "dev": 16,
+   "locked_test": 24,
+   "train": 64
+  },
+  "lineages_per_family": 3,
+  "master_seed": 20261106,
+  "plan_id": "p1-02-v1",
+  "spec": {
+   "attempts": {
+    "family": 40,
+    "lineage": 60
+   },
+   "crowd": {
+    "clusters": [
+     1,
+     3
+    ],
+    "count": [
+     1,
+     120
+    ],
+    "density_permille": [
+     10,
+     200
+    ],
+    "placement": {
+     "clustered": 2,
+     "far_from_exits": 1,
+     "near_exits": 1,
+     "uniform": 2
+    }
+   },
+   "exits": {
+    "count": [
+     1,
+     4
+    ],
+    "interior_pct": 10,
+    "placement": {
+     "clustered": 1,
+     "random": 1,
+     "spread": 1
+    }
+   },
+   "fire": {
+    "enter_fire": {
+     "blocked": 1,
+     "casualty": 1
+    },
+    "exits_flammable_pct": 50,
+    "model": {
+     "deterministic": 1,
+     "stochastic": 1
+    },
+    "spread_interval": [
+     1,
+     4
+    ],
+    "spread_probability_pct": [
+     10,
+     90
+    ]
+   },
+   "grid": {
+    "aspect_pct": [
+     100,
+     250
+    ],
+    "short_side": [
+     8,
+     30
+    ]
+   },
+   "horizon": {
+    "max_steps": [
+     20,
+     300
+    ],
+    "steps_per_side_pct": [
+     150,
+     400
+    ]
+   },
+   "ignition": {
+    "count": [
+     1,
+     3
+    ],
+    "placement": {
+     "bottleneck": 1,
+     "far_from_crowd": 1,
+     "near_crowd": 1,
+     "near_exit": 1,
+     "random": 2
+    }
+   },
+   "layout": {
+    "cave_fill_pct": [
+     38,
+     46
+    ],
+    "cave_smoothing": [
+     2,
+     5
+    ],
+    "corridor_width": [
+     1,
+     3
+    ],
+    "door_width": [
+     1,
+     3
+    ],
+    "extra_door_pct": 35,
+    "min_room_side": [
+     3,
+     6
+    ],
+    "mix": {
+     "corridor": 1,
+     "irregular": 1,
+     "multi_room": 1,
+     "open_room": 1
+    },
+    "sealed_room_pct": 15
+   },
+   "obstacles": {
+    "connectivity": {
+     "free": 1,
+     "preserve": 3
+    },
+    "density_pct": [
+     0,
+     20
+    ]
+   },
+   "targets": {
+    "mix": {
+     "difficult": 3,
+     "feasible": 6,
+     "unreachable": 1
+    }
+   }
+  }
+ },
+ "plan_hash": "sha256:94ef33df208ae247757baeb91e6921690991ecd940f7d718882f34e9b55fafaa",
+ "pool": {
+  "family_failures": [],
+  "family_rejections": {
+   "exit_inaccessible": 7,
+   "fragmented_layout": 3,
+   "insufficient_exit_cells": 9
+  },
+  "slots_used": 120
+ },
+ "spec_hash": "sha256:992f8be306d7f23f6c1b35defba26f92fb471aa8d01afb1966174714e7633644",
+ "splits": {
+  "calibration": {
+   "failed_lineages": 0,
+   "families": 16,
+   "file": "calibration.json",
+   "manifest_hash": "sha256:20af10ddb371d7a34cfcc0588bb15f7562252724804f68526748d790d27736bd",
+   "scenarios": 48,
+   "sealed": false
+  },
+  "dev": {
+   "failed_lineages": 0,
+   "families": 16,
+   "file": "dev.json",
+   "manifest_hash": "sha256:b08c2b134ead2fb25d59990ac82f186654879808105e08a9211f090e6b6d1347",
+   "scenarios": 48,
+   "sealed": false
+  },
+  "locked_test": {
+   "failed_lineages": 2,
+   "families": 24,
+   "file": null,
+   "manifest_hash": "sha256:e1eb5d54ce8f8b6b5191d25d2f25d6b528085ad1977d5717b01e93742201c56a",
+   "scenarios": 70,
+   "sealed": true
+  },
+  "train": {
+   "failed_lineages": 3,
+   "families": 64,
+   "file": "train.json",
+   "manifest_hash": "sha256:96a564819bdc6910708cb2891b043ae3fa6a3d9066d5927ba721aa61d44b442d",
+   "scenarios": 189,
+   "sealed": false
+  }
+ }
+}
