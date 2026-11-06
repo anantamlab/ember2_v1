@@ -1,7 +1,7 @@
 # ember_v1 — Evacuation Decision Model (Anantam Labs) — HLD v3.1
 
 **Project:** `ember_v1` (repo `ember_v1`, Python package `ember_v1`, CLI `ember-v1`, Modal app `ember-v1`).
-**Status:** P0A done (CPU). P0B harness preflight-hardened on CPU (P0B-01, [P0B_PREFLIGHT.md](P0B_PREFLIGHT.md)); P0B GPU feasibility **NOT RUN**. No T0–T4 reference policy yet. Data sources: one registered fixture source S0 (§7.1). No trained model.
+**Status:** P0A done (CPU). P0B harness preflight-hardened on CPU (P0B-01, [P0B_PREFLIGHT.md](P0B_PREFLIGHT.md)); P0B GPU feasibility **NOT RUN**. T0 implemented and evaluated on CPU on independent DEV (P1-03, [P1_T0_BASELINE.md](P1_T0_BASELINE.md)); T1–T4 not implemented. Data sources: one registered fixture source S0 (§7.1). No trained model.
 **Supersedes:** HLD v2 (project "evac-decision"). The v2 phase gates stay; v3 adds a concrete teacher, a Modal plan, a token budget and four design decisions from verified Unsloth facts. v3.1 renames the project and adds the data-source registry.
 **Boundary:** separate repo. Never write training code or assets into EMBERBench.
 
@@ -104,7 +104,7 @@ If T1 (cheap) already matches T2, the amortization claim fails. Report that as a
 | Data-source registry + zip ingestion | `sources.py`, `ember-v1 ingest`, `data/sources.json` | Done, tested; S0 registered |
 | Independent simulator | `sim/` (`ember_v1.sim`) | Done: independent simulator, internal correctness and full-replay gates tested on CPU; public interface compatible; exact EMBERBench equivalence not claimed ([P1_SIMULATOR_PARITY.md](P1_SIMULATOR_PARITY.md)) |
 | Independent generator | `generator/` | P1 |
-| Reference policies T0–T4 + trace logger | `teacher/` | P1; blocked by the simulator gates (issue #5). Direction: [P1_TEACHER_DIRECTION.md](P1_TEACHER_DIRECTION.md) |
+| Reference policies T0–T4 + trace logger | `teacher/` | P1; T0, the versioned `ReferencePolicy` interface and DEV harness done (#7, [P1_T0_BASELINE.md](P1_T0_BASELINE.md)); T1–T4 and the trace logger open. Direction: [P1_TEACHER_DIRECTION.md](P1_TEACHER_DIRECTION.md) |
 | Training job, eval harness, reports | `training/`, `eval/`, `reports/` | P2–P3 |
 
 ## 4. Design decisions
@@ -136,7 +136,7 @@ The teacher sees only what the student sees (plus the known rules). So the imita
 
 | Level | Method | Cost | Role |
 |---|---|---|---|
-| T0 | Fire-aware BFS to nearest reachable exit, avoid burning and "soon-burning" cells | ms | Baseline; DAgger fallback check |
+| T0 | Fire-aware BFS to nearest reachable exit, avoid cells that burn now (no fire forecast in T0 v1) | ms | Baseline; DAgger fallback check |
 | T1 | Prioritized cooperative planner: process people in **ascending ID** (matches lowest-ID-wins), space-time reservation table, follow-chains allowed, swaps forbidden, exit load balancing by estimated arrival time | 10–100 ms | Strongest deterministic baseline; P2 reference |
 | T2 | Stochastic fire forecasting and rollout planning: for each person, evaluate each of the 5 actions with others fixed to the continuation policy, continue for H steps over K teacher-sampled fire futures (stochastic rules) | seconds | Candidate label source; the only policy with real per-action value estimates |
 | T3 | Dynamic ACO: ant-colony routing over hazard- and congestion-weighted edges, replanned every step; paths become a full action map via the exact resolver (#23) | budgeted | Standalone policy; actions only |

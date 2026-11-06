@@ -1,12 +1,12 @@
 # P1 teacher direction: five reference policies (T0–T4)
 
-**Status: design note only. Nothing here is implemented.** Teacher work starts only after the simulator gates G1–G3 in [P1_SIMULATOR_PARITY.md](P1_SIMULATOR_PARITY.md) §8 pass on the merged issue #5 code. This note extends HLD §4 D4.
+**Status: design note.** T0 is implemented (issue #7, [P1_T0_BASELINE.md](P1_T0_BASELINE.md)) with the shared `ember_v1.teacher.ReferencePolicy` interface and `grid-utils@1.0.0`. T1–T4 and the #25 coordinator are not implemented. This note extends HLD §4 D4.
 
 ## 1. The five policies
 
 | ID | Policy | Issue | Output | Per-action values |
 |---|---|---|---|---|
-| T0 | Fire-aware shortest path: BFS to the nearest reachable exit; avoids burning and soon-burning cells | #7 | Full ID → action map | No |
+| T0 | Fire-aware shortest path: BFS to the nearest reachable exit; avoids cells that burn now (no fire forecast in T0 v1) | #7 | Full ID → action map | No |
 | T1 | Congestion-aware coordination: prioritized cooperative planner (ascending ID), space-time reservation table, follow chains allowed, swaps forbidden, exit load balancing | #8 | Full ID → action map | No |
 | T2 | Stochastic fire forecasting and rollout planning: for each person and action, Monte-Carlo returns over K teacher-sampled fire futures and H steps, with a fixed continuation policy | #9 | Full ID → action map | **Yes** (real Monte-Carlo estimates) |
 | T3 | Dynamic ACO: ant-colony routing over a hazard- and congestion-weighted graph, replanned every step | #23 | Full ID → action map (not only paths) | No |
