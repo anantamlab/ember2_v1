@@ -1,7 +1,7 @@
 # ember_v1 — Evacuation Decision Model (Anantam Labs) — HLD v3.1
 
 **Project:** `ember_v1` (repo `ember_v1`, Python package `ember_v1`, CLI `ember-v1`, Modal app `ember-v1`).
-**Status:** P0A done (CPU). P0B harness preflight-hardened on CPU (P0B-01, [P0B_PREFLIGHT.md](P0B_PREFLIGHT.md)); P0B GPU feasibility **NOT RUN**. No T0–T2 teacher yet. Data sources: one registered fixture source S0 (§7.1). No trained model.
+**Status:** P0A done (CPU). P0B harness preflight-hardened on CPU (P0B-01, [P0B_PREFLIGHT.md](P0B_PREFLIGHT.md)); P0B GPU feasibility **NOT RUN**. No T0–T4 reference policy yet. Data sources: one registered fixture source S0 (§7.1). No trained model.
 **Supersedes:** HLD v2 (project "evac-decision"). The v2 phase gates stay; v3 adds a concrete teacher, a Modal plan, a token budget and four design decisions from verified Unsloth facts. v3.1 renames the project and adds the data-source registry.
 **Boundary:** separate repo. Never write training code or assets into EMBERBench.
 
@@ -10,7 +10,7 @@
 | Area | v2 | v3 | Why |
 |---|---|---|---|
 | Research claim | "Competitive with strongest planner" | **Amortize** an expensive observation-only planner into a policy that meets the deadline | A student trained on teacher labels rarely beats that teacher. The useful claim is "near-teacher safety at a fraction of teacher compute". |
-| Teacher | "Strong reference teacher" (undefined) | T0/T1/T2 stack (§4.4). T2 gives real per-action scores | P1 can not start without a concrete teacher. Real scores make KL distillation legitimate. |
+| Teacher | "Strong reference teacher" (undefined) | Five reference policies T0–T4 (§4 D4). Only T2 gives real per-action scores | P1 can not start without a concrete teacher. Real scores make KL distillation legitimate. |
 | Question text | One long sentence + 5 long option texts per person | `compact` style (ID, position, grid delta) as the P0B candidate | Questions are 84–94% of the payload at N=200 (D2). The Clef encoder **cuts the state** when a row is too long. |
 | Left padding | Required, else gate fails | **Out of scope (D3)**; gate accepts an explicit, recorded exclusion | The Clef head takes `attention_mask.sum()` as the length: right padding only. |
 | Safety shield | Not present | Disclosed single-person shield as an **ablation arm** (off by default) | Removes an error class (wall/boundary/fire moves) with no route planning. |
@@ -27,7 +27,7 @@
 2. it reaches a preregistered fraction of T2 quality, and
 3. its p99 step latency meets the documented deadline, where T2 does not?
 
-If T1 (cheap) already matches T2, the amortization claim fails. Report that as a negative result.
+If T1 (cheap) already matches T2, the amortization claim fails. Report that as a negative result. T2 is the default target; if the five-teacher gate (#25) freezes another policy (T0–T4 or a validated arbiter), the same claim applies to that policy.
 
 ## 2. Facts and assumptions
 
@@ -50,7 +50,7 @@ If T1 (cheap) already matches T2, the amortization claim fails. Report that as a
 | A1 | `model(input_ids=, attention_mask=, records=)` flat logits follow record-then-question order on the installed stack (source says yes) | `--task inspect`, then `padding` cross-checks argmax vs `predict()` [P0B] |
 | A2 | Installed `EncodedQuestion` has `question_id`/`option_ids` (source says yes; no positional fallback) | `inspect` prints attributes [P0B] |
 | A3 | `build_dataset` accepts `questions` as a dict (source: `_parsed` keeps dicts) | `smoke` [P0B] |
-| A4 | Off-grid and wall moves resolve as "stay", not as an error | Read EMBERBench `movement.py` before the shield is used [P0A+] |
+| A4 | Off-grid and wall moves resolve as "stay", not as an error | Documented in EMBERBench `simulation-contract.md` phase 3 (`blocked_boundary`, `blocked_wall`; the person stays) and tested in `ember_v1.sim`. Exact EMBERBench equivalence is not claimed ([P1_SIMULATOR_PARITY.md](P1_SIMULATOR_PARITY.md)) [P1] |
 | A5 | fla / causal-conv1d kernels actually run for Qwen3.5 DeltaNet layers | Profiler kernel names in `inspect` [P0B] |
 | A6 | A LoRA checkpoint dir loads through `from_pretrained(model_name=dir)` | First P3 checkpoint [P3] |
 | A7 | The real evaluation runner permits a remote (Modal) call inside `act()` | Read the runner/adapter; else measure a co-located GPU [P2] |
@@ -80,7 +80,7 @@ If T1 (cheap) already matches T2, the amortization claim fails. Report that as a
                     OFFLINE DATA / TRAINING PLANE
  S0 p0a zip (fixture) --ember-v1 ingest--> validated traces [pipeline_smoke only]
  Independent generator (topology families, private seeds)
-   -> Teacher T0/T1/T2 (observation-only) -> trace records (+ T2 action scores)
+   -> Reference policies T0-T4 (observation-only, #25 gate) -> trace records (+ T2 action scores)
    -> simulator replay verification -> ember-v1 ingest (quality tier, sha256)
    -> data/sources.json registry -> family/lineage split
    -> build_decision_row -> Modal training job (DecisionTrainer, LoRA + head)
@@ -102,8 +102,9 @@ If T1 (cheap) already matches T2, the amortization claim fails. Report that as a
 | GPU measurements | `p0b.py` | Preflight-hardened (P0B-01), tested on CPU with fakes, **not run on GPU** |
 | Modal app | `infra/modal_app.py` | Definition loads with `modal==1.6.3`, **not run** |
 | Data-source registry + zip ingestion | `sources.py`, `ember-v1 ingest`, `data/sources.json` | Done, tested; S0 registered |
-| Independent generator + simulator | `generator/`, `sim/` | P1 |
-| Teacher T0/T1/T2 + trace logger | `teacher/` | P1 |
+| Independent simulator | `sim/` (`ember_v1.sim`) | Done: independent simulator, internal correctness and full-replay gates tested on CPU; public interface compatible; exact EMBERBench equivalence not claimed ([P1_SIMULATOR_PARITY.md](P1_SIMULATOR_PARITY.md)) |
+| Independent generator | `generator/` | P1 |
+| Reference policies T0–T4 + trace logger | `teacher/` | P1; blocked by the simulator gates (issue #5). Direction: [P1_TEACHER_DIRECTION.md](P1_TEACHER_DIRECTION.md) |
 | Training job, eval harness, reports | `training/`, `eval/`, `reports/` | P2–P3 |
 
 ## 4. Design decisions
@@ -130,18 +131,22 @@ The head computes the length from `attention_mask.sum()` and uses absolute spans
 
 The harness runs three batch orders (short first, short last, short in the middle) and needs a PASS on each. It also requires 100% argmax agreement between the batched adapter (T=1) and `predict()` before the batched path is trusted.
 
-### D4 — Teacher: observation-only, three levels
+### D4 — Teacher: observation-only, five reference policies
 The teacher sees only what the student sees (plus the known rules). So the imitation target is realizable. A privileged teacher (seed or future fire) is an upper-bound report only, never a label source.
 
 | Level | Method | Cost | Role |
 |---|---|---|---|
 | T0 | Fire-aware BFS to nearest reachable exit, avoid burning and "soon-burning" cells | ms | Baseline; DAgger fallback check |
 | T1 | Prioritized cooperative planner: process people in **ascending ID** (matches lowest-ID-wins), space-time reservation table, follow-chains allowed, swaps forbidden, exit load balancing by estimated arrival time | 10–100 ms | Strongest deterministic baseline; P2 reference |
-| T2 | Rollout-improved T1: for each person, evaluate each of the 5 actions with others fixed to T1, continue all with T1 for H steps over K sampled fire futures (stochastic rules) | seconds | **Label source**; gives real per-action value estimates |
+| T2 | Stochastic fire forecasting and rollout planning: for each person, evaluate each of the 5 actions with others fixed to the continuation policy, continue for H steps over K teacher-sampled fire futures (stochastic rules) | seconds | Candidate label source; the only policy with real per-action value estimates |
+| T3 | Dynamic ACO: ant-colony routing over hazard- and congestion-weighted edges, replanned every step; paths become a full action map via the exact resolver (#23) | budgeted | Standalone policy; actions only |
+| T4 | Risk-based priority: per-person evacuation urgency (hazard exposure, entrapment risk, escape-time margin) sets planning order and route allocation; never overrides the lowest-ID resolver (#24) | budgeted | Standalone policy; actions only |
 
 T2 per-action values are real Monte-Carlo estimates. They allow `kl_weight > 0` soft targets in P3 (as an ablation vs hard labels). Record K, H and the continuation policy version in every trace. Do not call these values causal: other agents are held fixed.
 
-Movement-rule parity: the independent simulator must pass a shared test table (contested cells, chains, swaps, rotations, fire entry) that matches EMBERBench `movement.py` behavior before any teacher data is used.
+T3 and T4 are standalone policies, not T1 variants. Policies may share planning utilities (distance fields, sampled futures, resolver checks), but each has its own version, evaluation and provenance. All five are compared separately first; an optional arbiter is gated by #25. Incompatible scores are never averaged blindly, and per-action values are never invented for action-only policies. Details: [P1_TEACHER_DIRECTION.md](P1_TEACHER_DIRECTION.md).
+
+Simulator gate: before any teacher data is used, the independent simulator must pass its internal correctness, full-replay and supported-domain gates (G1–G3, [P1_SIMULATOR_PARITY.md](P1_SIMULATOR_PARITY.md) §8). It keeps the public observation/action interface and the documented movement rules. Exact EMBERBench implementation equivalence is not required and not claimed.
 
 ### D5 — Training recipe (P3 start point)
 - `DecisionTrainer`, LoRA r=16, alpha=16 (notebook), `head_learning_rate=1e-4` (library default), LoRA LR 2e-4, cosine, 1–2 epochs.
@@ -184,11 +189,12 @@ Many CPU workers call `decide.remote()` at the same time. Modal groups those cal
 | Phase | Cap | Note |
 |---|---|---|
 | P0B | $10 | Short runs on L4 and L40S |
-| P1–P2 | $15 | Mostly CPU (teacher T2 is CPU-heavy) |
+| P1–P2 | $15 | Mostly CPU (T2 is CPU-heavy). T3, T4 and the #25 arbiter fit inside this cap; no increase |
 | P3 | $60 | Pilot training + representation A/B |
 | P4 | $40 | Coordination arms |
 | P5–P6 | $35 | DAgger / AWR only if a gate needs them |
 | Reserve | $40 | Not spent without a written reason |
+| **Total** | **$200** | Unchanged by adding T3, T4 or the arbiter |
 
 Track GPU-seconds from `timing.batch_exec_s` (once per Modal batch, not per request), simulator CPU time separately. Never convert dollars to episodes before measurement.
 
@@ -200,10 +206,10 @@ The v2 DAG, pass criteria and stop-and-review protocol stay. Additions:
 |---|---|
 | P0A | Done. +compact questions, shield, gate checks (token count, left scope), data-source registry, S0 ingested. |
 | P0B | Run order: `inspect` -> `smoke` (both question styles) -> `padding` (3 orders) -> `throughput` (L4, L40S; with/without fast kernels). Gate: positive preservation evidence (`OK`, not `UNVERIFIED`) at N<=200 for the chosen style, pinned model revision, adapter agreement 100%, padding PASS, p50/p95/p99 (n >= 100) and VRAM recorded. Checklist and budget: [P0B_PREFLIGHT.md](P0B_PREFLIGHT.md). |
-| P1 | Simulator movement parity table; T0/T1/T2; trace schema (§7); T2 traces ingested as S1 (`teacher_verified` after replay); T2 cost per step measured. Gate: T2 beats T1 on dev by a measurable margin, else rethink the amortization claim before training. |
+| P1 | Independent simulator gates G1–G3 (#5); T0–T4 evaluated separately (#7–#9, #23, #24); five-teacher gate (#25); trace schema (§7); S1 ingest as `teacher_verified` only after full-episode replay and the #10 provenance protections; T2 cost per step measured. Gate: T2 beats T1 on dev by a measurable margin, else rethink the amortization claim before training. |
 | P2 | Preregister: primary endpoint, margins, paired-seed CI method, N episodes from pilot variance. |
 | P3 | Arms: ascii vs coords vs ascii+neighbors; hard vs soft (T2) labels. Raw and shielded reported apart. |
-| P5 | DAgger states labeled by T2, with lineage. |
+| P5 | DAgger states labeled by the frozen #25 policy (T2 by default), with lineage. |
 
 ### 6.1 Start here (first working week)
 
@@ -213,7 +219,7 @@ The v2 DAG, pass criteria and stop-and-review protocol stay. Additions:
 4. `--task padding --ns 1,10,50,200`. Record the verdict files.
 5. `--task throughput` on L4 and L40S. Choose the GPU by env-steps per dollar.
 6. Pipeline smoke with S0 (§7.1): a few `DecisionTrainer` steps on the 2 fixture decisions, then `predict()`. Pass = the run completes and the model overfits them. (A Modal `train` task is the first P3 code item.)
-7. In parallel (CPU): build the independent simulator + movement parity table, then T0 and T1.
+7. In parallel (CPU): build the independent simulator and its validation suite, then T0 and T1.
 8. Update `PHASE_CHECKPOINT.json` with the P0B verdict and the exact pins.
 
 ## 7. Data contract (P1)
@@ -224,7 +230,7 @@ One trace record per (episode, step):
 {
   "episode_id": "fam-A/gen-v1/seed-000123", "family": "fam-A", "lineage": "gen-v1/seed-000123",
   "step": 8, "observation": {"...": "Observation.to_dict() only"},
-  "teacher": {"level": "T2", "version": "t2@<git-sha>", "K": 16, "H": 20, "continuation": "t1@<git-sha>"},
+  "teacher": {"level": "T2", "version": "t2@<git-sha>", "K": 16, "H": 20, "continuation": "t1@<git-sha>", "seed": "...", "utilities": {"futures": "futures@<git-sha>"}},
   "actions": {"P10": "north", "P2": "south"},
   "action_values": {"P10": {"stay": -3.1, "north": -1.2, "south": -4.0, "east": -2.2, "west": -9.9}},
   "ties": {"P10": ["north"]},
@@ -240,9 +246,11 @@ All data enters through `ember-v1 ingest <zip> --source-id ID --quality TIER --o
 
 | Tier | Meaning | Training-eligible |
 |---|---|---|
-| `teacher_verified` | T0/T1/T2 output, replayed in the simulator | Yes |
+| `teacher_verified` | Output of the frozen #25 policy (one of T0–T4 or a validated arbiter); the whole episode passes `verify_replay(partial=False)` at ingest | Yes, after the #10 protections |
 | `teacher_unverified` | Teacher output, not yet replayed | No (replay first) |
 | `synthetic_fixture` | Hand-written example labels | No; `pipeline_smoke` split only |
+
+**Trust boundary.** Full-episode replay proves only that the recorded actions produce the recorded transitions in our simulator. It does not authenticate teacher identity, label quality or data provenance. Those protections are open work under issue #10 (bound teacher code/config/seed provenance, re-generation spot checks, generator and split manifest binding, duplicate and leakage audits).
 
 `sources.training_records()` returns only eligible records. `allow_fixtures=True` is for pipeline smoke runs only, and those runs never feed a reported metric.
 
@@ -251,7 +259,7 @@ All data enters through `ember-v1 ingest <zip> --source-id ID --quality TIER --o
 | ID | File | SHA-256 | Content | Tier | Use |
 |---|---|---|---|---|---|
 | S0 `p0a-scaffold-fixtures` | `evac-decision-p0a-padding-gate.zip` | `bb924684…3157ded` | P0A code snapshot; 1 trace (2 decisions, teacher `example-teacher-v0`), 2 non-trace JSON | `synthetic_fixture` | See below |
-| S1 (P1) | generator + T2 traces | per shard | Main training data | `teacher_verified` | Train / dev / calibration |
+| S1 (P1) | generator + frozen #25 policy traces | per shard | Main training data; bulk generation **not authorized** yet | `teacher_verified` | Train / dev / calibration |
 
 **How S0 is useful.** Its labels are hand-written, so they are not evidence of good behavior, and one trace can not teach a policy. S0 is useful as:
 
@@ -273,7 +281,9 @@ Primary (preregister one): avoidable casualties per episode vs T1 on unseen fami
 | Batched path differs from singleton | Padding gate FAIL | Stay on path A; report throughput of path A |
 | DeltaNet fast kernels missing | Profiler shows torch fallback | Measure both; pick by measured latency |
 | T2 not better than T1 | P1 gate | Re-scope claim before any training spend |
-| Student imitates but fails closed-loop | P3 closed-loop gap | P5 DAgger with T2 labels |
+| Student imitates but fails closed-loop | P3 closed-loop gap | P5 DAgger with labels from the frozen #25 policy |
+| Complex teacher (T2–T4, arbiter) not better than T0/T1 | #25 paired-seed evaluation | Keep all as baselines; distill the simplest justified policy |
+| Replay-consistent but forged or low-quality traces | Replay passes; provenance unbound | #10 protections before any bulk S1 data; replay alone is not enough |
 | ID binding errors at large N | Wrong-ID / missing-ID counts | Fail gate; test position-in-question variants |
 | Remote call not allowed in real runner | A7 | Measure co-located GPU latency for the claim |
 | Budget overrun | Phase cap reached | Stop, report, use reserve only with a written reason |
