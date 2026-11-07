@@ -6,7 +6,7 @@
     "pr32_head": "45d8c2b9ae9d91f99d1ec642f017cd3611974a9f",
     "t4_v1_protocol_commit": "99a65b8a947ef857f79514bac9e639ebaddb5b3a"
   },
-  "last_successful_checkpoint": "P3 v2 protocol preregistered (commit pending in this file's own commit)",
+  "last_successful_checkpoint": "P6 verdict T4_V2_BLOCKED recorded",
   "phases": {
     "P0": {"status": "DONE", "branch": "p1/t4-v11-repair", "pr": 33,
            "base_sha": "45d8c2b9ae9d91f99d1ec642f017cd3611974a9f", "head_sha": "29ff686",
@@ -27,15 +27,20 @@
            "artifacts": ["docs/P1_T4_RISK_PRIORITY_V2.md", "src/ember_v1/teacher/t4_v2_pilot.py",
                          "src/ember_v1/teacher/t4_v2_eval.py", "tests/test_teacher_t4_v2.py"],
            "note": "committed before any v1.1 policy ran on a v2 pilot cell or DEV"},
-    "P4": {"status": "NOT_STARTED", "branch": "p1/t4-v11-repair", "dependencies": ["P2", "P3"],
-           "run_once": "python -m ember_v1.teacher.t4_v2_pilot -> data/baselines/p1-08-t4-v2-pilot.json"},
-    "P5": {"status": "NOT_STARTED", "branch": "p1/t4-v11-repair", "dependencies": ["P4"],
-           "condition": "only if P4 gate decision is T4_V2_FULL_DEV_FEASIBLE"},
-    "P6": {"status": "NOT_STARTED", "branch": "p1/t4-v11-repair", "dependencies": ["P4"]},
+    "P4": {"status": "DONE", "branch": "p1/t4-v11-repair", "dependencies": ["P2", "P3"],
+           "run_commit": "07bc90dcccb38657d73c556a18d8e57df42f9375",
+           "report": "data/baselines/p1-08-t4-v2-pilot.json", "runs": 1,
+           "gate_decision": "T4_V2_BLOCKED", "failed": ["G4_planner_health"],
+           "note": "ran once; never rerun this sample (protocol section 6)"},
+    "P5": {"status": "SKIPPED", "branch": "p1/t4-v11-repair", "dependencies": ["P4"],
+           "blocked_reason": "P4 gate T4_V2_BLOCKED; protocol forbids the DEV run"},
+    "P6": {"status": "DONE", "branch": "p1/t4-v11-repair", "dependencies": ["P4"],
+           "verdict": "T4_V2_BLOCKED", "artifact": "docs/overnight/T4_V2_VERDICT.md"},
     "P7": {"status": "NOT_STARTED", "branch": "p1/teacher-selection-prep", "dependencies": []},
     "P8": {"status": "NOT_STARTED", "branch": "p1/teacher-provenance", "dependencies": []},
     "P9": {"status": "NOT_STARTED", "dependencies": ["P2", "P7", "P8"]},
     "P10": {"status": "NOT_STARTED", "dependencies": ["P9"]}
   },
-  "pending_tasks": ["P4 run the v2 pilot once"]
+  "pending_tasks": ["P7 selection prep (worktree D:/Coding/ember_v1-p7)", "P8 provenance (worktree D:/Coding/ember_v1-p8)",
+                    "P9 review", "P10 final report"]
 }

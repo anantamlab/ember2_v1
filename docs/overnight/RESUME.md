@@ -8,8 +8,8 @@
 ## Current checkpoint
 
 - Branch `p1/t4-v11-repair`, based on PR #32 head `45d8c2b`. Stacked draft PR #33.
-- P0–P3 done. v2 protocol `docs/P1_T4_RISK_PRIORITY_V2.md` is committed.
-- Next: P4. Before you run the pilot, check that `data/baselines/p1-08-t4-v2-pilot.json` does not exist locally or on the remote branch. If it exists, the pilot already ran: do not run it again; go to P6/P5 from that report.
+- P0–P6 done. The v2 pilot ran once: `T4_V2_BLOCKED` (G4). P5 (DEV) is skipped by protocol. Never rerun `t4_v2_pilot` or run `t4_v2_eval`.
+- P7 on `p1/teacher-selection-prep` (worktree `D:/Coding/ember_v1-p7`), P8 on `p1/teacher-provenance` (worktree `D:/Coding/ember_v1-p8`). Both from main `b68535f`. Test a worktree with `PYTHONPATH=src` (the venv is an editable install of the main checkout).
 
 ## Test commands
 

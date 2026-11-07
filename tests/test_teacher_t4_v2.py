@@ -166,3 +166,20 @@ def test_both_entry_points_refuse_to_overwrite(tmp_path):
         v2p.main(["--out", str(out)])
     with pytest.raises(SystemExit, match="runs once"):
         v2e.main(["--out", str(out)])
+
+
+# ----- the committed v2 pilot report (run once, P4) ------------------------------------------------------------
+def test_committed_pilot_report_gate_is_reproducible_and_blocks_dev():
+    import json
+    from ember_v1.teacher.evaluate import REPO
+    rep = json.loads((REPO / "data/baselines/p1-08-t4-v2-pilot.json").read_text(encoding="utf-8"))
+    assert {k: rep["teachers"][k]["config_hash"] for k in ABLATIONS_V11} == \
+        {k: cls().identity.config_hash for k, cls in ABLATIONS_V11.items()}
+    assert rep["cells_run"] == 74 and rep["errors"] == [] and rep["environment"]["src_dirty"] is False
+    g = v2p.gate_v2(dict(ABLATIONS_V11["A2"]().identity.config), rep["pilot"], Counter(rep["neutral_paired_states"]),
+                    rep["pilot_complete"] and rep["dev_profile_complete"], rep["resources"]["peak_rss_mb"],
+                    rep["estimate"])
+    assert g == rep["gate"]
+    assert g["decision"] == "T4_V2_BLOCKED" and g["failed"] == ["G4_planner_health"]
+    with pytest.raises(GateError, match="T4_V2_BLOCKED"):
+        v2e.check_gate_v2(rep)

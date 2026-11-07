@@ -20,4 +20,8 @@ Before the freeze, G5c(i) counts only direct yields to an at-risk person (exit r
 
 ## D5 — Neutral paired states use frozen T1 trajectories
 
-A0 and A2 decide on the same T1-created observations and do not act. Reason: closed-loop A0/A2 traces diverge after step 0, so their differences mix mechanism and state (v1 diagnosis limitation). T1 is frozen and is neither arm.
+A0 and A2 decide on the same T1-created observations and do not act.
+
+## D6 — v2 pilot failed G4: stop T4, no v1.2 tonight
+
+The pilot gave `T4_V2_BLOCKED` (A1/A2 fallback ≈ 0.19, limit 0.05). Protocol section 6 forbids a rerun or a change of v1.1.0. A v1.2 (budget-aware retries) would be a new attempt. It needs a new identity, a new namespace and a preregistration. It is not started tonight, because a fix written right after seeing these cells is close to tuning on them. It is recommended in the verdict and the final report for a reviewed next step. Reason: closed-loop A0/A2 traces diverge after step 0, so their differences mix mechanism and state (v1 diagnosis limitation). T1 is frozen and is neither arm.
