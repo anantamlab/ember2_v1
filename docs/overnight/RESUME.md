@@ -7,8 +7,9 @@
 
 ## Current checkpoint
 
-- Branch `p1/t4-v11-repair`, based on PR #32 head `45d8c2b`.
-- Phase P0 done. Next: P1 (failure analysis and defect fixtures).
+- Branch `p1/t4-v11-repair`, based on PR #32 head `45d8c2b`. Stacked draft PR #33.
+- P0–P3 done. v2 protocol `docs/P1_T4_RISK_PRIORITY_V2.md` is committed.
+- Next: P4. Before you run the pilot, check that `data/baselines/p1-08-t4-v2-pilot.json` does not exist locally or on the remote branch. If it exists, the pilot already ran: do not run it again; go to P6/P5 from that report.
 
 ## Test commands
 
