@@ -1,0 +1,57 @@
+# cmd: D:\Coding\ember_v1\.venv\Scripts\python.exe -m ember_v1.teacher.t3_eval --pilot-report data/baselines/p1-06-t3-pilot.json --out data/baselines/p1-06-t3-dev-v1.json
+# started_utc: 2026-11-07T10:47:41.212811+00:00
+{"position": 0, "T0_cas": 11, "T1_cas": 10, "T3_cas": 10, "T3_cpu_s": 0.66}
+{"position": 1, "T0_cas": 21, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 1.5}
+{"position": 2, "T0_cas": 7, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 0.95}
+{"position": 3, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 1.67}
+{"position": 4, "T0_cas": 15, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 4.62}
+{"position": 5, "T0_cas": 28, "T1_cas": 4, "T3_cas": 26, "T3_cpu_s": 0.59}
+{"position": 6, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 2.23}
+{"position": 7, "T0_cas": 35, "T1_cas": 35, "T3_cas": 35, "T3_cpu_s": 0.11}
+{"position": 8, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 0.34}
+{"position": 9, "T0_cas": 61, "T1_cas": 55, "T3_cas": 57, "T3_cpu_s": 1.17}
+{"position": 10, "T0_cas": 4, "T1_cas": 0, "T3_cas": 1, "T3_cpu_s": 2.28}
+{"position": 11, "T0_cas": 13, "T1_cas": 8, "T3_cas": 12, "T3_cpu_s": 1.34}
+{"position": 12, "T0_cas": 29, "T1_cas": 28, "T3_cas": 28, "T3_cpu_s": 0.81}
+{"position": 13, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 0.11}
+{"position": 14, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 0.14}
+{"position": 15, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 1.17}
+{"position": 16, "T0_cas": 1, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 4.56}
+{"position": 17, "T0_cas": 1, "T1_cas": 1, "T3_cas": 1, "T3_cpu_s": 4.58}
+{"position": 18, "T0_cas": 4, "T1_cas": 4, "T3_cas": 4, "T3_cpu_s": 0.3}
+{"position": 19, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 0.09}
+{"position": 20, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 0.34}
+{"position": 21, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 0.08}
+{"position": 22, "T0_cas": 69, "T1_cas": 69, "T3_cas": 69, "T3_cpu_s": 0.52}
+{"position": 23, "T0_cas": 1, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 1.12}
+{"position": 24, "T0_cas": 7, "T1_cas": 7, "T3_cas": 7, "T3_cpu_s": 0.14}
+{"position": 25, "T0_cas": 1, "T1_cas": 1, "T3_cas": 1, "T3_cpu_s": 0.12}
+{"position": 26, "T0_cas": 20, "T1_cas": 17, "T3_cas": 11, "T3_cpu_s": 3.84}
+{"position": 27, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 0.03}
+{"position": 28, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 0.05}
+{"position": 29, "T0_cas": 1, "T1_cas": 1, "T3_cas": 1, "T3_cpu_s": 0.03}
+{"position": 30, "T0_cas": 9, "T1_cas": 11, "T3_cas": 10, "T3_cpu_s": 7.91}
+{"position": 31, "T0_cas": 16, "T1_cas": 4, "T3_cas": 4, "T3_cpu_s": 5.08}
+{"position": 32, "T0_cas": 31, "T1_cas": 27, "T3_cas": 27, "T3_cpu_s": 2.86}
+{"position": 33, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 1.27}
+{"position": 34, "T0_cas": 1, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 0.64}
+{"position": 35, "T0_cas": 3, "T1_cas": 3, "T3_cas": 3, "T3_cpu_s": 0.09}
+{"position": 36, "T0_cas": 1, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 0.59}
+{"position": 37, "T0_cas": 43, "T1_cas": 35, "T3_cas": 38, "T3_cpu_s": 3.88}
+{"position": 38, "T0_cas": 31, "T1_cas": 0, "T3_cas": 32, "T3_cpu_s": 3.16}
+{"position": 39, "T0_cas": 7, "T1_cas": 6, "T3_cas": 6, "T3_cpu_s": 0.19}
+{"position": 40, "T0_cas": 1, "T1_cas": 0, "T3_cas": 1, "T3_cpu_s": 0.06}
+{"position": 41, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 0.3}
+{"position": 42, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 1.78}
+{"position": 43, "T0_cas": 16, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 4.2}
+{"position": 44, "T0_cas": 19, "T1_cas": 19, "T3_cas": 19, "T3_cpu_s": 1.27}
+{"position": 45, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 0.06}
+{"position": 46, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 0.02}
+{"position": 47, "T0_cas": 0, "T1_cas": 0, "T3_cas": 0, "T3_cpu_s": 0.08}
+{
+ "out": "data\\baselines\\p1-06-t3-dev-v1.json",
+ "complete": true,
+ "deterministic_digest": "sha256:2a3db9e199d82eea422d80946185a21aa94e386aa197086999b134fc56122fe9"
+}
+# exit_code: 0
+# meta: {"cmd": ["D:\\Coding\\ember_v1\\.venv\\Scripts\\python.exe", "-m", "ember_v1.teacher.t3_eval", "--pilot-report", "data/baselines/p1-06-t3-pilot.json", "--out", "data/baselines/p1-06-t3-dev-v1.json"], "started_utc": "2026-11-07T10:47:41.212811+00:00", "ended_utc": "2026-11-07T10:49:28.479573+00:00", "exit_code": 0, "wall_s": 107.26651749998564, "retries": 0, "job_cpu_user_s": 101.265625, "job_cpu_kernel_s": 4.328125, "job_processes": 5, "job_peak_process_commit_mb": 26.30078125, "job_peak_total_commit_mb": 41.6640625, "processes": {"34876": {"peak_working_set_mb": 5.10546875, "peak_pagefile_mb": 0.97265625, "cpu_user_s": 0.015625, "cpu_kernel_s": 0.0}, "58008": {"peak_working_set_mb": 39.94140625, "peak_pagefile_mb": 26.30078125, "cpu_user_s": 100.828125, "cpu_kernel_s": 4.203125}, "23852": {"peak_working_set_mb": 9.05078125, "peak_pagefile_mb": 2.07421875, "cpu_user_s": 0.015625, "cpu_kernel_s": 0.0}, "64972": {"peak_working_set_mb": 10.3515625, "peak_pagefile_mb": 4.8515625, "cpu_user_s": 0.03125, "cpu_kernel_s": 0.03125}}, "note": "job totals include this wrapper; per-process peaks from GetProcessMemoryInfo"}

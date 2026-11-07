@@ -1,8 +1,8 @@
-"""Observation-only reference policies (P1): T0 (issue #7), T1 (issue #8) and T2 (issue #9).
+"""Observation-only reference policies (P1): T0 (issue #7), T1 (issue #8), T2 (issue #9) and T3 (issue #23).
 
 `interface.ReferencePolicy` is the versioned interface that T0-T4 implement.
 `controls` holds simple baseline controls; they are not teachers.
-Design and evidence: docs/P1_T0_BASELINE.md, docs/P1_T1_PLANNER.md, docs/P1_T2_ROLLOUT.md.
+Design and evidence: docs/P1_T0_BASELINE.md, docs/P1_T1_PLANNER.md, docs/P1_T2_ROLLOUT.md, docs/P1_T3_ACO.md.
 """
 from .controls import GreedyNearestExitControl, RandomControl, StayControl
 from .grid import GRID_UTILS_VERSION, PublicGrid, exit_distance_field
@@ -10,7 +10,9 @@ from .interface import POLICY_INTERFACE_VERSION, PolicyDecision, PolicyIdentity,
 from .t0 import T0ShortestPath
 from .t1 import T1CongestionAware
 from .t2 import T2StochasticRollout
+from .t3 import T3DynamicACO
 
 __all__ = ["GreedyNearestExitControl", "RandomControl", "StayControl", "GRID_UTILS_VERSION", "PublicGrid",
            "exit_distance_field", "POLICY_INTERFACE_VERSION", "PolicyDecision", "PolicyIdentity",
-           "ReferencePolicy", "T0ShortestPath", "T1CongestionAware", "T2StochasticRollout"]
+           "ReferencePolicy", "T0ShortestPath", "T1CongestionAware", "T2StochasticRollout",
+           "T3DynamicACO"]
