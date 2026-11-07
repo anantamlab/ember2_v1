@@ -1,0 +1,27 @@
+{
+  "schema": "overnight-status@1",
+  "session_start": "2026-11-08",
+  "verified_start": {
+    "main": "b68535ff6d282462663fcd073a57a2d3a92012f9",
+    "pr32_head": "45d8c2b9ae9d91f99d1ec642f017cd3611974a9f",
+    "t4_v1_protocol_commit": "99a65b8a947ef857f79514bac9e639ebaddb5b3a"
+  },
+  "last_successful_checkpoint": "P0 ledger created",
+  "phases": {
+    "P0": {"status": "DONE", "branch": "p1/t4-v11-repair", "pr": null,
+           "base_sha": "45d8c2b9ae9d91f99d1ec642f017cd3611974a9f", "head_sha": null,
+           "dependencies": [], "ci": null, "tests": null, "experiment_identity": null,
+           "frozen_config_hash": null, "allowed_next_action": "P1", "blocked_reason": null},
+    "P1": {"status": "NOT_STARTED", "branch": "p1/t4-v11-repair", "dependencies": ["P0"]},
+    "P2": {"status": "NOT_STARTED", "branch": "p1/t4-v11-repair", "dependencies": ["P1"]},
+    "P3": {"status": "NOT_STARTED", "branch": "p1/t4-v11-repair", "dependencies": ["P2"]},
+    "P4": {"status": "NOT_STARTED", "branch": "p1/t4-v11-repair", "dependencies": ["P2", "P3"]},
+    "P5": {"status": "NOT_STARTED", "branch": "p1/t4-v11-repair", "dependencies": ["P4"]},
+    "P6": {"status": "NOT_STARTED", "branch": "p1/t4-v11-repair", "dependencies": ["P4"]},
+    "P7": {"status": "NOT_STARTED", "branch": "p1/teacher-selection-prep", "dependencies": []},
+    "P8": {"status": "NOT_STARTED", "branch": "p1/teacher-provenance", "dependencies": []},
+    "P9": {"status": "NOT_STARTED", "dependencies": ["P2", "P7", "P8"]},
+    "P10": {"status": "NOT_STARTED", "dependencies": ["P9"]}
+  },
+  "pending_tasks": ["P1 failure analysis and defect fixtures"]
+}
