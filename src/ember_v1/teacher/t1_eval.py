@@ -222,12 +222,15 @@ def cluster_bootstrap(diffs_by_family: dict[str, list[float]], resamples: int, s
     return lo, hi
 
 
-def paired(rows: list[dict[str, Any]]) -> dict[str, Any]:
+def paired(rows: list[dict[str, Any]], new: str = "T1", ref: str = "T0", seed: str = BOOTSTRAP["seed"],
+           metrics: Sequence[tuple[str, int]] = PAIRED_METRICS) -> dict[str, Any]:
+    """Paired `new - ref` per scenario. Defaults give the P1-04 T1-vs-T0 report unchanged."""
+    a_, b_ = new.lower(), ref.lower()
     out: dict[str, Any] = {}
-    for metric, sign in PAIRED_METRICS:
+    for metric, sign in metrics:
         diffs, by_fam = [], {}
         for r in rows:
-            a, b = _metric(r["T1"], metric), _metric(r["T0"], metric)
+            a, b = _metric(r[new], metric), _metric(r[ref], metric)
             if a is None or b is None:
                 continue
             diffs.append(a - b)
@@ -237,20 +240,21 @@ def paired(rows: list[dict[str, Any]]) -> dict[str, Any]:
         fam_means = {f: statistics.fmean(d) for f, d in by_fam.items()}
         fb = sum(sign * d > 0 for d in fam_means.values())
         fw = sum(sign * d < 0 for d in fam_means.values())
-        ci = cluster_bootstrap(by_fam, BOOTSTRAP["resamples"], f"{BOOTSTRAP['seed']}/{metric}", BOOTSTRAP["level"])
+        ci = cluster_bootstrap(by_fam, BOOTSTRAP["resamples"], f"{seed}/{metric}", BOOTSTRAP["level"])
         out[metric] = {"direction": "higher_is_better" if sign > 0 else "lower_is_better", "pairs": len(diffs),
-                       "mean_diff_t1_minus_t0": statistics.fmean(diffs) if diffs else None,
-                       "t1_better": better, "equal": len(diffs) - better - worse, "t1_worse": worse,
+                       f"mean_diff_{a_}_minus_{b_}": statistics.fmean(diffs) if diffs else None,
+                       f"{a_}_better": better, "equal": len(diffs) - better - worse, f"{a_}_worse": worse,
                        "sign_test_p_two_sided": ev._sign_test(better, worse),
-                       "families": len(fam_means), "family_t1_better": fb, "family_t1_worse": fw,
+                       "families": len(fam_means), f"family_{a_}_better": fb, f"family_{a_}_worse": fw,
                        "family_sign_test_p_two_sided": ev._sign_test(fb, fw),
                        "family_cluster_bootstrap_ci95": list(ci) if ci else None}
     return out
 
 
-def aggregate(rows: list[dict[str, Any]], latencies: dict[str, list[float]]) -> dict[str, Any]:
+def aggregate(rows: list[dict[str, Any]], latencies: dict[str, list[float]],
+              names: Sequence[str] = POLICY_ORDER) -> dict[str, Any]:
     out: dict[str, Any] = {}
-    for name in POLICY_ORDER:
+    for name in names:
         rs = [r[name] for r in rows]
         completed = [x["completion_step"] for x in rs if x["completion_step"] is not None]
         mo: Counter = Counter()

@@ -1,7 +1,7 @@
 # ember_v1 — Evacuation Decision Model (Anantam Labs) — HLD v3.1
 
 **Project:** `ember_v1` (repo `ember_v1`, Python package `ember_v1`, CLI `ember-v1`, Modal app `ember-v1`).
-**Status:** P0A done (CPU). P0B harness preflight-hardened on CPU (P0B-01, [P0B_PREFLIGHT.md](P0B_PREFLIGHT.md)); P0B GPU feasibility **NOT RUN**. T0 implemented and evaluated on CPU on independent DEV (P1-03, [P1_T0_BASELINE.md](P1_T0_BASELINE.md)). T1 implemented and evaluated on CPU on DEV, paired against T0 (P1-04, [P1_T1_PLANNER.md](P1_T1_PLANNER.md)); T2–T4 not implemented. Data sources: one registered fixture source S0 (§7.1). No trained model.
+**Status:** P0A done (CPU). P0B harness preflight-hardened on CPU (P0B-01, [P0B_PREFLIGHT.md](P0B_PREFLIGHT.md)); P0B GPU feasibility **NOT RUN**. T0 implemented and evaluated on CPU on independent DEV (P1-03, [P1_T0_BASELINE.md](P1_T0_BASELINE.md)). T1 implemented and evaluated on CPU on DEV, paired against T0 (P1-04, [P1_T1_PLANNER.md](P1_T1_PLANNER.md)). T2 implemented and CPU-tested with a preregistered protocol and CPU feasibility gate (P1-05, [P1_T2_ROLLOUT.md](P1_T2_ROLLOUT.md)); T2 DEV comparison not run. T3–T4 not implemented. Data sources: one registered fixture source S0 (§7.1). No trained model.
 **Supersedes:** HLD v2 (project "evac-decision"). The v2 phase gates stay; v3 adds a concrete teacher, a Modal plan, a token budget and four design decisions from verified Unsloth facts. v3.1 renames the project and adds the data-source registry.
 **Boundary:** separate repo. Never write training code or assets into EMBERBench.
 
@@ -104,7 +104,7 @@ If T1 (cheap) already matches T2, the amortization claim fails. Report that as a
 | Data-source registry + zip ingestion | `sources.py`, `ember-v1 ingest`, `data/sources.json` | Done, tested; S0 registered |
 | Independent simulator | `sim/` (`ember_v1.sim`) | Done: independent simulator, internal correctness and full-replay gates tested on CPU; public interface compatible; exact EMBERBench equivalence not claimed ([P1_SIMULATOR_PARITY.md](P1_SIMULATOR_PARITY.md)) |
 | Independent generator | `generator/` | P1 |
-| Reference policies T0–T4 + trace logger | `teacher/` | P1; T0, the versioned `ReferencePolicy` interface and DEV harness done (#7, [P1_T0_BASELINE.md](P1_T0_BASELINE.md)); T1 done (#8, [P1_T1_PLANNER.md](P1_T1_PLANNER.md)); T2–T4 and the trace logger open. Direction: [P1_TEACHER_DIRECTION.md](P1_TEACHER_DIRECTION.md) |
+| Reference policies T0–T4 + trace logger | `teacher/` | P1; T0, the versioned `ReferencePolicy` interface and DEV harness done (#7, [P1_T0_BASELINE.md](P1_T0_BASELINE.md)); T1 done (#8, [P1_T1_PLANNER.md](P1_T1_PLANNER.md)); T2 implemented, DEV comparison gated on CPU cost (#9, [P1_T2_ROLLOUT.md](P1_T2_ROLLOUT.md)); T3–T4 and the trace logger open. Direction: [P1_TEACHER_DIRECTION.md](P1_TEACHER_DIRECTION.md) |
 | Training job, eval harness, reports | `training/`, `eval/`, `reports/` | P2–P3 |
 
 ## 4. Design decisions
