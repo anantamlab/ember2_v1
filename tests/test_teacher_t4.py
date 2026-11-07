@@ -376,6 +376,8 @@ def test_lower_id_occupant_vacates_for_a_critical_person():
 
 
 def test_a0_never_yields_over_the_id_rule_and_a2_sometimes_does():
+    """True on these small scenarios. The CPU pilot found A0 yields over the ID rule after repair re-plans
+    (docs/P1_T4_RISK_PRIORITY.md section 9.6); this test does not claim it never happens."""
     over = Counter()
     for k in range(120):
         s = random_scenario(random.Random(k), model="deterministic")

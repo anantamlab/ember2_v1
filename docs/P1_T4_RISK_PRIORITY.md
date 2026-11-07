@@ -1,6 +1,6 @@
 # P1-08: T4 risk-based priority reference agent (issue #24)
 
-**Status: implemented and CPU tested. Protocol frozen before any T4 decision on DEV.** The CPU pilot (§7) runs on synthetic scenarios only, after the freeze commit. The DEV comparison (§8) is prepared and gated. It is **not run** in this change; it needs review of the pilot report first.
+**Status: implemented and CPU tested. Protocol frozen (commit `99a65b8`) before any T4 decision on DEV.** The CPU pilot (§7) ran once on synthetic scenarios. Its gate decision is **`BLOCKED_BY_MECHANISM_CHECK`** (§9.6): compute passes, and the A0 control fails the preregistered "0 yields over the ID rule" check. The DEV comparison (§8) is prepared and gated. It is **not run**.
 
 T4 is a standalone reference policy. It is not a T1 variant and does not import T0–T3. It does not change T0–T3, the frozen datasets or the budget. No GPU, Modal, training, distillation, S1 teacher data or EMBERBench is used.
 
@@ -129,6 +129,8 @@ Rank, priority class, protected flag, urgency components, stratum, signals and u
 
 Every other number and rule is identical (a test checks it). A0 never yields over the ID rule, because its order is the ID order. T1 is an external baseline only.
 
+> **Post-pilot finding (§9.5; the frozen text above is unchanged).** The A0 claim is false when a repair happens. A lower-ID person plans first and leaves its cell. A higher-ID person then reserves that cell. If the resolver then blocks the lower-ID person, repair re-plans it and keeps the reservation, so it steps aside for the higher ID. The pilot has 238 such A0 yields. G5 therefore fails.
+
 ## 5. Frozen configuration
 
 Shared numbers (`t4._FROZEN`):
@@ -207,9 +209,84 @@ Reported: CPU p50/p95/p99/max per variant, grid and N; CPU per episode; peak mem
 - Negative findings are kept: the report lists every scenario where A2 is worse than T1 or A0.
 - T2 and T3 do not run. Train, calibration, test, blind sets and EMBERBench are not read.
 
-## 9. Pilot results
+## 9. Pilot results (single run, frozen commit `99a65b8`)
 
-Filled after the single pilot run (`data/baselines/p1-08-t4-pilot.json`).
+Report: `data/baselines/p1-08-t4-pilot.json`. `tests/test_teacher_t4_pilot.py` recomputes the gate from it.
+
+### 9.1 Resources
+
+One process, Python 3.14.7, Windows 11. Total wall 265.5 s (pilot 227.9 s, then the T1 DEV profile). Process CPU 223.4 s. Peak RSS 37.6 MB.
+
+### 9.2 Microbenchmark (32×32 room, N = 50, stochastic, step 3; best of 5)
+
+A0 22.6 ms, A1 21.5 ms, A2 21.6 ms.
+
+### 9.3 Decision latency, A2 (wall ms; A0 and A1 are similar)
+
+| Grid | N | Decisions | Active mean | p50 | p95 | p99 | max | CPU max | Fallback |
+|---|---|---|---|---|---|---|---|---|---|
+| 16×20 | 1 | 34 | 1.0 | 5.0 | 7.7 | 70.3 | 70.3 | 15.6 | 0 |
+| 16×20 | 10 | 196 | 4.1 | 4.0 | 10.7 | 32.9 | 36.8 | 15.6 | 0.49 % |
+| 16×20 | 50 | 297 | 21.7 | 10.0 | 40.9 | 119.9 | 122.1 | 62.5 | 0.27 % |
+| 16×20 | 100 | 251 | 42.2 | 15.2 | 43.8 | 91.0 | 121.6 | 46.9 | 1.27 % |
+| 16×20 | 200 | 183 | 77.2 | 19.2 | 83.2 | 151.1 | 173.1 | 93.8 | 1.86 % |
+| 48×64 | 1 | 32 | 1.0 | 78.6 | 152.7 | 198.1 | 198.1 | 109.4 | 0 |
+| 48×64 | 10 | 60 | 9.4 | 75.0 | 172.6 | 205.4 | 205.4 | 109.4 | 0 |
+| 48×64 | 50 | 96 | 47.0 | 92.3 | 177.3 | 230.5 | 230.5 | 187.5 | 0.25 % |
+| 48×64 | 100 | 60 | 94.5 | 77.6 | 158.0 | 184.1 | 184.1 | 125.0 | 0 |
+| 48×64 | 200 | 36 | 189.1 | 122.1 | 210.0 | 211.3 | 211.3 | 171.9 | 0 |
+
+CPU values have the Windows thread-clock resolution (about 15.6 ms). All pilot decisions: wall p50 / p95 / p99 / max = 16.1 / 124.6 / 176.3 / 230.5 ms (A2), 14.3 / 125.8 / 182.8 / 283.7 (A0), 15.2 / 126.6 / 186.1 / 286.6 (A1). No decision hit the CPU or node budget.
+
+### 9.4 Mechanism (all pilot decisions)
+
+| | A0 | A1 | A2 |
+|---|---|---|---|
+| Decisions | 1252 | 1258 | 1245 |
+| Blocked moves / prediction mismatches | 0 / 0 | 0 / 0 | 0 / 0 |
+| Fallback person-decisions | 0.73 % | 0.90 % | 0.88 % |
+| Yields (all) | 9059 | 6636 | 3960 |
+| Yields over the ID rule | 238 | 3412 | 2044 |
+| Effective yields over the ID rule | 238 | 2250 | 1854 |
+| Vacate refused | 3738 | 6188 | 7984 |
+| Evaluator contests (at-risk person vs less urgent person) | 3207 | 2769 | 2980 |
+| Priority enforcement success | 43.5 % | 43.1 % | 43.8 % |
+| Enforcement when the urgent person has the higher ID | 38.4 % | 43.6 % | 45.3 % |
+| Unnecessary waits | 982 | 520 | 378 |
+| Diversions to another exit | 5849 | 5455 | 5795 |
+| Moves converted to stay | 887 | 2037 | 1461 |
+| CPU total (s) | 35.1 | 35.7 | 35.9 |
+
+Closed-loop synthetic episodes (28 cells of 16×20, 1482 people):
+
+| | A0 | A1 | A2 |
+|---|---|---|---|
+| Evacuated | 1224 | 1165 | 1169 |
+| Casualties | 227 | 278 | 273 |
+| Unresolved | 31 | 39 | 40 |
+
+Per cell, A2 against A0: 3 better, 5 worse, 20 tied. Two crowded cells give most of the difference: multi room N = 200 stochastic (A0 31, A2 64) and open room N = 100 deterministic (A0 19, A2 38). Corridor N = 200 stochastic is the best A2 case (A0 16, A2 10). **Negative finding:** on these synthetic cells, risk priority does not reduce casualties against the neutral order of the same planner. It increases them in crowded rooms. The pilot is not powered for outcome claims. The cells are synthetic, not DEV.
+
+### 9.5 Full-DEV cost estimate (1978 DEV decisions from the frozen T1 replay; mean 26.3 active)
+
+| | A0 | A1 | A2 | Evaluator | T1 | Total |
+|---|---|---|---|---|---|---|
+| Central CPU (s) | 31.6 | 33.2 | 34.1 | 53.8 | 28.5 | 181.2 (0.05 h) |
+| Upper CPU (s) | 107.5 | 108.9 | 112.6 | 159.0 | 35.6 | 523.6 (0.15 h) |
+
+Predicted cap hits: 0 for every variant. Maximum upper CPU per episode: A2 29.7 s. Hard bound (every decision at the cap): 18 544 s. DEV wall guard if run: 900 s.
+
+### 9.6 Gate
+
+| Check | Result |
+|---|---|
+| G1 bounded | pass (complete; 0 blocked; 0 mismatches; max CPU 187.5 ms ≤ 2500 ms; RSS 37.6 MB) |
+| G2 DEV CPU | pass (upper 523.6 s ≤ 7200 s) |
+| G3 cap hits | pass (0 %) |
+| G4 planner health | pass (fallback ≤ 0.90 %; 0 budget-limited decisions) |
+| G5 mechanism | **fail**: A2 has 1854 effective yields over the ID rule (needs ≥ 1), but A0 has 238 yields over the ID rule (needs 0) |
+
+**Decision: `BLOCKED_BY_MECHANISM_CHECK`.** Compute is not the limit. `t4_eval` refuses to run on DEV with this report. The cause (§4 note) is the repair step, not an illegal move and not a diagnostics error. Any change to G5 or to the repair rule is a protocol amendment and needs review before a new pilot run. No amendment is made here.
 
 ## 10. Limitations
 
@@ -218,3 +295,5 @@ Filled after the single pilot run (`data/baselines/p1-08-t4-pilot.json`).
 - Statelessness avoids hidden memory but allows order changes between steps.
 - Urgency weights are reasoned, not fitted. A2 can be worse than A0 or T1 in specific scenarios (§5).
 - The pilot uses synthetic layouts; DEV cost is a model estimate.
+- Pilot gate: `BLOCKED_BY_MECHANISM_CHECK`. Repair re-plans can make A0 yield over the ID rule, so A0 is not a pure ID-order control.
+- In the synthetic pilot episodes, A2 had more casualties than A0 (273 vs 227), mostly in two crowded rooms.
