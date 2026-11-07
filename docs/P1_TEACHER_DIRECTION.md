@@ -1,6 +1,6 @@
 # P1 teacher direction: five reference policies (T0–T4)
 
-**Status: design note.** T0 is implemented (issue #7, [P1_T0_BASELINE.md](P1_T0_BASELINE.md)) with the shared `ember_v1.teacher.ReferencePolicy` interface and `grid-utils@1.0.0`. T1–T4 and the #25 coordinator are not implemented. This note extends HLD §4 D4.
+**Status: design note.** T0 is implemented (issue #7, [P1_T0_BASELINE.md](P1_T0_BASELINE.md)) with the shared `ember_v1.teacher.ReferencePolicy` interface and `grid-utils@1.0.0`. T1 is implemented (issue #8, [P1_T1_PLANNER.md](P1_T1_PLANNER.md)). T2–T4 and the #25 coordinator are not implemented. This note extends HLD §4 D4.
 
 ## 1. The five policies
 
