@@ -95,7 +95,8 @@ class Repo:
 
 
 def _protocol(eligibility=None, **over):
-    body = {"protocol_id": "p1-09-test", "frozen": True,
+    from ember_v1.teacher import selection          # the full #25 protocol (s1 applies its validator too)
+    body = {**selection.draft_protocol(), "protocol_id": "p1-09-test", "frozen": True,
             "eligibility": reg.default_eligibility() if eligibility is None else eligibility}
     body.update(over)
     return {**body, "protocol_hash": s1.protocol_hash(body)}

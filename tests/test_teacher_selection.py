@@ -1,7 +1,6 @@
-"""Five-teacher selection prep (issue #25): proposals, joint checks, evidence inventory, protocol and gate."""
+"""Teacher proposals (issue #25): common record, fabricated values, joint resolver checks, disagreement."""
 from __future__ import annotations
 
-import json
 import random
 
 import pytest
@@ -9,7 +8,6 @@ import pytest
 from ember_v1.sim import Simulator
 from ember_v1.sim.canonical import digest
 from ember_v1.teacher import proposals as pr
-from ember_v1.teacher import selection as sel
 from ember_v1.teacher.t0 import T0ShortestPath
 from ember_v1.teacher.t1 import T1CongestionAware
 from ember_v1.teacher.t2 import T2StochasticRollout
@@ -100,72 +98,4 @@ def test_disagreement_is_descriptive_only(obs, props):
         pr.disagreement(obs, [props[0], props[0]])
 
 
-# ----- evidence inventory and gate ---------------------------------------------------------------------------
-def test_inventory_of_committed_dev_reports():
-    inv = sel.evidence_inventory()
-    c = inv["candidates"]
-    assert [t for t in sel.CANDIDATES if c[t]["status"] == "dev_evidence"] == ["T0", "T1", "T2", "T3"]
-    assert c["T4"]["status"] == "missing"
-    assert inv["cross_report_conflicts"] == [] and inv["same_dev_metadata"] and inv["same_positions"]
-    for t in ("T0", "T1", "T2", "T3"):
-        assert c[t]["scenarios"] == 48 and len(c[t]["config_hashes"]) == 1 and c[t]["failures"] == 0
-    assert len(c["T1"]["reports"]) == 3 and len(c["T0"]["reports"]) == 3
-
-
-def test_inventory_detects_cross_report_conflicts(tmp_path):
-    a = json.loads(sel.DEFAULT_REPORTS[1].read_text(encoding="utf-8"))
-    b = json.loads(json.dumps(a))
-    b["rows"][0]["T1"]["final_transition_hash"] = "sha256:" + "0" * 64
-    pa, pb = tmp_path / "a.json", tmp_path / "b.json"
-    pa.write_text(json.dumps(a), encoding="utf-8")
-    pb.write_text(json.dumps(b), encoding="utf-8")
-    inv = sel.evidence_inventory([pa, pb])
-    assert {x["teacher"] for x in inv["cross_report_conflicts"]} == {"T1"}
-    assert "cross-report reproducibility conflicts" in sel.selection_gate(
-        None, inv, protocol_commit=None, evidence_after_commit=False)["reasons"]
-
-
-def _protocol(**over):
-    p = {"protocol_id": "test", "candidates": list(sel.CANDIDATES), "data": "dev p1-02-v1",
-         "primary_endpoint": "casualties", "secondary_endpoints": [], "comparisons": [],
-         "decision_rule": "ci_and_sign_test", "simplicity_rule": "prefer simpler on no evidence",
-         "arbiter": None, "compute_budget": {"usd_cap": 15.0}, "stop_rules": ["stop on failed gate"],
-         "excluded_data": ["locked_test", "blind_test", "emberbench"], "frozen": True}
-    p.update(over)
-    return p
-
-
-@pytest.mark.parametrize("over,match", [
-    ({"candidates": ["T0", "T1"]}, "all five"),
-    ({"frozen": False}, "frozen"),
-    ({"excluded_data": ["locked_test"]}, "exclude"),
-    ({"compute_budget": {"usd_cap": 50}}, "budget"),
-    ({"compute_budget": {}}, "budget"),
-    ({"arbiter": {"equal_compute_to_best_single": True}}, "arbiter"),
-    ({"stop_rules": []}, "stop rules"),
-])
-def test_unsafe_protocols_are_refused(over, match):
-    with pytest.raises(ValueError, match=match):
-        sel.freeze_protocol(_protocol(**over))
-    with pytest.raises(ValueError, match="misses"):
-        sel.freeze_protocol({k: v for k, v in _protocol().items() if k != "stop_rules"})
-
-
-def test_gate_never_selects_and_blocks_now():
-    inv = sel.evidence_inventory()
-    now = sel.selection_gate(None, inv, protocol_commit=None, evidence_after_commit=False)
-    assert now["decision"] == "NO_SELECTION" and now["selected_teacher"] is None
-    assert "T4: no DEV evidence" in now["reasons"]
-    frozen = sel.freeze_protocol(_protocol())
-    g = sel.selection_gate(frozen, inv, protocol_commit="abc", evidence_after_commit=True)
-    assert g["reasons"] == ["T4: no DEV evidence"]
-    full = json.loads(json.dumps(inv))
-    full["candidates"]["T4"] = {**full["candidates"]["T1"], "config_hashes": ["sha256:x"]}
-    ok = sel.selection_gate(frozen, full, protocol_commit="abc", evidence_after_commit=True)
-    assert ok == {"decision": "READY_FOR_PREREGISTERED_COMPARISON", "reasons": [], "selected_teacher": None}
-    for kw in ({"protocol_commit": None, "evidence_after_commit": True},
-               {"protocol_commit": "abc", "evidence_after_commit": False}):
-        assert sel.selection_gate(frozen, full, **kw)["decision"] == "NO_SELECTION"
-    tampered = {**frozen, "primary_endpoint": "evacuated"}
-    assert "protocol hash does not match" in sel.selection_gate(
-        tampered, full, protocol_commit="abc", evidence_after_commit=True)["reasons"]
+# Inventory, protocol, prospective gate and arbiter: tests/test_teacher_selection_gate.py

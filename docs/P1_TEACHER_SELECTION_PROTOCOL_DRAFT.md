@@ -1,6 +1,6 @@
 # P1-09 — Teacher selection protocol (review draft v0.1)
 
-**Status: DRAFT / NOT FROZEN / NO EXPERIMENT AUTHORIZATION.**
+**Status: DRAFT / NOT FROZEN / NO EXPERIMENT AUTHORIZATION.** Executable form: `ember_v1.teacher.selection.draft_protocol()` (`frozen: false`), validated by `validate_protocol` (see docs/P1_TEACHER_SELECTION_PREP.md sections 4–6). Freezing means committing a frozen protocol file to `main` after review.
 
 Issue #25; implementation home: PR #35. Prepared after the completed exploratory DEV reports P1-03 through P1-06 and the blocked T4 v1.0.0/v1.1.0 pilots. This is a prospective protocol proposal, not an outcome report, selection receipt, or permission to create S1 labels.
 

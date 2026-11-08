@@ -9,6 +9,8 @@ them (T2), compute cost, the teacher seed and a proposal hash.
 `joint_check` runs a joint action map (one teacher's, or a combination) through
 the exact public resolver and reports blocked moves; combining per-person
 actions of different teachers can create a blocked or harmful joint plan.
+A combined map that fails the resolver is never a selectable map
+(`arbiter.accept_joint_map`, `arbiter.select_joint_map`).
 `disagreement` describes how proposals differ. Agreement is NOT a quality
 measure (docs/P1_TEACHER_DIRECTION.md section 6).
 
@@ -27,9 +29,9 @@ from ..sim.canonical import digest
 from ..sim.movement import resolve_moves
 from .grid import PublicGrid
 from .interface import PolicyDecision
+from .registry import VALUE_TEACHERS       # shared with #10 provenance (one registry)
 
 PROPOSAL_VERSION = "teacher-proposal@1.0.0"
-VALUE_TEACHERS = frozenset({"T2"})          # only T2 computes per-action values
 _KEYS = {"proposal_version", "teacher", "observation_digest", "step", "actions", "values", "policy_seed",
          "compute", "proposal_hash"}
 

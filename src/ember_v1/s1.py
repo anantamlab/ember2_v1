@@ -102,6 +102,11 @@ def verify_protocol(protocol: Any) -> dict[str, Any]:
         reg.validate_eligibility(protocol["eligibility"])
     except reg.RegistryError as e:
         raise ValueError(f"protocol eligibility invalid: {e}") from None
+    from .teacher import selection          # lazy: selection builds receipts with this module
+    try:
+        selection.verify_frozen_protocol(protocol)      # the full #25 rules: one validator for both gates
+    except selection.ProtocolError as e:
+        raise ValueError(f"selection protocol invalid: {e}") from None
     return {"protocol_id": protocol["protocol_id"], "protocol_hash": protocol["protocol_hash"]}
 
 
