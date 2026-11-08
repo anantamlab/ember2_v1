@@ -1,0 +1,532 @@
+{
+ "abort": null,
+ "complete": true,
+ "errors": [],
+ "evidence_hash": "sha256:524e17c2d3b7d560c9556166f06068160f87486fbc6b5e77e213dd681d9478a7",
+ "evidence_hash_ok": true,
+ "evidence_path": "data/selection/p1-09-selection@1/evidence.json",
+ "gate_reasons": [],
+ "limits": {
+  "cpu_s_cap": 14400.0,
+  "per_decision_cpu_ms_cap": 30000.0,
+  "wall_s_cap": 14400.0
+ },
+ "multiplicity": {
+  "familywise_alpha": 0.05,
+  "holm_adjusted_p": {
+   "T0": 0.00160980224609375,
+   "T2": 0.375,
+   "T3": 1.0,
+   "T4": 1.0
+  },
+  "hypotheses": [
+   "T0",
+   "T2",
+   "T3",
+   "T4"
+  ],
+  "method": "holm",
+  "raw_p": {
+   "T0": 0.0004024505615234375,
+   "T2": 0.125,
+   "T3": 1.0,
+   "T4": 0.7265625
+  }
+ },
+ "note": "Verdict from selection.selection_gate (frozen). 'worse_scenarios' lists every scenario with more casualties than T1 (descriptive; the protocol defines no separate severity threshold).",
+ "per_teacher": {
+  "T0": {
+   "budget_limited_decisions": 0,
+   "casualties": 608,
+   "casualties_plus_unresolved": 624,
+   "decisions": 2906,
+   "evacuated": 2211,
+   "failures": 0,
+   "max_decision_cpu_ms": 15.625,
+   "mean_decision_cpu_ms": 2.441,
+   "peak_live_decision_cpu_ms": 15.6,
+   "people": 2835,
+   "policy_cpu_s": 7.094,
+   "process_cpu_s": 17.234,
+   "unresolved": 16
+  },
+  "T1": {
+   "budget_limited_decisions": 0,
+   "casualties": 435,
+   "casualties_plus_unresolved": 506,
+   "decisions": 3302,
+   "evacuated": 2329,
+   "failures": 0,
+   "max_decision_cpu_ms": 78.125,
+   "mean_decision_cpu_ms": 13.108,
+   "peak_live_decision_cpu_ms": 62.5,
+   "people": 2835,
+   "policy_cpu_s": 43.281,
+   "process_cpu_s": 54.688,
+   "unresolved": 71
+  },
+  "T2": {
+   "budget_limited_decisions": 24,
+   "casualties": 428,
+   "casualties_plus_unresolved": 502,
+   "decisions": 3277,
+   "evacuated": 2333,
+   "failures": 0,
+   "max_decision_cpu_ms": 20062.5,
+   "mean_decision_cpu_ms": 2305.51,
+   "peak_live_decision_cpu_ms": 20093.8,
+   "people": 2835,
+   "policy_cpu_s": 7555.156,
+   "process_cpu_s": 7573.734,
+   "unresolved": 74
+  },
+  "T3": {
+   "budget_limited_decisions": 0,
+   "casualties": 460,
+   "casualties_plus_unresolved": 489,
+   "decisions": 3307,
+   "evacuated": 2346,
+   "failures": 0,
+   "max_decision_cpu_ms": 312.5,
+   "mean_decision_cpu_ms": 40.52,
+   "peak_live_decision_cpu_ms": 281.2,
+   "people": 2835,
+   "policy_cpu_s": 134.0,
+   "process_cpu_s": 144.734,
+   "unresolved": 29
+  },
+  "T4": {
+   "budget_limited_decisions": 5,
+   "casualties": 419,
+   "casualties_plus_unresolved": 495,
+   "decisions": 3369,
+   "evacuated": 2340,
+   "failures": 0,
+   "max_decision_cpu_ms": 187.5,
+   "mean_decision_cpu_ms": 20.407,
+   "peak_live_decision_cpu_ms": 93.8,
+   "people": 2835,
+   "policy_cpu_s": 68.75,
+   "process_cpu_s": 79.438,
+   "unresolved": 76
+  }
+ },
+ "selected": "T1",
+ "stage": "completed",
+ "supervision": {
+  "abort": null,
+  "cpu_measurement": {
+   "T0": "os",
+   "T1": "os",
+   "T2": "os",
+   "T3": "os",
+   "T4": "os"
+  },
+  "exit_codes": {
+   "T0": 0,
+   "T1": 0,
+   "T2": 0,
+   "T3": 0,
+   "T4": 0
+  },
+  "peak_live_decision_cpu_ms": {
+   "T0": 15.6,
+   "T1": 62.5,
+   "T2": 20093.8,
+   "T3": 281.2,
+   "T4": 93.8
+  },
+  "process_cpu_s": {
+   "T0": 17.234,
+   "T1": 54.688,
+   "T2": 7573.734,
+   "T3": 144.734,
+   "T4": 79.438
+  },
+  "results_received": {
+   "T0": 72,
+   "T1": 72,
+   "T2": 72,
+   "T3": 72,
+   "T4": 72
+  },
+  "stage": "completed",
+  "total_process_cpu_s": 7869.828,
+  "wall_s": 8346.474
+ },
+ "verdict": "RETAIN_T1_NO_IMPROVEMENT",
+ "vs_T1": {
+  "T0": {
+   "ci95": [
+    1.0833333333333333,
+    4.194444444444445
+   ],
+   "compute_feasible": true,
+   "families": {
+    "better": 2,
+    "equal": 4,
+    "worse": 18
+   },
+   "mean_paired_casualty_diff": 2.4027777777777777,
+   "qualifies": false,
+   "safety_pass": false,
+   "scenarios": {
+    "better": 2,
+    "equal": 44,
+    "worse": 26
+   },
+   "sign_test_p": 0.0004024505615234375,
+   "sign_test_p_holm": 0.00160980224609375,
+   "superior": false,
+   "worse_scenarios": [
+    {
+     "cand_unresolved_delta": -41,
+     "casualty_delta": 43,
+     "family_id": "fam-50833fbbc2256e41",
+     "people": 120,
+     "scenario_id": "g-ab44068a942771ae"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 15,
+     "family_id": "fam-2b68258532f73c11",
+     "people": 63,
+     "scenario_id": "g-8f028c021d785b77"
+    },
+    {
+     "cand_unresolved_delta": -9,
+     "casualty_delta": 14,
+     "family_id": "fam-68cc68339c5a5934",
+     "people": 31,
+     "scenario_id": "g-42a7dc914766e212"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 12,
+     "family_id": "fam-50833fbbc2256e41",
+     "people": 120,
+     "scenario_id": "g-58fe9d5c43438e25"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 9,
+     "family_id": "fam-668f9eb253138b17",
+     "people": 44,
+     "scenario_id": "g-2948258c63a8bd50"
+    },
+    {
+     "cand_unresolved_delta": -5,
+     "casualty_delta": 9,
+     "family_id": "fam-a7598cd5f1310780",
+     "people": 98,
+     "scenario_id": "g-b17bf2e574772429"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 9,
+     "family_id": "fam-f5d5976157b6cd2a",
+     "people": 63,
+     "scenario_id": "g-e28acaaf4ed6dddd"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 8,
+     "family_id": "fam-f6e2e633c2b0bf6f",
+     "people": 120,
+     "scenario_id": "g-0ef69adf39311113"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 7,
+     "family_id": "fam-a54c674b882e7e75",
+     "people": 49,
+     "scenario_id": "g-1c8703b259c92fd1"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 7,
+     "family_id": "fam-68cc68339c5a5934",
+     "people": 85,
+     "scenario_id": "g-73d67bcba0b0cbef"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 6,
+     "family_id": "fam-f6e2e633c2b0bf6f",
+     "people": 83,
+     "scenario_id": "g-06dd56ef35a315e9"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 6,
+     "family_id": "fam-2b68258532f73c11",
+     "people": 62,
+     "scenario_id": "g-4eb0b199030ec4c4"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 4,
+     "family_id": "fam-5040e52abccfe39a",
+     "people": 47,
+     "scenario_id": "g-3de025629a59295e"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 4,
+     "family_id": "fam-668f9eb253138b17",
+     "people": 22,
+     "scenario_id": "g-4dddc0c7bb0433a4"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 3,
+     "family_id": "fam-66ee0ffc628ef2cc",
+     "people": 55,
+     "scenario_id": "g-1c8f943e19fa8532"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 3,
+     "family_id": "fam-66ee0ffc628ef2cc",
+     "people": 32,
+     "scenario_id": "g-4adaf51a2d5a447d"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 3,
+     "family_id": "fam-cad8572a2652a93d",
+     "people": 102,
+     "scenario_id": "g-6ab7ab85e28039ae"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 3,
+     "family_id": "fam-98eba9a8248c3137",
+     "people": 42,
+     "scenario_id": "g-f59233fcec7c59db"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 2,
+     "family_id": "fam-82cd99204450dadb",
+     "people": 8,
+     "scenario_id": "g-48da7db191091960"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 2,
+     "family_id": "fam-e66fb46cff5f9365",
+     "people": 6,
+     "scenario_id": "g-5800817c1a545b9f"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 2,
+     "family_id": "fam-668f9eb253138b17",
+     "people": 105,
+     "scenario_id": "g-7214a1bf6fd52f16"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 2,
+     "family_id": "fam-988659ee3dbb2b8d",
+     "people": 69,
+     "scenario_id": "g-e1ba051b6e8fcb95"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 1,
+     "family_id": "fam-7176d3bafab71aee",
+     "people": 12,
+     "scenario_id": "g-b7f6c6c2509d69f8"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 1,
+     "family_id": "fam-28faeaa5d0f47d2d",
+     "people": 26,
+     "scenario_id": "g-c1c21ac1a2f1e04f"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 1,
+     "family_id": "fam-988659ee3dbb2b8d",
+     "people": 18,
+     "scenario_id": "g-c69617769bc287b7"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 1,
+     "family_id": "fam-8ac68f727a2cd01b",
+     "people": 17,
+     "scenario_id": "g-d8b44a9d3faddb02"
+    }
+   ]
+  },
+  "T2": {
+   "ci95": [
+    -0.20833333333333334,
+    -0.013888888888888888
+   ],
+   "compute_feasible": false,
+   "families": {
+    "better": 4,
+    "equal": 20,
+    "worse": 0
+   },
+   "mean_paired_casualty_diff": -0.09722222222222222,
+   "qualifies": false,
+   "safety_pass": true,
+   "scenarios": {
+    "better": 4,
+    "equal": 68,
+    "worse": 0
+   },
+   "sign_test_p": 0.125,
+   "sign_test_p_holm": 0.375,
+   "superior": false,
+   "worse_scenarios": []
+  },
+  "T3": {
+   "ci95": [
+    -0.2222222222222222,
+    1.0555555555555556
+   ],
+   "compute_feasible": true,
+   "families": {
+    "better": 6,
+    "equal": 12,
+    "worse": 6
+   },
+   "mean_paired_casualty_diff": 0.3472222222222222,
+   "qualifies": false,
+   "safety_pass": true,
+   "scenarios": {
+    "better": 8,
+    "equal": 55,
+    "worse": 9
+   },
+   "sign_test_p": 1.0,
+   "sign_test_p_holm": 1.0,
+   "superior": false,
+   "worse_scenarios": [
+    {
+     "cand_unresolved_delta": -36,
+     "casualty_delta": 35,
+     "family_id": "fam-50833fbbc2256e41",
+     "people": 120,
+     "scenario_id": "g-ab44068a942771ae"
+    },
+    {
+     "cand_unresolved_delta": -4,
+     "casualty_delta": 7,
+     "family_id": "fam-a7598cd5f1310780",
+     "people": 98,
+     "scenario_id": "g-b17bf2e574772429"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 6,
+     "family_id": "fam-f6e2e633c2b0bf6f",
+     "people": 120,
+     "scenario_id": "g-0ef69adf39311113"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 5,
+     "family_id": "fam-f5d5976157b6cd2a",
+     "people": 63,
+     "scenario_id": "g-e28acaaf4ed6dddd"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 3,
+     "family_id": "fam-f5d5976157b6cd2a",
+     "people": 12,
+     "scenario_id": "g-5baee3fbb0800d25"
+    },
+    {
+     "cand_unresolved_delta": -2,
+     "casualty_delta": 2,
+     "family_id": "fam-68cc68339c5a5934",
+     "people": 31,
+     "scenario_id": "g-42a7dc914766e212"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 1,
+     "family_id": "fam-668f9eb253138b17",
+     "people": 44,
+     "scenario_id": "g-2948258c63a8bd50"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 1,
+     "family_id": "fam-988659ee3dbb2b8d",
+     "people": 18,
+     "scenario_id": "g-c69617769bc287b7"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 1,
+     "family_id": "fam-988659ee3dbb2b8d",
+     "people": 69,
+     "scenario_id": "g-e1ba051b6e8fcb95"
+    }
+   ]
+  },
+  "T4": {
+   "ci95": [
+    -0.7222222222222222,
+    0.09722222222222222
+   ],
+   "compute_feasible": true,
+   "families": {
+    "better": 5,
+    "equal": 16,
+    "worse": 3
+   },
+   "mean_paired_casualty_diff": -0.2222222222222222,
+   "qualifies": false,
+   "safety_pass": true,
+   "scenarios": {
+    "better": 6,
+    "equal": 62,
+    "worse": 4
+   },
+   "sign_test_p": 0.7265625,
+   "sign_test_p_holm": 1.0,
+   "superior": false,
+   "worse_scenarios": [
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 3,
+     "family_id": "fam-f6e2e633c2b0bf6f",
+     "people": 120,
+     "scenario_id": "g-0ef69adf39311113"
+    },
+    {
+     "cand_unresolved_delta": -3,
+     "casualty_delta": 1,
+     "family_id": "fam-68cc68339c5a5934",
+     "people": 31,
+     "scenario_id": "g-42a7dc914766e212"
+    },
+    {
+     "cand_unresolved_delta": -1,
+     "casualty_delta": 1,
+     "family_id": "fam-a7598cd5f1310780",
+     "people": 98,
+     "scenario_id": "g-b17bf2e574772429"
+    },
+    {
+     "cand_unresolved_delta": 0,
+     "casualty_delta": 1,
+     "family_id": "fam-28faeaa5d0f47d2d",
+     "people": 26,
+     "scenario_id": "g-c1c21ac1a2f1e04f"
+    }
+   ]
+  }
+ }
+}

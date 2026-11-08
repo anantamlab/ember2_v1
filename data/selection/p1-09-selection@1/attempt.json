@@ -1,0 +1,22 @@
+{
+ "attempt_hash": "sha256:f83212669e18f11c4687d3f94be43dca4c2d33faec23e10caf884cca24756ea7",
+ "attempt_version": "p1-09-attempt@1.0.0",
+ "code_commit": "46c445e0a0ffec8e3433696cab3c768da0e5335e",
+ "limits": {
+  "cpu_s_cap": 14400.0,
+  "per_decision_cpu_ms_cap": 30000.0,
+  "wall_s_cap": 14400.0
+ },
+ "manifest_hash": "sha256:4e9283b206296d7251514140613f0f8cc234fe9e2dc68877f7a71e906dc5cf9e",
+ "platform": {
+  "cpu_count": 24,
+  "machine": "AMD64",
+  "python": "3.14.7",
+  "system": "Windows"
+ },
+ "protocol_commit": "64b2d9873953ba750fd6c08fb84761f1bcd8e0bb",
+ "protocol_hash": "sha256:ae72c2cf1a0dae4f46b3a6d158f426af0853bc4100cd15706c74f203a6765c21",
+ "protocol_id": "p1-09-teacher-selection",
+ "rerun_policy": "one attempt only; a later attempt needs a separately documented scientific authorization (a new protocol version)",
+ "started_utc": "2026-11-08T10:39:31Z"
+}
