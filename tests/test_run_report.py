@@ -212,6 +212,18 @@ def test_deadline_after_the_run_may_have_started(tmp_path):
     assert report["local_elapsed_s"] == DEADLINE and call.cancels == [True]
 
 
+def test_a_container_that_ends_and_requeues_is_cancelled_at_once(tmp_path):
+    # A10 attempt 2026-11-08: one container seen, then the input queued again (startup crash loop).
+    call = FakeCall(Clock())
+    result, _, report, submit, path = _watch(tmp_path, call, stats_seq(QUEUED, STARTING, QUEUED))
+    assert result is None and submit.count == 1
+    _assert_not_pass(report, "container_restarted", path)
+    w = report["watchdog"]
+    assert (w["first_start_evidence_s"], w["restart_evidence_s"]) == (60.0, 90.0)
+    assert report["local_elapsed_s"] == 90.0 and call.cancels == [True]
+    assert report["outstanding_function_call_id"] == CALL_ID and report["manual_cleanup"]
+
+
 def test_short_queue_then_start_is_not_cancelled_at_the_queue_limit(tmp_path):
     script = ["wait"] * 15 + [("return", {"status": "FAIL"})]
     call = FakeCall(Clock(), script)

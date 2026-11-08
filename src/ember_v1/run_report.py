@@ -67,8 +67,8 @@ CANCEL_VERIFY_S = 15
 MAX_CONSECUTIVE_POLL_ERRORS = 3
 MAX_SNAPSHOTS = 20
 
-UNVERIFIED_STAGES = ("in_progress", "submit_failed", "post_submit_error", "queue_timeout", "client_deadline",
-                     "interrupted", "poll_failed", "remote_timeout", "unknown")
+UNVERIFIED_STAGES = ("in_progress", "submit_failed", "post_submit_error", "queue_timeout", "container_restarted",
+                     "client_deadline", "interrupted", "poll_failed", "remote_timeout", "unknown")
 # Cancel outcomes after which the call may still exist: keep its ID and the cleanup steps.
 UNCONFIRMED_CANCEL = ("failed", "unverified", "terminal_error_observed")
 FAIL_STAGES = ("model_load", "remote_task")
@@ -363,6 +363,13 @@ def watch_remote_call(submit: Callable[[], Any], *, plan: Mapping[str, Any], pat
             watch["snapshots"] = (watch["snapshots"] + [snap])[-MAX_SNAPSHOTS:]
             if snap["state"] in ("running", "container") and watch["first_start_evidence_s"] is None:
                 watch["first_start_evidence_s"] = snap["t_s"]
+            # A container was seen, and now the input waits again with no container: that container ended
+            # without a result (a startup crash, or a platform restart) and Modal will start another one.
+            # One container, no retries: cancel now (A10 attempt, 2026-11-08: 13 failed startups in 408 s).
+            if watch["first_start_evidence_s"] is not None and snap["state"] == "queued":
+                watch["restart_evidence_s"] = snap["t_s"]
+                trigger = "container_restarted"
+                break
             # Confirmed only if every reading so far was "queued" and none failed.
             readings = watch["polls"] - watch["poll_errors"]
             confirmed_queued = (watch["first_start_evidence_s"] is None and watch["stats_errors"] == 0

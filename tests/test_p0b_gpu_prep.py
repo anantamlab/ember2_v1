@@ -172,6 +172,35 @@ def test_modal_image_runs_verify_install_with_root_on_pythonpath():
     assert src.count("verify-install") == 1 and src.index(VERIFY_CMD) > copy
 
 
+def test_modal_app_reads_local_files_only_on_the_client():
+    # A10 attempt (2026-11-08): the container imports /root/modal_app.py, where the lock file does not
+    # exist; a module-level read failed every startup. Source check, for CI without modal.
+    import ast
+    src = (ROOT / "infra" / "modal_app.py").read_text(encoding="utf-8")
+    reads = {"read_bytes", "read_text", "open"}
+    top = [n for n in ast.parse(src).body if not isinstance(n, (ast.FunctionDef, ast.ClassDef))]
+    calls = [c for n in top for c in ast.walk(n) if isinstance(c, ast.Call)]
+    assert not [c for c in calls if getattr(c.func, "attr", getattr(c.func, "id", None)) in reads]
+    assert src.count("LOCK_FILE.read_bytes()") == 1
+    guard = src.index("    if modal.is_local():\n")
+    assert guard < src.index("LOCK_FILE.read_bytes()") < src.index("    return env\n")
+
+
+def test_modal_app_imports_in_the_container_without_the_lock_file(tmp_path):
+    # Behaviour check where modal is installed: a lone copy of modal_app.py, as in /root on Modal.
+    pytest.importorskip("modal")
+    import os
+    import subprocess
+    (tmp_path / "modal_app.py").write_bytes((ROOT / "infra" / "modal_app.py").read_bytes())
+    code = ("import modal, runpy, sys; modal.is_local = lambda: False; "
+            "g = runpy.run_path(sys.argv[1]); env = g['_image_env'](); "
+            "assert 'EMBER_IMAGE_LOCK_SHA256' not in env and env['HF_HOME'] == '/cache/hf'; print('ok')")
+    env = {**os.environ, "PYTHONPATH": str(ROOT / "src")}
+    out = subprocess.run([sys.executable, "-c", code, str(tmp_path / "modal_app.py")], cwd=tmp_path, env=env,
+                         capture_output=True, text=True, timeout=120)
+    assert out.returncode == 0 and out.stdout.strip().endswith("ok"), out.stderr[-2000:]
+
+
 def _find_p0b(cwd, pythonpath):
     import os
     import subprocess

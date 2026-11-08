@@ -47,13 +47,23 @@ BASE_IMAGE = "nvidia/cuda@sha256:a99a1860ba8e2916e5c3e73b72ec4c4301653a84586e05b
 # pip enters hash-checking mode, so an unlisted or changed wheel fails the CPU image build.
 LOCK_FILE = Path(__file__).resolve().with_name("p0b-requirements.lock.txt")
 
+
+def _image_env() -> dict:
+    """Image env. The lock hash is read on the local client only: Modal imports this module again in the
+    container (/root/modal_app.py), where the lock file does not exist and the image is already built
+    (A10 attempt, 2026-11-08: FileNotFoundError at import, 13 failed startups)."""
+    env = {"HF_HOME": "/cache/hf", "TOKENIZERS_PARALLELISM": "false"}
+    if modal.is_local():
+        env["EMBER_IMAGE_LOCK_SHA256"] = hashlib.sha256(LOCK_FILE.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+    return env
+
+
 image = (
     modal.Image.from_registry(BASE_IMAGE, add_python="3.11")
     .apt_install("git", "build-essential")
     .pip_install_from_requirements(str(LOCK_FILE))
     .run_commands("python -m pip check")
-    .env({"HF_HOME": "/cache/hf", "TOKENIZERS_PARALLELISM": "false",
-          "EMBER_IMAGE_LOCK_SHA256": hashlib.sha256(LOCK_FILE.read_bytes().replace(b"\r\n", b"\n")).hexdigest()})
+    .env(_image_env())
 )
 if os.environ.get("EMBER_FAST_KERNELS") == "1":
     # NOT locked and built on a GPU builder (billed). Not part of the first inspect.

@@ -1,0 +1,158 @@
+{
+  "schema": "ember_v1.p0b.run_failure/2",
+  "task": "inspect",
+  "gpu": "A10",
+  "code_commit": "21c88d5eac6bff533423c430e534295f4f39cc98",
+  "model_revision": "unsloth/Qwen3.5-2B@fffbc0d8711cf87df6d1f97938c5e50ef94aadc7",
+  "status": "UNVERIFIED",
+  "stage": "unknown",
+  "error": {
+    "type": "modal.exception.RemoteError",
+    "message": ""
+  },
+  "remote_frames": [
+    "watch_remote_call",
+    "wrapped",
+    "get",
+    "poll_function",
+    "_process_result"
+  ],
+  "local_elapsed_s": 408.1,
+  "function_call_id": "fc-01M6WVH81K79V2V3DZ0Z61W9W6",
+  "app_id": "ap-e7dfhri9d1JX6sPoqJzbQn",
+  "watchdog": {
+    "app_id": "ap-e7dfhri9d1JX6sPoqJzbQn",
+    "function_call_id": "fc-01M6WVH81K79V2V3DZ0Z61W9W6",
+    "submissions": 1,
+    "queue_wait_limit_s": 300,
+    "client_deadline_s": 1860,
+    "poll_interval_s": 30,
+    "polls": 14,
+    "poll_errors": 0,
+    "stats_errors": 0,
+    "queued_snapshots": 11,
+    "snapshots": [
+      {
+        "t_s": 32.1,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 63.3,
+        "state": "container",
+        "backlog": 1,
+        "runners": 1,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 94.5,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 125.8,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 157.1,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 188.0,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 219.4,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 250.5,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 281.9,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 313.1,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 344.4,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 375.7,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 407.1,
+        "state": "unknown",
+        "backlog": 0,
+        "runners": 0,
+        "running_inputs": 0
+      }
+    ],
+    "first_start_evidence_s": 63.3,
+    "execution_state": "ended_with_error",
+    "cancellation": null,
+    "elapsed_s": 408.1
+  },
+  "outstanding_function_call_id": null,
+  "manual_cleanup": [],
+  "cost_estimate": {
+    "kind": "ESTIMATE_NOT_A_BILLING_CAP",
+    "scope": "GPU container runtime of one attempt",
+    "prices": "modal billing rates, 2026-11-08",
+    "configured_container_s": 1500,
+    "gpu_usd": 0.459,
+    "cpu_usd_assumed": 0.079,
+    "memory_usd_assumed": 0.107,
+    "envelope_usd": 0.64,
+    "assumes": [
+      "the container ends within the configured startup and call timeouts (one attempt, retries=0)",
+      "CPU and memory stay at or below 4 cores and 32 GiB; more usage costs more",
+      "the listed prices apply to this workspace and region",
+      "no platform-initiated restart (for example a host preemption) adds a second container"
+    ],
+    "excludes": [
+      "image build on the Modal builder (CPU, or GPU for the optional EMBER_FAST_KERNELS layer)",
+      "volume storage (ember-v1-hf-cache, ember-v1-checkpoints)",
+      "network or egress charges, if any",
+      "local client time and Modal queueing before the container starts"
+    ]
+  },
+  "compatibility_pass_established": false,
+  "note": "No model compatibility PASS was established. cost_estimate is an ESTIMATE, not a bill; read actual charges on the Modal usage page. Modal logs hold the remote evidence."
+}

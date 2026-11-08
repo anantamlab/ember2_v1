@@ -24,7 +24,7 @@ Order: **L4 → A10 → L40S**, as separate bounded attempts, never concurrent. 
 
 1. Run the L4 command above.
 2. Go to the next GPU **only** if the attempt ended with stage `queue_timeout` (no container ever seen). Before the next attempt, check that the call is no longer queued or running (`modal app list`, `modal container list`, the report `cancellation` field) and record any uncertainty.
-3. A started container that fails (model load, any check) is a result. Do not retry it on another GPU.
+3. A started container that fails (model load, any check, or a startup crash, stage `container_restarted`) is a result. Do not retry it on another GPU.
 4. `run.allocated_gpu` records the device name and capability from CUDA in the container; `matches_request` is `null` when no container started. No GPU compatibility claim without it.
 
 ## 2. Dependency audit and pinned runtime strategy
@@ -141,6 +141,7 @@ Attempt 3 (app `ap-WB7GlV2CTIyIJ2WQRX7xYF`, 2026-11-03) waited 2069 s with no co
 | Wait | `FunctionCall.get(timeout=30)` in a loop. An empty poll raises the builtin `TimeoutError` (Modal job-queue guide); it does **not** cancel the call. |
 | Queue state | After each empty poll: `get_current_stats()` of this instance's variant (`backlog`, `num_total_runners`, `num_running_inputs`). `queued` = backlog >= 1, 0 runners, 0 running inputs. |
 | Queue timeout | Cancel at 300 s only if every reading since submission was `queued` (at least 3 readings, no stats error, no container seen). Stage `queue_timeout`. |
+| Container restart | After a container was seen, a `queued` reading (backlog >= 1, 0 runners) means that container ended without a result and Modal will start another one (a startup crash loop, or a platform restart). Cancel at once. Stage `container_restarted`, field `watchdog.restart_evidence_s`. Added after attempt 5: 13 failed startups in 408 s, not cancelled by the old rules. A restart faster than the 30 s poll can still be missed; the client deadline then bounds it. |
 | Client deadline | Otherwise cancel at `client_deadline_s` = 300 + startup 900 + task timeout 600 + 60 = 1860 s for inspect. Stage `client_deadline`, with `execution_state` `unknown` or `started_observed`; the report never claims the call stayed queued. |
 | Poll errors | A client `ConnectionError` while polling is counted. 3 in a row: cancel, stage `poll_failed`. |
 | Ctrl-C | Cancel, stage `interrupted`. |
@@ -156,7 +157,7 @@ Every non-success writes `results/<tag>.json` atomically (temp file, fsync, rena
 |---|---|
 | `schema` | `ember_v1.p0b.run_failure/2` |
 | `task`, `gpu`, `code_commit`, `model_revision` | from the plan (`unsloth/Qwen3.5-2B@fffbc0d8…`) |
-| `status`, `stage` | `FAIL` + `model_load` or `remote_task` (an exception carrying remote load/task frames). `UNVERIFIED` + `in_progress`, `submit_failed`, `post_submit_error`, `queue_timeout`, `client_deadline`, `interrupted`, `poll_failed`, `remote_timeout` or `unknown`. A call that never reached the model is never `FAIL`. |
+| `status`, `stage` | `FAIL` + `model_load` or `remote_task` (an exception carrying remote load/task frames). `UNVERIFIED` + `in_progress`, `submit_failed`, `post_submit_error`, `queue_timeout`, `container_restarted`, `client_deadline`, `interrupted`, `poll_failed`, `remote_timeout` or `unknown`. A call that never reached the model is never `FAIL`. |
 | `error` | exception type and a sanitized message (max 500 characters), or `null` for a deadline |
 | `remote_frames` | function names only, no file paths |
 | `local_elapsed_s` | client wall clock from submission |
@@ -180,7 +181,14 @@ Manual cleanup: `python -c "import modal; modal.FunctionCall.from_id('<fc-id>').
 | 2 | `ap-Ct45UWWa05s5Bdj2daPyQK` | `verify-install` PASS; `InvalidError: Please add a payment method to use L4 GPU functions` | app creation |
 | 3 | `ap-WB7GlV2CTIyIJ2WQRX7xYF` | call `fc-01M6GFMPN4FEN4YYWVV5P9M24W` enqueued 10:35:24 UTC, never started, no container; stopped by hand after 2069 s; `UNVERIFIED` | queue (reason unknown) |
 
-GPU spend for all three: $0. All 11 checks: NOT RUN.
+| 4 | `ap-l6eKiIBcmdQ2fI4pnY6nS9` (L4, code `21c88d5`, 2026-11-08) | image rebuilt, `verify-install` PASS; call `fc-01M6WV2BD0KQ9RQ0T192BBFEB6` submitted 11:15 IST; 10 readings `queued`, 0 runners; cancelled at 331 s, cancel outcome `unverified`. Checked after: app `stopped` 11:21:29 IST, 0 tasks, `modal container list` empty. No container. `UNVERIFIED` | `queue_timeout` |
+| 5 | `ap-e7dfhri9d1JX6sPoqJzbQn` (A10, code `21c88d5`, 2026-11-08) | call `fc-01M6WVH81K79V2V3DZ0Z61W9W6`; a container was seen at 63 s. **Every startup failed at import of `/root/modal_app.py`**: module-level `LOCK_FILE.read_bytes()`, `FileNotFoundError: /root/p0b-requirements.lock.txt`. Modal restarted the container 13 times (`retries=0` covers inputs, not startup failures). The watchdog did not cancel (a container was seen, so no queue rule applied). Stopped by hand (`modal app stop -y`) at 408 s, 11:30:52 IST; then 0 tasks, container list empty. The model never loaded; no CUDA metadata, so the allocated device is not recorded. **Harness FAIL (startup); GPU compatibility UNVERIFIED.** | startup crash (report stage `unknown`) |
+
+Spend: attempts 1–3 $0. Attempt 4: no GPU; billing report for 2026-11-08 shows CPU $0.0097, memory $0.0004, egress $0.0004 (image build). Attempt 5: not yet in the billing report when read; upper bound one A10 container for at most 376 s (first start evidence at 32–63 s to stop at 408 s), about $0.17 with CPU and memory. All 11 checks: NOT RUN.
+
+Client reports (unchanged copies of `results/*.json`): `docs/p0b_attempts/attempt4-L4-queue-timeout.json`, `docs/p0b_attempts/attempt5-A10-startup-crash.json`. The startup traceback is in the Modal app logs (`modal app logs ap-e7dfhri9d1JX6sPoqJzbQn`).
+
+Decision after attempt 5: no L40S attempt. The failure happened after a container started, and the rule (§1.1 step 3) forbids a retry on another GPU. It is a harness defect, not a GPU result. Fixes (this PR): the lock hash is read only where `modal.is_local()` (`_image_env`), with a test that imports a lone copy of `modal_app.py` as the container does (it fails on `21c88d5`); and the `container_restarted` watchdog rule. The next attempt needs a new, explicit authorization.
 
 ## 7. Remaining GPU-only uncertainties
 
@@ -196,3 +204,4 @@ GPU spend for all three: $0. All 11 checks: NOT RUN.
 | G8 | Are the identity hashes computable (U9), and is `head_sha256` reproducible across runs (seed 3407)? | `metadata` hashes; compare two runs later |
 | G9 | Does the hash-checked install of 107 wheels succeed on the Modal builder? (CPU, before GPU) | **Resolved 2026-11-03: yes.** Attempt 1: 107 wheels, `pip check` clean. Attempt 2: `verify-install` PASS, all audited hashes. |
 | G10 | Real compact token count at N=200 versus 16384. | `preservation_probe` |
+| G11 | Does the app module import in the GPU container? | **Failed 2026-11-08 (attempt 5), fixed after.** The fix is tested locally only (CPU import of a lone copy with `modal.is_local()` False). |
