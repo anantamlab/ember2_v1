@@ -1,0 +1,174 @@
+{
+ "estimate": {
+  "coef_uncompressed": [
+   2347.485,
+   117.764,
+   7.605
+  ],
+  "coef_zip": [
+   897.848,
+   4.559,
+   0.099
+  ],
+  "cover_ratio_uncompressed": 1.2912,
+  "cover_ratio_zip": 1.1856,
+  "decisions": {
+   "central": 11894,
+   "upper": 28421
+  },
+  "largest_member_fits": true,
+  "largest_member_upper_bytes": 8109752,
+  "mean_steps_fraction_of_max": 0.4152,
+  "member_bound_bytes": 52428800,
+  "model": "bytes/step = a + b*people + c*walls, scaled to cover every sample",
+  "per_trace_episode_format_largest_member_upper_bytes": 2432925571,
+  "samples": 46,
+  "train_scenarios": 189,
+  "uncompressed_bytes": {
+   "central": 164887573,
+   "upper": 397125072
+  },
+  "zip_bytes": {
+   "central": 16264011,
+   "upper": 39171215
+  }
+ },
+ "note": "synthetic probe only; no p1-02-v1 label made",
+ "probe_decisions": 3426,
+ "probe_episodes": 46,
+ "probe_overlap_with_heldout": {
+  "p1-02-v1/calibration": {
+   "core": 0,
+   "family": 0,
+   "lineage": 0,
+   "scenario": 0
+  },
+  "p1-02-v1/dev": {
+   "core": 0,
+   "family": 0,
+   "lineage": 0,
+   "scenario": 0
+  },
+  "p1-02-v1/locked_test": {
+   "core": 0,
+   "family": 0,
+   "lineage": 0,
+   "scenario": 0
+  },
+  "p1-02-v1/train": {
+   "core": 0,
+   "family": 0,
+   "lineage": 0,
+   "scenario": 0
+  },
+  "p1-09-selection@1": {
+   "core": 0,
+   "family": 0,
+   "lineage": 0,
+   "scenario": 0
+  },
+  "t2-pilot@1": {
+   "core": 0,
+   "family": 0,
+   "lineage": 0,
+   "scenario": 0
+  },
+  "t3-pilot@1": {
+   "core": 0,
+   "family": 0,
+   "lineage": 0,
+   "scenario": 0
+  },
+  "t4-explore@v12": {
+   "core": 0,
+   "family": 0,
+   "lineage": 0,
+   "scenario": 0
+  },
+  "t4-pilot@1": {
+   "core": 0,
+   "family": 0,
+   "lineage": 0,
+   "scenario": 0
+  },
+  "t4-pilot@2": {
+   "core": 0,
+   "family": 0,
+   "lineage": 0,
+   "scenario": 0
+  },
+  "t4-pilot@3": {
+   "core": 0,
+   "family": 0,
+   "lineage": 0,
+   "scenario": 0
+  }
+ },
+ "probe_people": [
+  33,
+  120,
+  18,
+  10,
+  52,
+  62,
+  49,
+  64,
+  40,
+  27,
+  120,
+  120,
+  8,
+  28,
+  22,
+  13,
+  7,
+  17,
+  120,
+  43,
+  44,
+  10,
+  5,
+  34,
+  98,
+  92,
+  29,
+  54,
+  3,
+  43,
+  120,
+  120,
+  15,
+  15,
+  41,
+  69,
+  22,
+  74,
+  50,
+  25,
+  15,
+  120,
+  11,
+  11,
+  19,
+  120
+ ],
+ "probe_plan": {
+  "families": {
+   "calibration": 1,
+   "dev": 1,
+   "locked_test": 1,
+   "train": 24
+  },
+  "lineages_per_family": 2,
+  "master_seed": 991,
+  "plan_id": "s1-storage-probe-1"
+ },
+ "provenance_record_bytes_assumed": 1300,
+ "t1_cpu": {
+  "max_decision_ms": 140.62,
+  "mean_decision_ms": 18.6,
+  "note": "upper = every train scenario runs to max_steps at the probe max decision CPU",
+  "train_upper_cpu_s": 3996.7,
+  "train_upper_decisions": 28421
+ }
+}
