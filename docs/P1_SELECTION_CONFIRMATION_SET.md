@@ -49,7 +49,7 @@ All 340 pilot maps are regenerated from the committed cell lists (t2-pilot@1 24,
 | `near_duplicate`, `wall_near_duplicate` | the frozen generator rules (scale 1.3, aspect 1.15, wall MAD 0.03 on the 16x16 coarse grid, exit chamfer 0.1, wall rule only at >= 5 % walls) |
 | `scale_free_near_duplicate`, `scale_free_wall_near_duplicate` | the same thresholds over all 8 rotations/reflections, **without** the scale and aspect gates (catches a rescaled copy) |
 
-Result: 8160 family x pilot pairs, 173 within the scale/aspect gates, **0 hits**. Nearest pilot map of any family (scale-free): wall MAD 0.043 (threshold 0.03), `t4-pilot-base-corridor-48x64-10-stochastic-3`. The audit lists the nearest map per family. `pass: true` requires no hit.
+Result: 8160 family x pilot pairs, 173 within the scale/aspect gates, **0 hits**. Nearest pilot map of any family (scale-free): wall MAD 0.043 (threshold 0.03), `t4-pilot-base-corridor-48x64-10-stochastic-3`. The audit lists the nearest map per family. `pass: true` requires no hit. The screen sums distances with `math.fsum` (correctly rounded), because plain float `sum()` changed in Python 3.12; the audit is then the same on 3.11 and 3.12+.
 
 Not checked (recorded in the audit): `blind_test` (secret seeds; another root; private contents stay inaccessible); dynamic pilot content (people, ignitions, fire model) beyond the exact core hash; local edits below the wall threshold, crops, translations and partial overlaps.
 

@@ -38,6 +38,7 @@ from __future__ import annotations
 import argparse
 import functools
 import json
+import math
 import multiprocessing as mp
 import os
 import platform
@@ -184,11 +185,24 @@ def pilot_maps() -> list[PilotMap]:
     return [PilotMap(ns, s) for ns in PILOT_SETS for s in scs[ns]]
 
 
+def _wall_mad(a: A.MapSignature, b: A.MapSignature, k: int) -> float:
+    """Mean absolute wall difference to symmetry k. math.fsum is correctly rounded on every Python version
+    (plain float sum() changed in 3.12), so the audit is identical on every interpreter."""
+    return math.fsum(abs(x - y) for x, y in zip(a.mats[0], b.mats[k])) / len(a.mats[0])
+
+
+def _exit_chamfer(a: list[tuple[float, float]], b: list[tuple[float, float]]) -> float:
+    """A._chamfer with correctly rounded sums (same rule, version-independent value)."""
+    if not a or not b:
+        return A.INF
+    d = lambda p, q: max(abs(p[0] - q[0]), abs(p[1] - q[1]))  # noqa: E731
+    return max(math.fsum(min(d(p, q) for q in b) for p in a) / len(a),
+               math.fsum(min(d(p, q) for q in a) for p in b) / len(b))
+
+
 def _free_distance(a: A.MapSignature, b: A.MapSignature) -> tuple[float, float]:
     """(wall distance, exit distance) at the best of all 8 symmetries, without scale or aspect gates."""
-    n = len(a.mats[0])
-    return min((sum(abs(x - y) for x, y in zip(a.mats[0], b.mats[k])) / n, A._chamfer(a.exits[0], b.exits[k]))
-               for k in range(8))
+    return min((_wall_mad(a, b, k), _exit_chamfer(a.exits[0], b.exits[k])) for k in range(8))
 
 
 def pilot_match(fam: Family, pm: PilotMap) -> str | None:
@@ -200,10 +214,9 @@ def pilot_match(fam: Family, pm: PilotMap) -> str | None:
         return "near_duplicate"
     if A.wall_near_duplicate(a, b)[0]:
         return "wall_near_duplicate"
-    n = len(a.mats[0])
-    walls = [sum(abs(x - y) for x, y in zip(a.mats[0], b.mats[k])) / n for k in range(8)]
+    walls = [_wall_mad(a, b, k) for k in range(8)]
     if abs(a.walls_frac - b.walls_frac) <= A.NEAR_WALL_MAD:
-        if any(w <= A.NEAR_WALL_MAD and A._chamfer(a.exits[0], b.exits[k]) <= A.NEAR_EXIT
+        if any(w <= A.NEAR_WALL_MAD and _exit_chamfer(a.exits[0], b.exits[k]) <= A.NEAR_EXIT
                for k, w in enumerate(walls)):
             return "scale_free_near_duplicate"
         if min(a.walls_frac, b.walls_frac) >= A.NEAR_WALL_MIN_FRAC and min(walls) <= A.NEAR_WALL_MAD:
