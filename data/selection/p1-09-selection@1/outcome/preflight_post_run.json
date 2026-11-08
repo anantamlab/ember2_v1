@@ -1,0 +1,114 @@
+{
+ "compute": {
+  "cpu_s_cap": 14400.0,
+  "enforcement": "live_supervisor_fail_closed",
+  "per_decision_cpu_ms_cap": 30000.0,
+  "replacement_cpu_s_cap": 7200.0,
+  "usd_cap": 15.0,
+  "wall_s_cap": 14400.0
+ },
+ "compute_preflight": {
+  "basis": "committed DEV policy CPU x scenarios/48 x 1.5 (T4: whole upper DEV comparison estimate of the v1.2 pilot)",
+  "cpu_s_cap": 14400.0,
+  "eligible": [
+   "T0",
+   "T1",
+   "T2",
+   "T3",
+   "T4"
+  ],
+  "eligible_total_s": 8805.7,
+  "estimated_cpu_s": {
+   "T0": 6.2,
+   "T1": 46.4,
+   "T2": 7615.0,
+   "T3": 155.1,
+   "T4": 983.0
+  },
+  "missing_estimates": [],
+  "over_replacement_cap": [
+   "T2"
+  ],
+  "pass": true,
+  "replacement_cpu_s_cap": 7200.0,
+  "total_s": 8805.7
+ },
+ "fail": [
+  "run_preconditions"
+ ],
+ "hashes": {
+  "audit": "sha256:802b8fa509767c3b3cc881289a81c9285ae254498aa0a1de255fb0e035ea2ef2",
+  "manifest": "sha256:4e9283b206296d7251514140613f0f8cc234fe9e2dc68877f7a71e906dc5cf9e",
+  "protocol": "sha256:ae72c2cf1a0dae4f46b3a6d158f426af0853bc4100cd15706c74f203a6765c21",
+  "protocol_preregisters_manifest": "sha256:4e9283b206296d7251514140613f0f8cc234fe9e2dc68877f7a71e906dc5cf9e"
+ },
+ "materialized": 72,
+ "no_prior_files": false,
+ "regen": {
+  "audit_equal": true,
+  "audit_hash": "sha256:802b8fa509767c3b3cc881289a81c9285ae254498aa0a1de255fb0e035ea2ef2",
+  "audit_pass": true,
+  "families": 24,
+  "family_ids": 24,
+  "manifest_equal": true,
+  "manifest_hash": "sha256:4e9283b206296d7251514140613f0f8cc234fe9e2dc68877f7a71e906dc5cf9e",
+  "scenario_rows": 72,
+  "scenarios": 72
+ },
+ "run_preconditions": {
+  "pass": false,
+  "reasons": "working tree not clean (uncommitted, untracked or unexpected ignored files): ['untracked data/selection/p1-09-selection@1/attempt.json', 'untracked data/selection/p1-09-selection@1/attempt_log.jsonl', 'untracked data/selection/p1-09-selection@1/evidence.json', 'untracked experiments/p1_09_confirmation_eval.py', 'untracked experiments/p1_09_preflight.py', 'ignored data/selection/p1-09-selection@1/results/']; evidence already exists: exactly one confirmatory run per identity; a previous confirmatory attempt exists (attempt marker or log; possibly interrupted): re-execution needs a separately documented scientific authorization"
+ },
+ "teachers": {
+  "T0": {
+   "code_fingerprint": "sha256:8ddf9370263284107ae5249c9adafe7323ed8deab2d45077fe9894979e6c84aa",
+   "config_hash": "sha256:bdc4d3580bcf3889348c563aaf622334d135a535d9cb2aaeedc3c0528f10208a",
+   "instance_seed": null,
+   "name": "T0",
+   "policy": "fire_aware_shortest_path",
+   "seed": null,
+   "status": "eligible",
+   "version": "1.0.0"
+  },
+  "T1": {
+   "code_fingerprint": "sha256:52dc61f4ff9599e55bfd29f47068bf301895321ce85f6c9aaa9feec1dc568eac",
+   "config_hash": "sha256:5047e942db3326706b6184c9f29e0b992078920f03c8a53adc8cc24258345361",
+   "instance_seed": null,
+   "name": "T1",
+   "policy": "congestion_aware_cooperative_planner",
+   "seed": null,
+   "status": "eligible",
+   "version": "1.0.0"
+  },
+  "T2": {
+   "code_fingerprint": "sha256:afe987d862caaa32701777050f19fb3126c03f9edd6ab8ac6ed375a95504db74",
+   "config_hash": "sha256:302139e18ba05fdcdc5561b7390b95f725600ec8791e336d065f77cea0c507e5",
+   "instance_seed": 20261107,
+   "name": "T2",
+   "policy": "stochastic_fire_forecast_rollout",
+   "seed": 20261107,
+   "status": "eligible",
+   "version": "1.0.0"
+  },
+  "T3": {
+   "code_fingerprint": "sha256:82294a3f0d7aa3caf38598505dbffd367c5cb14ade1f725fd9ee23e73c2c14f1",
+   "config_hash": "sha256:5a8d4985b1f65d5de18a06c86d8dd522e2ca95e2accd583165b7e7d7ea1d02e0",
+   "instance_seed": 20261123,
+   "name": "T3",
+   "policy": "dynamic_ant_colony_optimization",
+   "seed": 20261123,
+   "status": "eligible",
+   "version": "1.0.0"
+  },
+  "T4": {
+   "code_fingerprint": "sha256:fa66a0f354dc82f992d1f0a1896851fc90dc9e19dea244f815a76857361ce75e",
+   "config_hash": "sha256:79bd3322b9cf7ccd25928f3a70502089732496af5427f88f00ecd2ff6ba12504",
+   "instance_seed": null,
+   "name": "T4",
+   "policy": "risk_based_priority",
+   "seed": null,
+   "status": "eligible",
+   "version": "1.2.0"
+  }
+ }
+}
