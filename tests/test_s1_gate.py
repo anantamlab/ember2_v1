@@ -315,6 +315,7 @@ def _t4_out_protocol(fn=lambda e: None, **over):
     fn(e)
     return _protocol(e, t4_entry_rule={**selection.t4_entry_rule(), "admitted": None},
                      tie_rule={"order": "lower_cpu_then_simplicity", "simplicity_order": ["T0", "T1", "T3", "T2"]},
+                     primary={**selection.draft_protocol()["primary"], "multiplicity": selection.multiplicity_rule(e)},
                      **over)
 
 

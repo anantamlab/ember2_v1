@@ -1,0 +1,213 @@
+{
+ "arbiter": null,
+ "baseline": {
+  "basis": "historical_exploratory_provisional",
+  "teacher": "T1"
+ },
+ "candidates": [
+  "T0",
+  "T1",
+  "T2",
+  "T3",
+  "T4"
+ ],
+ "compute": {
+  "cpu_s_cap": 14400.0,
+  "enforcement": "live_supervisor_fail_closed",
+  "per_decision_cpu_ms_cap": 30000.0,
+  "replacement_cpu_s_cap": 7200.0,
+  "usd_cap": 15.0,
+  "wall_s_cap": 14400.0
+ },
+ "confirmation": {
+  "families": 24,
+  "generator_revision": "gen-1.0.0",
+  "isolation_against": [
+   "p1-02-v1/train",
+   "p1-02-v1/dev",
+   "p1-02-v1/calibration",
+   "p1-02-v1/locked_test",
+   "t2-pilot@1",
+   "t3-pilot@1",
+   "t4-pilot@1",
+   "t4-pilot@2",
+   "t4-explore@v12",
+   "t4-pilot@3"
+  ],
+  "lineages_per_family": 3,
+  "manifest_hash": "sha256:4e9283b206296d7251514140613f0f8cc234fe9e2dc68877f7a71e906dc5cf9e",
+  "namespace": "p1-09-selection@1",
+  "policy_seeds": {
+   "T2": 20261107,
+   "T3": 20261123
+  },
+  "runs_per_identity": 1,
+  "seed_namespace": "p1-09-selection@1/seeds"
+ },
+ "eligibility": {
+  "T0": {
+   "identity": {
+    "config_hash": "sha256:bdc4d3580bcf3889348c563aaf622334d135a535d9cb2aaeedc3c0528f10208a",
+    "name": "T0",
+    "policy": "fire_aware_shortest_path",
+    "version": "1.0.0"
+   },
+   "status": "eligible"
+  },
+  "T1": {
+   "identity": {
+    "config_hash": "sha256:5047e942db3326706b6184c9f29e0b992078920f03c8a53adc8cc24258345361",
+    "name": "T1",
+    "policy": "congestion_aware_cooperative_planner",
+    "version": "1.0.0"
+   },
+   "status": "eligible"
+  },
+  "T2": {
+   "identity": {
+    "config_hash": "sha256:302139e18ba05fdcdc5561b7390b95f725600ec8791e336d065f77cea0c507e5",
+    "name": "T2",
+    "policy": "stochastic_fire_forecast_rollout",
+    "version": "1.0.0"
+   },
+   "status": "eligible"
+  },
+  "T3": {
+   "identity": {
+    "config_hash": "sha256:5a8d4985b1f65d5de18a06c86d8dd522e2ca95e2accd583165b7e7d7ea1d02e0",
+    "name": "T3",
+    "policy": "dynamic_ant_colony_optimization",
+    "version": "1.0.0"
+   },
+   "status": "eligible"
+  },
+  "T4": {
+   "identity": {
+    "config_hash": "sha256:79bd3322b9cf7ccd25928f3a70502089732496af5427f88f00ecd2ff6ba12504",
+    "name": "T4",
+    "policy": "risk_based_priority",
+    "version": "1.2.0"
+   },
+   "status": "eligible"
+  }
+ },
+ "excluded_data": [
+  "locked_test",
+  "blind_test",
+  "calibration",
+  "emberbench"
+ ],
+ "frozen": true,
+ "historical_evidence": {
+  "reports": [
+   {
+    "report": "p1-03-t0-dev-v1.json",
+    "sha256": "sha256:07aeacabd45424a8238b7c777dce3c29178153baab62e777d75667a478320879"
+   },
+   {
+    "report": "p1-04-t1-dev-v1.json",
+    "sha256": "sha256:f6c9b49458c6e74d6df1a99d2d641fab91600a15ed8b1d5ba9927fe6ed499fff"
+   },
+   {
+    "report": "p1-05-t2-dev-v1.json",
+    "sha256": "sha256:368890f264a0e5c8efd374b9e53a6dffb624719b0d3b948302ca99c58af0d16a"
+   },
+   {
+    "report": "p1-06-t3-dev-v1.json",
+    "sha256": "sha256:cb10a772851bcdf011b656aad402fd1884489d348a4cd8b8ae3e9da81ef933ff"
+   }
+  ],
+  "use": "descriptive_only"
+ },
+ "primary": {
+  "bootstrap_resamples": 10000,
+  "bootstrap_seed": 20261109,
+  "ci": 0.95,
+  "comparison": "paired_vs_baseline",
+  "metric": "casualties",
+  "multiplicity": {
+   "familywise_alpha": 0.05,
+   "hypotheses": [
+    "T0",
+    "T2",
+    "T3",
+    "T4"
+   ],
+   "method": "holm",
+   "reject": "holm_adjusted_p < familywise_alpha",
+   "test": "two_sided_exact_family_sign_test"
+  },
+  "unit": "family"
+ },
+ "protocol_hash": "sha256:ae72c2cf1a0dae4f46b3a6d158f426af0853bc4100cd15706c74f203a6765c21",
+ "protocol_id": "p1-09-teacher-selection",
+ "protocol_version": "teacher-selection-protocol@1.2.0",
+ "safety": {
+  "casualties_plus_unresolved": "no_net_deterioration",
+  "evacuated": "no_net_deterioration"
+ },
+ "stop_rules": [
+  "freeze_commit_missing",
+  "scenario_isolation_invalid",
+  "unexpected_evaluation_error",
+  "identity_or_source_drift",
+  "forbidden_information_read",
+  "incomplete_matched_episodes",
+  "resource_cap_exceeded",
+  "unverified_proposal_provenance",
+  "rules_changed_after_results",
+  "blocked_t4_included",
+  "working_tree_not_clean",
+  "confirmation_attempt_exists",
+  "run_aborted_by_supervisor"
+ ],
+ "t4_entry_rule": {
+  "admitted": {
+   "config_hash": "sha256:79bd3322b9cf7ccd25928f3a70502089732496af5427f88f00ecd2ff6ba12504",
+   "freeze_commit": "b7ff040f8abe065ced5ed1331c0cd6854bd878a1",
+   "gate": "gate_v2",
+   "name": "T4",
+   "namespace": "t4-pilot@3",
+   "policy": "risk_based_priority",
+   "report": "data/baselines/p1-08-t4-v12-pilot.json",
+   "report_sha256": "sha256:b64b5589a5bec04fadf3dc8d8f0008f75fc3d9d7d0ab09e53d8f8f5075ed2655",
+   "verdict": "T4_READY_FOR_INDEPENDENT_SELECTION_EVALUATION",
+   "version": "1.2.0"
+  },
+  "after_freeze": "excluded for this protocol version",
+  "blocked_identities": [
+   {
+    "config_hash": "sha256:dbcd0af4752ffcaad00e89a38ffcba5d3867fa3e4de0cce9fd560533d4794195",
+    "failed_gate": "G5",
+    "name": "T4",
+    "policy": "risk_based_priority",
+    "report": "data/baselines/p1-08-t4-pilot.json",
+    "report_sha256": "sha256:3aececbd715591933574c534e9845fbcdf097903667b86a75186355cc3508377",
+    "verdict": "BLOCKED_BY_MECHANISM_CHECK",
+    "version": "1.0.0"
+   },
+   {
+    "config_hash": "sha256:67a3517de6fd109d128c0cf31836867fa0a1ec30cb09844e7a1541acae237ad4",
+    "failed_gate": "G4",
+    "name": "T4",
+    "policy": "risk_based_priority",
+    "report": "data/baselines/p1-08-t4-v2-pilot.json",
+    "report_sha256": "sha256:fc172cbc3d1382294bb0c927cbe0d53baca1f9f824b6dda201708a6e54b5a872",
+    "verdict": "T4_V2_BLOCKED",
+    "version": "1.1.0"
+   }
+  ],
+  "deadline": "protocol_freeze",
+  "requires": "new T4 identity passing a new preregistered independent pilot gate"
+ },
+ "tie_rule": {
+  "order": "lower_cpu_then_simplicity",
+  "simplicity_order": [
+   "T0",
+   "T1",
+   "T3",
+   "T4",
+   "T2"
+  ]
+ }
+}

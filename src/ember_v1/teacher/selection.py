@@ -38,9 +38,14 @@ from .. import trust
 from . import evaluate as ev
 from . import registry as reg
 
-SELECTION_VERSION = "teacher-selection@2.0.0"
-PROTOCOL_VERSION = "teacher-selection-protocol@1.1.0"
-EVIDENCE_VERSION = "teacher-selection-evidence@1.0.0"
+SELECTION_VERSION = "teacher-selection@2.1.0"
+PROTOCOL_VERSION = "teacher-selection-protocol@1.2.0"
+EVIDENCE_VERSION = "teacher-selection-evidence@1.1.0"
+FAMILYWISE_ALPHA = 0.05
+SIGN_TEST = "two_sided_exact_family_sign_test"
+HOLM_RULE = "holm_adjusted_p < familywise_alpha"
+ENFORCEMENT = "live_supervisor_fail_closed"
+WALL_S_CAP = 14400.0        # explicit wall-time safety limit of the one confirmatory run (new in protocol 1.2.0)
 CANDIDATES = reg.CANDIDATES
 BASELINE = "T1"
 HISTORICAL, PROSPECTIVE = "historical_exploratory", "prospective_confirmation"
@@ -50,11 +55,19 @@ DEFAULT_REPORTS = tuple(ev.REPO / f"data/baselines/{n}" for n in (
 CPU_CAP_USD = 15.0          # existing P1-P2 CPU cap (docs/P1_TEACHER_DIRECTION.md section 8)
 REQUIRED_EXCLUDED_DATA = ("locked_test", "blind_test", "calibration", "emberbench")
 REQUIRED_ISOLATION = ("p1-02-v1/train", "p1-02-v1/dev", "p1-02-v1/calibration", "p1-02-v1/locked_test",
-                      "t4-pilot@1", "t4-pilot@2", "t4-explore@v12", "t4-pilot@3")
+                      "t2-pilot@1", "t3-pilot@1", "t4-pilot@1", "t4-pilot@2", "t4-explore@v12", "t4-pilot@3")
+CONFIRMATION_KEYS = {"namespace", "families", "lineages_per_family", "generator_revision", "seed_namespace",
+                     "isolation_against", "runs_per_identity", "manifest_hash", "policy_seeds"}
+CONFIRMATION_MANIFEST = ev.REPO / "data/selection/p1-09-selection@1/manifest.json"
 REQUIRED_STOP_RULES = ("freeze_commit_missing", "scenario_isolation_invalid", "unexpected_evaluation_error",
                        "identity_or_source_drift", "forbidden_information_read", "incomplete_matched_episodes",
                        "resource_cap_exceeded", "unverified_proposal_provenance", "rules_changed_after_results",
-                       "blocked_t4_included")
+                       "blocked_t4_included", "working_tree_not_clean", "confirmation_attempt_exists",
+                       "run_aborted_by_supervisor")
+COMPUTE_KEYS = {"usd_cap", "cpu_s_cap", "per_decision_cpu_ms_cap", "replacement_cpu_s_cap", "wall_s_cap",
+                "enforcement"}
+EVIDENCE_KEYS = {"evidence_version", "evidence_class", "protocol_id", "protocol_hash", "protocol_commit",
+                 "code_commit", "manifest", "rows", "complete", "errors", "attempt", "supervision", "evidence_hash"}
 PROTOCOL_FIELDS = ("protocol_version", "protocol_id", "candidates", "eligibility", "t4_entry_rule", "baseline",
                    "historical_evidence", "confirmation", "primary", "safety", "compute", "tie_rule", "arbiter",
                    "excluded_data", "stop_rules", "frozen")
@@ -65,7 +78,8 @@ PROTOCOL_FIELDS = ("protocol_version", "protocol_id", "candidates", "eligibility
 SIMPLICITY_ORDER = ("T0", "T1", "T3", "T4", "T2")
 T4_ENTRY_KEYS = {"deadline", "requires", "after_freeze", "admitted", "blocked_identities"}
 RESULT_KEYS = {"config_hash", "casualties", "evacuated", "unresolved", "people", "failure",
-               "final_transition_hash", "policy_cpu_s", "max_decision_cpu_ms"}
+               "final_transition_hash", "policy_cpu_s", "max_decision_cpu_ms", "decisions",
+               "budget_limited_decisions"}
 
 
 class ProtocolError(ValueError):
@@ -149,18 +163,55 @@ def draft_protocol() -> dict[str, Any]:
                                 "reports": [{"report": k, "sha256": v} for k, v in sorted(inv["report_sha256"].items())]},
         "confirmation": {"namespace": "p1-09-selection@1", "families": 24, "lineages_per_family": 3,
                          "generator_revision": GENERATOR_REVISION, "seed_namespace": "p1-09-selection@1/seeds",
-                         "isolation_against": list(REQUIRED_ISOLATION), "runs_per_identity": 1},
+                         "isolation_against": list(REQUIRED_ISOLATION), "runs_per_identity": 1,
+                         "manifest_hash": _committed_manifest_hash(), "policy_seeds": policy_seeds()},
         "primary": {"metric": "casualties", "comparison": "paired_vs_baseline", "unit": "family", "ci": 0.95,
-                    "bootstrap_resamples": 10000, "bootstrap_seed": 20261109, "sign_test_alpha": 0.05},
+                    "bootstrap_resamples": 10000, "bootstrap_seed": 20261109,
+                    "multiplicity": multiplicity_rule(reg.default_eligibility())},
         "safety": {"casualties_plus_unresolved": "no_net_deterioration", "evacuated": "no_net_deterioration"},
         "compute": {"usd_cap": CPU_CAP_USD, "cpu_s_cap": 14400.0, "per_decision_cpu_ms_cap": 30000.0,
-                    "replacement_cpu_s_cap": 7200.0},
+                    "replacement_cpu_s_cap": 7200.0, "wall_s_cap": WALL_S_CAP, "enforcement": ENFORCEMENT},
         "tie_rule": {"order": "lower_cpu_then_simplicity", "simplicity_order": list(SIMPLICITY_ORDER)},
         "arbiter": None,
         "excluded_data": list(REQUIRED_EXCLUDED_DATA),
         "stop_rules": list(REQUIRED_STOP_RULES),
         "frozen": False,
     }
+
+
+def multiplicity_rule(eligibility: Mapping[str, Any]) -> dict[str, Any]:
+    """Holm step-down over every eligible candidate-vs-T1 sign test (one familywise alpha)."""
+    return {"method": "holm", "familywise_alpha": FAMILYWISE_ALPHA, "test": SIGN_TEST, "reject": HOLM_RULE,
+            "hypotheses": [c for c in CANDIDATES if c != BASELINE and eligibility[c]["status"] == reg.ELIGIBLE]}
+
+
+def holm_adjust(pvals: Mapping[str, float]) -> dict[str, float]:
+    """Holm-adjusted p-values: sorted ascending, p_(i) * (m - i + 1), made monotone, capped at 1."""
+    order = sorted(pvals, key=lambda c: (pvals[c], c))
+    m, run, out = len(order), 0.0, {}
+    for i, c in enumerate(order):
+        run = max(run, min(1.0, (m - i) * pvals[c]))
+        out[c] = run
+    return {c: out[c] for c in pvals}
+
+
+def _committed_manifest_hash() -> str | None:
+    """Hash of the committed p1-09-selection@1 manifest (built before any teacher outcome), or None."""
+    if not CONFIRMATION_MANIFEST.is_file():
+        return None
+    return json.loads(CONFIRMATION_MANIFEST.read_text(encoding="utf-8")).get("manifest_hash")
+
+
+def policy_seeds(eligibility: Mapping[str, Any] | None = None) -> dict[str, int]:
+    """Frozen default seed of every eligible stochastic teacher (deterministic teachers have none)."""
+    elig = eligibility or reg.default_eligibility()
+    out = {}
+    for c in CANDIDATES:
+        if elig[c]["status"] == reg.ELIGIBLE:
+            seed = reg.teacher_class(c, elig[c]["identity"]["version"])().seed
+            if seed is not None:
+                out[c] = seed
+    return out
 
 
 def t4_entry_rule() -> dict[str, Any]:
@@ -217,8 +268,7 @@ def validate_protocol(p: Any) -> dict[str, Any]:
     if not (isinstance(h, Mapping) and h.get("use") == "descriptive_only" and isinstance(h.get("reports"), list)):
         raise ProtocolError("historical evidence must be descriptive_only with its report list")
     c = p["confirmation"]
-    if not isinstance(c, Mapping) or set(c) != {"namespace", "families", "lineages_per_family", "generator_revision",
-                                                "seed_namespace", "isolation_against", "runs_per_identity"}:
+    if not isinstance(c, Mapping) or set(c) != CONFIRMATION_KEYS:
         raise ProtocolError("confirmation design needs exactly its preregistered fields")
     if not isinstance(c["namespace"], str) or not c["namespace"] or \
             any(c["namespace"].startswith(h) for h in HISTORICAL_PLAN_IDS):
@@ -232,18 +282,32 @@ def validate_protocol(p: Any) -> dict[str, Any]:
         raise ProtocolError(f"confirmation isolation must cover {REQUIRED_ISOLATION}")
     if c["runs_per_identity"] != 1:
         raise ProtocolError("exactly one confirmatory run per identity")
+    mh = c["manifest_hash"]
+    if not (isinstance(mh, str) and mh.startswith("sha256:") and len(mh) == 71):
+        raise ProtocolError("confirmation needs the hash of the manifest built before any teacher outcome")
+    if c["policy_seeds"] != policy_seeds(elig):
+        raise ProtocolError("confirmation policy seeds must be the frozen seeds of the eligible stochastic teachers")
     pr = p["primary"]
     if not (isinstance(pr, Mapping) and pr.get("metric") == "casualties" and pr.get("unit") == "family"
             and pr.get("comparison") == "paired_vs_baseline" and pr.get("ci") == 0.95
             and isinstance(pr.get("bootstrap_resamples"), int) and pr["bootstrap_resamples"] >= 1000
-            and isinstance(pr.get("bootstrap_seed"), int) and pr.get("sign_test_alpha") == 0.05):
-        raise ProtocolError("primary endpoint must be paired family-level casualties vs T1, 95% CI, sign test 0.05")
+            and isinstance(pr.get("bootstrap_seed"), int)
+            and set(pr) == {"metric", "unit", "comparison", "ci", "bootstrap_resamples", "bootstrap_seed",
+                            "multiplicity"}):
+        raise ProtocolError("primary endpoint must be paired family-level casualties vs T1, 95% CI, family sign "
+                            "tests")
+    if pr["multiplicity"] != multiplicity_rule(elig):
+        raise ProtocolError("primary needs the Holm correction over every eligible candidate-vs-T1 sign test at "
+                            f"familywise alpha {FAMILYWISE_ALPHA}")
     if p["safety"] != {"casualties_plus_unresolved": "no_net_deterioration", "evacuated": "no_net_deterioration"}:
         raise ProtocolError("safety guardrails must bound casualties+unresolved and evacuated")
     cm = p["compute"]
-    if not (isinstance(cm, Mapping) and _num(cm.get("usd_cap"), 0, CPU_CAP_USD) and _num(cm.get("cpu_s_cap"))
-            and _num(cm.get("per_decision_cpu_ms_cap")) and _num(cm.get("replacement_cpu_s_cap"))):
-        raise ProtocolError(f"compute needs positive caps and usd_cap within the ${CPU_CAP_USD:g} CPU cap")
+    if not (isinstance(cm, Mapping) and set(cm) == COMPUTE_KEYS and _num(cm.get("usd_cap"), 0, CPU_CAP_USD)
+            and _num(cm.get("cpu_s_cap")) and _num(cm.get("per_decision_cpu_ms_cap"))
+            and _num(cm.get("replacement_cpu_s_cap")) and _num(cm.get("wall_s_cap"))
+            and cm.get("enforcement") == ENFORCEMENT):
+        raise ProtocolError(f"compute needs positive caps (CPU, per decision, replacement, wall), live fail-closed "
+                            f"enforcement and usd_cap within the ${CPU_CAP_USD:g} CPU cap")
     tr = p["tie_rule"]
     if not (isinstance(tr, Mapping) and set(tr) == {"order", "simplicity_order"}
             and tr.get("order") == "lower_cpu_then_simplicity"
@@ -318,9 +382,10 @@ def _family_stats(rows: Sequence[Mapping[str, Any]], cand: str, base: str, prima
     pos = sum(v > 0 for v in fam_sum.values())
     n = neg + pos
     p = 1.0 if n == 0 else min(1.0, 2 * sum(math.comb(n, k) for k in range(min(neg, pos) + 1)) / 2 ** n)
+    # Raw (unadjusted) two-sided p; `selection_gate` applies the Holm correction across all hypotheses.
     return {"mean_paired_casualty_diff": est, "ci95": [lo, hi], "families": len(fams),
             "families_fewer": neg, "families_more": pos, "families_tied": len(fams) - n, "sign_test_p": p,
-            "superior": hi < 0 and p < primary["sign_test_alpha"] and neg > pos}
+            "ci_excludes_zero_favourably": hi < 0, "direction_favours_candidate": neg > pos}
 
 
 def selection_gate(protocol: Any, evidence: Any, *, protocol_ref: Any, repo: str | Path,
@@ -349,9 +414,7 @@ def selection_gate(protocol: Any, evidence: Any, *, protocol_ref: Any, repo: str
             (evidence.get("manifest") or {}).get("plan_id") in HISTORICAL_PLAN_IDS:
         reasons.append("historical DEV evidence is exploratory; it is not prospective confirmation")
         return out
-    need = {"evidence_version", "evidence_class", "protocol_id", "protocol_hash", "protocol_commit", "code_commit",
-            "manifest", "rows", "complete", "errors", "evidence_hash"}
-    if set(evidence) != need:
+    if set(evidence) != EVIDENCE_KEYS:
         reasons.append("evidence has missing or extra fields")
         return out
     if digest({k: v for k, v in evidence.items() if k != "evidence_hash"}) != evidence["evidence_hash"]:
@@ -366,6 +429,16 @@ def selection_gate(protocol: Any, evidence: Any, *, protocol_ref: Any, repo: str
         reasons.append("evidence code commit does not descend from the protocol freeze commit")
     if evidence["complete"] is not True or evidence["errors"]:
         reasons.append("confirmation run incomplete or with errors")
+    sup, att = evidence["supervision"], evidence["attempt"]
+    if not (isinstance(sup, Mapping) and sup.get("stage") == "completed" and sup.get("abort") is None
+            and sup.get("limits") == {k: p["compute"][k] for k in ("cpu_s_cap", "per_decision_cpu_ms_cap",
+                                                                    "wall_s_cap")}):
+        reasons.append(f"confirmation run not completed under the protocol limits by the supervisor "
+                       f"(stage {sup.get('stage') if isinstance(sup, Mapping) else None!r})")
+    if not (isinstance(att, Mapping) and att.get("protocol_hash") == p["protocol_hash"]
+            and att.get("protocol_commit") == protocol_ref["commit"]
+            and att.get("code_commit") == evidence["code_commit"]):
+        reasons.append("evidence lacks the attempt marker of this protocol and code commit")
 
     conf = p["confirmation"]
     m = evidence["manifest"]
@@ -380,6 +453,8 @@ def selection_gate(protocol: Any, evidence: Any, *, protocol_ref: Any, repo: str
         if len(fams) != conf["families"] or any(len(v) != conf["lineages_per_family"] for v in per_f.values()):
             raise ValueError(f"confirmation set is not {conf['families']} families x "
                              f"{conf['lineages_per_family']} lineages")
+        if m["manifest_hash"] != conf["manifest_hash"]:
+            raise ValueError("confirmation manifest is not the manifest preregistered in the protocol")
     except (ValueError, KeyError, TypeError) as e:
         reasons.append(f"confirmation manifest: {e}")
         return out
@@ -430,16 +505,22 @@ def selection_gate(protocol: Any, evidence: Any, *, protocol_ref: Any, repo: str
     analyses = {}
     tot = {c: {k: sum(r["results"][c][k] for r in rows) for k in ("casualties", "unresolved", "evacuated")}
            for c in eligible}
-    for c in eligible:
-        if c == BASELINE:
-            continue
-        st = _family_stats(rows, c, BASELINE, p["primary"])
+    mult = p["primary"]["multiplicity"]
+    stats = {c: _family_stats(rows, c, BASELINE, p["primary"]) for c in mult["hypotheses"]}
+    adj = holm_adjust({c: st["sign_test_p"] for c, st in stats.items()})
+    for c, st in stats.items():
+        sup_ok = st["ci_excludes_zero_favourably"] and st["direction_favours_candidate"] and \
+            adj[c] < mult["familywise_alpha"]
         safe = (tot[c]["casualties"] + tot[c]["unresolved"] <= tot[BASELINE]["casualties"] + tot[BASELINE]["unresolved"]
                 and tot[c]["evacuated"] >= tot[BASELINE]["evacuated"])
         feasible = cpu[c] <= p["compute"]["replacement_cpu_s_cap"]
-        analyses[c] = {**st, "totals": tot[c], "safety_pass": safe, "cpu_s": cpu[c], "compute_feasible": feasible,
-                       "qualifies": st["superior"] and safe and feasible}
+        analyses[c] = {**st, "sign_test_p_holm": adj[c], "superior": sup_ok, "totals": tot[c], "safety_pass": safe,
+                       "budget_limited_decisions": sum(r["results"][c]["budget_limited_decisions"] for r in rows),
+                       "cpu_s": cpu[c], "compute_feasible": feasible, "qualifies": sup_ok and safe and feasible}
     out["analyses"] = analyses
+    out["multiplicity"] = {"method": mult["method"], "familywise_alpha": mult["familywise_alpha"],
+                           "hypotheses": list(mult["hypotheses"]),
+                           "raw_p": {c: st["sign_test_p"] for c, st in stats.items()}, "holm_adjusted_p": adj}
     out["baseline_totals"] = tot[BASELINE]
     q = [c for c, a in analyses.items() if a["qualifies"]]
     order = p["tie_rule"]["simplicity_order"]

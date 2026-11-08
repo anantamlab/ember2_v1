@@ -54,6 +54,7 @@ def test_value_teachers_are_shared_by_proposals_provenance_and_registry():
 def _frozen(**over):
     p = sel.draft_protocol()
     p["frozen"] = True
+    p["confirmation"] = {**p["confirmation"], "manifest_hash": _conf_manifest()["manifest_hash"]}
     p.update(over)
     return sel.freeze_protocol(p)
 
@@ -91,7 +92,8 @@ FOUR = {"order": "lower_cpu_then_simplicity", "simplicity_order": ["T0", "T1", "
 def _t4_out(fn=lambda e: None):
     e = _elig(lambda e: e.update(T4=copy.deepcopy(T4_OUT)))
     fn(e)
-    return {"eligibility": e, "t4_entry_rule": {**sel.t4_entry_rule(), "admitted": None}, "tie_rule": FOUR}
+    return {"eligibility": e, "t4_entry_rule": {**sel.t4_entry_rule(), "admitted": None}, "tie_rule": FOUR,
+            "primary": {**sel.draft_protocol()["primary"], "multiplicity": sel.multiplicity_rule(e)}}
 
 
 def _adm(**over):
@@ -106,7 +108,7 @@ def test_draft_lists_all_five_candidates_with_t4_v12_admission_and_blocked_recor
     assert t4r["admitted"] == reg.admission_record("T4") and t4r["admitted"]["version"] == "1.2.0"
     assert t4r["blocked_identities"] == reg.blocked_records("T4")
     assert d["tie_rule"]["simplicity_order"] == ["T0", "T1", "T3", "T4", "T2"]
-    assert d["protocol_version"] == "teacher-selection-protocol@1.1.0"
+    assert d["protocol_version"] == "teacher-selection-protocol@1.2.0"
     assert sel.verify_frozen_protocol(_frozen(**_t4_out()))["eligibility"]["T4"]["status"] == "excluded"
 
 
@@ -142,10 +144,26 @@ BAD_PROTOCOL = {
     "too few families": ({"confirmation": _conf(families=4)}, "10 families"),
     "isolation incomplete": ({"confirmation": _conf(isolation_against=["p1-02-v1/dev"])}, "isolation"),
     "two runs": ({"confirmation": _conf(runs_per_identity=2)}, "one confirmatory run"),
+    "no manifest hash": ({"confirmation": _conf(manifest_hash=None)}, "hash of the manifest"),
+    "T2 seed changed": ({"confirmation": _conf(policy_seeds={**sel.policy_seeds(), "T2": 1})}, "policy seeds"),
+    "T3 seed missing": ({"confirmation": _conf(policy_seeds={"T2": sel.policy_seeds()["T2"]})}, "policy seeds"),
+    "extra confirmation field": ({"confirmation": _conf(note="x")}, "preregistered fields"),
+    "T2 pilot not isolated": ({"confirmation": _conf(isolation_against=[x for x in sel.REQUIRED_ISOLATION
+                                                                        if x != "t2-pilot@1"])}, "isolation"),
     "primary unresolved": ({"primary": _prim(metric="unresolved")}, "primary"),
     "few resamples": ({"primary": _prim(bootstrap_resamples=10)}, "primary"),
     "no safety guard": ({"safety": {"casualties_plus_unresolved": "no_net_deterioration"}}, "safety"),
     "budget over cap": ({"compute": {**sel.draft_protocol()["compute"], "usd_cap": 50}}, "compute"),
+    "no wall limit": ({"compute": {k: v for k, v in sel.draft_protocol()["compute"].items() if k != "wall_s_cap"}},
+                      "compute"),
+    "post-hoc limits only": ({"compute": {**sel.draft_protocol()["compute"], "enforcement": "after_run"}}, "compute"),
+    "unadjusted sign tests": ({"primary": _prim(multiplicity={**_prim()["multiplicity"], "method": "none"})},
+                              "Holm"),
+    "Holm over a subset": ({"primary": _prim(multiplicity={**_prim()["multiplicity"], "hypotheses": ["T3"]})},
+                           "Holm"),
+    "looser familywise alpha": ({"primary": _prim(multiplicity={**_prim()["multiplicity"], "familywise_alpha": 0.1})},
+                                "Holm"),
+    "raw alpha field": ({"primary": _prim(sign_test_alpha=0.05)}, "primary"),
     "inline arbiter": ({"arbiter": {"equal_compute_to_best_single": True}}, "separately frozen"),
     "calibration not excluded": ({"excluded_data": ["locked_test", "blind_test", "emberbench"]}, "exclude"),
     "stop rule missing": ({"stop_rules": ["freeze_commit_missing"]}, "stop rules"),
@@ -195,7 +213,7 @@ def _historical(**over):
 def _result(c, cas=5, unres=1, evac=10, cpu=1.0):
     return {"config_hash": reg.identity(c).config_hash, "casualties": cas, "evacuated": evac, "unresolved": unres,
             "people": cas + unres + evac, "failure": None, "final_transition_hash": digest([c, cas]),
-            "policy_cpu_s": cpu, "max_decision_cpu_ms": 10.0}
+            "policy_cpu_s": cpu, "max_decision_cpu_ms": 10.0, "decisions": 12, "budget_limited_decisions": 0}
 
 
 def _evidence(protocol, pref, code_commit, manifest=None, per=None, extra=None, rehash=True, **over):
@@ -210,7 +228,12 @@ def _evidence(protocol, pref, code_commit, manifest=None, per=None, extra=None, 
     body = {"evidence_version": sel.EVIDENCE_VERSION, "evidence_class": sel.PROSPECTIVE,
             "protocol_id": protocol["protocol_id"], "protocol_hash": protocol["protocol_hash"],
             "protocol_commit": pref["commit"], "code_commit": code_commit, "manifest": m, "rows": rows,
-            "complete": True, "errors": []}
+            "complete": True, "errors": [],
+            "attempt": {"protocol_hash": protocol["protocol_hash"], "protocol_commit": pref["commit"],
+                        "code_commit": code_commit},
+            "supervision": {"stage": "completed", "abort": None,
+                            "limits": {k: protocol["compute"][k] for k in ("cpu_s_cap", "per_decision_cpu_ms_cap",
+                                                                           "wall_s_cap")}}}
     body.update(over)
     return {**body, "evidence_hash": digest(body) if rehash else "sha256:" + "0" * 64}
 
@@ -329,6 +352,41 @@ def test_mixed_family_results_are_not_superior(frozen_repo):
     assert not g["analyses"]["T3"]["superior"] and g["decision"] == "RETAIN_T1_NO_IMPROVEMENT"
 
 
+def _split(c, better, cas_good=3, cas_bad=6):
+    """Fewer casualties than T1 (5) in the first `better` families, more in the others (all safe totals)."""
+    return lambda s: _result(c, cas=cas_good if int(s["family_id"].split("-")[1]) < better else cas_bad, evac=20)
+
+
+def test_holm_blocks_a_raw_sign_test_pass(frozen_repo):
+    repo, p, pref, run = frozen_repo
+    g = _gate(repo, p, pref, _evidence(p, pref, run, per={"T3": _split("T3", 18)}))
+    a = g["analyses"]["T3"]
+    assert a["families_fewer"] == 18 and a["families_more"] == 6 and a["ci95"][1] < 0
+    assert 0.02 < a["sign_test_p"] < 0.05                                 # unadjusted: would have qualified
+    assert a["sign_test_p_holm"] == pytest.approx(4 * a["sign_test_p"]) and a["sign_test_p_holm"] >= 0.05
+    assert not a["superior"] and not a["qualifies"] and g["decision"] == "RETAIN_T1_NO_IMPROVEMENT"
+    mt = g["multiplicity"]
+    assert mt["method"] == "holm" and mt["hypotheses"] == ["T0", "T2", "T3", "T4"]
+    assert mt["raw_p"]["T3"] == a["sign_test_p"] and mt["holm_adjusted_p"]["T3"] == a["sign_test_p_holm"]
+    assert mt["raw_p"]["T0"] == 1.0 and mt["holm_adjusted_p"]["T0"] == 1.0
+
+
+def test_holm_step_down_passes_a_strong_candidate_and_ranks_the_next(frozen_repo):
+    repo, p, pref, run = frozen_repo
+    g = _gate(repo, p, pref, _evidence(p, pref, run, per={"T3": _split("T3", 24), "T0": _split("T0", 19)}))
+    a3, a0 = g["analyses"]["T3"], g["analyses"]["T0"]
+    assert a3["sign_test_p_holm"] == pytest.approx(4 * a3["sign_test_p"]) and a3["superior"]
+    assert a0["sign_test_p_holm"] == pytest.approx(3 * a0["sign_test_p"]) and a0["sign_test_p_holm"] < 0.05
+    assert a0["superior"] and g["selected"] in ("T0", "T3")
+
+
+def test_holm_adjust_is_monotone_and_capped():
+    adj = sel.holm_adjust({"T0": 0.01, "T2": 0.04, "T3": 0.03, "T4": 0.5})
+    assert adj == pytest.approx({"T0": 0.04, "T2": 0.09, "T3": 0.09, "T4": 0.5})
+    assert sel.holm_adjust({"T0": 0.4, "T2": 0.4}) == {"T0": 0.8, "T2": 0.8}
+    assert sel.holm_adjust({"T0": 0.9, "T2": 0.6}) == {"T0": 1.0, "T2": 1.0}
+
+
 def test_over_budget_candidate_is_not_a_replacement(frozen_repo):
     repo, p, pref, run = frozen_repo
     big = p["compute"]["replacement_cpu_s_cap"] / 72 + 1
@@ -348,6 +406,20 @@ def test_blocked_t4_in_confirmation_evidence_stops_selection(frozen_repo, tmp_pa
     run2 = repo2.commit("selection/run-marker.json", {"run": 1})["commit"]
     ev = _evidence(p2, pref2, run2)
     _no(_gate(repo2, p2, pref2, ev), "excluded candidate T4")
+
+
+def test_a_manifest_other_than_the_preregistered_one_stops_selection(frozen_repo):
+    repo, p, pref, run = frozen_repo
+    other = _conf_manifest(prefix="CX")              # same namespace and shape, different scenarios
+    _no(_gate(repo, p, pref, _evidence(p, pref, run, manifest=other)), "not the manifest preregistered")
+
+
+def test_draft_binds_the_committed_confirmation_manifest_and_policy_seeds():
+    c = sel.draft_protocol()["confirmation"]
+    committed = json.loads(sel.CONFIRMATION_MANIFEST.read_text(encoding="utf-8"))
+    assert c["manifest_hash"] == committed["manifest_hash"] and committed["plan_id"] == c["namespace"]
+    assert c["policy_seeds"] == {"T2": 20261107, "T3": 20261123}
+    assert set(c["isolation_against"]) == set(sel.REQUIRED_ISOLATION)
 
 
 def test_evidence_before_or_beside_the_freeze_commit_is_refused(frozen_repo):
@@ -400,6 +472,15 @@ BAD_EVIDENCE = {
     "decision cpu": (lambda p, r, c: _evidence(p, r, c, per={"T2": lambda s: {**_result("T2"),
                                                                               "max_decision_cpu_ms": 1e9}}),
                      "decision CPU"),
+    "supervisor abort": (lambda p, r, c: _evidence(p, r, c, supervision={
+        "stage": "wall_time_cap", "abort": {"stage": "wall_time_cap"},
+        "limits": {k: p["compute"][k] for k in ("cpu_s_cap", "per_decision_cpu_ms_cap", "wall_s_cap")}}),
+        "not completed under the protocol limits"),
+    "supervisor other limits": (lambda p, r, c: _evidence(p, r, c, supervision={
+        "stage": "completed", "abort": None, "limits": {"cpu_s_cap": 1e9, "per_decision_cpu_ms_cap": 1e9,
+                                                        "wall_s_cap": 1e9}}),
+        "not completed under the protocol limits"),
+    "no attempt marker": (lambda p, r, c: _evidence(p, r, c, attempt=None), "attempt marker"),
 }
 
 
