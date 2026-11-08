@@ -135,6 +135,8 @@ def ingest_zip(zip_path: Path, *, source_id: str, quality: str,
                             rec["replay"] = verify_teacher_decision(trace, replay_cache)
                             if manifests is not None:
                                 rec["provenance"] = _verify_trace_provenance(trace, manifests, allowed_splits)
+                                rec["provenance_record"] = trace["provenance"]
+                                rec["values"] = trace.get("values")
                         except ValueError as e:
                             raise ValueError(f"{info.filename}[{i}]: {e}") from None
                     records.append(rec)
@@ -146,7 +148,9 @@ def ingest_zip(zip_path: Path, *, source_id: str, quality: str,
         "decisions": sum(len(r["actions"]) for r in records),
         "groups": sorted({r["group_id"] for r in records}),
         "non_trace_json_members": other_json,
-        "training_eligible": quality in TRAINING_QUALITIES,
+        "training_eligible": quality in TRAINING_QUALITIES,      # quality tier only (legacy meaning)
+        "provenance_verified": manifests is not None and quality == "teacher_verified",
+        "s1_eligible": False,     # only ember_v1.s1.build_s1_training_set can authorize S1 (issue #10)
     }
     return records, manifest
 
@@ -165,7 +169,10 @@ def _verify_trace_provenance(trace: Mapping[str, Any], manifests: Mapping[str, M
 
 def training_records(records: Iterable[Mapping[str, Any]], *, allow_fixtures: bool = False,
                      require_provenance: bool = False) -> list[Mapping[str, Any]]:
-    """Filter to training-eligible records. `allow_fixtures` is for pipeline smoke only.
+    """Legacy filter to quality-eligible records. `allow_fixtures` is for pipeline smoke only.
+
+    This is NOT an S1 entrypoint and its output never authorizes bulk S1:
+    use `ember_v1.s1.build_s1_training_set`, which has no opt-out.
 
     A `teacher_verified` record without complete full-replay evidence raises (fail closed).
     With `require_provenance` (required for S1 training, issue #10), a `teacher_verified`

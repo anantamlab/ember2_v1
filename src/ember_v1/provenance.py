@@ -17,12 +17,18 @@ protections that replay does not give:
 4 `leakage_audit` finds duplicates and cross-split leaks (observation,
   scenario, lineage, family).
 5 `bulk_s1_gate` returns `BULK_S1_BLOCKED` unless every gate holds,
-  including a frozen #25 selection. There is no frozen selection yet.
+  including a verified #25 selection receipt. There is no receipt yet.
+  The only S1 entrypoint is `ember_v1.s1.build_s1_training_set`; it makes
+  provenance, full replay, regeneration and the split audit mandatory.
+
+Teacher identities and `VALUE_TEACHERS` come from `teacher.registry`, shared
+with #25 selection. Blocked T4 identities never create or verify records.
 
 The digest is a hash binding, not a signature: it detects accidental and
 inconsistent edits, and a forger who does not also match the frozen code,
 config, seed and regeneration check. It cannot authenticate a party that
-controls the repository; that needs a signing key, which is out of scope here.
+controls the repository; that needs a signing key, which is out of scope here
+(trust boundary: docs/P1_TEACHER_PROVENANCE.md section "Trust boundary").
 """
 from __future__ import annotations
 
@@ -35,20 +41,18 @@ from pathlib import Path
 from typing import Any
 
 from .contract import validate_actions, validate_observation
-from .gen.spec import GENERATOR_REVISION
-from .gen.splits import LOCKED, MANIFEST_VERSION
+from . import trust
+from .gen.splits import LOCKED
 from .sim.canonical import digest
 from .teacher.grid import GRID_UTILS_VERSION
+from .teacher import registry as reg
 from .teacher.interface import POLICY_INTERFACE_VERSION, PolicyDecision, ReferencePolicy
-from .teacher.t0 import T0ShortestPath
-from .teacher.t1 import T1CongestionAware
-from .teacher.t2 import T2StochasticRollout
-from .teacher.t3 import T3DynamicACO
 
 PROVENANCE_VERSION = "teacher-provenance@1.0.0"
-REGISTRY: dict[str, type[ReferencePolicy]] = {"T0": T0ShortestPath, "T1": T1CongestionAware,
-                                              "T2": T2StochasticRollout, "T3": T3DynamicACO}
-VALUE_TEACHERS = frozenset({"T2"})        # only T2 computes per-action values (docs/P1_TEACHER_DIRECTION.md)
+# Retained frozen identities only (T0..T3). Blocked T4 v1.0.0/v1.1.0 stay in `teacher.registry` with their
+# verdicts and can never create or verify records. Shared with #25 selection (one registry, one VALUE_TEACHERS).
+REGISTRY: dict[str, type[ReferencePolicy]] = reg.retained_classes()
+VALUE_TEACHERS = reg.VALUE_TEACHERS
 TRAINING_SPLITS = ("train",)
 _PKG = Path(__file__).resolve().parent
 _RECORD_KEYS = {"provenance_version", "teacher", "code_fingerprint", "utilities", "policy_seed", "step",
@@ -108,11 +112,19 @@ def code_fingerprint(cls: type[ReferencePolicy]) -> str:
 
 
 # ----- records -----------------------------------------------------------------------------------------
-def frozen_teacher(name: str, seed: int | None) -> ReferencePolicy:
-    """The registered frozen teacher with the recorded seed (deterministic teachers take no seed)."""
-    cls = REGISTRY.get(name)
-    if cls is None:
+def _retained(name: Any, version: Any = None) -> type[ReferencePolicy]:
+    try:
+        cls = reg.teacher_class(name, version) if isinstance(name, str) else None
+    except reg.RegistryError as e:
+        raise ProvenanceError(str(e)) from None
+    if cls is None or REGISTRY.get(name) is not cls:
         raise ProvenanceError(f"unknown teacher {name!r}")
+    return cls
+
+
+def frozen_teacher(name: str, seed: int | None, version: str | None = None) -> ReferencePolicy:
+    """The registered frozen teacher with the recorded seed (deterministic teachers take no seed)."""
+    cls = _retained(name, version)
     try:
         pol = cls() if seed is None else cls(seed=seed)
     except (TypeError, ValueError) as e:
@@ -140,13 +152,10 @@ def _manifest_scenario(manifest: Mapping[str, Any], scenario_id: str) -> Mapping
 
 
 def _check_manifest(manifest: Mapping[str, Any]) -> None:
-    if manifest.get("manifest_version") != MANIFEST_VERSION:
-        raise ProvenanceError("unsupported manifest version")
-    body = {k: v for k, v in manifest.items() if k != "manifest_hash"}
-    if digest(body) != manifest.get("manifest_hash"):
-        raise ProvenanceError("manifest hash does not match its content")
-    if manifest.get("generator_revision") != GENERATOR_REVISION:
-        raise ProvenanceError("manifest generator revision differs from the current generator")
+    try:
+        trust.check_manifest(manifest)
+    except ValueError as e:
+        raise ProvenanceError(str(e)) from None
 
 
 def provenance_record(policy: ReferencePolicy, decision: PolicyDecision, *, manifest: Mapping[str, Any],
@@ -154,6 +163,10 @@ def provenance_record(policy: ReferencePolicy, decision: PolicyDecision, *, mani
     """Hash-bound provenance for one decision of a registered frozen teacher."""
     name = policy.identity.name
     if REGISTRY.get(name) is not type(policy):
+        try:
+            reg.teacher_class(name, policy.identity.version)
+        except reg.RegistryError as e:
+            raise ProvenanceError(f"{name!r} is not a registered frozen teacher class: {e}") from None
         raise ProvenanceError(f"{name!r} is not a registered frozen teacher class")
     _check_manifest(manifest)
     if manifest["split"] == LOCKED:
@@ -191,8 +204,8 @@ def verify_provenance(record: Mapping[str, Any], *, observation: Mapping[str, An
     if record["provenance_version"] != PROVENANCE_VERSION:
         raise ProvenanceError("unsupported provenance version")
     t = record["teacher"]
-    cls = REGISTRY.get(t.get("name"))
-    frozen = frozen_teacher(t.get("name"), record["policy_seed"]).identity
+    cls = _retained(t.get("name"), t.get("version"))
+    frozen = frozen_teacher(t.get("name"), record["policy_seed"], t.get("version")).identity
     if (t.get("policy"), t.get("version"), t.get("config_hash")) != (frozen.policy, frozen.version, frozen.config_hash):
         raise ProvenanceError(f"{t['name']}: identity differs from the frozen teacher")
     if record["code_fingerprint"] != code_fingerprint(cls):
@@ -242,7 +255,7 @@ def regeneration_spot_check(items: Sequence[Mapping[str, Any]], *, k: int, seed:
         it = items[i]
         rec = it["record"]
         try:
-            pol = frozen_teacher(rec["teacher"]["name"], rec["policy_seed"])
+            pol = frozen_teacher(rec["teacher"]["name"], rec["policy_seed"], rec["teacher"].get("version"))
         except ProvenanceError as e:
             mismatches.append({"index": i, "reason": str(e)})
             continue
@@ -279,25 +292,36 @@ def leakage_audit(records: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
 
 
 # ----- bulk S1 gate --------------------------------------------------------------------------------------
-REQUIRED_DEPENDENCIES = ("generator_splits_6", "teachers_7_8_9", "t3_23", "t4_24", "selection_gate_25")
+# `t4_24_resolved`: T4 is an eligible retained identity under the frozen #25 protocol, or that protocol
+# excludes it with exactly the registry's blocked records (T4 v1.0.0 G5, v1.1.0 G4). Never a silent skip.
+REQUIRED_DEPENDENCIES = ("generator_splits_6", "teachers_7_8_9", "t3_23", "t4_24_resolved", "selection_gate_25")
 
 
 def bulk_s1_gate(*, selection: Mapping[str, Any] | None, dependencies: Mapping[str, bool],
                  provenance_failures: int, records_checked: int, spot_check: Mapping[str, Any] | None,
                  leakage: Mapping[str, Any] | None, min_spot_checks: int = 50) -> dict[str, Any]:
-    """`BULK_S1_AUTHORIZED` only if every gate holds; otherwise `BULK_S1_BLOCKED` with all reasons."""
+    """`BULK_S1_AUTHORIZED` only if every gate holds; otherwise `BULK_S1_BLOCKED` with all reasons.
+
+    This is the pure decision rule. It authorizes nothing by itself and returns
+    no records: `ember_v1.s1.build_s1_training_set` is the only S1 entrypoint,
+    and it computes every input here from trusted, re-verified sources.
+    `selection` is the summary of `s1.verify_receipt`.
+    """
     reasons = []
     for dep in REQUIRED_DEPENDENCIES:
         if dependencies.get(dep) is not True:
             reasons.append(f"dependency {dep} not met")
     if not selection:
-        reasons.append("no frozen #25 teacher selection")
+        reasons.append("no verified #25 selection receipt")
     else:
-        body = {k: v for k, v in selection.items() if k != "selection_hash"}
-        if selection.get("frozen") is not True or digest(body) != selection.get("selection_hash"):
-            reasons.append("#25 selection is not frozen or its hash does not match")
-        if selection.get("selected_teacher") not in REGISTRY:
-            reasons.append("selected teacher is not a registered frozen teacher")
+        if selection.get("status") != "verified":
+            reasons.append("#25 selection receipt is not verified")
+        sel = selection.get("selected") or {}
+        try:
+            if REGISTRY.get(sel.get("name")) is not reg.teacher_class(sel.get("name"), sel.get("version")):
+                raise reg.RegistryError("not retained")
+        except reg.RegistryError as e:
+            reasons.append(f"selected teacher is not a retained frozen teacher: {e}")
     if records_checked < 1 or provenance_failures:
         reasons.append(f"provenance: {provenance_failures} failures in {records_checked} records")
     if not spot_check or not spot_check.get("pass") or spot_check.get("checked", 0) < min_spot_checks:

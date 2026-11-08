@@ -113,7 +113,7 @@ def test_forged_and_rehashed_fields_fail(world, field, value, match):
 def test_forged_identity_fields_fail(world):
     rec, d = _make(world)
     for k, v in (("config_hash", "sha256:" + "0" * 64), ("version", "9.9.9"), ("policy", "other")):
-        with pytest.raises(pv.ProvenanceError, match="identity differs"):
+        with pytest.raises(pv.ProvenanceError, match="identity differs|unknown teacher version"):
             _verify(world, _rehash(rec, teacher={**rec["teacher"], k: v}), d)
     with pytest.raises(pv.ProvenanceError, match="identity differs"):     # T0 label on a T1 decision
         t1 = _make(world, T1CongestionAware)[0]
@@ -239,9 +239,9 @@ def test_leakage_audit():
 
 
 def _selection(**over):
-    body = {"protocol": "test", "selected_teacher": "T1", "frozen": True}
-    body.update(over)
-    return {**body, "selection_hash": digest(body)}
+    sel = {"name": "T1", "version": "1.0.0"}
+    sel.update(over)
+    return {"status": "verified", "selected": sel}
 
 
 ALL_DEPS = {d: True for d in pv.REQUIRED_DEPENDENCIES}
@@ -254,12 +254,15 @@ def test_bulk_s1_is_blocked_now_and_only_authorized_when_every_gate_holds():
                           spot_check=None, leakage=None)
     assert now["decision"] == "BULK_S1_BLOCKED" and len(now["reasons"]) >= 5
     assert pv.bulk_s1_gate(selection=_selection(), **GOOD)["decision"] == "BULK_S1_AUTHORIZED"
+    assert "t4_24" not in pv.REQUIRED_DEPENDENCIES and "t4_24_resolved" in pv.REQUIRED_DEPENDENCIES
     bad_cases = [
         dict(selection=None),
-        dict(selection=_selection(frozen=False)),
-        dict(selection={**_selection(), "selected_teacher": "T2"}),        # hash no longer matches
-        dict(selection=_selection(selected_teacher="T9")),
-        dict(selection=_selection(), dependencies={**ALL_DEPS, "t4_24": False}),
+        dict(selection={**_selection(), "status": "unverified"}),
+        dict(selection=_selection(name="T9")),
+        dict(selection=_selection(name="T4", version="1.1.0")),          # blocked T4 v1.1.0 (G4)
+        dict(selection=_selection(name="T4", version="1.0.0")),          # blocked T4 v1.0.0 (G5)
+        dict(selection=_selection(name="T4", version=None)),
+        dict(selection=_selection(), dependencies={**ALL_DEPS, "t4_24_resolved": False}),
         dict(selection=_selection(), provenance_failures=1),
         dict(selection=_selection(), records_checked=0),
         dict(selection=_selection(), spot_check={"pass": True, "checked": 49}),
@@ -269,6 +272,22 @@ def test_bulk_s1_is_blocked_now_and_only_authorized_when_every_gate_holds():
     for case in bad_cases:
         g = pv.bulk_s1_gate(**{**GOOD, **case})
         assert g["decision"] == "BULK_S1_BLOCKED" and g["reasons"], case
+
+
+def test_blocked_t4_never_creates_or_verifies_records(world):
+    from ember_v1.teacher.t4_v11 import T4RiskPriorityV11
+    s, obs, m = world
+    pol = T4RiskPriorityV11()
+    with pytest.raises(pv.ProvenanceError, match="blocked"):
+        pv.provenance_record(pol, pol.decide(obs), manifest=m, scenario_id=s.scenario_id)
+    rec, d = _make(world)
+    t4 = _rehash(rec, teacher={"name": "T4", "policy": "risk_based_priority", "version": "1.1.0",
+                               "config_hash": pol.identity.config_hash})
+    with pytest.raises(pv.ProvenanceError, match="blocked"):
+        _verify(world, t4, d)
+    with pytest.raises(pv.ProvenanceError, match="blocked"):
+        pv.frozen_teacher("T4", None)
+    assert "T4" not in pv.REGISTRY and pv.VALUE_TEACHERS == frozenset({"T2"})
 
 
 # ----- ingestion (sources.ingest_zip) ---------------------------------------------------------------------
