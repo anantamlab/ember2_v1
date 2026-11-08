@@ -50,7 +50,7 @@ These totals come from **separate** comparisons on DEV, which was used for devel
 - a T4 entry rule that does not close at protocol freeze;
 - a baseline other than eligible T1 on a `historical_exploratory_provisional` basis;
 - historical evidence used for anything other than `descriptive_only`;
-- a confirmation design with a historical namespace, < 10 families, a different generator revision, an isolation list without all of `p1-02-v1/{train,dev,calibration,locked_test}`, `t4-pilot@1`, `t4-pilot@2`, or more than one run per identity;
+- a confirmation design with a historical namespace, < 10 families, a different generator revision, an isolation list without all of `p1-02-v1/{train,dev,calibration,locked_test}`, `t4-pilot@1`, `t4-pilot@2`, `t4-explore@v12`, `t4-pilot@3` (T4 v1.2.0 smoke and pilot, PR #36), or more than one run per identity;
 - a primary endpoint other than paired family-level casualties vs T1 (95 % cluster bootstrap with ≥ 1 000 seeded resamples, exact two-sided sign test at 0.05);
 - missing safety guards (casualties + unresolved and evacuated, no net deterioration vs T1);
 - compute caps missing or a USD cap above $15;
@@ -93,3 +93,4 @@ Only `ember_v1.s1.build_s1_training_set` can produce S1 records (issue #10). It 
 - Generate the `p1-09-selection@1` confirmation manifest and its isolation audit.
 - Run the one prospective comparison of T0–T3 (CPU only; T2 dominates cost).
 - An arbiter, if wanted, needs its own frozen protocol before the confirmation run.
+- T4 v1.2.0 (PR #36) passed its preregistered pilot gate: `T4_READY_FOR_INDEPENDENT_SELECTION_EVALUATION`, not selected. Under the draft T4 entry rule it can enter only if reviewers accept #36 **before** the protocol freeze. Admission then needs a retained T4 v1.2.0 registry identity (the class exists only after #36 merges) and a changed T4 eligibility record. This is a reviewer decision. Without it, T4 stays excluded with its blocked records for this protocol version.

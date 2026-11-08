@@ -49,7 +49,7 @@ DEFAULT_REPORTS = tuple(ev.REPO / f"data/baselines/{n}" for n in (
 CPU_CAP_USD = 15.0          # existing P1-P2 CPU cap (docs/P1_TEACHER_DIRECTION.md section 8)
 REQUIRED_EXCLUDED_DATA = ("locked_test", "blind_test", "calibration", "emberbench")
 REQUIRED_ISOLATION = ("p1-02-v1/train", "p1-02-v1/dev", "p1-02-v1/calibration", "p1-02-v1/locked_test",
-                      "t4-pilot@1", "t4-pilot@2")
+                      "t4-pilot@1", "t4-pilot@2", "t4-explore@v12", "t4-pilot@3")
 REQUIRED_STOP_RULES = ("freeze_commit_missing", "scenario_isolation_invalid", "unexpected_evaluation_error",
                        "identity_or_source_drift", "forbidden_information_read", "incomplete_matched_episodes",
                        "resource_cap_exceeded", "unverified_proposal_provenance", "rules_changed_after_results",
