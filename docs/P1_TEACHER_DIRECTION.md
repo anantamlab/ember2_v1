@@ -69,7 +69,7 @@ It does **not** authenticate:
 - **label quality:** a bad or random policy produces replay-consistent traces too;
 - **data provenance:** replay does not show that a trace came from the frozen teacher code, config and seed that it names, or that the scenario came from the approved generator split.
 
-These protections are open work under **issue #10**: signed or hash-bound teacher code/config/seed provenance, re-generation spot checks, the generator and split manifest binding, and duplicate and leakage audits. **Bulk S1 generation is not authorized** by this PR or by replay verification alone. It needs #6, #7–#9, #23, #24, the #25 gate and #10.
+These protections are tracked under **issue #10**. Hash-bound teacher code/config/seed provenance, re-generation spot checks, the generator and split manifest binding, duplicate and leakage audits and the bulk S1 gate are implemented in `ember_v1.provenance` ([P1_TEACHER_PROVENANCE.md](P1_TEACHER_PROVENANCE.md)); signing is not. **Bulk S1 generation is not authorized** by this PR or by replay verification alone. It needs #6, #7–#9, #23, #24 resolved (T4 passes its gates, or the frozen #25 protocol excludes it with its blocked records), the #25 gate and #10; the only S1 entrypoint is `ember_v1.s1.build_s1_training_set`.
 
 ## 8. Budget
 
