@@ -1,0 +1,46 @@
+{
+ "bulk_s1": "BULK_S1_BLOCKED",
+ "checks": {
+  "attempt_marker": true,
+  "committed_gate_decision": true,
+  "config_equals_registry_pin": true,
+  "confirmation_lists_equal_manifest": true,
+  "draft_equals_committed_gate_draft": true,
+  "evidence_hash_and_complete": true,
+  "fingerprint_equals_current_code": true,
+  "fingerprint_equals_preflight": true,
+  "gate_reproduces_identically": true,
+  "isolation_audit": true,
+  "manifest_hash": true,
+  "protocol_trusted_and_hash": true,
+  "protocol_worktree_equals_trusted": true,
+  "receipt_draft_hash": true,
+  "receipt_equals_draft_except_review": true,
+  "receipt_hash": true,
+  "s1_refuses_only_for_review": true,
+  "selects_exactly_T1_v1_0_0": true
+ },
+ "notes": {
+  "confirmation_counts": {
+   "family_ids": 24,
+   "lineage_ids": 72,
+   "scenario_hashes": 72
+  },
+  "s1_verify_receipt": "receipt is not reviewed (review.status approved with named reviewers)"
+ },
+ "protocol_trust": {
+  "commit": "64b2d9873953ba750fd6c08fb84761f1bcd8e0bb",
+  "kind": "git",
+  "path": "data/selection/p1-09-selection@1/protocol.json",
+  "sha256": "sha256:a10ba999e03f5d169b292d7f997b12c2dd6d054d70ed856d6d2c3b009da584c1",
+  "trusted_ref": "origin/main"
+ },
+ "receipt_hash": "sha256:d6e94bd4a43631a5138cc110b3b04d75f94a150ce15fe07b89094443918d4022",
+ "receipt_path": "data/selection/p1-09-selection@1/receipt.json",
+ "review": {
+  "reviewers": [],
+  "status": "pending"
+ },
+ "review_version": "receipt-review@1.0.0",
+ "status": "VERIFIED_PENDING_REVIEW"
+}
