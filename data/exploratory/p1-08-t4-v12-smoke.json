@@ -1,0 +1,8021 @@
+{
+ "cell_content_hashes": [
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 1,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:4e9e6e76c03aa8a6708fce11d5daf17d171fd956d0f3fc3aa1857a3f0892c009"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 10,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:fbaeb5a67f6ceda125fae8f067cc612bcff1fb9e596d2e7a75a589cc7a8455dc"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:c3f36084eb0fb6d219dd296656aed1e32249bad8ebc147927538415ddc1b4771"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:967a2adb7378329ca9a93cac4f54de6cddb0d47cd40808e7139055182a32cf11"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:4c57c834c6671770e50d667a19fc32a59290575ab0fe93d19d55727244af1f38"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 1,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:2852c1355cf9ad79cf67ab327bcbe83ceec8d32963b1a3b00ffd97ca97b08221"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 10,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:345d7f571a335765912e9afb1c80b59e5a88a5bcaaad96c02e01f6e5edaa5dc2"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:8262f18bf9016cad8484f0481c87ed079dc009393deda8c45e23817113fd168d"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:37de7ac91d44b8bf852804b7bdc3578ca3c9e75f14a766c325f6d3a463f60239"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:680e19084243fe5a79daa8e688badf02dfa33c510779a83a220ccd69990bed0e"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 1,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:870e50d25376e21fea7e2f19c4122faad20d6752d8073d6e65208a66a9e19f02"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 10,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:ac9b68de77f18b39c9c2020274b87ae69e9589c3db045c98ae3e5ce5b1a15b00"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:6452a22e00b4d7203c99262912e0a7bde3cf2c67f19e12099e206c8420f23f6f"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:b1f683e982d3bf420835e839faac4c256eea651e3a41d5f95e5ac0215f3a8704"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:1b49e8923cacdba0695460c0181381f8be39e5382eabe3ce264b5231f9bb6024"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 1,
+    "topology": "irregular"
+   },
+   "content_hash": "sha256:0fe4a4e76c2dcbb43b744c826e8a5c435b751566d389a85ac7e4eba1a58b157b"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 10,
+    "topology": "irregular"
+   },
+   "content_hash": "sha256:7b1fa9e19ec1f4467339ec0b85dcffef67259cf51b4a7f4530a8ce86a12d2e94"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "irregular"
+   },
+   "content_hash": "sha256:b39e8642ce0c4a5761dd2e27e7d084611ee61d03dda4330cdcf07338e9ef034c"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "irregular"
+   },
+   "content_hash": "sha256:ff16e46b28168568397463140fcc5e6f8ad7227561302b74fae44eff110e7408"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "irregular"
+   },
+   "content_hash": "sha256:b0df871f05ba0626db6539889a2bf07c2c571ec67cce17c5fb3c118234c23c22"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 1,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:358a119efedcb2fe6824c9acba3d1ef8833fb7a44afb8506ba55882f9be1279c"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 10,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:a18485eddec697b0e0a8f5ac0e31a7764b340d861b92c8d56cce7ff47defde5a"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:66b33c99e7816271a712cbd7c7a9c421fd764d3153237e7ecf8cd8ff909a733a"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:166f5bc3beece560744eb4382abd109e9daf3292328009769f419caf121db0bc"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:6a2f052e1c276e070a752fa21afe93b74d449f0d65f470492bbab88f0db8733f"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 1,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:653c84ce3f704490d2de4b093f873ae58de5e8fde5e09aeae4eb160c59575389"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 10,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:0ea68aa13018635e1b42e9fc5c5d1f57965d5f269eb0b27243e6c1e5a72ad392"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:df44510cf80546e0c5d81298008746b512d13a17f879624186728ea4f1c9ee88"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:6187cecff9b26f35199d764f491cfd64fad341460c1afc0fd6852f7d64e66a76"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:73806f4c2267f9a4bd7faa1d181e0d666f5891ddb0648b6e5d48ac9030f39ca6"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 1,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:327f211a730d07281c6046dedd5e9943344d33e939f85f43c15d6ed3efdc9508"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 10,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:119dfac1310ec2c571e28420d97064b8912f2e9c1265f0d97d8cb9ba88d851f2"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:48743e0ed9ba0a9454175b301ce76ad330a8fdf8802dec1f4684518b5f9ad838"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:00da577ae2deec9fce6b2e1e17b3247306a86c09ca7f586d408ed2392cf4ff6e"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:e0268db6bb1a1245d8a77c306e1746e7492b4d4e328ac9c9a9dfc8413a24b807"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 1,
+    "topology": "irregular"
+   },
+   "content_hash": "sha256:0f81197f1adba531fe8cce1992b928d758300b1272d23c764a0b9188a087b674"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 10,
+    "topology": "irregular"
+   },
+   "content_hash": "sha256:614735f35a127309221a6ccb9097a92f522fdef60db699008e81737f159f0bb1"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "irregular"
+   },
+   "content_hash": "sha256:2785cb10ead1d3249cea2f7124047f56158a5c0fbdc4fbd3411d96195fc6b46f"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "irregular"
+   },
+   "content_hash": "sha256:e1dc5212cacf2d744e0280556699ab7fb1a5fccdabeac8f1db2396719110df45"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "irregular"
+   },
+   "content_hash": "sha256:119b41f39dd86b272ce7be8a62247b79a37188fbb63c314589a5d82b7a39f023"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "deterministic",
+    "n": 10,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:9a6af374f1888c0c64abe1985bc2a43d104411faba666379b81f5ff88fb3a0d8"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "deterministic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:647c591774cf3bbfe7c52e794d7e1aa02f5851c9ecfa23dbdb9e0858bf28790d"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "deterministic",
+    "n": 10,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:b507b598dfa183e47a46f4ce535b91c036288bd6560673646eab2b8c496254f0"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "deterministic",
+    "n": 100,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:d42b731ad8e65449b75ff3af5c4d9eb716214b47e5e2aa3b561059f9d55cc87b"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "deterministic",
+    "n": 10,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:1994114bb9bad4d4f2c74dc2de931434874d3f688e69794b28e57e5cd9546150"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "deterministic",
+    "n": 100,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:1b26266a2aae4a41a71f2d5163cf5e02ab8c03bc2f36c868e02dd39f5eb5f35f"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "deterministic",
+    "n": 10,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:43fc36950fab27707be8463006c023dd004513ccc18885dc3c0b7777238eff04"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "deterministic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:4e2e269b28063cd03d822b1810c51be7702f810d64e011653ef5202e472373c5"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "deterministic",
+    "n": 10,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:a73c38d471bb1e30cf8b394d487cef041f256a537972b15201026da1463f65e2"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "deterministic",
+    "n": 100,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:8392d3301d8adee1f700c80852742fb4a70edf75c421040f7ee93c3bd8bb75b0"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "deterministic",
+    "n": 10,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:331fb67dcb1a3dc36a48e03a778af53ecbcd0e351dba011e1d18a857ac4d9323"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "base",
+    "mode": "prefix",
+    "model": "deterministic",
+    "n": 100,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:3948d74a51aa48b01cdbd12423a1eeaa1a0d9ba0e68aaee043b0f7a3f929320d"
+  },
+  {
+   "cell": {
+    "exits": 1,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "exits",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:cc65d550008390f192bced4b040babbbd1a274e46cd049ef826a6dd197db3115"
+  },
+  {
+   "cell": {
+    "exits": 6,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "exits",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:90b4b808d3daaa115189ae3426ad3757fbafec6a12cce55d6e63463992a89a41"
+  },
+  {
+   "cell": {
+    "exits": 1,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "exits",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:264aa21aa6a1d057275d99164c58c867b2f6a4540a6373f9166606c1dee93472"
+  },
+  {
+   "cell": {
+    "exits": 6,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "exits",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:0d82115cc547936efb567ac05ce1160a0530693919977988a7d2bb6cb8e13f64"
+  },
+  {
+   "cell": {
+    "exits": 1,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "bottleneck",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:00d083010964a338ab22cb4002c4ef42c05e40e3310a8a60496358d0c972c652"
+  },
+  {
+   "cell": {
+    "exits": 1,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "bottleneck",
+    "mode": "full_episode",
+    "model": "deterministic",
+    "n": 50,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:aee3d8d334707d25bfc80e82029b3ac55600beef7ab026296ff80de3118342ef"
+  },
+  {
+   "cell": {
+    "exits": 1,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "bottleneck",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:cfc04075ef574241912eef434c3eaa36800745cfb55b82fa189a40682c4e2aa8"
+  },
+  {
+   "cell": {
+    "exits": 1,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "bottleneck",
+    "mode": "full_episode",
+    "model": "deterministic",
+    "n": 100,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:b5e04a92a3be99a239a2071716036cab9f0e610e18f216071d52fb47353e2239"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "high_id_risk",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:c287b20691e7494f72c8882c4e8fab977951b249f10031f4351ace2d5f2578e5"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "high_id_risk",
+    "mode": "full_episode",
+    "model": "deterministic",
+    "n": 50,
+    "topology": "open_room"
+   },
+   "content_hash": "sha256:ed5fdd27680b8674b00122ffd56de10478eaaa519695f49e349e4e166b3b0c69"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "high_id_risk",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:b079dec72504f225acdfda7ca198b2ee7686410928f92db73b438ca7dc0b7bb1"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "high_id_risk",
+    "mode": "full_episode",
+    "model": "deterministic",
+    "n": 50,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:f0cdfcae900df328cf60ba9876dcebe111fbe71bc7bed092818f4cfa476ffc8d"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "high_id_risk",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:83fb77edb4df40cc5e415f28b9e8ce6fcedca27cbaa0e3e86a187554964a0c50"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "high_id_risk",
+    "mode": "full_episode",
+    "model": "deterministic",
+    "n": 50,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:9196c959e1d3631a0c4c0a26df74a228a4bf734e821cf40d86ab104082b9b6dd"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "near_entrapment",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 10,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:3b9f669809a940b80ca5af18bbc2d510014e3a142079b378989c3ce53d21e42e"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "near_entrapment",
+    "mode": "full_episode",
+    "model": "deterministic",
+    "n": 10,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:9d6b3fcc547c5129f2783b6ab20dada902596a99cc38aae46f18332bcc24e9c3"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "near_entrapment",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:5dce74affa2c81a48a15f24b890d3267bf7b013680e993ae3a3f6315f7b59039"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "near_entrapment",
+    "mode": "full_episode",
+    "model": "deterministic",
+    "n": 50,
+    "topology": "corridor"
+   },
+   "content_hash": "sha256:5be73355ee288aab3afbff58b284d8211f66ece56261dbcdc48e2ba8033bafd9"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "unreachable",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:b023f6fa059e767ce676e7eafd82fca469b46913074073150f29b19e2f193ec2"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "unreachable",
+    "mode": "full_episode",
+    "model": "deterministic",
+    "n": 50,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:0bdfbf337b5eb84e38f75f5e226f911ef9ffc04db99ebfa405ca3664f590748c"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "unreachable",
+    "mode": "prefix",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:6ad276e5e65da404094b790226ed99f8a4838438035eb99b18989b42d5cabddf"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     48,
+     64
+    ],
+    "kind": "unreachable",
+    "mode": "prefix",
+    "model": "deterministic",
+    "n": 50,
+    "topology": "multi_room"
+   },
+   "content_hash": "sha256:92ab290d808e8b4396538375a83aa7663cb6ad4737843757708503690cf29d87"
+  }
+ ],
+ "cells_defined": 74,
+ "cells_run": 74,
+ "dev_profile_complete": true,
+ "dev_profile_summary": {
+  "active_mean": 26.306370070778563,
+  "decisions": 1978
+ },
+ "dev_use": "frozen T1 replay for public workload and reference timing only; no T4 decision on DEV; no DEV comparison in this protocol",
+ "environment": {
+  "git_sha": "e00bab851549635c0f25aaa2f447d59c6c47ac66",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "processor": "AMD64 Family 26 Model 36 Stepping 0, AuthenticAMD",
+  "python": "3.14.7",
+  "src_dirty": true
+ },
+ "errors": [],
+ "estimate": {
+  "alpha_wall_ms_per_work_unit": {
+   "A0": {
+    "max": 0.01935012254901961,
+    "median": 0.0017839448631495438,
+    "n": 1740,
+    "p90": 0.003858944444444445
+   },
+   "A1": {
+    "max": 0.01735207142857143,
+    "median": 0.00171582,
+    "n": 1840,
+    "p90": 0.0042564125
+   },
+   "A2": {
+    "max": 0.0161134375,
+    "median": 0.0017796681711802073,
+    "n": 1807,
+    "p90": 0.00444873831775701
+   },
+   "evaluator": {
+    "max": 0.003988252314814815,
+    "median": 0.0007219413407821229,
+    "n": 5391,
+    "p90": 0.0012297142857142856
+   }
+  },
+  "central": {
+   "comparison_cpu_h_total": 0.04262522158846404,
+   "comparison_cpu_s_total": 153.45079771847054,
+   "episode_factor": 1.0,
+   "evaluator_cpu_s": 47.02318141385475,
+   "t1_cpu_s": 20.459503899999994,
+   "variants": {
+    "A0": {
+     "cpu_s_total": 29.04902316624385,
+     "max_episode_cpu_s": 7.669132584113476,
+     "predicted_cap_decisions": 0,
+     "predicted_cap_fraction": 0.0
+    },
+    "A1": {
+     "cpu_s_total": 27.939705962160296,
+     "max_episode_cpu_s": 7.376265568679975,
+     "predicted_cap_decisions": 0,
+     "predicted_cap_fraction": 0.0
+    },
+    "A2": {
+     "cpu_s_total": 28.979383276211646,
+     "max_episode_cpu_s": 7.650747196531301,
+     "predicted_cap_decisions": 0,
+     "predicted_cap_fraction": 0.0
+    }
+   }
+  },
+  "dev_decisions": 1978,
+  "dev_reference_policy_wall_s": {
+   "t1_wall_s": 20.459503899999994
+  },
+  "hard_bound_t4_variants_s": 18543.75,
+  "upper": {
+   "comparison_cpu_h_total": 0.10595302009985542,
+   "comparison_cpu_s_total": 381.4308723594795,
+   "episode_factor": 1.25,
+   "evaluator_cpu_s": 100.12080393142855,
+   "t1_cpu_s": 25.57437987499999,
+   "variants": {
+    "A0": {
+     "cpu_s_total": 78.54682681027768,
+     "max_episode_cpu_s": 20.73687729263879,
+     "predicted_cap_decisions": 0,
+     "predicted_cap_fraction": 0.0
+    },
+    "A1": {
+     "cpu_s_total": 86.63708438506336,
+     "max_episode_cpu_s": 22.872758338468778,
+     "predicted_cap_decisions": 0,
+     "predicted_cap_fraction": 0.0
+    },
+    "A2": {
+     "cpu_s_total": 90.55177735770992,
+     "max_episode_cpu_s": 23.90626295105135,
+     "predicted_cap_decisions": 0,
+     "predicted_cap_fraction": 0.0
+    }
+   }
+  }
+ },
+ "evidence_class": "exploratory_smoke_not_evidence",
+ "exclusion_checks": {
+  "inspected_v1_layouts": 2,
+  "t4-pilot_3_scenarios_checked": 74,
+  "v1_pilot_scenarios_checked": 52,
+  "v2_pilot_scenarios_checked": 74
+ },
+ "g5c_example_cases": [
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "open_room"
+   },
+   "higher_risk": "P021",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": 1,
+   "lower_risk": "P001",
+   "lower_stratum": "low",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "high"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "open_room"
+   },
+   "higher_risk": "P023",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": 1,
+   "lower_risk": "P001",
+   "lower_stratum": "low",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "open_room"
+   },
+   "higher_risk": "P021",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 0,
+   "lower_progress_a2": 1,
+   "lower_risk": "P006",
+   "lower_stratum": "low",
+   "progress_a0": 0,
+   "progress_a2": 1,
+   "step": 1,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "open_room"
+   },
+   "higher_risk": "P037",
+   "link": "yield",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": 0,
+   "lower_risk": "P035",
+   "lower_stratum": "low",
+   "progress_a0": 0,
+   "progress_a2": 1,
+   "step": 8,
+   "stratum": "elevated"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "open_room"
+   },
+   "higher_risk": "P044",
+   "link": "yield",
+   "lower_progress_a0": 0,
+   "lower_progress_a2": -1,
+   "lower_risk": "P042",
+   "lower_stratum": "low",
+   "progress_a0": 0,
+   "progress_a2": 1,
+   "step": 10,
+   "stratum": "elevated"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 50,
+    "topology": "open_room"
+   },
+   "higher_risk": "P039",
+   "link": "yield",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": 0,
+   "lower_risk": "P007",
+   "lower_stratum": "low",
+   "progress_a0": 0,
+   "progress_a2": 1,
+   "step": 13,
+   "stratum": "elevated"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P031",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P011",
+   "lower_stratum": "elevated",
+   "progress_a0": 0,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "high"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P036",
+   "link": "yield",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": 1,
+   "lower_risk": "P063",
+   "lower_stratum": "low",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "elevated"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P067",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 0,
+   "lower_progress_a2": 0,
+   "lower_risk": "P042",
+   "lower_stratum": "low",
+   "progress_a0": 0,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "elevated"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P084",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": 1,
+   "lower_risk": "P016",
+   "lower_stratum": "high",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P085",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P011",
+   "lower_stratum": "elevated",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P086",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": 1,
+   "lower_risk": "P063",
+   "lower_stratum": "low",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "elevated"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P014",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P063",
+   "lower_stratum": "elevated",
+   "progress_a0": 0,
+   "progress_a2": 1,
+   "step": 1,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P065",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P063",
+   "lower_stratum": "elevated",
+   "progress_a0": 0,
+   "progress_a2": 1,
+   "step": 1,
+   "stratum": "high"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P067",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 0,
+   "lower_progress_a2": 0,
+   "lower_risk": "P042",
+   "lower_stratum": "low",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 1,
+   "stratum": "elevated"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P085",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P063",
+   "lower_stratum": "elevated",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 1,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P088",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P063",
+   "lower_stratum": "elevated",
+   "progress_a0": 0,
+   "progress_a2": 1,
+   "step": 1,
+   "stratum": "high"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P091",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": 1,
+   "lower_risk": "P054",
+   "lower_stratum": "elevated",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 1,
+   "stratum": "high"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P095",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": 1,
+   "lower_risk": "P054",
+   "lower_stratum": "elevated",
+   "progress_a0": -1,
+   "progress_a2": 0,
+   "step": 1,
+   "stratum": "high"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P048",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P063",
+   "lower_stratum": "elevated",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 2,
+   "stratum": "high"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P062",
+   "link": "exit_reassignment",
+   "lower_progress_a0": -1,
+   "lower_progress_a2": 1,
+   "lower_risk": "P064",
+   "lower_stratum": "low",
+   "progress_a0": 0,
+   "progress_a2": 1,
+   "step": 2,
+   "stratum": "elevated"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P066",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": 1,
+   "lower_risk": "P001",
+   "lower_stratum": "elevated",
+   "progress_a0": 0,
+   "progress_a2": 1,
+   "step": 2,
+   "stratum": "high"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P075",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P063",
+   "lower_stratum": "elevated",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 2,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P079",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": 1,
+   "lower_risk": "P004",
+   "lower_stratum": "high",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 2,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P080",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": 1,
+   "lower_risk": "P001",
+   "lower_stratum": "elevated",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 2,
+   "stratum": "high"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 100,
+    "topology": "open_room"
+   },
+   "higher_risk": "P085",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P063",
+   "lower_stratum": "elevated",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 2,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "open_room"
+   },
+   "higher_risk": "P027",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P004",
+   "lower_stratum": "high",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "open_room"
+   },
+   "higher_risk": "P060",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": 0,
+   "lower_risk": "P003",
+   "lower_stratum": "low",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "open_room"
+   },
+   "higher_risk": "P070",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P069",
+   "lower_stratum": "low",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "open_room"
+   },
+   "higher_risk": "P071",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P004",
+   "lower_stratum": "high",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "open_room"
+   },
+   "higher_risk": "P084",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P004",
+   "lower_stratum": "high",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "open_room"
+   },
+   "higher_risk": "P086",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P004",
+   "lower_stratum": "high",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "open_room"
+   },
+   "higher_risk": "P093",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P004",
+   "lower_stratum": "high",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "open_room"
+   },
+   "higher_risk": "P098",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": 0,
+   "lower_risk": "P003",
+   "lower_stratum": "low",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "open_room"
+   },
+   "higher_risk": "P104",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": 0,
+   "lower_risk": "P003",
+   "lower_stratum": "low",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "open_room"
+   },
+   "higher_risk": "P109",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P004",
+   "lower_stratum": "high",
+   "progress_a0": -1,
+   "progress_a2": 0,
+   "step": 0,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "open_room"
+   },
+   "higher_risk": "P111",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": 0,
+   "lower_risk": "P003",
+   "lower_stratum": "low",
+   "progress_a0": 0,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "open_room"
+   },
+   "higher_risk": "P112",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P004",
+   "lower_stratum": "high",
+   "progress_a0": -1,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "open_room"
+   },
+   "higher_risk": "P114",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P004",
+   "lower_stratum": "high",
+   "progress_a0": 0,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "critical"
+  },
+  {
+   "cell": {
+    "exits": 3,
+    "grid": [
+     16,
+     20
+    ],
+    "kind": "base",
+    "mode": "full_episode",
+    "model": "stochastic",
+    "n": 200,
+    "topology": "open_room"
+   },
+   "higher_risk": "P143",
+   "link": "exit_reassignment",
+   "lower_progress_a0": 1,
+   "lower_progress_a2": -1,
+   "lower_risk": "P069",
+   "lower_stratum": "low",
+   "progress_a0": 0,
+   "progress_a2": 1,
+   "step": 0,
+   "stratum": "critical"
+  }
+ ],
+ "gate": {
+  "G1": {
+   "blocked_moves": 0,
+   "max_allowed_cpu_ms": 2500.0,
+   "max_decision_cpu_ms": 218.75,
+   "memory_limit_mb": 1024.0,
+   "pass": true,
+   "peak_rss_mb": 49.296875,
+   "pilot_complete_inside_wall_limit": true,
+   "predicted_blocked": 0,
+   "prediction_mismatches": 0,
+   "verification_mismatches": 0
+  },
+  "G2": {
+   "limit_s": 7200.0,
+   "pass": true,
+   "upper_dev_comparison_cpu_s": 381.4308723594795
+  },
+  "G3": {
+   "limit": 0.05,
+   "pass": true,
+   "upper_cap_fraction": {
+    "A0": 0.0,
+    "A1": 0.0,
+    "A2": 0.0
+   }
+  },
+  "G4": {
+   "A0": {
+    "budget_limited_decisions": 3,
+    "budget_limited_fraction": 0.0017211703958691911,
+    "decisions": 1743,
+    "fallback_fraction": 0.018835308099542623,
+    "fallback_person_decisions": 1046,
+    "routable_person_decisions": 55534
+   },
+   "A1": {
+    "budget_limited_decisions": 1,
+    "budget_limited_fraction": 0.0005431830526887561,
+    "decisions": 1841,
+    "fallback_fraction": 0.016655480589211912,
+    "fallback_person_decisions": 943,
+    "routable_person_decisions": 56618
+   },
+   "A2": {
+    "budget_limited_decisions": 0,
+    "budget_limited_fraction": 0.0,
+    "decisions": 1807,
+    "fallback_fraction": 0.014796569322370286,
+    "fallback_person_decisions": 835,
+    "routable_person_decisions": 56432
+   },
+   "budget_limit": 0.05,
+   "fallback_limit": 0.05,
+   "pass": true
+  },
+  "G5a": {
+   "neutral_state_predicted_blocked": 0,
+   "pass": true,
+   "precedence_audit_violations": 0,
+   "precedence_inversions": 0
+  },
+  "G5b": {
+   "a0_chain_yields_over_id_rule": 2669,
+   "a0_id_inversions": 0,
+   "a0_unexplained_over_id_yields": 0,
+   "a0_yields_over_id_rule_all_chain": 2669,
+   "pass": true
+  },
+  "G5c": {
+   "at_risk_person_states": 18127,
+   "at_risk_progress_a0": 8364,
+   "at_risk_progress_a2": 10166,
+   "neutral_decisions": 1790,
+   "pass": true,
+   "verified_cases_exit_reassignment": 2563,
+   "verified_cases_yield": 388
+  },
+  "decision": "T4_READY_FOR_INDEPENDENT_SELECTION_EVALUATION",
+  "failed": [],
+  "v2_label": "T4_V2_FULL_DEV_FEASIBLE"
+ },
+ "limits": {
+  "budget_hit_limit": 0.05,
+  "dev_cpu_limit_s": 7200.0,
+  "episode_factor": 1.25,
+  "fallback_limit": 0.05,
+  "memory_limit_mb": 1024.0,
+  "overrun_ms": 500.0,
+  "wall_limit_s": 3600.0,
+  "workers": 1
+ },
+ "mechanism": {
+  "A0": {
+   "blocked_moves": 0,
+   "chain_yields": 2669,
+   "chain_yields_over_id_rule": 2669,
+   "contest_success": 2029,
+   "contest_success_over_id": 1161,
+   "contests": 3673,
+   "contests_over_id": 2444,
+   "converted_to_stay": 0,
+   "cpu_s_total": 41.3125,
+   "decisions": 1743,
+   "diverted": 6594,
+   "effective_yields": 10540,
+   "effective_yields_over_id_rule": 2669,
+   "episodes": {
+    "casualties": 574,
+    "count": 42,
+    "evacuated": 1666,
+    "final_by_initial_stratum": {
+     "critical/casualty": 343,
+     "critical/evacuated": 435,
+     "elevated/casualty": 21,
+     "elevated/evacuated": 438,
+     "high/casualty": 24,
+     "high/evacuated": 204,
+     "low/casualty": 15,
+     "low/evacuated": 589,
+     "no_viable_route/active": 50,
+     "no_viable_route/casualty": 171
+    },
+    "max_consecutive_stall": 54,
+    "people": 2290,
+    "unresolved": 50
+   },
+   "free_progress_unused": 1001,
+   "max_push_depth": 42,
+   "precedence_audit_violations": 0,
+   "precedence_inversions": 0,
+   "prediction_mismatches": 0,
+   "priority_enforcement_rate": 0.5524094745439695,
+   "push_rollbacks": 7595,
+   "rank_vs_target_distance_spearman_mean": 0.21051391489552748,
+   "unnecessary_waits": 1124,
+   "vacate_refusals": 7595,
+   "vacate_requests": 20849,
+   "vacate_success": 13254,
+   "verification_mismatches": 0,
+   "wall_ms": {
+    "max": 351.5246,
+    "p50": 13.7331,
+    "p95": 82.6864,
+    "p99": 131.8746
+   },
+   "yields": 14061,
+   "yields_over_id_rule": 2669
+  },
+  "A1": {
+   "blocked_moves": 0,
+   "chain_yields": 2198,
+   "chain_yields_over_id_rule": 1110,
+   "contest_success": 2159,
+   "contest_success_over_id": 1170,
+   "contests": 3515,
+   "contests_over_id": 1856,
+   "converted_to_stay": 0,
+   "cpu_s_total": 41.875,
+   "decisions": 1841,
+   "diverted": 6855,
+   "effective_yields": 11058,
+   "effective_yields_over_id_rule": 5653,
+   "episodes": {
+    "casualties": 601,
+    "count": 42,
+    "evacuated": 1639,
+    "final_by_initial_stratum": {
+     "critical/casualty": 345,
+     "critical/evacuated": 433,
+     "elevated/casualty": 43,
+     "elevated/evacuated": 416,
+     "high/casualty": 24,
+     "high/evacuated": 204,
+     "low/casualty": 18,
+     "low/evacuated": 586,
+     "no_viable_route/active": 50,
+     "no_viable_route/casualty": 171
+    },
+    "max_consecutive_stall": 56,
+    "people": 2290,
+    "unresolved": 50
+   },
+   "free_progress_unused": 562,
+   "max_push_depth": 61,
+   "precedence_audit_violations": 0,
+   "precedence_inversions": 0,
+   "prediction_mismatches": 0,
+   "priority_enforcement_rate": 0.6142247510668564,
+   "push_rollbacks": 12710,
+   "rank_vs_target_distance_spearman_mean": -0.1234942020727146,
+   "unnecessary_waits": 696,
+   "vacate_refusals": 12710,
+   "vacate_requests": 29791,
+   "vacate_success": 17081,
+   "verification_mismatches": 0,
+   "wall_ms": {
+    "max": 219.6849,
+    "p50": 12.8742,
+    "p95": 76.6503,
+    "p99": 116.9121
+   },
+   "yields": 15025,
+   "yields_over_id_rule": 7720
+  },
+  "A2": {
+   "blocked_moves": 0,
+   "chain_yields": 2101,
+   "chain_yields_over_id_rule": 1009,
+   "contest_success": 2110,
+   "contest_success_over_id": 1119,
+   "contests": 3893,
+   "contests_over_id": 2068,
+   "converted_to_stay": 0,
+   "cpu_s_total": 42.34375,
+   "decisions": 1807,
+   "diverted": 6580,
+   "effective_yields": 8940,
+   "effective_yields_over_id_rule": 4466,
+   "episodes": {
+    "casualties": 580,
+    "count": 42,
+    "evacuated": 1660,
+    "final_by_initial_stratum": {
+     "critical/casualty": 341,
+     "critical/evacuated": 437,
+     "elevated/casualty": 32,
+     "elevated/evacuated": 427,
+     "high/casualty": 22,
+     "high/evacuated": 206,
+     "low/casualty": 14,
+     "low/evacuated": 590,
+     "no_viable_route/active": 50,
+     "no_viable_route/casualty": 171
+    },
+    "max_consecutive_stall": 56,
+    "people": 2290,
+    "unresolved": 50
+   },
+   "free_progress_unused": 474,
+   "max_push_depth": 40,
+   "precedence_audit_violations": 0,
+   "precedence_inversions": 0,
+   "prediction_mismatches": 0,
+   "priority_enforcement_rate": 0.5419984587721551,
+   "push_rollbacks": 16307,
+   "rank_vs_target_distance_spearman_mean": -0.669805316150967,
+   "unnecessary_waits": 607,
+   "vacate_refusals": 16307,
+   "vacate_requests": 34224,
+   "vacate_success": 17917,
+   "verification_mismatches": 0,
+   "wall_ms": {
+    "max": 149.3819,
+    "p50": 13.6492,
+    "p95": 78.3062,
+    "p99": 115.812
+   },
+   "yields": 11799,
+   "yields_over_id_rule": 5801
+  }
+ },
+ "namespace": "t4-explore@v12",
+ "neutral_paired_states": {
+  "A0/precedence_audit_violations": 0,
+  "A0/precedence_inversions": 0,
+  "A0/predicted_blocked": 0,
+  "A2/precedence_audit_violations": 0,
+  "A2/precedence_inversions": 0,
+  "A2/predicted_blocked": 0,
+  "at_risk/a2_less_progress": 2770,
+  "at_risk/a2_more_progress": 3975,
+  "at_risk/persons": 18127,
+  "at_risk/progress_a0": 8364,
+  "at_risk/progress_a2": 10166,
+  "g5c/exit_reassignment": 2563,
+  "g5c/yield": 388,
+  "lower_risk/a2_less_progress": 3916,
+  "lower_risk/a2_more_progress": 3594,
+  "lower_risk/persons": 39974,
+  "lower_risk/progress_a0": 28330,
+  "lower_risk/progress_a2": 27907,
+  "neutral_decisions": 1790
+ },
+ "pilot_complete": true,
+ "pilot_episodes": [
+  {
+   "casualties": 0,
+   "decisions": 5,
+   "evacuated": 1,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "high/evacuated": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 0,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 1,
+   "people": 1,
+   "step_metrics": {
+    "person_steps/critical": 1,
+    "person_steps/high": 4,
+    "waits/critical": 0,
+    "waits/high": 0
+   },
+   "steps": 5,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 0,
+   "decisions": 5,
+   "evacuated": 1,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "high/evacuated": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 0,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 1,
+   "people": 1,
+   "step_metrics": {
+    "person_steps/critical": 1,
+    "person_steps/high": 4,
+    "waits/critical": 0,
+    "waits/high": 0
+   },
+   "steps": 5,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 0,
+   "decisions": 5,
+   "evacuated": 1,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "high/evacuated": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 0,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 1,
+   "people": 1,
+   "step_metrics": {
+    "person_steps/critical": 1,
+    "person_steps/high": 4,
+    "waits/critical": 0,
+    "waits/high": 0
+   },
+   "steps": 5,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 0,
+   "decisions": 15,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "elevated/evacuated": 6,
+    "high/evacuated": 2,
+    "low/evacuated": 2
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "person_steps/critical": 1,
+    "person_steps/elevated": 41,
+    "person_steps/high": 14,
+    "person_steps/low": 13,
+    "waits/critical": 0,
+    "waits/elevated": 0,
+    "waits/high": 0,
+    "waits/low": 1
+   },
+   "steps": 15,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 0,
+   "decisions": 15,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "elevated/evacuated": 6,
+    "high/evacuated": 2,
+    "low/evacuated": 2
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "person_steps/critical": 1,
+    "person_steps/elevated": 41,
+    "person_steps/high": 14,
+    "person_steps/low": 13,
+    "waits/critical": 0,
+    "waits/elevated": 0,
+    "waits/high": 0,
+    "waits/low": 1
+   },
+   "steps": 15,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 0,
+   "decisions": 15,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "elevated/evacuated": 6,
+    "high/evacuated": 2,
+    "low/evacuated": 2
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "person_steps/critical": 1,
+    "person_steps/elevated": 41,
+    "person_steps/high": 14,
+    "person_steps/low": 13,
+    "waits/critical": 0,
+    "waits/elevated": 0,
+    "waits/high": 0,
+    "waits/low": 1
+   },
+   "steps": 15,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 0,
+   "decisions": 21,
+   "evacuated": 50,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 2,
+    "elevated/evacuated": 21,
+    "high/evacuated": 4,
+    "low/evacuated": 23
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 11,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 13,
+    "contest_success_over_id": 10,
+    "contests": 14,
+    "contests_over_id": 10,
+    "person_steps/critical": 27,
+    "person_steps/elevated": 247,
+    "person_steps/high": 48,
+    "person_steps/low": 192,
+    "unnecessary_waits": 16,
+    "waits/critical": 0,
+    "waits/elevated": 36,
+    "waits/high": 1,
+    "waits/low": 64
+   },
+   "steps": 21,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 0,
+   "decisions": 22,
+   "evacuated": 50,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 2,
+    "elevated/evacuated": 21,
+    "high/evacuated": 4,
+    "low/evacuated": 23
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 6,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 11,
+    "contest_success_over_id": 10,
+    "contests": 11,
+    "contests_over_id": 10,
+    "person_steps/critical": 33,
+    "person_steps/elevated": 260,
+    "person_steps/high": 43,
+    "person_steps/low": 192,
+    "unnecessary_waits": 13,
+    "waits/critical": 0,
+    "waits/elevated": 20,
+    "waits/high": 0,
+    "waits/low": 50
+   },
+   "steps": 22,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 0,
+   "decisions": 22,
+   "evacuated": 50,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 2,
+    "elevated/evacuated": 21,
+    "high/evacuated": 4,
+    "low/evacuated": 23
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 6,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 12,
+    "contest_success_over_id": 9,
+    "contests": 12,
+    "contests_over_id": 9,
+    "person_steps/critical": 33,
+    "person_steps/elevated": 266,
+    "person_steps/high": 43,
+    "person_steps/low": 181,
+    "unnecessary_waits": 15,
+    "waits/critical": 0,
+    "waits/elevated": 19,
+    "waits/high": 0,
+    "waits/low": 39
+   },
+   "steps": 22,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 17,
+   "decisions": 44,
+   "evacuated": 83,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 12,
+    "critical/evacuated": 33,
+    "elevated/casualty": 1,
+    "elevated/evacuated": 20,
+    "high/casualty": 2,
+    "high/evacuated": 11,
+    "low/casualty": 2,
+    "low/evacuated": 19
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 14,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 100,
+   "people": 100,
+   "step_metrics": {
+    "contest_success": 190,
+    "contest_success_over_id": 99,
+    "contests": 351,
+    "contests_over_id": 222,
+    "person_steps/critical": 847,
+    "person_steps/elevated": 384,
+    "person_steps/high": 295,
+    "person_steps/low": 138,
+    "person_steps/no_viable_route": 139,
+    "unnecessary_waits": 81,
+    "waits/critical": 192,
+    "waits/elevated": 107,
+    "waits/high": 78,
+    "waits/low": 40,
+    "waits/no_viable_route": 87
+   },
+   "steps": 44,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 26,
+   "decisions": 44,
+   "evacuated": 74,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 18,
+    "critical/evacuated": 27,
+    "elevated/casualty": 3,
+    "elevated/evacuated": 18,
+    "high/casualty": 4,
+    "high/evacuated": 9,
+    "low/casualty": 1,
+    "low/evacuated": 20
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 30,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 100,
+   "people": 100,
+   "step_metrics": {
+    "contest_success": 150,
+    "contest_success_over_id": 87,
+    "contests": 244,
+    "contests_over_id": 144,
+    "person_steps/critical": 759,
+    "person_steps/elevated": 383,
+    "person_steps/high": 250,
+    "person_steps/low": 150,
+    "person_steps/no_viable_route": 347,
+    "unnecessary_waits": 45,
+    "waits/critical": 152,
+    "waits/elevated": 65,
+    "waits/high": 46,
+    "waits/low": 38,
+    "waits/no_viable_route": 202
+   },
+   "steps": 44,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 22,
+   "decisions": 44,
+   "evacuated": 78,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 14,
+    "critical/evacuated": 31,
+    "elevated/casualty": 5,
+    "elevated/evacuated": 16,
+    "high/casualty": 1,
+    "high/evacuated": 12,
+    "low/casualty": 2,
+    "low/evacuated": 19
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 23,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 100,
+   "people": 100,
+   "step_metrics": {
+    "contest_success": 157,
+    "contest_success_over_id": 78,
+    "contests": 278,
+    "contests_over_id": 139,
+    "person_steps/critical": 817,
+    "person_steps/elevated": 386,
+    "person_steps/high": 259,
+    "person_steps/low": 142,
+    "person_steps/no_viable_route": 211,
+    "unnecessary_waits": 47,
+    "waits/critical": 283,
+    "waits/elevated": 88,
+    "waits/high": 62,
+    "waits/low": 53,
+    "waits/no_viable_route": 108
+   },
+   "steps": 44,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 89,
+   "decisions": 60,
+   "evacuated": 111,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 54,
+    "critical/evacuated": 51,
+    "elevated/casualty": 13,
+    "elevated/evacuated": 26,
+    "high/casualty": 10,
+    "high/evacuated": 7,
+    "low/casualty": 12,
+    "low/evacuated": 27
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 12,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 200,
+   "people": 200,
+   "step_metrics": {
+    "contest_success": 314,
+    "contest_success_over_id": 161,
+    "contests": 773,
+    "contests_over_id": 504,
+    "person_steps/critical": 3561,
+    "person_steps/elevated": 835,
+    "person_steps/high": 518,
+    "person_steps/low": 576,
+    "person_steps/no_viable_route": 249,
+    "unnecessary_waits": 228,
+    "waits/critical": 890,
+    "waits/elevated": 272,
+    "waits/high": 149,
+    "waits/low": 236,
+    "waits/no_viable_route": 205
+   },
+   "steps": 60,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 89,
+   "decisions": 60,
+   "evacuated": 111,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 47,
+    "critical/evacuated": 58,
+    "elevated/casualty": 21,
+    "elevated/evacuated": 18,
+    "high/casualty": 6,
+    "high/evacuated": 11,
+    "low/casualty": 15,
+    "low/evacuated": 24
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 42,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 200,
+   "people": 200,
+   "step_metrics": {
+    "contest_success": 359,
+    "contest_success_over_id": 206,
+    "contests": 843,
+    "contests_over_id": 470,
+    "person_steps/critical": 3770,
+    "person_steps/elevated": 850,
+    "person_steps/high": 573,
+    "person_steps/low": 573,
+    "person_steps/no_viable_route": 267,
+    "unnecessary_waits": 120,
+    "waits/critical": 1187,
+    "waits/elevated": 345,
+    "waits/high": 189,
+    "waits/low": 305,
+    "waits/no_viable_route": 260
+   },
+   "steps": 60,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 88,
+   "decisions": 60,
+   "evacuated": 112,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 51,
+    "critical/evacuated": 54,
+    "elevated/casualty": 16,
+    "elevated/evacuated": 23,
+    "high/casualty": 10,
+    "high/evacuated": 7,
+    "low/casualty": 11,
+    "low/evacuated": 28
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 48,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 200,
+   "people": 200,
+   "step_metrics": {
+    "contest_success": 255,
+    "contest_success_over_id": 130,
+    "contests": 996,
+    "contests_over_id": 547,
+    "person_steps/critical": 3539,
+    "person_steps/elevated": 865,
+    "person_steps/high": 514,
+    "person_steps/low": 556,
+    "person_steps/no_viable_route": 134,
+    "unnecessary_waits": 81,
+    "waits/critical": 1966,
+    "waits/elevated": 505,
+    "waits/high": 318,
+    "waits/low": 334,
+    "waits/no_viable_route": 98
+   },
+   "steps": 60,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 0,
+   "decisions": 7,
+   "evacuated": 1,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "low/evacuated": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 0,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 1,
+   "people": 1,
+   "step_metrics": {
+    "person_steps/low": 7,
+    "waits/low": 0
+   },
+   "steps": 7,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 0,
+   "decisions": 7,
+   "evacuated": 1,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "low/evacuated": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 0,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 1,
+   "people": 1,
+   "step_metrics": {
+    "person_steps/low": 7,
+    "waits/low": 0
+   },
+   "steps": 7,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 0,
+   "decisions": 7,
+   "evacuated": 1,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "low/evacuated": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 0,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 1,
+   "people": 1,
+   "step_metrics": {
+    "person_steps/low": 7,
+    "waits/low": 0
+   },
+   "steps": 7,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 0,
+   "decisions": 16,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 1,
+    "elevated/evacuated": 3,
+    "low/evacuated": 6
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "person_steps/critical": 2,
+    "person_steps/elevated": 13,
+    "person_steps/high": 2,
+    "person_steps/low": 82,
+    "waits/critical": 0,
+    "waits/elevated": 0,
+    "waits/high": 0,
+    "waits/low": 1
+   },
+   "steps": 16,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 0,
+   "decisions": 16,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 1,
+    "elevated/evacuated": 3,
+    "low/evacuated": 6
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "person_steps/critical": 2,
+    "person_steps/elevated": 13,
+    "person_steps/high": 2,
+    "person_steps/low": 82,
+    "waits/critical": 0,
+    "waits/elevated": 0,
+    "waits/high": 0,
+    "waits/low": 1
+   },
+   "steps": 16,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 0,
+   "decisions": 16,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 1,
+    "elevated/evacuated": 3,
+    "low/evacuated": 6
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "person_steps/critical": 2,
+    "person_steps/elevated": 13,
+    "person_steps/high": 2,
+    "person_steps/low": 82,
+    "waits/critical": 0,
+    "waits/elevated": 0,
+    "waits/high": 0,
+    "waits/low": 1
+   },
+   "steps": 16,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 0,
+   "decisions": 16,
+   "evacuated": 41,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 11,
+    "elevated/evacuated": 15,
+    "high/evacuated": 3,
+    "low/evacuated": 12
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 9,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 41,
+   "step_metrics": {
+    "contest_success": 32,
+    "contest_success_over_id": 14,
+    "contests": 51,
+    "contests_over_id": 32,
+    "person_steps/critical": 59,
+    "person_steps/elevated": 120,
+    "person_steps/high": 39,
+    "person_steps/low": 89,
+    "waits/critical": 19,
+    "waits/elevated": 31,
+    "waits/high": 11,
+    "waits/low": 13
+   },
+   "steps": 16,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 0,
+   "decisions": 17,
+   "evacuated": 41,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 11,
+    "elevated/evacuated": 15,
+    "high/evacuated": 3,
+    "low/evacuated": 12
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 16,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 41,
+   "step_metrics": {
+    "contest_success": 46,
+    "contest_success_over_id": 31,
+    "contests": 53,
+    "contests_over_id": 38,
+    "person_steps/critical": 66,
+    "person_steps/elevated": 115,
+    "person_steps/high": 44,
+    "person_steps/low": 95,
+    "unnecessary_waits": 3,
+    "waits/critical": 21,
+    "waits/elevated": 36,
+    "waits/high": 21,
+    "waits/low": 23
+   },
+   "steps": 17,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 0,
+   "decisions": 16,
+   "evacuated": 41,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 11,
+    "elevated/evacuated": 15,
+    "high/evacuated": 3,
+    "low/evacuated": 12
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 15,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 41,
+   "step_metrics": {
+    "contest_success": 45,
+    "contest_success_over_id": 30,
+    "contests": 51,
+    "contests_over_id": 35,
+    "person_steps/critical": 53,
+    "person_steps/elevated": 124,
+    "person_steps/high": 46,
+    "person_steps/low": 88,
+    "unnecessary_waits": 2,
+    "waits/critical": 13,
+    "waits/elevated": 36,
+    "waits/high": 18,
+    "waits/low": 15
+   },
+   "steps": 16,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 25,
+   "decisions": 32,
+   "evacuated": 66,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 10,
+    "critical/evacuated": 28,
+    "elevated/evacuated": 18,
+    "high/evacuated": 10,
+    "low/evacuated": 10,
+    "no_viable_route/casualty": 15
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 18,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 100,
+   "people": 91,
+   "step_metrics": {
+    "contest_success": 96,
+    "contest_success_over_id": 57,
+    "contests": 152,
+    "contests_over_id": 99,
+    "person_steps/critical": 287,
+    "person_steps/elevated": 309,
+    "person_steps/high": 154,
+    "person_steps/low": 61,
+    "person_steps/no_viable_route": 451,
+    "unnecessary_waits": 11,
+    "waits/critical": 96,
+    "waits/elevated": 116,
+    "waits/high": 44,
+    "waits/low": 42,
+    "waits/no_viable_route": 336
+   },
+   "steps": 32,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 31,
+   "decisions": 58,
+   "evacuated": 60,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 16,
+    "critical/evacuated": 22,
+    "elevated/evacuated": 18,
+    "high/evacuated": 10,
+    "low/evacuated": 10,
+    "no_viable_route/casualty": 15
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 24,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 100,
+   "people": 91,
+   "step_metrics": {
+    "contest_success": 88,
+    "contest_success_over_id": 51,
+    "contests": 117,
+    "contests_over_id": 64,
+    "person_steps/critical": 335,
+    "person_steps/elevated": 262,
+    "person_steps/high": 145,
+    "person_steps/low": 60,
+    "person_steps/no_viable_route": 662,
+    "unnecessary_waits": 15,
+    "waits/critical": 181,
+    "waits/elevated": 87,
+    "waits/high": 60,
+    "waits/low": 40,
+    "waits/no_viable_route": 522
+   },
+   "steps": 58,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 29,
+   "decisions": 58,
+   "evacuated": 62,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 12,
+    "critical/evacuated": 26,
+    "elevated/evacuated": 18,
+    "high/casualty": 2,
+    "high/evacuated": 8,
+    "low/evacuated": 10,
+    "no_viable_route/casualty": 15
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 22,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 100,
+   "people": 91,
+   "step_metrics": {
+    "contest_success": 93,
+    "contest_success_over_id": 51,
+    "contests": 124,
+    "contests_over_id": 63,
+    "person_steps/critical": 353,
+    "person_steps/elevated": 275,
+    "person_steps/high": 136,
+    "person_steps/low": 60,
+    "person_steps/no_viable_route": 628,
+    "unnecessary_waits": 14,
+    "waits/critical": 183,
+    "waits/elevated": 95,
+    "waits/high": 56,
+    "waits/low": 41,
+    "waits/no_viable_route": 468
+   },
+   "steps": 58,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 6,
+   "decisions": 41,
+   "evacuated": 81,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 5,
+    "critical/evacuated": 8,
+    "elevated/evacuated": 21,
+    "high/evacuated": 1,
+    "low/evacuated": 51,
+    "no_viable_route/casualty": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 23,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 200,
+   "people": 87,
+   "step_metrics": {
+    "contest_success": 42,
+    "contest_success_over_id": 27,
+    "contests": 101,
+    "contests_over_id": 67,
+    "person_steps/critical": 133,
+    "person_steps/elevated": 357,
+    "person_steps/high": 94,
+    "person_steps/low": 789,
+    "person_steps/no_viable_route": 17,
+    "unnecessary_waits": 32,
+    "waits/critical": 64,
+    "waits/elevated": 103,
+    "waits/high": 35,
+    "waits/low": 241,
+    "waits/no_viable_route": 15
+   },
+   "steps": 41,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 3,
+   "decisions": 45,
+   "evacuated": 84,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 2,
+    "critical/evacuated": 11,
+    "elevated/evacuated": 21,
+    "high/evacuated": 1,
+    "low/evacuated": 51,
+    "no_viable_route/casualty": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 44,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 200,
+   "people": 87,
+   "step_metrics": {
+    "contest_success": 33,
+    "contest_success_over_id": 19,
+    "contests": 35,
+    "contests_over_id": 21,
+    "person_steps/critical": 50,
+    "person_steps/elevated": 469,
+    "person_steps/high": 37,
+    "person_steps/low": 895,
+    "person_steps/no_viable_route": 15,
+    "unnecessary_waits": 7,
+    "waits/critical": 7,
+    "waits/elevated": 171,
+    "waits/high": 2,
+    "waits/low": 496,
+    "waits/no_viable_route": 13
+   },
+   "steps": 45,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 4,
+   "decisions": 43,
+   "evacuated": 83,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 3,
+    "critical/evacuated": 10,
+    "elevated/evacuated": 21,
+    "high/evacuated": 1,
+    "low/evacuated": 51,
+    "no_viable_route/casualty": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 42,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 200,
+   "people": 87,
+   "step_metrics": {
+    "contest_success": 26,
+    "contest_success_over_id": 15,
+    "contests": 26,
+    "contests_over_id": 15,
+    "person_steps/critical": 53,
+    "person_steps/elevated": 376,
+    "person_steps/high": 29,
+    "person_steps/low": 942,
+    "person_steps/no_viable_route": 19,
+    "unnecessary_waits": 3,
+    "waits/critical": 8,
+    "waits/elevated": 88,
+    "waits/high": 0,
+    "waits/low": 459,
+    "waits/no_viable_route": 17
+   },
+   "steps": 43,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 0,
+   "decisions": 14,
+   "evacuated": 1,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "low/evacuated": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 0,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 1,
+   "people": 1,
+   "step_metrics": {
+    "person_steps/low": 14,
+    "waits/low": 0
+   },
+   "steps": 14,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 0,
+   "decisions": 14,
+   "evacuated": 1,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "low/evacuated": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 0,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 1,
+   "people": 1,
+   "step_metrics": {
+    "person_steps/low": 14,
+    "waits/low": 0
+   },
+   "steps": 14,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 0,
+   "decisions": 14,
+   "evacuated": 1,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "low/evacuated": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 0,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 1,
+   "people": 1,
+   "step_metrics": {
+    "person_steps/low": 14,
+    "waits/low": 0
+   },
+   "steps": 14,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 0,
+   "decisions": 14,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "elevated/evacuated": 4,
+    "high/evacuated": 2,
+    "low/evacuated": 4
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 3,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 4,
+    "contest_success_over_id": 3,
+    "contests": 4,
+    "contests_over_id": 3,
+    "person_steps/elevated": 53,
+    "person_steps/high": 18,
+    "person_steps/low": 16,
+    "waits/elevated": 1,
+    "waits/high": 1,
+    "waits/low": 4
+   },
+   "steps": 14,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 0,
+   "decisions": 14,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "elevated/evacuated": 4,
+    "high/evacuated": 2,
+    "low/evacuated": 4
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 3,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 3,
+    "contests": 4,
+    "person_steps/elevated": 53,
+    "person_steps/high": 18,
+    "person_steps/low": 16,
+    "waits/elevated": 0,
+    "waits/high": 2,
+    "waits/low": 4
+   },
+   "steps": 14,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 0,
+   "decisions": 14,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "elevated/evacuated": 4,
+    "high/evacuated": 2,
+    "low/evacuated": 4
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 3,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 4,
+    "contest_success_over_id": 2,
+    "contests": 4,
+    "contests_over_id": 2,
+    "person_steps/elevated": 54,
+    "person_steps/high": 17,
+    "person_steps/low": 16,
+    "waits/elevated": 2,
+    "waits/high": 0,
+    "waits/low": 4
+   },
+   "steps": 14,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 21,
+   "decisions": 60,
+   "evacuated": 29,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 2,
+    "critical/evacuated": 3,
+    "elevated/evacuated": 5,
+    "high/evacuated": 1,
+    "low/evacuated": 20,
+    "no_viable_route/casualty": 19
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 4,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 7,
+    "contest_success_over_id": 4,
+    "contests": 8,
+    "contests_over_id": 5,
+    "person_steps/critical": 24,
+    "person_steps/elevated": 73,
+    "person_steps/high": 17,
+    "person_steps/low": 210,
+    "person_steps/no_viable_route": 1118,
+    "unnecessary_waits": 10,
+    "waits/critical": 8,
+    "waits/elevated": 12,
+    "waits/high": 0,
+    "waits/low": 13,
+    "waits/no_viable_route": 700
+   },
+   "steps": 60,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 21,
+   "decisions": 60,
+   "evacuated": 29,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 2,
+    "critical/evacuated": 3,
+    "elevated/evacuated": 5,
+    "high/evacuated": 1,
+    "low/evacuated": 20,
+    "no_viable_route/casualty": 19
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 4,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 3,
+    "contest_success_over_id": 3,
+    "contests": 3,
+    "contests_over_id": 3,
+    "person_steps/critical": 24,
+    "person_steps/elevated": 68,
+    "person_steps/high": 15,
+    "person_steps/low": 215,
+    "person_steps/no_viable_route": 1131,
+    "unnecessary_waits": 5,
+    "waits/critical": 7,
+    "waits/elevated": 6,
+    "waits/high": 0,
+    "waits/low": 9,
+    "waits/no_viable_route": 573
+   },
+   "steps": 60,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 21,
+   "decisions": 60,
+   "evacuated": 29,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 2,
+    "critical/evacuated": 3,
+    "elevated/evacuated": 5,
+    "high/evacuated": 1,
+    "low/evacuated": 20,
+    "no_viable_route/casualty": 19
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 5,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 3,
+    "contest_success_over_id": 3,
+    "contests": 3,
+    "contests_over_id": 3,
+    "person_steps/critical": 24,
+    "person_steps/elevated": 68,
+    "person_steps/high": 15,
+    "person_steps/low": 215,
+    "person_steps/no_viable_route": 1131,
+    "unnecessary_waits": 6,
+    "waits/critical": 7,
+    "waits/elevated": 6,
+    "waits/high": 0,
+    "waits/low": 13,
+    "waits/no_viable_route": 573
+   },
+   "steps": 60,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 20,
+   "decisions": 40,
+   "evacuated": 80,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 19,
+    "critical/evacuated": 16,
+    "elevated/evacuated": 6,
+    "high/casualty": 1,
+    "high/evacuated": 6,
+    "low/evacuated": 52
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 11,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 100,
+   "people": 100,
+   "step_metrics": {
+    "contest_success": 31,
+    "contest_success_over_id": 17,
+    "contests": 48,
+    "contests_over_id": 31,
+    "person_steps/critical": 255,
+    "person_steps/elevated": 111,
+    "person_steps/high": 50,
+    "person_steps/low": 1067,
+    "person_steps/no_viable_route": 546,
+    "unnecessary_waits": 77,
+    "waits/critical": 42,
+    "waits/elevated": 29,
+    "waits/high": 14,
+    "waits/low": 359,
+    "waits/no_viable_route": 239
+   },
+   "steps": 40,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 21,
+   "decisions": 41,
+   "evacuated": 79,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 20,
+    "critical/evacuated": 15,
+    "elevated/evacuated": 6,
+    "high/casualty": 1,
+    "high/evacuated": 6,
+    "low/evacuated": 52
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 25,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 100,
+   "people": 100,
+   "step_metrics": {
+    "contest_success": 34,
+    "contest_success_over_id": 14,
+    "contests": 46,
+    "contests_over_id": 21,
+    "person_steps/critical": 233,
+    "person_steps/elevated": 60,
+    "person_steps/high": 40,
+    "person_steps/low": 1190,
+    "person_steps/no_viable_route": 632,
+    "unnecessary_waits": 29,
+    "waits/critical": 47,
+    "waits/elevated": 8,
+    "waits/high": 9,
+    "waits/low": 287,
+    "waits/no_viable_route": 268
+   },
+   "steps": 41,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 20,
+   "decisions": 40,
+   "evacuated": 80,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 20,
+    "critical/evacuated": 15,
+    "elevated/evacuated": 6,
+    "high/evacuated": 7,
+    "low/evacuated": 52
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 20,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 100,
+   "people": 100,
+   "step_metrics": {
+    "contest_success": 35,
+    "contest_success_over_id": 13,
+    "contests": 44,
+    "contests_over_id": 15,
+    "person_steps/critical": 236,
+    "person_steps/elevated": 68,
+    "person_steps/high": 46,
+    "person_steps/low": 1163,
+    "person_steps/no_viable_route": 583,
+    "unnecessary_waits": 38,
+    "waits/critical": 52,
+    "waits/elevated": 8,
+    "waits/high": 9,
+    "waits/low": 275,
+    "waits/no_viable_route": 247
+   },
+   "steps": 40,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 39,
+   "decisions": 62,
+   "evacuated": 161,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 34,
+    "critical/evacuated": 41,
+    "elevated/casualty": 3,
+    "elevated/evacuated": 21,
+    "high/casualty": 2,
+    "high/evacuated": 6,
+    "low/evacuated": 93
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 11,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 200,
+   "people": 200,
+   "step_metrics": {
+    "contest_success": 153,
+    "contest_success_over_id": 112,
+    "contests": 248,
+    "contests_over_id": 186,
+    "person_steps/critical": 1568,
+    "person_steps/elevated": 802,
+    "person_steps/high": 226,
+    "person_steps/low": 2525,
+    "person_steps/no_viable_route": 432,
+    "unnecessary_waits": 234,
+    "waits/critical": 457,
+    "waits/elevated": 260,
+    "waits/high": 61,
+    "waits/low": 739,
+    "waits/no_viable_route": 280
+   },
+   "steps": 62,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 45,
+   "decisions": 62,
+   "evacuated": 155,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 33,
+    "critical/evacuated": 42,
+    "elevated/casualty": 6,
+    "elevated/evacuated": 18,
+    "high/casualty": 5,
+    "high/evacuated": 3,
+    "low/casualty": 1,
+    "low/evacuated": 92
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 26,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 200,
+   "people": 200,
+   "step_metrics": {
+    "contest_success": 191,
+    "contest_success_over_id": 101,
+    "contests": 310,
+    "contests_over_id": 154,
+    "person_steps/critical": 1825,
+    "person_steps/elevated": 620,
+    "person_steps/high": 253,
+    "person_steps/low": 2662,
+    "person_steps/no_viable_route": 670,
+    "unnecessary_waits": 101,
+    "waits/critical": 446,
+    "waits/elevated": 173,
+    "waits/high": 69,
+    "waits/low": 684,
+    "waits/no_viable_route": 510
+   },
+   "steps": 62,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 43,
+   "decisions": 62,
+   "evacuated": 157,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 33,
+    "critical/evacuated": 42,
+    "elevated/casualty": 6,
+    "elevated/evacuated": 18,
+    "high/casualty": 4,
+    "high/evacuated": 4,
+    "low/evacuated": 93
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 36,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 200,
+   "people": 200,
+   "step_metrics": {
+    "contest_success": 132,
+    "contest_success_over_id": 68,
+    "contests": 251,
+    "contests_over_id": 119,
+    "person_steps/critical": 1891,
+    "person_steps/elevated": 646,
+    "person_steps/high": 193,
+    "person_steps/low": 2665,
+    "person_steps/no_viable_route": 622,
+    "unnecessary_waits": 71,
+    "waits/critical": 1218,
+    "waits/elevated": 166,
+    "waits/high": 81,
+    "waits/low": 846,
+    "waits/no_viable_route": 449
+   },
+   "steps": 62,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 0,
+   "decisions": 6,
+   "evacuated": 1,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "elevated/evacuated": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 0,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 1,
+   "people": 1,
+   "step_metrics": {
+    "person_steps/elevated": 2,
+    "person_steps/low": 4,
+    "waits/elevated": 0,
+    "waits/low": 0
+   },
+   "steps": 6,
+   "termination_reason": "all_resolved",
+   "topology": "irregular",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 0,
+   "decisions": 6,
+   "evacuated": 1,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "elevated/evacuated": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 0,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 1,
+   "people": 1,
+   "step_metrics": {
+    "person_steps/elevated": 2,
+    "person_steps/low": 4,
+    "waits/elevated": 0,
+    "waits/low": 0
+   },
+   "steps": 6,
+   "termination_reason": "all_resolved",
+   "topology": "irregular",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 0,
+   "decisions": 6,
+   "evacuated": 1,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "elevated/evacuated": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 0,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 1,
+   "people": 1,
+   "step_metrics": {
+    "person_steps/elevated": 2,
+    "person_steps/low": 4,
+    "waits/elevated": 0,
+    "waits/low": 0
+   },
+   "steps": 6,
+   "termination_reason": "all_resolved",
+   "topology": "irregular",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 0,
+   "decisions": 13,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "high/evacuated": 1,
+    "low/evacuated": 9
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "person_steps/elevated": 11,
+    "person_steps/high": 2,
+    "person_steps/low": 67,
+    "waits/elevated": 0,
+    "waits/high": 0,
+    "waits/low": 2
+   },
+   "steps": 13,
+   "termination_reason": "all_resolved",
+   "topology": "irregular",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 0,
+   "decisions": 13,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "high/evacuated": 1,
+    "low/evacuated": 9
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "person_steps/elevated": 11,
+    "person_steps/high": 2,
+    "person_steps/low": 67,
+    "waits/elevated": 0,
+    "waits/high": 0,
+    "waits/low": 2
+   },
+   "steps": 13,
+   "termination_reason": "all_resolved",
+   "topology": "irregular",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 0,
+   "decisions": 13,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "high/evacuated": 1,
+    "low/evacuated": 9
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "person_steps/elevated": 11,
+    "person_steps/high": 2,
+    "person_steps/low": 67,
+    "waits/elevated": 0,
+    "waits/high": 0,
+    "waits/low": 2
+   },
+   "steps": 13,
+   "termination_reason": "all_resolved",
+   "topology": "irregular",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 0,
+   "decisions": 28,
+   "evacuated": 50,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 6,
+    "elevated/evacuated": 17,
+    "high/evacuated": 3,
+    "low/evacuated": 24
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 6,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 33,
+    "contest_success_over_id": 19,
+    "contests": 42,
+    "contests_over_id": 28,
+    "person_steps/critical": 59,
+    "person_steps/elevated": 186,
+    "person_steps/high": 85,
+    "person_steps/low": 234,
+    "unnecessary_waits": 15,
+    "waits/critical": 4,
+    "waits/elevated": 30,
+    "waits/high": 12,
+    "waits/low": 71
+   },
+   "steps": 28,
+   "termination_reason": "all_resolved",
+   "topology": "irregular",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 0,
+   "decisions": 26,
+   "evacuated": 50,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 6,
+    "elevated/evacuated": 17,
+    "high/evacuated": 3,
+    "low/evacuated": 24
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 9,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 19,
+    "contest_success_over_id": 4,
+    "contests": 19,
+    "contests_over_id": 4,
+    "person_steps/critical": 42,
+    "person_steps/elevated": 186,
+    "person_steps/high": 62,
+    "person_steps/low": 290,
+    "unnecessary_waits": 22,
+    "waits/critical": 3,
+    "waits/elevated": 26,
+    "waits/high": 3,
+    "waits/low": 51
+   },
+   "steps": 26,
+   "termination_reason": "all_resolved",
+   "topology": "irregular",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 0,
+   "decisions": 27,
+   "evacuated": 50,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 6,
+    "elevated/evacuated": 17,
+    "high/evacuated": 3,
+    "low/evacuated": 24
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 6,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 22,
+    "contest_success_over_id": 7,
+    "contests": 22,
+    "contests_over_id": 7,
+    "person_steps/critical": 40,
+    "person_steps/elevated": 219,
+    "person_steps/high": 67,
+    "person_steps/low": 265,
+    "unnecessary_waits": 13,
+    "waits/critical": 3,
+    "waits/elevated": 25,
+    "waits/high": 3,
+    "waits/low": 43
+   },
+   "steps": 27,
+   "termination_reason": "all_resolved",
+   "topology": "irregular",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 4,
+   "decisions": 41,
+   "evacuated": 96,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 4,
+    "critical/evacuated": 25,
+    "elevated/evacuated": 21,
+    "high/evacuated": 4,
+    "low/evacuated": 46
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 17,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 100,
+   "people": 100,
+   "step_metrics": {
+    "contest_success": 92,
+    "contest_success_over_id": 49,
+    "contests": 143,
+    "contests_over_id": 87,
+    "person_steps/critical": 512,
+    "person_steps/elevated": 434,
+    "person_steps/high": 254,
+    "person_steps/low": 567,
+    "unnecessary_waits": 66,
+    "waits/critical": 65,
+    "waits/elevated": 122,
+    "waits/high": 52,
+    "waits/low": 180
+   },
+   "steps": 41,
+   "termination_reason": "all_resolved",
+   "topology": "irregular",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 5,
+   "decisions": 56,
+   "evacuated": 95,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 4,
+    "critical/evacuated": 25,
+    "elevated/evacuated": 21,
+    "high/evacuated": 4,
+    "low/casualty": 1,
+    "low/evacuated": 45
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 13,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 100,
+   "people": 100,
+   "step_metrics": {
+    "contest_success": 91,
+    "contest_success_over_id": 50,
+    "contests": 124,
+    "contests_over_id": 69,
+    "person_steps/critical": 471,
+    "person_steps/elevated": 596,
+    "person_steps/high": 266,
+    "person_steps/low": 724,
+    "person_steps/no_viable_route": 20,
+    "unnecessary_waits": 62,
+    "waits/critical": 72,
+    "waits/elevated": 75,
+    "waits/high": 43,
+    "waits/low": 189,
+    "waits/no_viable_route": 12
+   },
+   "steps": 56,
+   "termination_reason": "all_resolved",
+   "topology": "irregular",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 1,
+   "decisions": 49,
+   "evacuated": 99,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 1,
+    "critical/evacuated": 28,
+    "elevated/evacuated": 21,
+    "high/evacuated": 4,
+    "low/evacuated": 46
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 41,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 100,
+   "people": 100,
+   "step_metrics": {
+    "contest_success": 109,
+    "contest_success_over_id": 70,
+    "contests": 131,
+    "contests_over_id": 80,
+    "person_steps/critical": 431,
+    "person_steps/elevated": 567,
+    "person_steps/high": 246,
+    "person_steps/low": 689,
+    "person_steps/no_viable_route": 2,
+    "unnecessary_waits": 39,
+    "waits/critical": 59,
+    "waits/elevated": 118,
+    "waits/high": 28,
+    "waits/low": 213,
+    "waits/no_viable_route": 2
+   },
+   "steps": 49,
+   "termination_reason": "all_resolved",
+   "topology": "irregular",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 120,
+   "decisions": 54,
+   "evacuated": 34,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 110,
+    "critical/evacuated": 18,
+    "elevated/casualty": 2,
+    "elevated/evacuated": 9,
+    "high/casualty": 8,
+    "high/evacuated": 7
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 10,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 200,
+   "people": 154,
+   "step_metrics": {
+    "contest_success": 46,
+    "contest_success_over_id": 16,
+    "contests": 95,
+    "contests_over_id": 41,
+    "person_steps/critical": 1131,
+    "person_steps/elevated": 32,
+    "person_steps/high": 77,
+    "person_steps/no_viable_route": 1915,
+    "unnecessary_waits": 20,
+    "waits/critical": 453,
+    "waits/elevated": 0,
+    "waits/high": 21,
+    "waits/no_viable_route": 1198
+   },
+   "steps": 54,
+   "termination_reason": "all_resolved",
+   "topology": "irregular",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 120,
+   "decisions": 54,
+   "evacuated": 34,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 110,
+    "critical/evacuated": 18,
+    "elevated/casualty": 4,
+    "elevated/evacuated": 7,
+    "high/casualty": 6,
+    "high/evacuated": 9
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 14,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 200,
+   "people": 154,
+   "step_metrics": {
+    "contest_success": 44,
+    "contest_success_over_id": 24,
+    "contests": 94,
+    "contests_over_id": 42,
+    "person_steps/critical": 1139,
+    "person_steps/elevated": 31,
+    "person_steps/high": 86,
+    "person_steps/no_viable_route": 2024,
+    "unnecessary_waits": 14,
+    "waits/critical": 761,
+    "waits/elevated": 6,
+    "waits/high": 24,
+    "waits/no_viable_route": 1991
+   },
+   "steps": 54,
+   "termination_reason": "all_resolved",
+   "topology": "irregular",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 120,
+   "decisions": 54,
+   "evacuated": 34,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 116,
+    "critical/evacuated": 12,
+    "elevated/evacuated": 11,
+    "high/casualty": 4,
+    "high/evacuated": 11
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 14,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 200,
+   "people": 154,
+   "step_metrics": {
+    "contest_success": 36,
+    "contest_success_over_id": 17,
+    "contests": 99,
+    "contests_over_id": 46,
+    "person_steps/critical": 1146,
+    "person_steps/elevated": 32,
+    "person_steps/high": 80,
+    "person_steps/no_viable_route": 2006,
+    "unnecessary_waits": 15,
+    "waits/critical": 915,
+    "waits/elevated": 10,
+    "waits/high": 34,
+    "waits/no_viable_route": 1772
+   },
+   "steps": 54,
+   "termination_reason": "all_resolved",
+   "topology": "irregular",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 1,
+   "decisions": 58,
+   "evacuated": 9,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 2,
+    "elevated/evacuated": 3,
+    "high/evacuated": 4,
+    "no_viable_route/casualty": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 0,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 2,
+    "contests": 2,
+    "person_steps/critical": 68,
+    "person_steps/elevated": 20,
+    "person_steps/high": 46,
+    "person_steps/no_viable_route": 58,
+    "waits/critical": 0,
+    "waits/elevated": 0,
+    "waits/high": 0,
+    "waits/no_viable_route": 17
+   },
+   "steps": 58,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 1,
+   "decisions": 58,
+   "evacuated": 9,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 2,
+    "elevated/evacuated": 3,
+    "high/evacuated": 4,
+    "no_viable_route/casualty": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 0,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 2,
+    "contests": 2,
+    "person_steps/critical": 68,
+    "person_steps/elevated": 20,
+    "person_steps/high": 46,
+    "person_steps/no_viable_route": 58,
+    "waits/critical": 0,
+    "waits/elevated": 0,
+    "waits/high": 0,
+    "waits/no_viable_route": 17
+   },
+   "steps": 58,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 1,
+   "decisions": 58,
+   "evacuated": 9,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 2,
+    "elevated/evacuated": 3,
+    "high/evacuated": 4,
+    "no_viable_route/casualty": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 0,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 2,
+    "contests": 2,
+    "person_steps/critical": 68,
+    "person_steps/elevated": 20,
+    "person_steps/high": 46,
+    "person_steps/no_viable_route": 58,
+    "waits/critical": 0,
+    "waits/elevated": 0,
+    "waits/high": 0,
+    "waits/no_viable_route": 17
+   },
+   "steps": 58,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 1,
+   "decisions": 53,
+   "evacuated": 99,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 13,
+    "elevated/evacuated": 33,
+    "high/evacuated": 19,
+    "low/casualty": 1,
+    "low/evacuated": 34
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 14,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 100,
+   "people": 100,
+   "step_metrics": {
+    "contest_success": 135,
+    "contest_success_over_id": 89,
+    "contests": 371,
+    "contests_over_id": 302,
+    "person_steps/critical": 433,
+    "person_steps/elevated": 770,
+    "person_steps/high": 498,
+    "person_steps/low": 411,
+    "unnecessary_waits": 103,
+    "waits/critical": 118,
+    "waits/elevated": 268,
+    "waits/high": 197,
+    "waits/low": 158
+   },
+   "steps": 53,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 1,
+   "decisions": 66,
+   "evacuated": 99,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 13,
+    "elevated/casualty": 1,
+    "elevated/evacuated": 32,
+    "high/evacuated": 19,
+    "low/evacuated": 35
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 20,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 100,
+   "people": 100,
+   "step_metrics": {
+    "contest_success": 204,
+    "contest_success_over_id": 123,
+    "contests": 345,
+    "contests_over_id": 205,
+    "person_steps/critical": 344,
+    "person_steps/elevated": 845,
+    "person_steps/high": 576,
+    "person_steps/low": 423,
+    "person_steps/no_viable_route": 15,
+    "unnecessary_waits": 54,
+    "waits/critical": 44,
+    "waits/elevated": 215,
+    "waits/high": 123,
+    "waits/low": 129,
+    "waits/no_viable_route": 11
+   },
+   "steps": 66,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 1,
+   "decisions": 56,
+   "evacuated": 99,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 13,
+    "elevated/casualty": 1,
+    "elevated/evacuated": 32,
+    "high/evacuated": 19,
+    "low/evacuated": 35
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 16,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 100,
+   "people": 100,
+   "step_metrics": {
+    "contest_success": 251,
+    "contest_success_over_id": 132,
+    "contests": 442,
+    "contests_over_id": 231,
+    "person_steps/critical": 435,
+    "person_steps/elevated": 843,
+    "person_steps/high": 470,
+    "person_steps/low": 441,
+    "unnecessary_waits": 27,
+    "waits/critical": 107,
+    "waits/elevated": 182,
+    "waits/high": 84,
+    "waits/low": 148
+   },
+   "steps": 56,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 0,
+   "decisions": 17,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 3,
+    "elevated/evacuated": 3,
+    "high/evacuated": 4
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 7,
+    "contests": 7,
+    "person_steps/critical": 21,
+    "person_steps/elevated": 14,
+    "person_steps/high": 40,
+    "waits/critical": 0,
+    "waits/elevated": 1,
+    "waits/high": 0
+   },
+   "steps": 17,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 0,
+   "decisions": 17,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 3,
+    "elevated/evacuated": 3,
+    "high/evacuated": 4
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 7,
+    "contests": 7,
+    "person_steps/critical": 21,
+    "person_steps/elevated": 14,
+    "person_steps/high": 40,
+    "waits/critical": 0,
+    "waits/elevated": 1,
+    "waits/high": 0
+   },
+   "steps": 17,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 0,
+   "decisions": 17,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 3,
+    "elevated/evacuated": 3,
+    "high/evacuated": 4
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 7,
+    "contests": 7,
+    "person_steps/critical": 21,
+    "person_steps/elevated": 14,
+    "person_steps/high": 40,
+    "waits/critical": 0,
+    "waits/elevated": 1,
+    "waits/high": 0
+   },
+   "steps": 17,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 12,
+   "decisions": 27,
+   "evacuated": 57,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 8,
+    "critical/evacuated": 15,
+    "elevated/evacuated": 22,
+    "high/evacuated": 9,
+    "low/evacuated": 11,
+    "no_viable_route/casualty": 4
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 6,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 100,
+   "people": 69,
+   "step_metrics": {
+    "contest_success": 68,
+    "contest_success_over_id": 51,
+    "contests": 114,
+    "contests_over_id": 88,
+    "person_steps/critical": 174,
+    "person_steps/elevated": 329,
+    "person_steps/high": 191,
+    "person_steps/low": 31,
+    "person_steps/no_viable_route": 126,
+    "unnecessary_waits": 5,
+    "waits/critical": 53,
+    "waits/elevated": 114,
+    "waits/high": 70,
+    "waits/low": 9,
+    "waits/no_viable_route": 88
+   },
+   "steps": 27,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 12,
+   "decisions": 44,
+   "evacuated": 57,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 6,
+    "critical/evacuated": 17,
+    "elevated/casualty": 2,
+    "elevated/evacuated": 20,
+    "high/evacuated": 9,
+    "low/evacuated": 11,
+    "no_viable_route/casualty": 4
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 24,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 100,
+   "people": 69,
+   "step_metrics": {
+    "contest_success": 77,
+    "contest_success_over_id": 39,
+    "contests": 146,
+    "contests_over_id": 72,
+    "person_steps/critical": 222,
+    "person_steps/elevated": 343,
+    "person_steps/high": 211,
+    "person_steps/low": 31,
+    "person_steps/no_viable_route": 171,
+    "unnecessary_waits": 2,
+    "waits/critical": 67,
+    "waits/elevated": 194,
+    "waits/high": 103,
+    "waits/low": 10,
+    "waits/no_viable_route": 140
+   },
+   "steps": 44,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 8,
+   "decisions": 31,
+   "evacuated": 61,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 4,
+    "critical/evacuated": 19,
+    "elevated/evacuated": 22,
+    "high/evacuated": 9,
+    "low/evacuated": 11,
+    "no_viable_route/casualty": 4
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 26,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 100,
+   "people": 69,
+   "step_metrics": {
+    "contest_success": 91,
+    "contest_success_over_id": 50,
+    "contests": 160,
+    "contests_over_id": 81,
+    "person_steps/critical": 215,
+    "person_steps/elevated": 339,
+    "person_steps/high": 241,
+    "person_steps/low": 31,
+    "person_steps/no_viable_route": 119,
+    "unnecessary_waits": 11,
+    "waits/critical": 46,
+    "waits/elevated": 190,
+    "waits/high": 100,
+    "waits/low": 10,
+    "waits/no_viable_route": 88
+   },
+   "steps": 31,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 0,
+   "decisions": 22,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "elevated/evacuated": 7,
+    "high/evacuated": 2,
+    "low/evacuated": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 18,
+    "contests": 18,
+    "person_steps/elevated": 96,
+    "person_steps/high": 27,
+    "person_steps/low": 1,
+    "waits/elevated": 2,
+    "waits/high": 0,
+    "waits/low": 0
+   },
+   "steps": 22,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 0,
+   "decisions": 22,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "elevated/evacuated": 7,
+    "high/evacuated": 2,
+    "low/evacuated": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 18,
+    "contests": 18,
+    "person_steps/elevated": 96,
+    "person_steps/high": 27,
+    "person_steps/low": 1,
+    "waits/elevated": 2,
+    "waits/high": 0,
+    "waits/low": 0
+   },
+   "steps": 22,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 0,
+   "decisions": 22,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "elevated/evacuated": 7,
+    "high/evacuated": 2,
+    "low/evacuated": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 18,
+    "contests": 18,
+    "person_steps/elevated": 96,
+    "person_steps/high": 27,
+    "person_steps/low": 1,
+    "waits/elevated": 2,
+    "waits/high": 0,
+    "waits/low": 0
+   },
+   "steps": 22,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 34,
+   "decisions": 46,
+   "evacuated": 66,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 14,
+    "critical/evacuated": 23,
+    "elevated/casualty": 2,
+    "elevated/evacuated": 25,
+    "high/casualty": 1,
+    "high/evacuated": 5,
+    "low/evacuated": 13,
+    "no_viable_route/casualty": 17
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 14,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 100,
+   "people": 100,
+   "step_metrics": {
+    "contest_success": 90,
+    "contest_success_over_id": 47,
+    "contests": 178,
+    "contests_over_id": 127,
+    "person_steps/critical": 440,
+    "person_steps/elevated": 286,
+    "person_steps/high": 187,
+    "person_steps/low": 86,
+    "person_steps/no_viable_route": 1059,
+    "unnecessary_waits": 31,
+    "waits/critical": 132,
+    "waits/elevated": 61,
+    "waits/high": 47,
+    "waits/low": 14,
+    "waits/no_viable_route": 371
+   },
+   "steps": 46,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 36,
+   "decisions": 46,
+   "evacuated": 64,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 15,
+    "critical/evacuated": 22,
+    "elevated/casualty": 4,
+    "elevated/evacuated": 23,
+    "high/evacuated": 6,
+    "low/evacuated": 13,
+    "no_viable_route/casualty": 17
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 8,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 100,
+   "people": 100,
+   "step_metrics": {
+    "contest_success": 91,
+    "contest_success_over_id": 36,
+    "contests": 146,
+    "contests_over_id": 61,
+    "person_steps/critical": 444,
+    "person_steps/elevated": 276,
+    "person_steps/high": 194,
+    "person_steps/low": 94,
+    "person_steps/no_viable_route": 1060,
+    "unnecessary_waits": 24,
+    "waits/critical": 87,
+    "waits/elevated": 56,
+    "waits/high": 18,
+    "waits/low": 22,
+    "waits/no_viable_route": 461
+   },
+   "steps": 46,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 36,
+   "decisions": 46,
+   "evacuated": 64,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 16,
+    "critical/evacuated": 21,
+    "elevated/casualty": 3,
+    "elevated/evacuated": 24,
+    "high/evacuated": 6,
+    "low/evacuated": 13,
+    "no_viable_route/casualty": 17
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "base",
+   "max_consecutive_stall": 16,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 100,
+   "people": 100,
+   "step_metrics": {
+    "contest_success": 93,
+    "contest_success_over_id": 42,
+    "contests": 195,
+    "contests_over_id": 102,
+    "person_steps/critical": 459,
+    "person_steps/elevated": 275,
+    "person_steps/high": 187,
+    "person_steps/low": 93,
+    "person_steps/no_viable_route": 1052,
+    "unnecessary_waits": 15,
+    "waits/critical": 173,
+    "waits/elevated": 64,
+    "waits/high": 52,
+    "waits/low": 24,
+    "waits/no_viable_route": 444
+   },
+   "steps": 46,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 5,
+   "decisions": 45,
+   "evacuated": 45,
+   "exits": 1,
+   "final_by_initial_stratum": {
+    "critical/casualty": 3,
+    "critical/evacuated": 20,
+    "elevated/evacuated": 5,
+    "high/evacuated": 5,
+    "low/evacuated": 15,
+    "no_viable_route/casualty": 2
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "bottleneck",
+   "max_consecutive_stall": 13,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 105,
+    "contest_success_over_id": 64,
+    "contests": 173,
+    "contests_over_id": 124,
+    "person_steps/critical": 434,
+    "person_steps/elevated": 228,
+    "person_steps/high": 157,
+    "person_steps/low": 235,
+    "person_steps/no_viable_route": 57,
+    "unnecessary_waits": 18,
+    "waits/critical": 89,
+    "waits/elevated": 62,
+    "waits/high": 34,
+    "waits/low": 72,
+    "waits/no_viable_route": 47
+   },
+   "steps": 45,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 7,
+   "decisions": 46,
+   "evacuated": 43,
+   "exits": 1,
+   "final_by_initial_stratum": {
+    "critical/casualty": 5,
+    "critical/evacuated": 18,
+    "elevated/evacuated": 5,
+    "high/evacuated": 5,
+    "low/evacuated": 15,
+    "no_viable_route/casualty": 2
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "bottleneck",
+   "max_consecutive_stall": 23,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 107,
+    "contest_success_over_id": 58,
+    "contests": 189,
+    "contests_over_id": 96,
+    "person_steps/critical": 357,
+    "person_steps/elevated": 231,
+    "person_steps/high": 164,
+    "person_steps/low": 240,
+    "person_steps/no_viable_route": 154,
+    "unnecessary_waits": 12,
+    "waits/critical": 60,
+    "waits/elevated": 84,
+    "waits/high": 58,
+    "waits/low": 124,
+    "waits/no_viable_route": 94
+   },
+   "steps": 46,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 7,
+   "decisions": 46,
+   "evacuated": 43,
+   "exits": 1,
+   "final_by_initial_stratum": {
+    "critical/casualty": 5,
+    "critical/evacuated": 18,
+    "elevated/evacuated": 5,
+    "high/evacuated": 5,
+    "low/evacuated": 15,
+    "no_viable_route/casualty": 2
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "bottleneck",
+   "max_consecutive_stall": 16,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 94,
+    "contest_success_over_id": 48,
+    "contests": 198,
+    "contests_over_id": 113,
+    "person_steps/critical": 356,
+    "person_steps/elevated": 231,
+    "person_steps/high": 165,
+    "person_steps/low": 240,
+    "person_steps/no_viable_route": 154,
+    "unnecessary_waits": 12,
+    "waits/critical": 122,
+    "waits/elevated": 110,
+    "waits/high": 73,
+    "waits/low": 125,
+    "waits/no_viable_route": 94
+   },
+   "steps": 46,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 42,
+   "decisions": 38,
+   "evacuated": 8,
+   "exits": 1,
+   "final_by_initial_stratum": {
+    "critical/casualty": 17,
+    "critical/evacuated": 6,
+    "high/evacuated": 2,
+    "no_viable_route/casualty": 25
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "bottleneck",
+   "max_consecutive_stall": 3,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 5,
+    "contest_success_over_id": 0,
+    "contests": 15,
+    "contests_over_id": 1,
+    "person_steps/critical": 91,
+    "person_steps/high": 7,
+    "person_steps/no_viable_route": 924,
+    "unnecessary_waits": 3,
+    "waits/critical": 27,
+    "waits/high": 2,
+    "waits/no_viable_route": 493
+   },
+   "steps": 38,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 42,
+   "decisions": 38,
+   "evacuated": 8,
+   "exits": 1,
+   "final_by_initial_stratum": {
+    "critical/casualty": 16,
+    "critical/evacuated": 7,
+    "high/casualty": 1,
+    "high/evacuated": 1,
+    "no_viable_route/casualty": 25
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "bottleneck",
+   "max_consecutive_stall": 3,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 6,
+    "contest_success_over_id": 3,
+    "contests": 11,
+    "contests_over_id": 8,
+    "person_steps/critical": 86,
+    "person_steps/high": 7,
+    "person_steps/no_viable_route": 1011,
+    "unnecessary_waits": 6,
+    "waits/critical": 25,
+    "waits/high": 4,
+    "waits/no_viable_route": 646
+   },
+   "steps": 38,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 42,
+   "decisions": 38,
+   "evacuated": 8,
+   "exits": 1,
+   "final_by_initial_stratum": {
+    "critical/casualty": 17,
+    "critical/evacuated": 6,
+    "high/evacuated": 2,
+    "no_viable_route/casualty": 25
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "bottleneck",
+   "max_consecutive_stall": 6,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 5,
+    "contest_success_over_id": 3,
+    "contests": 16,
+    "contests_over_id": 12,
+    "person_steps/critical": 96,
+    "person_steps/high": 7,
+    "person_steps/no_viable_route": 995,
+    "unnecessary_waits": 2,
+    "waits/critical": 51,
+    "waits/high": 5,
+    "waits/no_viable_route": 604
+   },
+   "steps": 38,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 33,
+   "decisions": 56,
+   "evacuated": 56,
+   "exits": 1,
+   "final_by_initial_stratum": {
+    "critical/casualty": 28,
+    "critical/evacuated": 22,
+    "elevated/evacuated": 8,
+    "high/evacuated": 2,
+    "low/evacuated": 24,
+    "no_viable_route/casualty": 5
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "bottleneck",
+   "max_consecutive_stall": 54,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 100,
+   "people": 89,
+   "step_metrics": {
+    "contest_success": 88,
+    "contest_success_over_id": 49,
+    "contests": 168,
+    "contests_over_id": 91,
+    "person_steps/critical": 928,
+    "person_steps/elevated": 330,
+    "person_steps/high": 138,
+    "person_steps/low": 691,
+    "person_steps/no_viable_route": 433,
+    "unnecessary_waits": 28,
+    "waits/critical": 491,
+    "waits/elevated": 143,
+    "waits/high": 60,
+    "waits/low": 405,
+    "waits/no_viable_route": 301
+   },
+   "steps": 56,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 32,
+   "decisions": 57,
+   "evacuated": 57,
+   "exits": 1,
+   "final_by_initial_stratum": {
+    "critical/casualty": 27,
+    "critical/evacuated": 23,
+    "elevated/evacuated": 8,
+    "high/evacuated": 2,
+    "low/evacuated": 24,
+    "no_viable_route/casualty": 5
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "bottleneck",
+   "max_consecutive_stall": 56,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 100,
+   "people": 89,
+   "step_metrics": {
+    "contest_success": 97,
+    "contest_success_over_id": 50,
+    "contests": 170,
+    "contests_over_id": 74,
+    "person_steps/critical": 951,
+    "person_steps/elevated": 367,
+    "person_steps/high": 126,
+    "person_steps/low": 702,
+    "person_steps/no_viable_route": 605,
+    "unnecessary_waits": 31,
+    "waits/critical": 680,
+    "waits/elevated": 192,
+    "waits/high": 61,
+    "waits/low": 433,
+    "waits/no_viable_route": 540
+   },
+   "steps": 57,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 30,
+   "decisions": 59,
+   "evacuated": 59,
+   "exits": 1,
+   "final_by_initial_stratum": {
+    "critical/casualty": 25,
+    "critical/evacuated": 25,
+    "elevated/evacuated": 8,
+    "high/evacuated": 2,
+    "low/evacuated": 24,
+    "no_viable_route/casualty": 5
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "bottleneck",
+   "max_consecutive_stall": 56,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 100,
+   "people": 89,
+   "step_metrics": {
+    "contest_success": 112,
+    "contest_success_over_id": 52,
+    "contests": 188,
+    "contests_over_id": 79,
+    "person_steps/critical": 1023,
+    "person_steps/elevated": 372,
+    "person_steps/high": 145,
+    "person_steps/low": 708,
+    "person_steps/no_viable_route": 526,
+    "unnecessary_waits": 16,
+    "waits/critical": 711,
+    "waits/elevated": 192,
+    "waits/high": 65,
+    "waits/low": 437,
+    "waits/no_viable_route": 437
+   },
+   "steps": 59,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 64,
+   "decisions": 34,
+   "evacuated": 6,
+   "exits": 1,
+   "final_by_initial_stratum": {
+    "critical/casualty": 1,
+    "critical/evacuated": 4,
+    "high/evacuated": 2,
+    "no_viable_route/casualty": 63
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "bottleneck",
+   "max_consecutive_stall": 5,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 100,
+   "people": 70,
+   "step_metrics": {
+    "contest_success": 2,
+    "contest_success_over_id": 1,
+    "contests": 4,
+    "contests_over_id": 1,
+    "person_steps/critical": 19,
+    "person_steps/high": 4,
+    "person_steps/no_viable_route": 1138,
+    "waits/critical": 8,
+    "waits/high": 2,
+    "waits/no_viable_route": 854
+   },
+   "steps": 34,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 64,
+   "decisions": 34,
+   "evacuated": 6,
+   "exits": 1,
+   "final_by_initial_stratum": {
+    "critical/casualty": 1,
+    "critical/evacuated": 4,
+    "high/evacuated": 2,
+    "no_viable_route/casualty": 63
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "bottleneck",
+   "max_consecutive_stall": 3,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 100,
+   "people": 70,
+   "step_metrics": {
+    "contest_success": 2,
+    "contest_success_over_id": 1,
+    "contests": 4,
+    "contests_over_id": 1,
+    "person_steps/critical": 19,
+    "person_steps/high": 4,
+    "person_steps/no_viable_route": 1164,
+    "waits/critical": 8,
+    "waits/high": 2,
+    "waits/no_viable_route": 1155
+   },
+   "steps": 34,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 64,
+   "decisions": 34,
+   "evacuated": 6,
+   "exits": 1,
+   "final_by_initial_stratum": {
+    "critical/casualty": 1,
+    "critical/evacuated": 4,
+    "high/evacuated": 2,
+    "no_viable_route/casualty": 63
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "bottleneck",
+   "max_consecutive_stall": 3,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 100,
+   "people": 70,
+   "step_metrics": {
+    "contest_success": 2,
+    "contest_success_over_id": 1,
+    "contests": 4,
+    "contests_over_id": 1,
+    "person_steps/critical": 19,
+    "person_steps/high": 4,
+    "person_steps/no_viable_route": 1164,
+    "waits/critical": 8,
+    "waits/high": 2,
+    "waits/no_viable_route": 1131
+   },
+   "steps": 34,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 0,
+   "decisions": 20,
+   "evacuated": 50,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 3,
+    "elevated/evacuated": 11,
+    "high/evacuated": 5,
+    "low/evacuated": 31
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 10,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 20,
+    "contest_success_over_id": 16,
+    "contests": 34,
+    "contests_over_id": 30,
+    "person_steps/critical": 45,
+    "person_steps/elevated": 155,
+    "person_steps/high": 73,
+    "person_steps/low": 310,
+    "unnecessary_waits": 22,
+    "waits/critical": 13,
+    "waits/elevated": 54,
+    "waits/high": 17,
+    "waits/low": 39
+   },
+   "steps": 20,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 0,
+   "decisions": 23,
+   "evacuated": 50,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 3,
+    "elevated/evacuated": 11,
+    "high/evacuated": 5,
+    "low/evacuated": 31
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 8,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 10,
+    "contest_success_over_id": 8,
+    "contests": 11,
+    "contests_over_id": 9,
+    "person_steps/critical": 8,
+    "person_steps/elevated": 142,
+    "person_steps/high": 39,
+    "person_steps/low": 402,
+    "unnecessary_waits": 8,
+    "waits/critical": 0,
+    "waits/elevated": 12,
+    "waits/high": 2,
+    "waits/low": 61
+   },
+   "steps": 23,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 0,
+   "decisions": 21,
+   "evacuated": 50,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 3,
+    "elevated/evacuated": 11,
+    "high/evacuated": 5,
+    "low/evacuated": 31
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 11,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 18,
+    "contest_success_over_id": 11,
+    "contests": 20,
+    "contests_over_id": 12,
+    "person_steps/critical": 11,
+    "person_steps/elevated": 135,
+    "person_steps/high": 59,
+    "person_steps/low": 380,
+    "unnecessary_waits": 10,
+    "waits/critical": 1,
+    "waits/elevated": 5,
+    "waits/high": 7,
+    "waits/low": 56
+   },
+   "steps": 21,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 3,
+   "decisions": 34,
+   "evacuated": 47,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 2,
+    "critical/evacuated": 20,
+    "elevated/evacuated": 15,
+    "high/evacuated": 12,
+    "no_viable_route/casualty": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 4,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 43,
+    "contest_success_over_id": 21,
+    "contests": 50,
+    "contests_over_id": 28,
+    "person_steps/critical": 236,
+    "person_steps/elevated": 145,
+    "person_steps/high": 227,
+    "person_steps/no_viable_route": 65,
+    "unnecessary_waits": 9,
+    "waits/critical": 8,
+    "waits/elevated": 13,
+    "waits/high": 14,
+    "waits/no_viable_route": 34
+   },
+   "steps": 34,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 5,
+   "decisions": 34,
+   "evacuated": 45,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 4,
+    "critical/evacuated": 18,
+    "elevated/evacuated": 15,
+    "high/evacuated": 12,
+    "no_viable_route/casualty": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 3,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 31,
+    "contest_success_over_id": 14,
+    "contests": 37,
+    "contests_over_id": 18,
+    "person_steps/critical": 248,
+    "person_steps/elevated": 136,
+    "person_steps/high": 203,
+    "person_steps/low": 2,
+    "person_steps/no_viable_route": 73,
+    "unnecessary_waits": 10,
+    "waits/critical": 13,
+    "waits/elevated": 4,
+    "waits/high": 21,
+    "waits/low": 1,
+    "waits/no_viable_route": 52
+   },
+   "steps": 34,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 5,
+   "decisions": 34,
+   "evacuated": 45,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 4,
+    "critical/evacuated": 18,
+    "elevated/evacuated": 15,
+    "high/evacuated": 12,
+    "no_viable_route/casualty": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 3,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 38,
+    "contest_success_over_id": 20,
+    "contests": 42,
+    "contests_over_id": 22,
+    "person_steps/critical": 253,
+    "person_steps/elevated": 133,
+    "person_steps/high": 207,
+    "person_steps/low": 2,
+    "person_steps/no_viable_route": 67,
+    "unnecessary_waits": 9,
+    "waits/critical": 13,
+    "waits/elevated": 3,
+    "waits/high": 19,
+    "waits/low": 1,
+    "waits/no_viable_route": 45
+   },
+   "steps": 34,
+   "termination_reason": "all_resolved",
+   "topology": "open_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 0,
+   "decisions": 31,
+   "evacuated": 50,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 8,
+    "elevated/evacuated": 19,
+    "high/evacuated": 4,
+    "low/evacuated": 19
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 5,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 44,
+    "contest_success_over_id": 19,
+    "contests": 89,
+    "contests_over_id": 60,
+    "person_steps/critical": 148,
+    "person_steps/elevated": 253,
+    "person_steps/high": 124,
+    "person_steps/low": 214,
+    "unnecessary_waits": 21,
+    "waits/critical": 43,
+    "waits/elevated": 48,
+    "waits/high": 31,
+    "waits/low": 35
+   },
+   "steps": 31,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 2,
+   "decisions": 42,
+   "evacuated": 48,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 8,
+    "elevated/casualty": 2,
+    "elevated/evacuated": 17,
+    "high/evacuated": 4,
+    "low/evacuated": 19
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 8,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 73,
+    "contest_success_over_id": 32,
+    "contests": 115,
+    "contests_over_id": 49,
+    "person_steps/critical": 151,
+    "person_steps/elevated": 266,
+    "person_steps/high": 182,
+    "person_steps/low": 205,
+    "person_steps/no_viable_route": 15,
+    "unnecessary_waits": 19,
+    "waits/critical": 20,
+    "waits/elevated": 50,
+    "waits/high": 50,
+    "waits/low": 23,
+    "waits/no_viable_route": 13
+   },
+   "steps": 42,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 2,
+   "decisions": 42,
+   "evacuated": 48,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 8,
+    "elevated/casualty": 1,
+    "elevated/evacuated": 18,
+    "high/evacuated": 4,
+    "low/casualty": 1,
+    "low/evacuated": 18
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 10,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 86,
+    "contest_success_over_id": 58,
+    "contests": 129,
+    "contests_over_id": 89,
+    "person_steps/critical": 179,
+    "person_steps/elevated": 255,
+    "person_steps/high": 165,
+    "person_steps/low": 205,
+    "person_steps/no_viable_route": 15,
+    "unnecessary_waits": 30,
+    "waits/critical": 36,
+    "waits/elevated": 57,
+    "waits/high": 41,
+    "waits/low": 41,
+    "waits/no_viable_route": 13
+   },
+   "steps": 42,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 4,
+   "decisions": 28,
+   "evacuated": 46,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 1,
+    "critical/evacuated": 9,
+    "elevated/evacuated": 15,
+    "high/evacuated": 11,
+    "low/evacuated": 11,
+    "no_viable_route/casualty": 3
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 9,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 59,
+    "contest_success_over_id": 39,
+    "contests": 89,
+    "contests_over_id": 66,
+    "person_steps/critical": 164,
+    "person_steps/elevated": 197,
+    "person_steps/high": 208,
+    "person_steps/low": 53,
+    "person_steps/no_viable_route": 99,
+    "unnecessary_waits": 13,
+    "waits/critical": 25,
+    "waits/elevated": 13,
+    "waits/high": 35,
+    "waits/low": 3,
+    "waits/no_viable_route": 36
+   },
+   "steps": 28,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 3,
+   "decisions": 28,
+   "evacuated": 47,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 10,
+    "elevated/evacuated": 15,
+    "high/evacuated": 11,
+    "low/evacuated": 11,
+    "no_viable_route/casualty": 3
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 17,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 71,
+    "contest_success_over_id": 40,
+    "contests": 81,
+    "contests_over_id": 42,
+    "person_steps/critical": 158,
+    "person_steps/elevated": 211,
+    "person_steps/high": 177,
+    "person_steps/low": 92,
+    "person_steps/no_viable_route": 76,
+    "unnecessary_waits": 2,
+    "waits/critical": 10,
+    "waits/elevated": 5,
+    "waits/high": 17,
+    "waits/low": 42,
+    "waits/no_viable_route": 30
+   },
+   "steps": 28,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 3,
+   "decisions": 28,
+   "evacuated": 47,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 10,
+    "elevated/evacuated": 15,
+    "high/evacuated": 11,
+    "low/evacuated": 11,
+    "no_viable_route/casualty": 3
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 13,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 77,
+    "contest_success_over_id": 48,
+    "contests": 101,
+    "contests_over_id": 62,
+    "person_steps/critical": 191,
+    "person_steps/elevated": 184,
+    "person_steps/high": 179,
+    "person_steps/low": 98,
+    "person_steps/no_viable_route": 76,
+    "unnecessary_waits": 8,
+    "waits/critical": 34,
+    "waits/elevated": 7,
+    "waits/high": 19,
+    "waits/low": 16,
+    "waits/no_viable_route": 30
+   },
+   "steps": 28,
+   "termination_reason": "all_resolved",
+   "topology": "multi_room",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 2,
+   "decisions": 14,
+   "evacuated": 37,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 2,
+    "critical/evacuated": 11,
+    "elevated/evacuated": 10,
+    "high/evacuated": 5,
+    "low/evacuated": 11
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 2,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 39,
+   "step_metrics": {
+    "contest_success": 22,
+    "contest_success_over_id": 17,
+    "contests": 28,
+    "contests_over_id": 23,
+    "person_steps/critical": 38,
+    "person_steps/elevated": 105,
+    "person_steps/high": 28,
+    "person_steps/low": 85,
+    "person_steps/no_viable_route": 3,
+    "unnecessary_waits": 3,
+    "waits/critical": 8,
+    "waits/elevated": 11,
+    "waits/high": 4,
+    "waits/low": 0,
+    "waits/no_viable_route": 3
+   },
+   "steps": 14,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 2,
+   "decisions": 15,
+   "evacuated": 37,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 2,
+    "critical/evacuated": 11,
+    "elevated/evacuated": 10,
+    "high/evacuated": 5,
+    "low/evacuated": 11
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 11,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 39,
+   "step_metrics": {
+    "contest_success": 20,
+    "contest_success_over_id": 16,
+    "contests": 26,
+    "contests_over_id": 17,
+    "person_steps/critical": 36,
+    "person_steps/elevated": 101,
+    "person_steps/high": 36,
+    "person_steps/low": 83,
+    "person_steps/no_viable_route": 3,
+    "unnecessary_waits": 3,
+    "waits/critical": 9,
+    "waits/elevated": 18,
+    "waits/high": 7,
+    "waits/low": 0,
+    "waits/no_viable_route": 3
+   },
+   "steps": 15,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 2,
+   "decisions": 14,
+   "evacuated": 37,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 2,
+    "critical/evacuated": 11,
+    "elevated/evacuated": 10,
+    "high/evacuated": 5,
+    "low/evacuated": 11
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 11,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 39,
+   "step_metrics": {
+    "contest_success": 20,
+    "contest_success_over_id": 18,
+    "contests": 26,
+    "contests_over_id": 20,
+    "person_steps/critical": 36,
+    "person_steps/elevated": 101,
+    "person_steps/high": 34,
+    "person_steps/low": 84,
+    "person_steps/no_viable_route": 3,
+    "unnecessary_waits": 2,
+    "waits/critical": 8,
+    "waits/elevated": 18,
+    "waits/high": 7,
+    "waits/low": 0,
+    "waits/no_viable_route": 3
+   },
+   "steps": 14,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 13,
+   "decisions": 17,
+   "evacuated": 37,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 4,
+    "critical/evacuated": 8,
+    "elevated/evacuated": 19,
+    "high/evacuated": 7,
+    "low/evacuated": 3,
+    "no_viable_route/casualty": 9
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 5,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 27,
+    "contest_success_over_id": 18,
+    "contests": 34,
+    "contests_over_id": 24,
+    "person_steps/critical": 50,
+    "person_steps/elevated": 177,
+    "person_steps/high": 95,
+    "person_steps/low": 8,
+    "person_steps/no_viable_route": 105,
+    "unnecessary_waits": 2,
+    "waits/critical": 14,
+    "waits/elevated": 39,
+    "waits/high": 7,
+    "waits/low": 1,
+    "waits/no_viable_route": 77
+   },
+   "steps": 17,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 13,
+   "decisions": 22,
+   "evacuated": 37,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 4,
+    "critical/evacuated": 8,
+    "elevated/evacuated": 19,
+    "high/evacuated": 7,
+    "low/evacuated": 3,
+    "no_viable_route/casualty": 9
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 9,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 45,
+    "contest_success_over_id": 30,
+    "contests": 59,
+    "contests_over_id": 33,
+    "person_steps/critical": 127,
+    "person_steps/elevated": 133,
+    "person_steps/high": 86,
+    "person_steps/low": 10,
+    "person_steps/no_viable_route": 148,
+    "unnecessary_waits": 6,
+    "waits/critical": 31,
+    "waits/elevated": 8,
+    "waits/high": 16,
+    "waits/low": 0,
+    "waits/no_viable_route": 121
+   },
+   "steps": 22,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 12,
+   "decisions": 22,
+   "evacuated": 38,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 3,
+    "critical/evacuated": 9,
+    "elevated/evacuated": 19,
+    "high/evacuated": 7,
+    "low/evacuated": 3,
+    "no_viable_route/casualty": 9
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "high_id_risk",
+   "max_consecutive_stall": 12,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 39,
+    "contest_success_over_id": 24,
+    "contests": 58,
+    "contests_over_id": 31,
+    "person_steps/critical": 119,
+    "person_steps/elevated": 143,
+    "person_steps/high": 88,
+    "person_steps/low": 10,
+    "person_steps/no_viable_route": 131,
+    "unnecessary_waits": 3,
+    "waits/critical": 42,
+    "waits/elevated": 14,
+    "waits/high": 23,
+    "waits/low": 0,
+    "waits/no_viable_route": 107
+   },
+   "steps": 22,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 0,
+   "decisions": 16,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 1,
+    "elevated/evacuated": 2,
+    "high/evacuated": 7
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "near_entrapment",
+   "max_consecutive_stall": 2,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 9,
+    "contest_success_over_id": 8,
+    "contests": 9,
+    "contests_over_id": 8,
+    "person_steps/critical": 7,
+    "person_steps/elevated": 54,
+    "person_steps/high": 22,
+    "person_steps/low": 32,
+    "waits/critical": 0,
+    "waits/elevated": 0,
+    "waits/high": 2,
+    "waits/low": 0
+   },
+   "steps": 16,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 0,
+   "decisions": 16,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 1,
+    "elevated/evacuated": 2,
+    "high/evacuated": 7
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "near_entrapment",
+   "max_consecutive_stall": 2,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 9,
+    "contest_success_over_id": 8,
+    "contests": 9,
+    "contests_over_id": 8,
+    "person_steps/critical": 7,
+    "person_steps/elevated": 54,
+    "person_steps/high": 22,
+    "person_steps/low": 32,
+    "waits/critical": 0,
+    "waits/elevated": 0,
+    "waits/high": 2,
+    "waits/low": 0
+   },
+   "steps": 16,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 0,
+   "decisions": 16,
+   "evacuated": 10,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 1,
+    "elevated/evacuated": 2,
+    "high/evacuated": 7
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "near_entrapment",
+   "max_consecutive_stall": 0,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 10,
+    "contest_success_over_id": 9,
+    "contests": 10,
+    "contests_over_id": 9,
+    "person_steps/critical": 7,
+    "person_steps/elevated": 54,
+    "person_steps/high": 22,
+    "person_steps/low": 31,
+    "waits/critical": 0,
+    "waits/elevated": 0,
+    "waits/high": 0,
+    "waits/low": 0
+   },
+   "steps": 16,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 3,
+   "decisions": 22,
+   "evacuated": 7,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 1,
+    "critical/evacuated": 3,
+    "elevated/evacuated": 1,
+    "high/evacuated": 3,
+    "no_viable_route/casualty": 2
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "near_entrapment",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 7,
+    "contest_success_over_id": 7,
+    "contests": 8,
+    "contests_over_id": 8,
+    "person_steps/critical": 20,
+    "person_steps/elevated": 16,
+    "person_steps/high": 32,
+    "person_steps/no_viable_route": 34,
+    "waits/critical": 0,
+    "waits/elevated": 0,
+    "waits/high": 1,
+    "waits/no_viable_route": 23
+   },
+   "steps": 22,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 3,
+   "decisions": 22,
+   "evacuated": 7,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 1,
+    "critical/evacuated": 3,
+    "elevated/evacuated": 1,
+    "high/evacuated": 3,
+    "no_viable_route/casualty": 2
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "near_entrapment",
+   "max_consecutive_stall": 1,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 9,
+    "contest_success_over_id": 5,
+    "contests": 9,
+    "contests_over_id": 5,
+    "person_steps/critical": 20,
+    "person_steps/elevated": 17,
+    "person_steps/high": 31,
+    "person_steps/no_viable_route": 34,
+    "waits/critical": 1,
+    "waits/elevated": 2,
+    "waits/high": 0,
+    "waits/no_viable_route": 23
+   },
+   "steps": 22,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 3,
+   "decisions": 22,
+   "evacuated": 7,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 1,
+    "critical/evacuated": 3,
+    "elevated/evacuated": 1,
+    "high/evacuated": 3,
+    "no_viable_route/casualty": 2
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "near_entrapment",
+   "max_consecutive_stall": 2,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 10,
+   "people": 10,
+   "step_metrics": {
+    "contest_success": 9,
+    "contest_success_over_id": 5,
+    "contests": 9,
+    "contests_over_id": 5,
+    "person_steps/critical": 20,
+    "person_steps/elevated": 17,
+    "person_steps/high": 31,
+    "person_steps/no_viable_route": 34,
+    "waits/critical": 1,
+    "waits/elevated": 2,
+    "waits/high": 0,
+    "waits/no_viable_route": 23
+   },
+   "steps": 22,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 11,
+   "decisions": 26,
+   "evacuated": 29,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 11,
+    "critical/evacuated": 11,
+    "elevated/evacuated": 10,
+    "high/evacuated": 8
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "near_entrapment",
+   "max_consecutive_stall": 11,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 40,
+   "step_metrics": {
+    "contest_success": 49,
+    "contest_success_over_id": 31,
+    "contests": 58,
+    "contests_over_id": 36,
+    "person_steps/critical": 107,
+    "person_steps/elevated": 175,
+    "person_steps/high": 56,
+    "person_steps/low": 16,
+    "person_steps/no_viable_route": 172,
+    "unnecessary_waits": 6,
+    "waits/critical": 35,
+    "waits/elevated": 42,
+    "waits/high": 10,
+    "waits/low": 6,
+    "waits/no_viable_route": 102
+   },
+   "steps": 26,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 12,
+   "decisions": 26,
+   "evacuated": 28,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 12,
+    "critical/evacuated": 10,
+    "elevated/evacuated": 10,
+    "high/evacuated": 8
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "near_entrapment",
+   "max_consecutive_stall": 7,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 40,
+   "step_metrics": {
+    "contest_success": 40,
+    "contest_success_over_id": 21,
+    "contests": 48,
+    "contests_over_id": 28,
+    "person_steps/critical": 107,
+    "person_steps/elevated": 167,
+    "person_steps/high": 46,
+    "person_steps/low": 15,
+    "person_steps/no_viable_route": 176,
+    "unnecessary_waits": 13,
+    "waits/critical": 58,
+    "waits/elevated": 34,
+    "waits/high": 6,
+    "waits/low": 5,
+    "waits/no_viable_route": 113
+   },
+   "steps": 26,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 11,
+   "decisions": 26,
+   "evacuated": 29,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 11,
+    "critical/evacuated": 11,
+    "elevated/evacuated": 10,
+    "high/evacuated": 8
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "near_entrapment",
+   "max_consecutive_stall": 5,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 40,
+   "step_metrics": {
+    "contest_success": 45,
+    "contest_success_over_id": 25,
+    "contests": 57,
+    "contests_over_id": 35,
+    "person_steps/critical": 116,
+    "person_steps/elevated": 169,
+    "person_steps/high": 54,
+    "person_steps/low": 15,
+    "person_steps/no_viable_route": 170,
+    "unnecessary_waits": 11,
+    "waits/critical": 58,
+    "waits/elevated": 35,
+    "waits/high": 10,
+    "waits/low": 5,
+    "waits/no_viable_route": 103
+   },
+   "steps": 26,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 3,
+   "decisions": 22,
+   "evacuated": 13,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 5,
+    "elevated/evacuated": 2,
+    "high/evacuated": 6,
+    "no_viable_route/casualty": 3
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "near_entrapment",
+   "max_consecutive_stall": 7,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 16,
+   "step_metrics": {
+    "contest_success": 28,
+    "contest_success_over_id": 17,
+    "contests": 30,
+    "contests_over_id": 19,
+    "person_steps/critical": 22,
+    "person_steps/elevated": 114,
+    "person_steps/high": 54,
+    "person_steps/no_viable_route": 14,
+    "waits/critical": 1,
+    "waits/elevated": 16,
+    "waits/high": 3,
+    "waits/no_viable_route": 13
+   },
+   "steps": 22,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A0"
+  },
+  {
+   "casualties": 3,
+   "decisions": 22,
+   "evacuated": 13,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 5,
+    "elevated/evacuated": 2,
+    "high/evacuated": 6,
+    "no_viable_route/casualty": 3
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "near_entrapment",
+   "max_consecutive_stall": 8,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 16,
+   "step_metrics": {
+    "contest_success": 30,
+    "contest_success_over_id": 18,
+    "contests": 30,
+    "contests_over_id": 18,
+    "person_steps/critical": 21,
+    "person_steps/elevated": 114,
+    "person_steps/high": 55,
+    "person_steps/no_viable_route": 14,
+    "waits/critical": 0,
+    "waits/elevated": 18,
+    "waits/high": 2,
+    "waits/no_viable_route": 11
+   },
+   "steps": 22,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A1"
+  },
+  {
+   "casualties": 3,
+   "decisions": 22,
+   "evacuated": 13,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 5,
+    "elevated/evacuated": 2,
+    "high/evacuated": 6,
+    "no_viable_route/casualty": 3
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "near_entrapment",
+   "max_consecutive_stall": 8,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 16,
+   "step_metrics": {
+    "contest_success": 30,
+    "contest_success_over_id": 18,
+    "contests": 30,
+    "contests_over_id": 18,
+    "person_steps/critical": 21,
+    "person_steps/elevated": 114,
+    "person_steps/high": 55,
+    "person_steps/no_viable_route": 14,
+    "waits/critical": 0,
+    "waits/elevated": 18,
+    "waits/high": 2,
+    "waits/no_viable_route": 11
+   },
+   "steps": 22,
+   "termination_reason": "all_resolved",
+   "topology": "corridor",
+   "unresolved": 0,
+   "variant": "A2"
+  },
+  {
+   "casualties": 0,
+   "decisions": 72,
+   "evacuated": 25,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "elevated/evacuated": 7,
+    "high/evacuated": 6,
+    "low/evacuated": 12,
+    "no_viable_route/active": 25
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "unreachable",
+   "max_consecutive_stall": 2,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 5,
+    "contest_success_over_id": 3,
+    "contests": 5,
+    "contests_over_id": 3,
+    "person_steps/critical": 3,
+    "person_steps/elevated": 77,
+    "person_steps/high": 28,
+    "person_steps/low": 86,
+    "person_steps/no_viable_route": 1800,
+    "waits/critical": 0,
+    "waits/elevated": 2,
+    "waits/high": 1,
+    "waits/low": 6,
+    "waits/no_viable_route": 1800
+   },
+   "steps": 72,
+   "termination_reason": "max_steps",
+   "topology": "multi_room",
+   "unresolved": 25,
+   "variant": "A0"
+  },
+  {
+   "casualties": 0,
+   "decisions": 72,
+   "evacuated": 25,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "elevated/evacuated": 7,
+    "high/evacuated": 6,
+    "low/evacuated": 12,
+    "no_viable_route/active": 25
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "unreachable",
+   "max_consecutive_stall": 2,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 5,
+    "contest_success_over_id": 3,
+    "contests": 5,
+    "contests_over_id": 3,
+    "person_steps/critical": 19,
+    "person_steps/elevated": 66,
+    "person_steps/high": 28,
+    "person_steps/low": 79,
+    "person_steps/no_viable_route": 1800,
+    "unnecessary_waits": 2,
+    "waits/critical": 2,
+    "waits/elevated": 7,
+    "waits/high": 0,
+    "waits/low": 6,
+    "waits/no_viable_route": 1800
+   },
+   "steps": 72,
+   "termination_reason": "max_steps",
+   "topology": "multi_room",
+   "unresolved": 25,
+   "variant": "A1"
+  },
+  {
+   "casualties": 0,
+   "decisions": 72,
+   "evacuated": 25,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "elevated/evacuated": 7,
+    "high/evacuated": 6,
+    "low/evacuated": 12,
+    "no_viable_route/active": 25
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "unreachable",
+   "max_consecutive_stall": 2,
+   "mode": "full_episode",
+   "model": "stochastic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 5,
+    "contest_success_over_id": 3,
+    "contests": 5,
+    "contests_over_id": 3,
+    "person_steps/critical": 19,
+    "person_steps/elevated": 66,
+    "person_steps/high": 28,
+    "person_steps/low": 79,
+    "person_steps/no_viable_route": 1800,
+    "unnecessary_waits": 2,
+    "waits/critical": 2,
+    "waits/elevated": 7,
+    "waits/high": 0,
+    "waits/low": 6,
+    "waits/no_viable_route": 1800
+   },
+   "steps": 72,
+   "termination_reason": "max_steps",
+   "topology": "multi_room",
+   "unresolved": 25,
+   "variant": "A2"
+  },
+  {
+   "casualties": 2,
+   "decisions": 72,
+   "evacuated": 23,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/casualty": 1,
+    "critical/evacuated": 5,
+    "elevated/evacuated": 7,
+    "high/evacuated": 7,
+    "low/evacuated": 4,
+    "no_viable_route/active": 25,
+    "no_viable_route/casualty": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "unreachable",
+   "max_consecutive_stall": 5,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 22,
+    "contest_success_over_id": 14,
+    "contests": 26,
+    "contests_over_id": 18,
+    "person_steps/critical": 98,
+    "person_steps/elevated": 53,
+    "person_steps/high": 113,
+    "person_steps/low": 8,
+    "person_steps/no_viable_route": 1896,
+    "unnecessary_waits": 1,
+    "waits/critical": 8,
+    "waits/elevated": 1,
+    "waits/high": 2,
+    "waits/low": 0,
+    "waits/no_viable_route": 1831
+   },
+   "steps": 72,
+   "termination_reason": "max_steps",
+   "topology": "multi_room",
+   "unresolved": 25,
+   "variant": "A0"
+  },
+  {
+   "casualties": 2,
+   "decisions": 72,
+   "evacuated": 23,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 6,
+    "elevated/evacuated": 7,
+    "high/casualty": 1,
+    "high/evacuated": 6,
+    "low/evacuated": 4,
+    "no_viable_route/active": 25,
+    "no_viable_route/casualty": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "unreachable",
+   "max_consecutive_stall": 6,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 22,
+    "contest_success_over_id": 14,
+    "contests": 25,
+    "contests_over_id": 16,
+    "person_steps/critical": 98,
+    "person_steps/elevated": 53,
+    "person_steps/high": 114,
+    "person_steps/low": 8,
+    "person_steps/no_viable_route": 1895,
+    "unnecessary_waits": 1,
+    "waits/critical": 8,
+    "waits/elevated": 1,
+    "waits/high": 2,
+    "waits/low": 0,
+    "waits/no_viable_route": 1825
+   },
+   "steps": 72,
+   "termination_reason": "max_steps",
+   "topology": "multi_room",
+   "unresolved": 25,
+   "variant": "A1"
+  },
+  {
+   "casualties": 2,
+   "decisions": 72,
+   "evacuated": 23,
+   "exits": 3,
+   "final_by_initial_stratum": {
+    "critical/evacuated": 6,
+    "elevated/evacuated": 7,
+    "high/casualty": 1,
+    "high/evacuated": 6,
+    "low/evacuated": 4,
+    "no_viable_route/active": 25,
+    "no_viable_route/casualty": 1
+   },
+   "grid": [
+    16,
+    20
+   ],
+   "kind": "unreachable",
+   "max_consecutive_stall": 6,
+   "mode": "full_episode",
+   "model": "deterministic",
+   "n": 50,
+   "people": 50,
+   "step_metrics": {
+    "contest_success": 22,
+    "contest_success_over_id": 14,
+    "contests": 25,
+    "contests_over_id": 16,
+    "person_steps/critical": 98,
+    "person_steps/elevated": 53,
+    "person_steps/high": 114,
+    "person_steps/low": 8,
+    "person_steps/no_viable_route": 1895,
+    "unnecessary_waits": 1,
+    "waits/critical": 8,
+    "waits/elevated": 1,
+    "waits/high": 2,
+    "waits/low": 0,
+    "waits/no_viable_route": 1825
+   },
+   "steps": 72,
+   "termination_reason": "max_steps",
+   "topology": "multi_room",
+   "unresolved": 25,
+   "variant": "A2"
+  }
+ ],
+ "pilot_version": "t4-v12-confirmation-pilot@1.0.0",
+ "rejected_cells": [],
+ "resources": {
+  "peak_rss_mb": 49.296875,
+  "pilot_wall_s": 370.67064850003226,
+  "process_cpu_s": 387.6875,
+  "wall_s": 397.4474358999869
+ },
+ "teachers": {
+  "A0": {
+   "config": {
+    "alt_exit_margin": 2.0,
+    "arrival_estimate": "first_relative_step_with_P_burn_ge_q; CAP_after_episode_end",
+    "band_critical": 3,
+    "band_elevated": 16,
+    "band_high": 8,
+    "budget_fallback": "reservation_consistent_greedy_descent",
+    "candidate_exits": 3,
+    "cpu_budget_ms": 2000.0,
+    "cycle_rule": "tau1_follow_move_rejected_if_it_closes_a_rotation_cycle",
+    "deadline_field": "per_exit_latest_departure_max_min_dijkstra",
+    "deadline_weight": 4.0,
+    "exit_assignment": "priority_order_nominal_descent_one_person_per_narrow_cell_step",
+    "fairness": "F1 max_detour cap; F2 critical class vacates only by progress moves; F3 stateless (no aging)",
+    "fire_distance_order_tie_break": [
+     "no_static_route_last",
+     "fire_layer",
+     "static_distance",
+     "row",
+     "col"
+    ],
+    "fire_forecast": "public_rule_layer_bfs; deterministic exact; stochastic l1 exact, l>=2 single_front_binomial_lower_bound",
+    "margin": "latest_departure_slack_early_minus_fifo_exit_congestion_delay",
+    "max_detour": 12,
+    "memory": "stateless_per_decision",
+    "move_extra_cost": 0.25,
+    "move_order": [
+     "north",
+     "south",
+     "east",
+     "west",
+     "stay"
+    ],
+    "no_route_mode": "shelter_toward_latest_T_late_cells",
+    "no_successor_fallback": "least_hazard_action",
+    "node_budget_per_person": 256,
+    "node_budget_total": 20000,
+    "none_order": "ascending_person_id",
+    "planner": "t4-priority-planner@1.2.0",
+    "priority_scheme": "none",
+    "push_depth_limit": 256,
+    "q_early": 0.25,
+    "q_late": 0.75,
+    "repair": "transactional_push_with_chain_rollback_no_replanning_of_committed_people",
+    "reservation_horizon": 8,
+    "reservation_ownership": "no_overwrite_conflicts_resolved_by_push_or_rollback",
+    "risk_hard": 0.5,
+    "risk_model": "t4-risk@1.0.0",
+    "risk_order_tie_break": [
+     "stratum",
+     "-urgency",
+     "nominal_distance",
+     "row",
+     "col"
+    ],
+    "risk_weight": 20.0,
+    "scale_congestion": 8.0,
+    "scale_evacuation": 16.0,
+    "scale_exposure": 8.0,
+    "scale_margin": 6.0,
+    "scale_proximity": 4.0,
+    "search": "windowed_space_time_astar_vertex_and_edge_reservations_in_priority_order",
+    "search_tie_break": [
+     "f",
+     "h",
+     "generation_order"
+    ],
+    "strata": "no_viable_route if no exit viable under T_late; critical if slack_early<0 or margin<stratum_critical; high, elevated, low by margin thresholds",
+    "stratum_critical": 3.0,
+    "stratum_elevated": 25.0,
+    "stratum_high": 10.0,
+    "unrepaired_blocked_moves": "stay_counted_as_verification_mismatch",
+    "urgency": "weighted_sum_of_bounded_components(margin,exposure,proximity,options,congestion,evacuation)",
+    "urgency_digits": 6,
+    "vacate_infeasibility_proof": "entry_time_push_chain_reachability_exact_no_search_on_proved_failure",
+    "w_congestion": 0.1,
+    "w_evacuation": 0.1,
+    "w_exposure": 0.2,
+    "w_margin": 0.35,
+    "w_options": 0.15,
+    "w_proximity": 0.1,
+    "yield_rule": "later_planner_vacates_cell_claimed_at_tau1_by_earlier_root_or_its_dependent_if_full_plan_exists"
+   },
+   "config_hash": "sha256:d95ac217d8dc61206c15fa508c6534ea89c2a259b5f6d964cb82ed69bcb047be",
+   "name": "T4-A0",
+   "policy": "risk_priority_ablation_no_priority",
+   "version": "1.2.0"
+  },
+  "A1": {
+   "config": {
+    "alt_exit_margin": 2.0,
+    "arrival_estimate": "first_relative_step_with_P_burn_ge_q; CAP_after_episode_end",
+    "band_critical": 3,
+    "band_elevated": 16,
+    "band_high": 8,
+    "budget_fallback": "reservation_consistent_greedy_descent",
+    "candidate_exits": 3,
+    "cpu_budget_ms": 2000.0,
+    "cycle_rule": "tau1_follow_move_rejected_if_it_closes_a_rotation_cycle",
+    "deadline_field": "per_exit_latest_departure_max_min_dijkstra",
+    "deadline_weight": 4.0,
+    "exit_assignment": "priority_order_nominal_descent_one_person_per_narrow_cell_step",
+    "fairness": "F1 max_detour cap; F2 critical class vacates only by progress moves; F3 stateless (no aging)",
+    "fire_distance_order_tie_break": [
+     "no_static_route_last",
+     "fire_layer",
+     "static_distance",
+     "row",
+     "col"
+    ],
+    "fire_forecast": "public_rule_layer_bfs; deterministic exact; stochastic l1 exact, l>=2 single_front_binomial_lower_bound",
+    "margin": "latest_departure_slack_early_minus_fifo_exit_congestion_delay",
+    "max_detour": 12,
+    "memory": "stateless_per_decision",
+    "move_extra_cost": 0.25,
+    "move_order": [
+     "north",
+     "south",
+     "east",
+     "west",
+     "stay"
+    ],
+    "no_route_mode": "shelter_toward_latest_T_late_cells",
+    "no_successor_fallback": "least_hazard_action",
+    "node_budget_per_person": 256,
+    "node_budget_total": 20000,
+    "none_order": "ascending_person_id",
+    "planner": "t4-priority-planner@1.2.0",
+    "priority_scheme": "fire_distance",
+    "push_depth_limit": 256,
+    "q_early": 0.25,
+    "q_late": 0.75,
+    "repair": "transactional_push_with_chain_rollback_no_replanning_of_committed_people",
+    "reservation_horizon": 8,
+    "reservation_ownership": "no_overwrite_conflicts_resolved_by_push_or_rollback",
+    "risk_hard": 0.5,
+    "risk_model": "t4-risk@1.0.0",
+    "risk_order_tie_break": [
+     "stratum",
+     "-urgency",
+     "nominal_distance",
+     "row",
+     "col"
+    ],
+    "risk_weight": 20.0,
+    "scale_congestion": 8.0,
+    "scale_evacuation": 16.0,
+    "scale_exposure": 8.0,
+    "scale_margin": 6.0,
+    "scale_proximity": 4.0,
+    "search": "windowed_space_time_astar_vertex_and_edge_reservations_in_priority_order",
+    "search_tie_break": [
+     "f",
+     "h",
+     "generation_order"
+    ],
+    "strata": "no_viable_route if no exit viable under T_late; critical if slack_early<0 or margin<stratum_critical; high, elevated, low by margin thresholds",
+    "stratum_critical": 3.0,
+    "stratum_elevated": 25.0,
+    "stratum_high": 10.0,
+    "unrepaired_blocked_moves": "stay_counted_as_verification_mismatch",
+    "urgency": "weighted_sum_of_bounded_components(margin,exposure,proximity,options,congestion,evacuation)",
+    "urgency_digits": 6,
+    "vacate_infeasibility_proof": "entry_time_push_chain_reachability_exact_no_search_on_proved_failure",
+    "w_congestion": 0.1,
+    "w_evacuation": 0.1,
+    "w_exposure": 0.2,
+    "w_margin": 0.35,
+    "w_options": 0.15,
+    "w_proximity": 0.1,
+    "yield_rule": "later_planner_vacates_cell_claimed_at_tau1_by_earlier_root_or_its_dependent_if_full_plan_exists"
+   },
+   "config_hash": "sha256:f177bc8fe197dde7c45d1586b4f3e988baa4dc334d447519af7c8b721b042638",
+   "name": "T4-A1",
+   "policy": "risk_priority_ablation_fire_distance",
+   "version": "1.2.0"
+  },
+  "A2": {
+   "config": {
+    "alt_exit_margin": 2.0,
+    "arrival_estimate": "first_relative_step_with_P_burn_ge_q; CAP_after_episode_end",
+    "band_critical": 3,
+    "band_elevated": 16,
+    "band_high": 8,
+    "budget_fallback": "reservation_consistent_greedy_descent",
+    "candidate_exits": 3,
+    "cpu_budget_ms": 2000.0,
+    "cycle_rule": "tau1_follow_move_rejected_if_it_closes_a_rotation_cycle",
+    "deadline_field": "per_exit_latest_departure_max_min_dijkstra",
+    "deadline_weight": 4.0,
+    "exit_assignment": "priority_order_nominal_descent_one_person_per_narrow_cell_step",
+    "fairness": "F1 max_detour cap; F2 critical class vacates only by progress moves; F3 stateless (no aging)",
+    "fire_distance_order_tie_break": [
+     "no_static_route_last",
+     "fire_layer",
+     "static_distance",
+     "row",
+     "col"
+    ],
+    "fire_forecast": "public_rule_layer_bfs; deterministic exact; stochastic l1 exact, l>=2 single_front_binomial_lower_bound",
+    "margin": "latest_departure_slack_early_minus_fifo_exit_congestion_delay",
+    "max_detour": 12,
+    "memory": "stateless_per_decision",
+    "move_extra_cost": 0.25,
+    "move_order": [
+     "north",
+     "south",
+     "east",
+     "west",
+     "stay"
+    ],
+    "no_route_mode": "shelter_toward_latest_T_late_cells",
+    "no_successor_fallback": "least_hazard_action",
+    "node_budget_per_person": 256,
+    "node_budget_total": 20000,
+    "none_order": "ascending_person_id",
+    "planner": "t4-priority-planner@1.2.0",
+    "priority_scheme": "risk",
+    "push_depth_limit": 256,
+    "q_early": 0.25,
+    "q_late": 0.75,
+    "repair": "transactional_push_with_chain_rollback_no_replanning_of_committed_people",
+    "reservation_horizon": 8,
+    "reservation_ownership": "no_overwrite_conflicts_resolved_by_push_or_rollback",
+    "risk_hard": 0.5,
+    "risk_model": "t4-risk@1.0.0",
+    "risk_order_tie_break": [
+     "stratum",
+     "-urgency",
+     "nominal_distance",
+     "row",
+     "col"
+    ],
+    "risk_weight": 20.0,
+    "scale_congestion": 8.0,
+    "scale_evacuation": 16.0,
+    "scale_exposure": 8.0,
+    "scale_margin": 6.0,
+    "scale_proximity": 4.0,
+    "search": "windowed_space_time_astar_vertex_and_edge_reservations_in_priority_order",
+    "search_tie_break": [
+     "f",
+     "h",
+     "generation_order"
+    ],
+    "strata": "no_viable_route if no exit viable under T_late; critical if slack_early<0 or margin<stratum_critical; high, elevated, low by margin thresholds",
+    "stratum_critical": 3.0,
+    "stratum_elevated": 25.0,
+    "stratum_high": 10.0,
+    "unrepaired_blocked_moves": "stay_counted_as_verification_mismatch",
+    "urgency": "weighted_sum_of_bounded_components(margin,exposure,proximity,options,congestion,evacuation)",
+    "urgency_digits": 6,
+    "vacate_infeasibility_proof": "entry_time_push_chain_reachability_exact_no_search_on_proved_failure",
+    "w_congestion": 0.1,
+    "w_evacuation": 0.1,
+    "w_exposure": 0.2,
+    "w_margin": 0.35,
+    "w_options": 0.15,
+    "w_proximity": 0.1,
+    "yield_rule": "later_planner_vacates_cell_claimed_at_tau1_by_earlier_root_or_its_dependent_if_full_plan_exists"
+   },
+   "config_hash": "sha256:79bd3322b9cf7ccd25928f3a70502089732496af5427f88f00ecd2ff6ba12504",
+   "name": "T4",
+   "policy": "risk_based_priority",
+   "version": "1.2.0"
+  },
+  "T1": {
+   "config": {
+    "alt_exit_margin": 2.0,
+    "budget_fallback": "reservation_consistent_greedy_descent",
+    "candidate_exits": 3,
+    "congestion_cells": "safe_exits_and_corridor_cells_with_at_most_2_open_neighbours",
+    "exit_cost": "nominal_space_time_arrival + alt_exit_margin*[not_nearest] + risk_weight*sum_hazard",
+    "fire_forecast": "public_rule_layer_bfs; deterministic exact; stochastic single_front_binomial_lower_bound",
+    "follow_dependency": "leader_vacates_if_a_full_plan_exists_else_may_stay",
+    "move_extra_cost": 0.25,
+    "move_order": [
+     "north",
+     "south",
+     "east",
+     "west",
+     "stay"
+    ],
+    "no_route_mode": "shelter_max_fire_layer",
+    "no_successor_fallback": "least_hazard_action",
+    "node_budget_per_person": 256,
+    "node_budget_total": 16000,
+    "planning_order": "ascending_person_id",
+    "repair_rounds": 6,
+    "reservation_horizon": 8,
+    "risk_hard": 0.5,
+    "risk_weight": 20.0,
+    "search": "windowed_space_time_astar_vertex_and_edge_reservations",
+    "search_tie_break": [
+     "f",
+     "h",
+     "generation_order"
+    ],
+    "unrepaired_blocked_moves": "stay"
+   },
+   "config_hash": "sha256:5047e942db3326706b6184c9f29e0b992078920f03c8a53adc8cc24258345361",
+   "name": "T1",
+   "policy": "congestion_aware_cooperative_planner",
+   "version": "1.0.0"
+  }
+ }
+}
