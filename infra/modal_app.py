@@ -2,11 +2,19 @@
 
 Prerequisites (local): `pip install -e '.[modal]'` then `modal setup`.
 
-P0B tasks (results land in ./results, padding verdicts are computed locally):
-  modal run infra/modal_app.py --task inspect                  # characterize Unsloth internals FIRST
-  modal run infra/modal_app.py --task smoke --gpu L4
-  modal run infra/modal_app.py --task padding --gpu L4 --ns 1,10,50,200
-  modal run infra/modal_app.py --task throughput --gpu L40S --batch-sizes 1,4,8,16,32,64
+P0B tasks (results land in ./results, padding verdicts are computed locally). Every GPU
+task needs `--authorize <task>` (the same task name), a clean git checkout, the pinned
+model, and runs under the timeouts of `p0b.gpu_run_plan`. A failed remote call writes a
+FAIL/UNVERIFIED report (`ember_v1.run_report`); an abrupt kill or a failed image build
+writes none (use Modal logs). First command (issue #2):
+  modal run infra/modal_app.py --task inspect --gpu L4 --authorize inspect
+If L4 has no capacity (queue_timeout, cancel checked), one separate attempt each, never concurrent:
+  modal run infra/modal_app.py --task inspect --gpu A10 --authorize inspect
+  modal run infra/modal_app.py --task inspect --gpu L40S --authorize inspect
+Later tasks need their own written authorization (docs/P0B_GPU_INSPECT.md):
+  modal run infra/modal_app.py --task smoke --gpu L4 --authorize smoke
+  modal run infra/modal_app.py --task padding --gpu L4 --ns 1,10,50,200 --authorize padding
+  modal run infra/modal_app.py --task throughput --gpu L40S --batch-sizes 1,4,8,16,32,64 --authorize throughput
 
 Serving (CPU simulator/agent locally or in CPU containers, GPU inference here):
   modal deploy infra/modal_app.py
@@ -19,6 +27,7 @@ Run P0B both with and without it; record which backend actually executed.
 Checklist, exit codes and budget: docs/P0B_PREFLIGHT.md.
 """
 # No `from __future__ import annotations`: Modal reads real class-parameter types.
+import hashlib
 import json
 import os
 import subprocess
@@ -26,24 +35,44 @@ from pathlib import Path
 
 import modal
 
+from ember_v1.p0b import (MAX_CONTAINERS, PINNED_MODEL, PINNED_MODEL_COMMIT, RETRIES, SCALEDOWN_WINDOW_S,
+                          STARTUP_TIMEOUT_S, TASK_TIMEOUT_S)
+
 APP_NAME = "ember-v1"
-DEFAULT_MODEL = "unsloth/Qwen3.5-2B"
-# Pins follow the Unsloth Qwen3.5 Decision notebook. Replace "unsloth"/"unsloth_zoo"
-# with exact `==` versions after the first PASSing `inspect`+`smoke` run (see
-# runtime_versions in results) and never change them inside a phase.
-UNSLOTH_SPECS = ("unsloth", "unsloth_zoo")
+DEFAULT_MODEL = PINNED_MODEL
+# nvidia/cuda:12.8.1-devel-ubuntu22.04, pinned by manifest-list digest (Docker Hub, 2026-11-03).
+# devel (nvcc) only for the optional causal-conv1d build; triton needs the gcc from build-essential.
+BASE_IMAGE = "nvidia/cuda@sha256:a99a1860ba8e2916e5c3e73b72ec4c4301653a84586e05bfc9a2aa2d58027e97"
+# Every package, exact version and sha256 (uv pip compile of infra/p0b-requirements.in).
+# pip enters hash-checking mode, so an unlisted or changed wheel fails the CPU image build.
+LOCK_FILE = Path(__file__).resolve().with_name("p0b-requirements.lock.txt")
+
+
+def _image_env() -> dict:
+    """Image env. The lock hash is read on the local client only: Modal imports this module again in the
+    container (/root/modal_app.py), where the lock file does not exist and the image is already built
+    (A10 attempt, 2026-11-08: FileNotFoundError at import, 13 failed startups)."""
+    env = {"HF_HOME": "/cache/hf", "TOKENIZERS_PARALLELISM": "false"}
+    if modal.is_local():
+        env["EMBER_IMAGE_LOCK_SHA256"] = hashlib.sha256(LOCK_FILE.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+    return env
+
 
 image = (
-    modal.Image.from_registry("nvidia/cuda:12.8.1-devel-ubuntu22.04", add_python="3.11")
+    modal.Image.from_registry(BASE_IMAGE, add_python="3.11")
     .apt_install("git", "build-essential")
-    .pip_install("torch==2.8.0", "torchvision==0.23.0", "triton>=3.3.0", "xformers==0.0.32.post2", "bitsandbytes")
-    .pip_install(*UNSLOTH_SPECS, "transformers==5.2.0", "trl==0.22.2",
-                 "tokenizers>=0.22.0,<=0.23.0", "torchao>=0.16.0")
-    .env({"HF_HOME": "/cache/hf", "TOKENIZERS_PARALLELISM": "false"})
+    .pip_install_from_requirements(str(LOCK_FILE))
+    .run_commands("python -m pip check")
+    .env(_image_env())
 )
 if os.environ.get("EMBER_FAST_KERNELS") == "1":
+    # NOT locked and built on a GPU builder (billed). Not part of the first inspect.
     image = image.pip_install("flash-linear-attention", "causal-conv1d", gpu="L4")
-image = image.add_local_python_source("ember_v1")
+# Last build step, CPU only: audited upstream bytes + exact pinned versions, else the build fails.
+# The source is copied to /root/ember_v1. Modal adds /root to sys.path only at function run time,
+# not in builder RUN steps (first inspect, 2026-11-03: ModuleNotFoundError), so set PYTHONPATH here.
+image = (image.add_local_python_source("ember_v1", copy=True)
+         .run_commands("PYTHONPATH=/root python -m ember_v1.p0b verify-install"))
 
 app = modal.App(APP_NAME)
 hf_cache = modal.Volume.from_name("ember-v1-hf-cache", create_if_missing=True)
@@ -51,9 +80,12 @@ checkpoints = modal.Volume.from_name("ember-v1-checkpoints", create_if_missing=T
 VOLUMES = {"/cache": hf_cache, "/ckpt": checkpoints}
 
 
-@app.cls(image=image, gpu="L4", volumes=VOLUMES, timeout=3600, scaledown_window=120)
+# Bounds for direct callers too; the entrypoint sets `timeout` per task (p0b.gpu_run_plan).
+@app.cls(image=image, gpu="L4", volumes=VOLUMES, timeout=TASK_TIMEOUT_S["inspect"], startup_timeout=STARTUP_TIMEOUT_S,
+         scaledown_window=SCALEDOWN_WINDOW_S, retries=RETRIES, max_containers=MAX_CONTAINERS)
 class P0BHarness:
     model_name: str = modal.parameter(default=DEFAULT_MODEL)
+    revision: str = modal.parameter(default=PINNED_MODEL_COMMIT)
     precision: str = modal.parameter(default="bf16")
     max_seq: int = modal.parameter(default=16384)
     code_commit: str = modal.parameter(default="")
@@ -62,10 +94,12 @@ class P0BHarness:
     def load(self):
         from ember_v1 import p0b
 
-        self.model, self.tokenizer = p0b.load_model(self.model_name, self.max_seq, self.precision)
+        self.model, self.tokenizer = p0b.load_model(self.model_name, self.max_seq, self.precision,
+                                                    revision=self.revision)
         self.metadata = p0b.runtime_metadata(
             self.model, self.tokenizer, self.model_name, self.precision, self.max_seq,
-            evidence_source="modal:P0BHarness", code_commit=self.code_commit or None)
+            evidence_source="modal:P0BHarness", code_commit=self.code_commit or None,
+            requested_revision=self.revision)
         hf_cache.commit()
 
     @modal.method()
@@ -150,24 +184,49 @@ def _code_commit() -> str:
 
 
 @app.local_entrypoint()
-def main(task: str = "smoke", gpu: str = "L4", model: str = DEFAULT_MODEL, precision: str = "bf16",
+def main(task: str = "inspect", gpu: str = "L4", model: str = DEFAULT_MODEL, precision: str = "bf16",
          max_seq: int = 16384, question_style: str = "compact", repeats: int = 25,
-         ns: str = "1,10,50,100,200", batch_sizes: str = "1,4,8,16,32,64", out_dir: str = "results"):
-    harness = P0BHarness.with_options(gpu=gpu)(model_name=model, precision=precision, max_seq=max_seq,
-                                               code_commit=_code_commit())
+         ns: str = "1,10,50,100,200", batch_sizes: str = "1,4,8,16,32,64", out_dir: str = "results",
+         authorize: str = ""):
+    from ember_v1.p0b import allocated_gpu, gpu_run_plan
+
+    # Runs after `modal run` has created the ephemeral app (the CPU image build may already have
+    # happened) but before any GPU container starts: authorization, clean commit, pinned model, GPU.
+    try:
+        plan = gpu_run_plan(task, gpu, model, precision, authorize, _code_commit())
+    except (ValueError, PermissionError) as exc:
+        raise SystemExit(f"refused: {exc}")
+    from ember_v1.run_report import watch_remote_call, write_json_atomic
+
+    print(json.dumps({"plan": plan}))
+    harness = P0BHarness.with_options(
+        gpu=gpu, timeout=plan["timeout_s"], retries=plan["retries"], max_containers=plan["max_containers"],
+        scaledown_window=plan["scaledown_window_s"])(model_name=model, revision=plan["revision"],
+                                                     precision=precision, max_seq=max_seq,
+                                                     code_commit=plan["code_commit"])
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     tag = f"{task}-{gpu}-{precision}-{question_style}"
-    if task == "inspect":
-        result = harness.inspect.remote(question_style)
-    elif task == "smoke":
-        result = harness.smoke.remote(_ints(ns), repeats, question_style)
-    elif task == "throughput":
-        result = harness.throughput.remote(_ints(batch_sizes), _ints(ns), repeats, question_style)
-    elif task == "padding":
+    path = out / f"{tag}.json"
+    submits = {"inspect": lambda: harness.inspect.spawn(question_style),
+               "smoke": lambda: harness.smoke.spawn(_ints(ns), repeats, question_style),
+               "throughput": lambda: harness.throughput.spawn(_ints(batch_sizes), _ints(ns), repeats, question_style),
+               "padding": lambda: harness.padding.spawn(_ints(ns), question_style)}
+    # One spawn(), then bounded get(timeout=) polls with get_current_stats() snapshots of this
+    # variant (public Modal 1.6.3 APIs). A confirmed queue wait over 300 s, or the overall client
+    # deadline, cancels the call explicitly (terminate_containers=True). Load errors, remote
+    # exceptions, timeouts and Ctrl-C give a FAIL/UNVERIFIED report at `path`; a provisional
+    # record with the FunctionCall ID replaces any older result right after submission.
+    result, watch = watch_remote_call(submits[task], plan=plan, path=path,
+                                      current_stats=getattr(harness, task).get_current_stats,
+                                      app_id=app.app_id, log=print)
+    elapsed = watch["elapsed_s"]
+    if result is None:
+        print(json.dumps({"task": task, "gpu": gpu, "status": "NOT_PASS", "file": str(path)}))
+        raise SystemExit(2)
+    if task == "padding":
         from ember_v1.padding_gate import assess_padding_parity
 
-        result = harness.padding.remote(_ints(ns), question_style)
         verdicts = {}
         for order, doc in result["gate_inputs"].items():
             (out / f"{tag}-{order}-input.json").write_text(json.dumps(doc, indent=2), encoding="utf-8")
@@ -178,10 +237,11 @@ def main(task: str = "smoke", gpu: str = "L4", model: str = DEFAULT_MODEL, preci
         result["verdicts"] = verdicts
         result["status"] = "PASS" if all(v["status"] == "PASS" for v in verdicts.values()) and all(
             a == 1.0 for a in result["adapter_agreement_with_predict"].values()) else "FAIL"
-    else:
-        raise SystemExit(f"unknown task {task!r}: use inspect|smoke|padding|throughput")
-    path = out / f"{tag}.json"
-    path.write_text(json.dumps(result, indent=2, default=str), encoding="utf-8")
+    # Client wall clock of the remote call (excludes image build). Compare it with the Modal
+    # usage page; `plan.cost_estimate` is an estimate, not a bill.
+    result["run"] = {"plan": plan, "client_elapsed_s": round(elapsed, 1), "watchdog": watch,
+                     "allocated_gpu": allocated_gpu(gpu, result.get("metadata"))}
+    write_json_atomic(path, result)
     from ember_v1.p0b import result_exit_code
 
     # The report is written above first, so it survives a FAIL or UNVERIFIED exit.

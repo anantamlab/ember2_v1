@@ -1,0 +1,138 @@
+{
+  "schema": "ember_v1.p0b.run_failure/2",
+  "task": "inspect",
+  "gpu": "L4",
+  "code_commit": "705dc3a7330c9429b67e868e033758fc3360f6f2",
+  "model_revision": "unsloth/Qwen3.5-2B@fffbc0d8711cf87df6d1f97938c5e50ef94aadc7",
+  "status": "UNVERIFIED",
+  "stage": "queue_timeout",
+  "error": null,
+  "remote_frames": [],
+  "local_elapsed_s": 331.3,
+  "function_call_id": "fc-01M6X7610CJJ325BMG1787WCTP",
+  "app_id": "ap-MWELWMmuIa8CzfW61nHM4B",
+  "watchdog": {
+    "app_id": "ap-MWELWMmuIa8CzfW61nHM4B",
+    "function_call_id": "fc-01M6X7610CJJ325BMG1787WCTP",
+    "submissions": 1,
+    "queue_wait_limit_s": 300,
+    "client_deadline_s": 1860,
+    "poll_interval_s": 30,
+    "polls": 10,
+    "poll_errors": 0,
+    "stats_errors": 0,
+    "queued_snapshots": 10,
+    "snapshots": [
+      {
+        "t_s": 32.2,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 63.6,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 94.9,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 126.2,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 157.6,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 188.9,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 220.2,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 251.5,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 282.8,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      },
+      {
+        "t_s": 314.2,
+        "state": "queued",
+        "backlog": 1,
+        "runners": 0,
+        "running_inputs": 0
+      }
+    ],
+    "first_start_evidence_s": null,
+    "execution_state": "queued",
+    "cancellation": {
+      "requested": true,
+      "terminate_containers": true,
+      "outcome": "unverified",
+      "error": null,
+      "verify": "no terminal state within 15 s after cancel"
+    },
+    "elapsed_s": 331.3
+  },
+  "outstanding_function_call_id": "fc-01M6X7610CJJ325BMG1787WCTP",
+  "manual_cleanup": [
+    "python -c \"import modal; modal.FunctionCall.from_id('fc-01M6X7610CJJ325BMG1787WCTP').cancel(terminate_containers=True)\"",
+    "modal app stop --yes ap-MWELWMmuIa8CzfW61nHM4B",
+    "Check that nothing runs: modal app list; modal container list"
+  ],
+  "cost_estimate": {
+    "kind": "ESTIMATE_NOT_A_BILLING_CAP",
+    "scope": "GPU container runtime of one attempt",
+    "prices": "modal billing rates, 2026-11-08",
+    "configured_container_s": 1500,
+    "gpu_usd": 0.333,
+    "cpu_usd_assumed": 0.079,
+    "memory_usd_assumed": 0.107,
+    "envelope_usd": 0.52,
+    "assumes": [
+      "the container ends within the configured startup and call timeouts (one attempt, retries=0)",
+      "CPU and memory stay at or below 4 cores and 32 GiB; more usage costs more",
+      "the listed prices apply to this workspace and region",
+      "no platform-initiated restart (for example a host preemption) adds a second container"
+    ],
+    "excludes": [
+      "image build on the Modal builder (CPU, or GPU for the optional EMBER_FAST_KERNELS layer)",
+      "volume storage (ember-v1-hf-cache, ember-v1-checkpoints)",
+      "network or egress charges, if any",
+      "local client time and Modal queueing before the container starts"
+    ]
+  },
+  "compatibility_pass_established": false,
+  "note": "No model compatibility PASS was established. cost_estimate is an ESTIMATE, not a bill; read actual charges on the Modal usage page. Modal logs hold the remote evidence."
+}

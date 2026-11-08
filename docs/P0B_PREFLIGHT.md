@@ -31,7 +31,7 @@ Source read: `unslothai/unsloth@fa2a5e714955ecc5ffcae555432036deeb52c37c` (`main
 2. **Fail-closed predictions** (`predict_answers`, `validate_answers`, `validate_questions`). Questions must have exactly `type`, `instructions` (nonempty string) and `criteria` (five actions, string descriptions). `predict()` runs only after `OK` evidence for the same state and questions. Reused evidence must carry a valid HMAC seal from `encode_one` in the same process (per-process random key) and the same row sha256. The row sha256 is order-preserving: state, question IDs and order, `type`, `instructions`, option IDs, option order and descriptions (nested lists, no key sorting). The evidence also carries a binding: per-object random tokens for the model and tokenizer instances, the token limit and the `decision_config` sha256. Another model or tokenizer instance, or a changed config, raises. If an object can not be tracked (no weak reference), the proof is recomputed. No weights are hashed per request, so an in-place weight or tokenizer-vocabulary change on the same object is not detected. A typed or edited dict raises; without evidence the proof is recomputed. Output must have the exact ID set, the five actions, finite probabilities in [0, 1] that sum to 1 within 1e-3, and an answer equal to the top action. A wrapped result with `truncated` not exactly `false` fails. There is no repair and no `stay` fallback.
 3. **Serving** (`decide_batch`, used by `DecisionPolicy.decide`). Any unverified request raises for the batch. `batched_forward=False` stays the default. `batched_forward=True` needs `padding_evidence_path`; `verify_batched_forward_evidence` ignores stored verdicts, re-runs the gate on the raw inputs of all three batch orders, and requires 100% adapter agreement and `OK` encodings. The serving runtime must know its implementation identity (`REQUIRED_IDENTITY_KEYS`: pinned model revision, tokenizer sha256, encoder-config sha256, head-weights sha256, `ember_v1` package-source sha256) and an audited Clef encoder. Every key in `EVIDENCE_MATCH_KEYS` plus the detected kernel packages must equal the evidence (also model name, decision config, CUDA, GPU capability, library versions, precision, `max_seq`, token limit, head path, upstream hashes). The evidence fixes a scope: its question style, its input-token range and its batch size (number of environments measured together). `decide_batch` refuses any request or batch outside that scope; it does not fall back to path A.
 4. **Provenance** (`runtime_metadata`, `padding_gate.validate_provenance`). The model revision is `name@<40-hex>` or `null`, never a placeholder. `kernel_backend` separates `detected_packages` (import check) from `executed` (torch.profiler). The gate requires profiled kernels, pinned revision, library versions, GPU, precision, `max_seq`, token limit, head path and `evidence_source`. A `null` tokenizer revision or code commit is reported in `provenance_gaps`. A missing key fails.
-5. **Inspect fails closed.** `task_inspect` returns per-check `PASS`/`FAIL`/`UNVERIFIED` for `INSPECT_CHECKS` (item shape, Clef encoder, encoding, native predict, batched adapter, adapter agreement, kernel profile, provenance), an `errors` map and an overall `status`. A missing check is `UNVERIFIED`. Errors are recorded, so the report survives. The entrypoint writes the result file first and exits with `result_exit_code`: 0 only for an explicit `PASS`, else 2. This now holds for every task (`throughput` reports `PASS` when at least one batch ran and the rest are OOM).
+5. **Inspect fails closed.** `task_inspect` returns per-check `PASS`/`FAIL`/`UNVERIFIED` for `INSPECT_CHECKS` (item shape, Clef encoder, encoding, native predict, batched adapter, adapter agreement, kernel profile, provenance; P0B-02 adds upstream contract, decision head and model pin), an `errors` map and an overall `status`. A missing check is `UNVERIFIED`. Errors are recorded, so the report survives. The entrypoint writes the result file first and exits with `result_exit_code`: 0 only for an explicit `PASS`, else 2. This now holds for every task (`throughput` reports `PASS` when at least one batch ran and the rest are OOM).
 6. **Timing.** Every timed repetition synchronizes CUDA before and after. Percentiles use nearest rank. `p95_s` needs n >= 20 and `p99_s` needs n >= 100; otherwise they are `null` with a `tail_note`. Server responses report `timing.batch_exec_s` (whole Modal batch, server side, synchronized) and `amortized_per_request_s`. They exclude Modal batching wait, queueing, network and cold start. `modal_predictor().timings` records client end-to-end time next to the server timing.
 
 ## 3. Unverified assumptions (need the GPU run)
@@ -39,7 +39,7 @@ Source read: `unslothai/unsloth@fa2a5e714955ecc5ffcae555432036deeb52c37c` (`main
 | # | Assumption | How the next phase checks it |
 |---|---|---|
 | U1 | The installed `unsloth` vendors the audited Clef file (sha256 `0e304cf7…dc3a3`). If not, every row is `UNVERIFIED` (safe, but P0B can not pass). | `inspect`: `clef_encoder == "MATCHES_AUDITED"`, `upstream_contract.clef_matches_audited` |
-| U2 | The installed `build_dataset` returns the audited dict items. The Modal image installs `unsloth` unpinned from PyPI, which can differ from `main`. | `inspect`: `item_keys` holds `record`, `source`; `encoding.status == "OK"` |
+| U2 | The installed `build_dataset` returns the audited dict items. The image now installs the hash-locked `unsloth==2026.10.11`, whose contract files match the audit (P0B-02, [P0B_GPU_INSPECT.md](P0B_GPU_INSPECT.md)). | `inspect`: `item_keys` holds `record`, `source`; `encoding.status == "OK"` |
 | U3 | `predict()` encodes with a context of at least `min(max_len, 16384)`. | `upstream_contract.decision_matches_audited`; if false, read the installed `decision.py` before trusting `smoke` |
 | U4 | The encoder config exposes `_commit_hash`. If not, `model_revision` is `null` and the gate fails closed. | `inspect`/`smoke` metadata |
 | U5 | The tokenizer exposes `init_kwargs["_commit_hash"]`. If not, it is reported as a provenance gap. | metadata `tokenizer_revision` |
@@ -52,23 +52,23 @@ Source read: `unslothai/unsloth@fa2a5e714955ecc5ffcae555432036deeb52c37c` (`main
 
 ## 4. Next-phase command checklist (authorized GPU run only)
 
-Run in order. Stop at the first non-zero exit (2 = `FAIL` or `UNVERIFIED`).
+Run in order. Stop at the first non-zero exit (2 = `FAIL` or `UNVERIFIED`). Each GPU task needs its own authorization and `--authorize <task>` (P0B-02). The first command, its cost bound and stop conditions: [P0B_GPU_INSPECT.md](P0B_GPU_INSPECT.md).
 
 ```bash
 python -m pip install -e '.[test,modal]'
 python -m pytest -q
 modal setup
-modal run infra/modal_app.py --task inspect --gpu L4                      # U1-U7, U9; exit 0 only on PASS
-modal run infra/modal_app.py --task smoke --gpu L4 --question-style compact --repeats 100
-modal run infra/modal_app.py --task smoke --gpu L4 --question-style verbose --repeats 100
-modal run infra/modal_app.py --task padding --gpu L4 --ns 1,10,50,200 --question-style compact
-modal run infra/modal_app.py --task throughput --gpu L4 --repeats 100
-modal run infra/modal_app.py --task throughput --gpu L40S --repeats 100
-EMBER_FAST_KERNELS=1 modal run infra/modal_app.py --task inspect --gpu L4
-EMBER_FAST_KERNELS=1 modal run infra/modal_app.py --task throughput --gpu L4 --repeats 100
+modal run infra/modal_app.py --task inspect --gpu L4 --authorize inspect   # exit 0 only on PASS
+modal run infra/modal_app.py --task smoke --gpu L4 --question-style compact --repeats 100 --authorize smoke
+modal run infra/modal_app.py --task smoke --gpu L4 --question-style verbose --repeats 100 --authorize smoke
+modal run infra/modal_app.py --task padding --gpu L4 --ns 1,10,50,200 --question-style compact --authorize padding
+modal run infra/modal_app.py --task throughput --gpu L4 --repeats 100 --authorize throughput
+modal run infra/modal_app.py --task throughput --gpu L40S --repeats 100 --authorize throughput
+EMBER_FAST_KERNELS=1 modal run infra/modal_app.py --task inspect --gpu L4 --authorize inspect
+EMBER_FAST_KERNELS=1 modal run infra/modal_app.py --task throughput --gpu L4 --repeats 100 --authorize throughput
 ```
 
-After a PASSing `inspect` + `smoke`, pin `unsloth` / `unsloth_zoo` to the exact versions in `runtime_versions` (`infra/modal_app.py`) and re-run `inspect`. Then, to enable path B on that exact stack only:
+The image is hash-locked (`infra/p0b-requirements.lock.txt`, P0B-02). After a PASSing `inspect` + `smoke`, keep the `pip_freeze` of that run as the environment lock. The fast-kernel layer is not locked yet: pin it before its own run. Then, to enable path B on that exact stack only:
 
 ```bash
 modal volume put ember-v1-checkpoints results/padding-L4-bf16-compact.json /p0b/padding-evidence.json
@@ -78,4 +78,5 @@ modal volume put ember-v1-checkpoints results/padding-L4-bf16-compact.json /p0b/
 ## 5. Spend
 
 - This PR: **$0 GPU**, no Modal calls.
-- Next phase estimate: about 2–3 GPU-hours (mostly L4, about 1 hour L40S, including model download, image build with the optional kernel layer, and the runs above). Check current Modal prices before the run. Hard cap: **$10** (HLD §5.3). Stop and report if a run reaches the cap.
+- First `inspect` (P0B-02): about $0.10–$0.20 expected; estimated GPU-runtime envelope $0.52 at the configured timeouts and assumed resources. These are estimates, not a billing cap; image build and storage are charged apart ([P0B_GPU_INSPECT.md](P0B_GPU_INSPECT.md) section 4).
+- Next phase estimate: about 2–3 GPU-hours (mostly L4, about 1 hour L40S, including model download, image build with the optional kernel layer, and the runs above). Check current Modal prices before the run. Phase budget: **$10** (HLD §5.3), tracked by hand from the Modal usage page; the code does not enforce it. Stop and report if spend reaches the budget.

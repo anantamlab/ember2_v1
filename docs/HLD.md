@@ -1,7 +1,7 @@
 # ember_v1 — Evacuation Decision Model (Anantam Labs) — HLD v3.1
 
 **Project:** `ember_v1` (repo `ember_v1`, Python package `ember_v1`, CLI `ember-v1`, Modal app `ember-v1`).
-**Status:** P0A done (CPU). P0B harness preflight-hardened on CPU (P0B-01, [P0B_PREFLIGHT.md](P0B_PREFLIGHT.md)); P0B GPU feasibility **NOT RUN**. T0 implemented and evaluated on CPU on independent DEV (P1-03, [P1_T0_BASELINE.md](P1_T0_BASELINE.md)). T1 implemented and evaluated on CPU on DEV, paired against T0 (P1-04, [P1_T1_PLANNER.md](P1_T1_PLANNER.md)). T2 implemented and evaluated on DEV against T1 with a preregistered protocol (P1-05, [P1_T2_ROLLOUT.md](P1_T2_ROLLOUT.md)); no evidence of a casualty difference, T2 NOT SELECTED as the training teacher. T3 implemented and evaluated on DEV against T0 and T1 with a preregistered protocol and CPU pilot gate (P1-06, [P1_T3_ACO.md](P1_T3_ACO.md)); fewer casualties than T0, no evidence of a casualty difference against T1, T3 NOT SELECTED. T4 not implemented. Data sources: one registered fixture source S0 (§7.1). No trained model.
+**Status:** P0A done (CPU). P0B harness preflight-hardened on CPU (P0B-01, [P0B_PREFLIGHT.md](P0B_PREFLIGHT.md)); first GPU `inspect` prepared and locked (P0B-02, [P0B_GPU_INSPECT.md](P0B_GPU_INSPECT.md)); P0B GPU feasibility **NOT RUN**. T0 implemented and evaluated on CPU on independent DEV (P1-03, [P1_T0_BASELINE.md](P1_T0_BASELINE.md)). T1 implemented and evaluated on CPU on DEV, paired against T0 (P1-04, [P1_T1_PLANNER.md](P1_T1_PLANNER.md)). T2 implemented and evaluated on DEV against T1 with a preregistered protocol (P1-05, [P1_T2_ROLLOUT.md](P1_T2_ROLLOUT.md)); no evidence of a casualty difference, T2 NOT SELECTED as the training teacher. T3 implemented and evaluated on DEV against T0 and T1 with a preregistered protocol and CPU pilot gate (P1-06, [P1_T3_ACO.md](P1_T3_ACO.md)); fewer casualties than T0, no evidence of a casualty difference against T1, T3 NOT SELECTED. T4 not implemented. Data sources: one registered fixture source S0 (§7.1). No trained model.
 **Supersedes:** HLD v2 (project "evac-decision"). The v2 phase gates stay; v3 adds a concrete teacher, a Modal plan, a token budget and four design decisions from verified Unsloth facts. v3.1 renames the project and adds the data-source registry.
 **Boundary:** separate repo. Never write training code or assets into EMBERBench.
 
@@ -41,7 +41,7 @@ If T1 (cheap) already matches T2, the amortization claim fails. Report that as a
 - `ClefDecisionModel.forward(input_ids, attention_mask, records)` returns `(flat_padded_logits, None)`.
 - `DecisionTrainer` has `head_learning_rate` (default constant `HEAD_LEARNING_RATE = 1e-4`), `kl_weight`, `label_smoothing`, `brier_weight`, `permute_fields`. `evaluate(..., batch_size=)`, `calibrate(...)`, `split_holdout(...)` exist.
 - Vendored Clef `collate_records(records, pad_token_id, device)` right-pads. The head uses `attention_mask.sum()` as length. No `cu_seqlens`, no `position_ids` handling.
-- Notebook pins: `torch==2.8.0`, `transformers==5.2.0`, `trl==0.22.2`, `xformers==0.0.32.post2`; `unsloth` unpinned.
+- Notebook pins: `torch==2.8.0`, `transformers==5.2.0`, `trl==0.22.2`, `xformers==0.0.32.post2`; `unsloth` unpinned. P0B image (P0B-02): hash-locked `unsloth[huggingface]==2026.10.11` (audited contract bytes), `unsloth_zoo==2026.10.11`, `torchao==0.14.0` (0.16 is built for torch 2.10), model commit `unsloth/Qwen3.5-2B@fffbc0d8`. See [P0B_GPU_INSPECT.md](P0B_GPU_INSPECT.md).
 
 ### 2.2 Assumptions to verify (owner phase in brackets)
 
@@ -181,7 +181,7 @@ Many CPU workers call `decide.remote()` at the same time. Modal groups those cal
 - Every response carries `status: "OK"`, `truncated: false`, `model_revision`, `path`, `encoding`, `timing`. Eval reports use them. Clients reject any other response.
 - Two latencies: **server batch execution** (`timing.batch_exec_s` for the whole Modal batch, CUDA-synchronized, plus `amortized_per_request_s`) and **end-to-end** (client wall clock in `modal_predictor().timings`, includes network, queueing and `wait_ms`). The deadline claim uses the latency of the real deployment (A7). p95 needs n >= 20 and p99 needs n >= 100 samples; smaller samples report them as `null`.
 - Fail-closed: unverified or cut input, missing/extra IDs, wrong option sets, bad probabilities or a network error raise. No fallback action.
-- Image pins follow the notebook. Pin `unsloth`/`unsloth_zoo` to exact versions after the first PASSing `inspect` + `smoke`. Do not change pins inside a phase.
+- The image installs a hash-locked requirements file (`infra/p0b-requirements.lock.txt`) on a digest-pinned base. A CPU build step (`verify-install`) fails the build if upstream contract bytes or pinned versions drift. Every GPU task needs `--authorize <task>`, a clean commit and the pinned model, and runs under fixed timeouts (`p0b.gpu_run_plan`). Do not change pins inside a phase.
 - Fast DeltaNet kernels are an opt-in image layer (`EMBER_FAST_KERNELS=1`). Run P0B with and without it. Report which kernels ran (profiler, `kernel_backend.executed`), not which packages imported (`kernel_backend.detected_packages`).
 
 ### 5.3 Budget (proposal; replace with measured values after P0B)
@@ -196,7 +196,7 @@ Many CPU workers call `decide.remote()` at the same time. Modal groups those cal
 | Reserve | $40 | Not spent without a written reason |
 | **Total** | **$200** | Unchanged by adding T3, T4 or the arbiter |
 
-Track GPU-seconds from `timing.batch_exec_s` (once per Modal batch, not per request), simulator CPU time separately. Never convert dollars to episodes before measurement.
+Caps are planning budgets, tracked from the Modal usage page; the code does not enforce them. Per-run figures from `gpu_run_plan` are estimates (`ESTIMATE_NOT_A_BILLING_CAP`). Track GPU-seconds from `timing.batch_exec_s` (once per Modal batch, not per request), simulator CPU time separately. Never convert dollars to episodes before measurement.
 
 ## 6. Phases and gates
 

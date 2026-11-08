@@ -18,16 +18,18 @@ from ember_v1 import p0b
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", default="unsloth/Qwen3.5-2B")
+    parser.add_argument("--model", default=p0b.PINNED_MODEL)
+    parser.add_argument("--revision", default=p0b.PINNED_MODEL_COMMIT)
     parser.add_argument("--max-seq", type=int, default=16384)
     parser.add_argument("--precision", choices=("4bit", "bf16"), default="bf16")
     parser.add_argument("--question-style", choices=("verbose", "compact"), default="compact")
     parser.add_argument("--repeats", type=int, default=25)
     args = parser.parse_args()
-    model, tokenizer = p0b.load_model(args.model, args.max_seq, args.precision)
+    model, tokenizer = p0b.load_model(args.model, args.max_seq, args.precision, revision=args.revision)
     report = p0b.task_smoke(model, tokenizer, (1, 10, 50, 100, 200), args.repeats, args.question_style)
     report["metadata"] = p0b.runtime_metadata(model, tokenizer, args.model, args.precision, args.max_seq,
-                                              evidence_source="local:experiments/phase0b_unsloth_smoke.py")
+                                              evidence_source="local:experiments/phase0b_unsloth_smoke.py",
+                                              requested_revision=args.revision)
     print(json.dumps(report, indent=2))
     if report["status"] != "PASS":
         raise SystemExit(2)
