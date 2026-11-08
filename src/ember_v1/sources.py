@@ -28,6 +28,9 @@ QUALITIES = ("teacher_verified", "teacher_unverified", "synthetic_fixture")
 TRAINING_QUALITIES = frozenset({"teacher_verified"})
 _TRACE_KEYS = {"observation", "actions", "group_id", "source"}
 _MAX_MEMBER_BYTES = 50 * 2**20  # guard against oversized / zip-bomb members
+_MAX_TOTAL_BYTES = 2 * 2**30    # declared uncompressed total of one zip
+_MAX_MEMBERS = 100_000
+_MAX_RATIO = 200                # declared uncompressed / compressed size, for members above 1 MiB
 
 
 def verify_teacher_decision(trace: Mapping[str, Any], cache: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -45,7 +48,15 @@ def verify_teacher_decision(trace: Mapping[str, Any], cache: dict[str, Any] | No
     records = ep["records"]
     if not isinstance(records, list) or type(step) is not int or not 1 <= step <= len(records):
         raise ValueError("teacher_verified needs an integer step inside the episode")
-    key = digest(dict(ep))
+    # A shared-episode member attaches one episode object to many traces: hash it once per object. The cache
+    # keeps the object alive, so its id cannot be reused while the cache exists.
+    memo = cache.get(("id", id(ep))) if cache is not None else None
+    if memo is not None and memo[0] is ep:
+        key = memo[1]
+    else:
+        key = digest(dict(ep))
+        if cache is not None:
+            cache[("id", id(ep))] = (ep, key)
     if cache is not None and key in cache:
         verdict, observations = cache[key]
     else:
@@ -75,13 +86,31 @@ def sha256_file(path: Path) -> str:
     return "sha256:" + h.hexdigest()
 
 
+SHARED_EPISODE_FORMAT = "s1-shard-member@1.0.0"
+
+
 def _traces(data: Any) -> Iterable[Mapping[str, Any]]:
-    """A member holds one trace object, a list of them, or {"traces": [...]}."""
+    """A member holds one trace object, a list of them, or {"traces": [...]}.
+
+    Shared-episode member (`SHARED_EPISODE_FORMAT`): {"member_format", "episode", "traces"}. The episode is
+    stored once and attached to every trace; a trace in such a member must not carry its own episode. This
+    keeps a shard linear in episode length (a per-trace episode copy is quadratic).
+    """
+    shared = None
+    if isinstance(data, Mapping) and "member_format" in data:
+        if data["member_format"] != SHARED_EPISODE_FORMAT or set(data) != {"member_format", "episode", "traces"} \
+                or not isinstance(data["traces"], list):
+            raise ValueError("unsupported or malformed shared-episode member")
+        shared = data["episode"]
     if isinstance(data, Mapping) and isinstance(data.get("traces"), list):
         data = data["traces"]
     items = data if isinstance(data, list) else [data]
     for item in items:
         if isinstance(item, Mapping) and set(item) >= _TRACE_KEYS:
+            if shared is not None:
+                if "episode" in item:
+                    raise ValueError("a trace in a shared-episode member must not carry its own episode")
+                item = {**item, "episode": shared}
             yield item
 
 
@@ -104,11 +133,21 @@ def ingest_zip(zip_path: Path, *, source_id: str, quality: str,
     other_json = 0
     replay_cache: dict[str, Any] = {}
     with zipfile.ZipFile(zip_path) as zf:
-        for info in sorted(zf.infolist(), key=lambda i: i.filename):
-            if info.is_dir() or not info.filename.lower().endswith((".json", ".jsonl")):
+        infos = zf.infolist()
+        if len(infos) > _MAX_MEMBERS:
+            raise ValueError(f"too many zip members: {len(infos)} > {_MAX_MEMBERS}")
+        if sum(i.file_size for i in infos) > _MAX_TOTAL_BYTES:
+            raise ValueError("zip expands beyond the total size bound")
+        for info in sorted(infos, key=lambda i: i.filename):
+            name = info.filename
+            if name.startswith("/") or "\\" in name or ":" in name or ".." in name.split("/"):
+                raise ValueError(f"unsafe member path: {name!r}")
+            if info.is_dir() or not name.lower().endswith((".json", ".jsonl")):
                 continue
             if info.file_size > _MAX_MEMBER_BYTES:
                 raise ValueError(f"member too large: {info.filename}")
+            if info.file_size > _MAX_RATIO * max(info.compress_size, 1) and info.file_size > 2**20:
+                raise ValueError(f"member compression ratio too high: {info.filename}")
             raw = zf.read(info)
             text = raw.decode("utf-8")
             docs = ([json.loads(line) for line in text.splitlines() if line.strip()]
