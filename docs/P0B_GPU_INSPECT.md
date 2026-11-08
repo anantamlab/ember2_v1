@@ -190,6 +190,31 @@ Client reports (unchanged copies of `results/*.json`): `docs/p0b_attempts/attemp
 
 Decision after attempt 5: no L40S attempt. The failure happened after a container started, and the rule (§1.1 step 3) forbids a retry on another GPU. It is a harness defect, not a GPU result. Fixes (this PR): the lock hash is read only where `modal.is_local()` (`_image_env`), with a test that imports a lone copy of `modal_app.py` as the container does (it fails on `21c88d5`); and the `container_restarted` watchdog rule. The next attempt needs a new, explicit authorization.
 
+Run 3 (2026-11-08, code `705dc3a`, new written authorization: L4 → A10 → L40S, $2 plan, retries 0, one container, `EMBER_FAST_KERNELS` unset, clean checkout):
+
+| # | App | Result | Stage |
+|---|---|---|---|
+| 6 | `ap-MWELWMmuIa8CzfW61nHM4B` (L4) | call `fc-01M6X7610CJJ325BMG1787WCTP`; 10 readings `queued`, 0 runners; cancelled at 331 s, outcome `unverified`. Checked after: app `stopped` 14:53:12 IST, 0 tasks, container list empty; a second `cancel(terminate_containers=True)` sent. No container. `UNVERIFIED` | `queue_timeout` |
+| 7 | `ap-niIArHbXX3gAfTQzwij7ib` (A10) | call `fc-01M6X7J4VXQWEGD55M3J1PV01Z`; container at 32 s, 0 queued readings, one submission, no restart; completed at 113.4 s; app `stopped` 14:56:16 IST, container list empty. **`PASS`: all 11 checks.** | completed |
+
+Attempt 7 evidence (`docs/p0b_attempts/attempt7-A10-inspect-pass.json`):
+
+| Item | Value |
+|---|---|
+| Allocated GPU | `NVIDIA A10`, capability 8.6, `matches_request: true` (CUDA properties in the container) |
+| Queue / start | first start evidence 32.1 s after submission; total client time 113.4 s |
+| Model | `unsloth/Qwen3.5-2B@fffbc0d8711cf87df6d1f97938c5e50ef94aadc7` (`model_pin` PASS); `tokenizer_revision` null (provenance gap, as before), tokenizer sha256 `a57b5c62…` |
+| Versions | torch 2.8.0, CUDA 12.8, transformers 5.2.0, unsloth / unsloth_zoo 2026.10.11, triton 3.4.0, xformers 0.0.32.post2; `version_mismatches` empty; upstream contract all audited hashes match |
+| Precision | backbone bf16 (plus fp32 parameters), `unsloth_forced_float32: false`; head fp32 |
+| Decision head | `JointSchemaHead` on `ClefDecisionModel`; `decision_head` PASS |
+| Output | 3 questions, each options `east, north, south, stay, west`; `native_predict` PASS; batched argmax equals `predict()` |
+| Hybrid kernels | profiler (`kernel_profile` PASS, 183 device events): FLA gated-delta (`chunk_gated_delta_rule_fwd_*`), `_causal_conv1d_fwd_kernel`, Triton fused ops, cutlass bf16 GEMM. **Not the expected torch fallback (G6):** no `fla` or `causal-conv1d` distribution is in `pip freeze`, but `fla` imports (`kernel_backend.detected_packages`). Source of these kernels: open. |
+| Memory | `cuda_mem_reserved_gb` 4.555 (reserved, not a peak-allocated reading) |
+| Full-state preservation | `encoding` N=3: 617 tokens, not truncated, unbounded re-encode proof OK. Probe N=1: 350 tokens OK. Probe N=200: `FAIL_ENCODE_SKIPPED` (`build_dataset` skipped the row; reason not recorded). Not gating (`smoke` owns N≤200); G10 open. |
+| Charges (billing report 2026-11-08) | attempt 7: A10G $0.0342, CPU $0.0020, memory $0.0007, egress $0.0055, total $0.0425; attempt 6: $0.00001. Billed $0.00 (credits). |
+
+Stop: the first PASS ends run 3. No L40S attempt. Smoke, padding, throughput, distillation and training need their own authorization.
+
 ## 7. Remaining GPU-only uncertainties
 
 | # | Question | Evidence in the inspect result |
@@ -199,9 +224,9 @@ Decision after attempt 5: no L40S attempt. The failure happened after a containe
 | G3 | Is the backbone bf16 on L4, or on the forced float32 path? Memory? | `backbone.param_dtypes`, `unsloth_forced_float32`, `cuda_mem_reserved_gb` |
 | G4 | Does the `predict()` output pass the strict checks (ID set, five actions, sum within 1e-3)? | `native_predict` |
 | G5 | Does `_clef_amp_dtype` exist and do flat logits follow record-then-question order (U6, A1)? | `batched_adapter`, `adapter_agreement` |
-| G6 | Which DeltaNet kernels run (A5)? fla and causal-conv1d are not in the base image, so the transformers torch fallback is expected. | `kernels*.markers`, `executed` |
+| G6 | Which DeltaNet kernels run (A5)? fla and causal-conv1d are not in the base image, so the transformers torch fallback is expected. | `kernels*.markers`, `executed`. **Attempt 7 (A10): FLA gated-delta and causal-conv1d Triton kernels ran, with no such distribution in `pip freeze`. Source open; resolve before smoke compares backends.** |
 | G7 | Does the profiler see CUDA kernels in a Modal container (CUPTI)? | `kernel_profile` |
 | G8 | Are the identity hashes computable (U9), and is `head_sha256` reproducible across runs (seed 3407)? | `metadata` hashes; compare two runs later |
 | G9 | Does the hash-checked install of 107 wheels succeed on the Modal builder? (CPU, before GPU) | **Resolved 2026-11-03: yes.** Attempt 1: 107 wheels, `pip check` clean. Attempt 2: `verify-install` PASS, all audited hashes. |
 | G10 | Real compact token count at N=200 versus 16384. | `preservation_probe` |
-| G11 | Does the app module import in the GPU container? | **Failed 2026-11-08 (attempt 5), fixed after.** The fix is tested locally only (CPU import of a lone copy with `modal.is_local()` False). |
+| G11 | Does the app module import in the GPU container? | **Failed 2026-11-08 (attempt 5), fixed in `705dc3a`; resolved by attempt 7 (A10 container imported and completed).** |

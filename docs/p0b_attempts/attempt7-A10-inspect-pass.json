@@ -1,0 +1,713 @@
+{
+  "metadata": {
+    "schema": "ember_v1.p0b.runtime/2",
+    "model_name": "unsloth/Qwen3.5-2B",
+    "model_revision": "unsloth/Qwen3.5-2B@fffbc0d8711cf87df6d1f97938c5e50ef94aadc7",
+    "tokenizer_revision": null,
+    "tokenizer_sha256": "a57b5c62cd5f242a06c632b82cc0b4f8239d08cc80fd9347fc1f629be977c6ca",
+    "encoder_config_sha256": "5ed1d7d417ed4f32134c7f18ac9b11c5ce36435c8a47394fdd27cc4ed3596355",
+    "head_sha256": "0f31b5311331e30daef25d4d6c61dccc636fa17c2b0e134c338b39a997467630",
+    "decision_config": {
+      "base_model": "unsloth/Qwen3.5-2B",
+      "base_revision": "fffbc0d8711cf87df6d1f97938c5e50ef94aadc7",
+      "layout": "clef",
+      "load_in_4bit": false,
+      "max_len": 16384,
+      "temperature": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "ember_v1_source_sha256": "49c4d7e8779f3d6b201cc27da93a8d6b699d55a6f1395e9c69574502240a213d",
+    "runtime_versions": {
+      "unsloth": "2026.10.11",
+      "unsloth_zoo": "2026.10.11",
+      "transformers": "5.2.0",
+      "tokenizers": "0.22.2",
+      "torch": "2.8.0",
+      "torchvision": "0.23.0",
+      "triton": "3.4.0",
+      "xformers": "0.0.32.post2",
+      "peft": "0.21.2",
+      "accelerate": "1.15.0",
+      "torchao": "0.14.0",
+      "flash-linear-attention": null,
+      "causal-conv1d": null,
+      "bitsandbytes": "0.50.2"
+    },
+    "cuda": "12.8",
+    "gpu": "NVIDIA A10",
+    "gpu_capability": "8.6",
+    "head_path": "unsloth.models.decision.ClefDecisionModel+unsloth.models.clef.JointSchemaHead+clef.collate_records(right_pad)",
+    "kernel_backend": {
+      "detected_packages": [
+        "fla"
+      ],
+      "executed": null,
+      "evidence": "import_check_only"
+    },
+    "precision": "bf16",
+    "max_seq": 16384,
+    "token_limit": 16384,
+    "upstream_contract": {
+      "audited_unsloth_commit": "fa2a5e714955ecc5ffcae555432036deeb52c37c",
+      "audited_clef_revision": "6a3ac5fc030a3f33f7fa860a1271886b64a6606d",
+      "clef_sha256": "0e304cf7c6500e8bb59bef7e2afd2c6373f82596dfb3b57d1aa93c175e2dc3a3",
+      "clef_matches_audited": true,
+      "decision_sha256": "784a0a36f50f82c1608b6ef53392249a585e8d16859c2ec3cfe7f4d64fbf56b0",
+      "decision_matches_audited": true,
+      "decision_from_lm_sha256": "1236b0ec42c05687702e3ef813eaf0ae44b9280477d2ec6df2a1828754455153",
+      "decision_from_lm_matches_audited": true,
+      "decision_common_sha256": "6dbfab4ed887fff660cdeda7fcfdafc035566ad1da3ad5b6e91e212a7bde8f4c",
+      "decision_common_matches_audited": true,
+      "all_match_audited": true
+    },
+    "code_commit": "705dc3a7330c9429b67e868e033758fc3360f6f2",
+    "evidence_source": "modal:P0BHarness",
+    "requested_model_revision": "unsloth/Qwen3.5-2B@fffbc0d8711cf87df6d1f97938c5e50ef94aadc7",
+    "backbone": {
+      "class": "unsloth_compiled_module_qwen3_5.Qwen3_5ForConditionalGeneration",
+      "param_dtypes": [
+        "torch.bfloat16",
+        "torch.float32"
+      ],
+      "unsloth_forced_float32": false,
+      "unsloth_fast_backbone": true
+    },
+    "host": {
+      "python": "3.11.5",
+      "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.35",
+      "nvidia_driver": "610.57.04",
+      "cudnn": 91002,
+      "image_lock_sha256": "9613f929b53c0fed65105b1f808f64e8f842dab29e837b3dca3e503cbd60bc2c"
+    },
+    "pip_freeze_sha256": "d75f6d636d370edff914004e003e726dc6cccf587bd63874d6edb8d82a2301bd"
+  },
+  "task": "inspect",
+  "question_style": "compact",
+  "checks": {
+    "decision_head": "PASS",
+    "item_shape": "PASS",
+    "upstream_contract": "PASS",
+    "clef_encoder": "PASS",
+    "encoding": "PASS",
+    "native_predict": "PASS",
+    "batched_adapter": "PASS",
+    "adapter_agreement": "PASS",
+    "kernel_profile": "PASS",
+    "provenance": "PASS",
+    "model_pin": "PASS"
+  },
+  "errors": {},
+  "required_checks": [
+    "item_shape",
+    "clef_encoder",
+    "upstream_contract",
+    "decision_head",
+    "encoding",
+    "native_predict",
+    "batched_adapter",
+    "adapter_agreement",
+    "kernel_profile",
+    "provenance",
+    "model_pin"
+  ],
+  "model_type": "unsloth.models.decision.ClefDecisionModel",
+  "has_head": true,
+  "has_encoder": true,
+  "decision_head": {
+    "head_class": "unsloth.models.clef.JointSchemaHead",
+    "encoder_class": "unsloth_compiled_module_qwen3_5.Qwen3_5ForConditionalGeneration",
+    "forward_signature": "(self, input_ids, attention_mask, records, head=None, **kwargs)",
+    "head_forward_signature": "(self, hidden_states, input_ids, attention_mask, records, output_embedding_weight) -> list",
+    "head_param_count": 30472708,
+    "head_param_dtypes": [
+      "torch.float32"
+    ],
+    "head_state_shapes": {
+      "evidence_layers.0.attention.in_proj_bias": [
+        1536
+      ],
+      "evidence_layers.0.attention.in_proj_weight": [
+        1536,
+        512
+      ],
+      "evidence_layers.0.attention.out_proj.bias": [
+        512
+      ],
+      "evidence_layers.0.attention.out_proj.weight": [
+        512,
+        512
+      ],
+      "evidence_layers.0.feedforward.0.bias": [
+        2048
+      ],
+      "evidence_layers.0.feedforward.0.weight": [
+        2048,
+        512
+      ],
+      "evidence_layers.0.feedforward.3.bias": [
+        512
+      ],
+      "evidence_layers.0.feedforward.3.weight": [
+        512,
+        2048
+      ],
+      "evidence_layers.0.feedforward_norm.bias": [
+        512
+      ],
+      "evidence_layers.0.feedforward_norm.weight": [
+        512
+      ],
+      "evidence_layers.0.memory_norm.bias": [
+        512
+      ],
+      "evidence_layers.0.memory_norm.weight": [
+        512
+      ],
+      "evidence_layers.0.query_norm.bias": [
+        512
+      ],
+      "evidence_layers.0.query_norm.weight": [
+        512
+      ],
+      "evidence_layers.1.attention.in_proj_bias": [
+        1536
+      ],
+      "evidence_layers.1.attention.in_proj_weight": [
+        1536,
+        512
+      ],
+      "evidence_layers.1.attention.out_proj.bias": [
+        512
+      ],
+      "evidence_layers.1.attention.out_proj.weight": [
+        512,
+        512
+      ],
+      "evidence_layers.1.feedforward.0.bias": [
+        2048
+      ],
+      "evidence_layers.1.feedforward.0.weight": [
+        2048,
+        512
+      ],
+      "evidence_layers.1.feedforward.3.bias": [
+        512
+      ],
+      "evidence_layers.1.feedforward.3.weight": [
+        512,
+        2048
+      ],
+      "evidence_layers.1.feedforward_norm.bias": [
+        512
+      ],
+      "evidence_layers.1.feedforward_norm.weight": [
+        512
+      ],
+      "evidence_layers.1.memory_norm.bias": [
+        512
+      ],
+      "evidence_layers.1.memory_norm.weight": [
+        512
+      ],
+      "evidence_layers.1.query_norm.bias": [
+        512
+      ],
+      "evidence_layers.1.query_norm.weight": [
+        512
+      ],
+      "field_norm.bias": [
+        512
+      ],
+      "field_norm.weight": [
+        512
+      ],
+      "global_projection.weight": [
+        512,
+        2048
+      ],
+      "hidden_norm.bias": [
+        2048
+      ],
+      "hidden_norm.weight": [
+        2048
+      ],
+      "joint_logit_scale": [],
+      "layers.0.linear1.bias": [
+        2048
+      ],
+      "layers.0.linear1.weight": [
+        2048,
+        512
+      ],
+      "layers.0.linear2.bias": [
+        512
+      ],
+      "layers.0.linear2.weight": [
+        512,
+        2048
+      ],
+      "layers.0.multihead_attn.in_proj_bias": [
+        1536
+      ],
+      "layers.0.multihead_attn.in_proj_weight": [
+        1536,
+        512
+      ]
+    },
+    "forward_missing_params": []
+  },
+  "forward_signature": "(self, input_ids, attention_mask, records, head=None, **kwargs)",
+  "decision_config": {
+    "layout": "clef",
+    "max_len": "16384",
+    "temperature": "[1.0, 1.0, 1.0]",
+    "base_model": "unsloth/Qwen3.5-2B",
+    "base_revision": "fffbc0d8711cf87df6d1f97938c5e50ef94aadc7",
+    "load_in_4bit": "False"
+  },
+  "report": {
+    "total": "3",
+    "skipped": "0",
+    "reason": "None",
+    "truncated": "0"
+  },
+  "item_type": "dict",
+  "item_keys": [
+    "input_ids",
+    "labels",
+    "qtypes",
+    "record",
+    "row",
+    "source",
+    "targets"
+  ],
+  "record_attrs": [
+    "input_ids",
+    "media",
+    "questions",
+    "record_id"
+  ],
+  "question_attrs": [
+    "option_ids",
+    "option_spans",
+    "question_id",
+    "question_span",
+    "question_type"
+  ],
+  "upstream_contract": {
+    "audited_unsloth_commit": "fa2a5e714955ecc5ffcae555432036deeb52c37c",
+    "audited_clef_revision": "6a3ac5fc030a3f33f7fa860a1271886b64a6606d",
+    "clef_sha256": "0e304cf7c6500e8bb59bef7e2afd2c6373f82596dfb3b57d1aa93c175e2dc3a3",
+    "clef_matches_audited": true,
+    "decision_sha256": "784a0a36f50f82c1608b6ef53392249a585e8d16859c2ec3cfe7f4d64fbf56b0",
+    "decision_matches_audited": true,
+    "decision_from_lm_sha256": "1236b0ec42c05687702e3ef813eaf0ae44b9280477d2ec6df2a1828754455153",
+    "decision_from_lm_matches_audited": true,
+    "decision_common_sha256": "6dbfab4ed887fff660cdeda7fcfdafc035566ad1da3ad5b6e91e212a7bde8f4c",
+    "decision_common_matches_audited": true,
+    "all_match_audited": true
+  },
+  "clef_encoder": "MATCHES_AUDITED",
+  "encoding": {
+    "input_tokens": 617,
+    "full_tokens": 617,
+    "token_limit": 16384,
+    "report": {
+      "total": 3,
+      "skipped": 0,
+      "reason": null,
+      "truncated": 0
+    },
+    "status": "OK",
+    "truncated": false,
+    "evidence": "unbounded encode_record reference, clef sha256 0e304cf7c650",
+    "row_sha256": "d140604a8d8dcd67b250e725b2560a90e699299eae1b01177326e0a44fa12757",
+    "binding": {
+      "model": "447831fc9fa14a824324eddc850dde8f",
+      "tokenizer": "3c2a07a6c904b28472a66d7b14dea39a",
+      "token_limit": 16384,
+      "decision_config_sha256": "0c5f5b544c883b8ded400e5d114e8ab69358957761e29f3869d238dddba77654"
+    },
+    "seal": "e5607ebcbdad14679132d3283095e59ab92f0ed4f28370b73f0653abae2e86e3"
+  },
+  "record_type": "unsloth._vendor.clef.joint_schema_model.EncodedRecord",
+  "question_type": "EncodedQuestion",
+  "question_options": [
+    {
+      "question_id": "P0",
+      "option_ids": [
+        "east",
+        "north",
+        "south",
+        "stay",
+        "west"
+      ]
+    },
+    {
+      "question_id": "P1",
+      "option_ids": [
+        "east",
+        "north",
+        "south",
+        "stay",
+        "west"
+      ]
+    },
+    {
+      "question_id": "P2",
+      "option_ids": [
+        "east",
+        "north",
+        "south",
+        "stay",
+        "west"
+      ]
+    }
+  ],
+  "predict_status": "OK",
+  "batched_vs_predict_argmax_equal": true,
+  "kernels_native_predict": {
+    "executed": [
+      "aten::mm",
+      "Torch-Compiled Region: 2/0",
+      "void cutlass::Kernel2<cutlass_80_tensorop_bf16_s16816gemm_relu_bf16_256x128_32x3_tn_align8>(cutlass_80_tensorop_bf16_s16",
+      "aten::linear",
+      "aten::matmul",
+      "ampere_bf16_s16816gemm_bf16_256x128_ldg8_f2f_stages_32x3_tn",
+      "ampere_bf16_s16816gemm_bf16_128x128_ldg8_f2f_stages_64x3_tn",
+      "ChunkGatedDeltaRuleFunction",
+      "aten::copy_",
+      "aten::scaled_dot_product_attention",
+      "triton_poi_fused_mul_silu_0",
+      "triton_poi_fused_mul_silu_0",
+      "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::T",
+      "aten::clone",
+      "ampere_bf16_s1688gemm_bf16_128x128_ldg8_f2f_tn",
+      "aten::contiguous",
+      "aten::to",
+      "aten::_to_copy",
+      "aten::add",
+      "chunk_fwd_kernel_o",
+      "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+      "aten::_scaled_dot_product_flash_attention",
+      "aten::_flash_attention_forward",
+      "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<c10::BFloat16>, std::array<char*, 3ul> >(i",
+      "void at::native::vectorized_elementwise_kernel<4, at::native::bfloat16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambd"
+    ],
+    "evidence": "torch_profiler",
+    "device_event_count": 183,
+    "markers": {
+      "fla_gated_delta": [
+        "chunk_fwd_kernel_o",
+        "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+        "chunk_gated_delta_rule_fwd_kkt_solve_kernel"
+      ],
+      "causal_conv1d": [
+        "_causal_conv1d_fwd_kernel"
+      ],
+      "triton": [
+        "triton_poi_fused_mul_silu_0",
+        "triton_poi_fused_mul_silu_0",
+        "triton_red_fused__to_copy_add_mean_mul_pow_rsqrt_0",
+        "triton_red_fused__to_copy_add_mean_mul_pow_rsqrt_0",
+        "triton_poi_fused_cat_0",
+        "triton_poi_fused_cat_0",
+        "triton_poi_fused_cat_1",
+        "triton_poi_fused_cat_1",
+        "triton_per_fused_native_layer_norm_0",
+        "triton_per_fused_native_layer_norm_0"
+      ]
+    }
+  },
+  "kernels": {
+    "executed": [
+      "aten::mm",
+      "Torch-Compiled Region: 2/1",
+      "void cutlass::Kernel2<cutlass_80_tensorop_bf16_s16816gemm_relu_bf16_256x128_32x3_tn_align8>(cutlass_80_tensorop_bf16_s16",
+      "aten::linear",
+      "aten::matmul",
+      "ampere_bf16_s16816gemm_bf16_256x128_ldg8_f2f_stages_32x3_tn",
+      "ampere_bf16_s16816gemm_bf16_128x128_ldg8_f2f_stages_64x3_tn",
+      "ChunkGatedDeltaRuleFunction",
+      "aten::copy_",
+      "aten::scaled_dot_product_attention",
+      "triton_poi_fused_mul_silu_0",
+      "triton_poi_fused_mul_silu_0",
+      "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::T",
+      "aten::clone",
+      "ampere_bf16_s1688gemm_bf16_128x128_ldg8_f2f_tn",
+      "aten::contiguous",
+      "aten::to",
+      "aten::_to_copy",
+      "aten::add",
+      "chunk_fwd_kernel_o",
+      "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+      "aten::_scaled_dot_product_flash_attention",
+      "aten::_flash_attention_forward",
+      "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<c10::BFloat16>, std::array<char*, 3ul> >(i",
+      "void at::native::vectorized_elementwise_kernel<4, at::native::bfloat16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambd"
+    ],
+    "evidence": "torch_profiler",
+    "device_event_count": 183,
+    "markers": {
+      "fla_gated_delta": [
+        "chunk_fwd_kernel_o",
+        "chunk_gated_delta_rule_fwd_kernel_h_blockdim64",
+        "chunk_gated_delta_rule_fwd_kkt_solve_kernel"
+      ],
+      "causal_conv1d": [
+        "_causal_conv1d_fwd_kernel"
+      ],
+      "triton": [
+        "triton_poi_fused_mul_silu_0",
+        "triton_poi_fused_mul_silu_0",
+        "triton_red_fused__to_copy_add_mean_mul_pow_rsqrt_0",
+        "triton_red_fused__to_copy_add_mean_mul_pow_rsqrt_0",
+        "triton_poi_fused_cat_0",
+        "triton_poi_fused_cat_0",
+        "triton_poi_fused_cat_1",
+        "triton_poi_fused_cat_1",
+        "triton_per_fused_native_layer_norm_0",
+        "triton_per_fused_native_layer_norm_0"
+      ]
+    }
+  },
+  "provenance_gaps": [
+    "tokenizer_revision"
+  ],
+  "expected_model_revision": "unsloth/Qwen3.5-2B@fffbc0d8711cf87df6d1f97938c5e50ef94aadc7",
+  "preservation_probe": [
+    {
+      "n": 1,
+      "status": "OK",
+      "truncated": false,
+      "input_tokens": 350,
+      "full_tokens": 350,
+      "token_limit": 16384
+    },
+    {
+      "n": 200,
+      "status": "FAIL_ENCODE_SKIPPED",
+      "truncated": null,
+      "input_tokens": null,
+      "full_tokens": null,
+      "token_limit": null
+    }
+  ],
+  "pip_freeze": [
+    "accelerate==1.15.0",
+    "aiohappyeyeballs==2.6.1",
+    "aiohappyeyeballs==2.7.1",
+    "aiohttp==3.12.7",
+    "aiohttp==3.14.5",
+    "aiosignal==1.3.2",
+    "aiosignal==1.4.0",
+    "annotated-doc==0.0.5",
+    "annotated-types==0.8.0",
+    "anyio==4.16.0",
+    "attrs==25.3.0",
+    "attrs==26.1.0",
+    "bitsandbytes==0.50.2",
+    "cbor2==5.7.0",
+    "certifi==2026.10.19",
+    "certifi==2026.10.23",
+    "charset-normalizer==3.5.2",
+    "click==8.5.0",
+    "cloudpickle==3.1.2",
+    "cut-cross-entropy==25.1.1",
+    "datasets==4.8.5",
+    "diffusers==0.42.1",
+    "dill==0.4.1",
+    "docstring_parser==0.18.0",
+    "einops==0.8.2",
+    "filelock==4.2.7",
+    "frozenlist==1.6.0",
+    "frozenlist==1.8.0",
+    "fsspec==2026.2.0",
+    "grpclib==0.4.8",
+    "h11==0.16.0",
+    "h2==4.2.0",
+    "hf-xet==1.8.0",
+    "hf_transfer==0.1.9",
+    "hpack==4.1.0",
+    "httpcore==1.0.9",
+    "httpx==0.28.1",
+    "huggingface_hub==1.33.0",
+    "hyperframe==6.1.0",
+    "idna==3.10",
+    "idna==3.20",
+    "importlib_metadata==10.1.0",
+    "Jinja2==3.1.6",
+    "joblib==1.6.0",
+    "json5==0.17.3",
+    "markdown-it-py==4.2.0",
+    "MarkupSafe==3.0.4",
+    "mdurl==0.1.2",
+    "mpmath==1.3.0",
+    "msgspec==0.22.0",
+    "multidict==6.4.4",
+    "multidict==7.2.1",
+    "multiprocess==0.70.19",
+    "narwhals==2.28.0",
+    "nest-asyncio==1.6.0",
+    "networkx==3.6.1",
+    "numpy==2.4.6",
+    "nvidia-cublas-cu12==12.8.4.1",
+    "nvidia-cuda-cupti-cu12==12.8.90",
+    "nvidia-cuda-nvrtc-cu12==12.8.93",
+    "nvidia-cuda-runtime-cu12==12.8.90",
+    "nvidia-cudnn-cu12==9.10.2.21",
+    "nvidia-cufft-cu12==11.3.3.83",
+    "nvidia-cufile-cu12==1.13.1.3",
+    "nvidia-curand-cu12==10.3.9.90",
+    "nvidia-cusolver-cu12==11.7.3.90",
+    "nvidia-cusparse-cu12==12.5.8.93",
+    "nvidia-cusparselt-cu12==0.7.1",
+    "nvidia-nccl-cu12==2.27.3",
+    "nvidia-nvjitlink-cu12==12.8.93",
+    "nvidia-nvtx-cu12==12.8.90",
+    "packaging==26.3",
+    "pandas==3.1.0",
+    "peft==0.21.2",
+    "pillow==13.0.0",
+    "pip==23.2.1",
+    "propcache==0.3.1",
+    "propcache==0.5.4",
+    "protobuf==6.31.1",
+    "protobuf==7.36.2",
+    "psutil==7.2.2",
+    "pyarrow==26.0.0",
+    "pydantic==2.14.2",
+    "pydantic_core==2.50.2",
+    "Pygments==2.21.0",
+    "python-dateutil==4.0.0",
+    "PyYAML==6.0.3",
+    "regex==2026.9.29",
+    "requests==2.34.2",
+    "rich==15.0.0",
+    "safetensors==0.8.0",
+    "scikit-learn==1.9.1",
+    "scipy==1.17.1",
+    "sentence-transformers==6.2.0",
+    "sentencepiece==0.2.2",
+    "setuptools==84.2.1",
+    "shellingham==1.5.4",
+    "structlog==26.1.0",
+    "sympy==1.14.0",
+    "threadpoolctl==3.7.0",
+    "tokenizers==0.22.2",
+    "torch==2.8.0",
+    "torchao==0.14.0",
+    "torchvision==0.23.0",
+    "tqdm==4.70.1",
+    "transformers==5.2.0",
+    "triton==3.4.0",
+    "trl==0.22.2",
+    "typeguard==4.6.0",
+    "typer-slim==0.24.0",
+    "typer==0.27.3",
+    "typing-inspection==0.4.4",
+    "typing_extensions==4.13.2",
+    "typing_extensions==4.16.0",
+    "tyro==1.0.16",
+    "tzdata==2026.6",
+    "unsloth==2026.10.11",
+    "unsloth_zoo==2026.10.11",
+    "urllib3==2.8.0",
+    "wheel==0.48.0",
+    "xformers==0.0.32.post2",
+    "xxhash==4.0.2",
+    "yarl==1.20.0",
+    "yarl==1.25.1",
+    "zipp==4.1.2"
+  ],
+  "cuda_mem_reserved_gb": 4.555,
+  "status": "PASS",
+  "run": {
+    "plan": {
+      "task": "inspect",
+      "gpu": "A10",
+      "model": "unsloth/Qwen3.5-2B",
+      "revision": "fffbc0d8711cf87df6d1f97938c5e50ef94aadc7",
+      "code_commit": "705dc3a7330c9429b67e868e033758fc3360f6f2",
+      "startup_timeout_s": 900,
+      "timeout_s": 600,
+      "retries": 0,
+      "max_containers": 1,
+      "scaledown_window_s": 2,
+      "cost_estimate": {
+        "kind": "ESTIMATE_NOT_A_BILLING_CAP",
+        "scope": "GPU container runtime of one attempt",
+        "prices": "modal billing rates, 2026-11-08",
+        "configured_container_s": 1500,
+        "gpu_usd": 0.459,
+        "cpu_usd_assumed": 0.079,
+        "memory_usd_assumed": 0.107,
+        "envelope_usd": 0.64,
+        "assumes": [
+          "the container ends within the configured startup and call timeouts (one attempt, retries=0)",
+          "CPU and memory stay at or below 4 cores and 32 GiB; more usage costs more",
+          "the listed prices apply to this workspace and region",
+          "no platform-initiated restart (for example a host preemption) adds a second container"
+        ],
+        "excludes": [
+          "image build on the Modal builder (CPU, or GPU for the optional EMBER_FAST_KERNELS layer)",
+          "volume storage (ember-v1-hf-cache, ember-v1-checkpoints)",
+          "network or egress charges, if any",
+          "local client time and Modal queueing before the container starts"
+        ]
+      },
+      "phase_budget_usd": 10.0
+    },
+    "client_elapsed_s": 113.4,
+    "watchdog": {
+      "app_id": "ap-niIArHbXX3gAfTQzwij7ib",
+      "function_call_id": "fc-01M6X7J4VXQWEGD55M3J1PV01Z",
+      "submissions": 1,
+      "queue_wait_limit_s": 300,
+      "client_deadline_s": 1860,
+      "poll_interval_s": 30,
+      "polls": 4,
+      "poll_errors": 0,
+      "stats_errors": 0,
+      "queued_snapshots": 0,
+      "snapshots": [
+        {
+          "t_s": 32.1,
+          "state": "container",
+          "backlog": 1,
+          "runners": 1,
+          "running_inputs": 0
+        },
+        {
+          "t_s": 63.4,
+          "state": "running",
+          "backlog": 0,
+          "runners": 1,
+          "running_inputs": 1
+        },
+        {
+          "t_s": 94.8,
+          "state": "running",
+          "backlog": 0,
+          "runners": 1,
+          "running_inputs": 1
+        }
+      ],
+      "first_start_evidence_s": 32.1,
+      "execution_state": "completed",
+      "cancellation": null,
+      "elapsed_s": 113.4
+    },
+    "allocated_gpu": {
+      "requested": "A10",
+      "device_name": "NVIDIA A10",
+      "capability": "8.6",
+      "matches_request": true,
+      "source": "torch.cuda.get_device_properties(0) in the container"
+    }
+  }
+}
