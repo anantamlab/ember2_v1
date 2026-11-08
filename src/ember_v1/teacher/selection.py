@@ -50,7 +50,10 @@ DEFAULT_REPORTS = tuple(ev.REPO / f"data/baselines/{n}" for n in (
 CPU_CAP_USD = 15.0          # existing P1-P2 CPU cap (docs/P1_TEACHER_DIRECTION.md section 8)
 REQUIRED_EXCLUDED_DATA = ("locked_test", "blind_test", "calibration", "emberbench")
 REQUIRED_ISOLATION = ("p1-02-v1/train", "p1-02-v1/dev", "p1-02-v1/calibration", "p1-02-v1/locked_test",
-                      "t4-pilot@1", "t4-pilot@2", "t4-explore@v12", "t4-pilot@3")
+                      "t2-pilot@1", "t3-pilot@1", "t4-pilot@1", "t4-pilot@2", "t4-explore@v12", "t4-pilot@3")
+CONFIRMATION_KEYS = {"namespace", "families", "lineages_per_family", "generator_revision", "seed_namespace",
+                     "isolation_against", "runs_per_identity", "manifest_hash", "policy_seeds"}
+CONFIRMATION_MANIFEST = ev.REPO / "data/selection/p1-09-selection@1/manifest.json"
 REQUIRED_STOP_RULES = ("freeze_commit_missing", "scenario_isolation_invalid", "unexpected_evaluation_error",
                        "identity_or_source_drift", "forbidden_information_read", "incomplete_matched_episodes",
                        "resource_cap_exceeded", "unverified_proposal_provenance", "rules_changed_after_results",
@@ -149,7 +152,8 @@ def draft_protocol() -> dict[str, Any]:
                                 "reports": [{"report": k, "sha256": v} for k, v in sorted(inv["report_sha256"].items())]},
         "confirmation": {"namespace": "p1-09-selection@1", "families": 24, "lineages_per_family": 3,
                          "generator_revision": GENERATOR_REVISION, "seed_namespace": "p1-09-selection@1/seeds",
-                         "isolation_against": list(REQUIRED_ISOLATION), "runs_per_identity": 1},
+                         "isolation_against": list(REQUIRED_ISOLATION), "runs_per_identity": 1,
+                         "manifest_hash": _committed_manifest_hash(), "policy_seeds": policy_seeds()},
         "primary": {"metric": "casualties", "comparison": "paired_vs_baseline", "unit": "family", "ci": 0.95,
                     "bootstrap_resamples": 10000, "bootstrap_seed": 20261109, "sign_test_alpha": 0.05},
         "safety": {"casualties_plus_unresolved": "no_net_deterioration", "evacuated": "no_net_deterioration"},
@@ -161,6 +165,25 @@ def draft_protocol() -> dict[str, Any]:
         "stop_rules": list(REQUIRED_STOP_RULES),
         "frozen": False,
     }
+
+
+def _committed_manifest_hash() -> str | None:
+    """Hash of the committed p1-09-selection@1 manifest (built before any teacher outcome), or None."""
+    if not CONFIRMATION_MANIFEST.is_file():
+        return None
+    return json.loads(CONFIRMATION_MANIFEST.read_text(encoding="utf-8")).get("manifest_hash")
+
+
+def policy_seeds(eligibility: Mapping[str, Any] | None = None) -> dict[str, int]:
+    """Frozen default seed of every eligible stochastic teacher (deterministic teachers have none)."""
+    elig = eligibility or reg.default_eligibility()
+    out = {}
+    for c in CANDIDATES:
+        if elig[c]["status"] == reg.ELIGIBLE:
+            seed = reg.teacher_class(c, elig[c]["identity"]["version"])().seed
+            if seed is not None:
+                out[c] = seed
+    return out
 
 
 def t4_entry_rule() -> dict[str, Any]:
@@ -217,8 +240,7 @@ def validate_protocol(p: Any) -> dict[str, Any]:
     if not (isinstance(h, Mapping) and h.get("use") == "descriptive_only" and isinstance(h.get("reports"), list)):
         raise ProtocolError("historical evidence must be descriptive_only with its report list")
     c = p["confirmation"]
-    if not isinstance(c, Mapping) or set(c) != {"namespace", "families", "lineages_per_family", "generator_revision",
-                                                "seed_namespace", "isolation_against", "runs_per_identity"}:
+    if not isinstance(c, Mapping) or set(c) != CONFIRMATION_KEYS:
         raise ProtocolError("confirmation design needs exactly its preregistered fields")
     if not isinstance(c["namespace"], str) or not c["namespace"] or \
             any(c["namespace"].startswith(h) for h in HISTORICAL_PLAN_IDS):
@@ -232,6 +254,11 @@ def validate_protocol(p: Any) -> dict[str, Any]:
         raise ProtocolError(f"confirmation isolation must cover {REQUIRED_ISOLATION}")
     if c["runs_per_identity"] != 1:
         raise ProtocolError("exactly one confirmatory run per identity")
+    mh = c["manifest_hash"]
+    if not (isinstance(mh, str) and mh.startswith("sha256:") and len(mh) == 71):
+        raise ProtocolError("confirmation needs the hash of the manifest built before any teacher outcome")
+    if c["policy_seeds"] != policy_seeds(elig):
+        raise ProtocolError("confirmation policy seeds must be the frozen seeds of the eligible stochastic teachers")
     pr = p["primary"]
     if not (isinstance(pr, Mapping) and pr.get("metric") == "casualties" and pr.get("unit") == "family"
             and pr.get("comparison") == "paired_vs_baseline" and pr.get("ci") == 0.95
@@ -380,6 +407,8 @@ def selection_gate(protocol: Any, evidence: Any, *, protocol_ref: Any, repo: str
         if len(fams) != conf["families"] or any(len(v) != conf["lineages_per_family"] for v in per_f.values()):
             raise ValueError(f"confirmation set is not {conf['families']} families x "
                              f"{conf['lineages_per_family']} lineages")
+        if m["manifest_hash"] != conf["manifest_hash"]:
+            raise ValueError("confirmation manifest is not the manifest preregistered in the protocol")
     except (ValueError, KeyError, TypeError) as e:
         reasons.append(f"confirmation manifest: {e}")
         return out

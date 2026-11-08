@@ -80,6 +80,7 @@ def run_episode(scenario: Scenario, policy: ReferencePolicy) -> tuple[dict[str, 
     casualty_reasons: Counter = Counter()
     wall_ms: list[float] = []
     policy_cpu_ms = 0.0
+    decision_cpu_ms_max = 0.0
     failure = None
     no_route_person_steps = 0
     mismatches = 0
@@ -94,6 +95,7 @@ def run_episode(scenario: Scenario, policy: ReferencePolicy) -> tuple[dict[str, 
             break
         wall_ms.append(decision.runtime["wall_ms"])
         policy_cpu_ms += decision.runtime["cpu_ms"]
+        decision_cpu_ms_max = max(decision_cpu_ms_max, decision.runtime["cpu_ms"])
         try:
             rec = sim.step(decision.actions)
         except InvalidActionError:
@@ -145,6 +147,7 @@ def run_episode(scenario: Scenario, policy: ReferencePolicy) -> tuple[dict[str, 
         "decision_wall_ms_mean": statistics.fmean(wall_ms) if wall_ms else None,
         "decision_wall_ms_max": max(wall_ms) if wall_ms else None,
         "policy_cpu_ms_total": policy_cpu_ms,
+        "decision_cpu_ms_max": decision_cpu_ms_max,
         "episode_cpu_s": episode_cpu_s,
         "episode_wall_s": episode_wall_s,
     }

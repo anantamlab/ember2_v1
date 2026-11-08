@@ -54,6 +54,7 @@ def test_value_teachers_are_shared_by_proposals_provenance_and_registry():
 def _frozen(**over):
     p = sel.draft_protocol()
     p["frozen"] = True
+    p["confirmation"] = {**p["confirmation"], "manifest_hash": _conf_manifest()["manifest_hash"]}
     p.update(over)
     return sel.freeze_protocol(p)
 
@@ -142,6 +143,12 @@ BAD_PROTOCOL = {
     "too few families": ({"confirmation": _conf(families=4)}, "10 families"),
     "isolation incomplete": ({"confirmation": _conf(isolation_against=["p1-02-v1/dev"])}, "isolation"),
     "two runs": ({"confirmation": _conf(runs_per_identity=2)}, "one confirmatory run"),
+    "no manifest hash": ({"confirmation": _conf(manifest_hash=None)}, "hash of the manifest"),
+    "T2 seed changed": ({"confirmation": _conf(policy_seeds={**sel.policy_seeds(), "T2": 1})}, "policy seeds"),
+    "T3 seed missing": ({"confirmation": _conf(policy_seeds={"T2": sel.policy_seeds()["T2"]})}, "policy seeds"),
+    "extra confirmation field": ({"confirmation": _conf(note="x")}, "preregistered fields"),
+    "T2 pilot not isolated": ({"confirmation": _conf(isolation_against=[x for x in sel.REQUIRED_ISOLATION
+                                                                        if x != "t2-pilot@1"])}, "isolation"),
     "primary unresolved": ({"primary": _prim(metric="unresolved")}, "primary"),
     "few resamples": ({"primary": _prim(bootstrap_resamples=10)}, "primary"),
     "no safety guard": ({"safety": {"casualties_plus_unresolved": "no_net_deterioration"}}, "safety"),
@@ -348,6 +355,20 @@ def test_blocked_t4_in_confirmation_evidence_stops_selection(frozen_repo, tmp_pa
     run2 = repo2.commit("selection/run-marker.json", {"run": 1})["commit"]
     ev = _evidence(p2, pref2, run2)
     _no(_gate(repo2, p2, pref2, ev), "excluded candidate T4")
+
+
+def test_a_manifest_other_than_the_preregistered_one_stops_selection(frozen_repo):
+    repo, p, pref, run = frozen_repo
+    other = _conf_manifest(prefix="CX")              # same namespace and shape, different scenarios
+    _no(_gate(repo, p, pref, _evidence(p, pref, run, manifest=other)), "not the manifest preregistered")
+
+
+def test_draft_binds_the_committed_confirmation_manifest_and_policy_seeds():
+    c = sel.draft_protocol()["confirmation"]
+    committed = json.loads(sel.CONFIRMATION_MANIFEST.read_text(encoding="utf-8"))
+    assert c["manifest_hash"] == committed["manifest_hash"] and committed["plan_id"] == c["namespace"]
+    assert c["policy_seeds"] == {"T2": 20261107, "T3": 20261123}
+    assert set(c["isolation_against"]) == set(sel.REQUIRED_ISOLATION)
 
 
 def test_evidence_before_or_beside_the_freeze_commit_is_refused(frozen_repo):

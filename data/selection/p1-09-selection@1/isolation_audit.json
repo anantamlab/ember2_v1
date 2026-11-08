@@ -1,0 +1,151 @@
+{
+ "audit_hash": "sha256:4a08f3f0897e0fb94b5baf3189fff2a5524440f7c87ae99365560a3a8b15ef18",
+ "conf_version": "p1-09-confirmation-set@1.0.0",
+ "families": 24,
+ "historical": {
+  "reference_families": 120,
+  "sets": {
+   "p1-02-v1/calibration": {
+    "manifest_hash": "sha256:20af10ddb371d7a34cfcc0588bb15f7562252724804f68526748d790d27736bd",
+    "source": "committed manifest"
+   },
+   "p1-02-v1/dev": {
+    "manifest_hash": "sha256:b08c2b134ead2fb25d59990ac82f186654879808105e08a9211f090e6b6d1347",
+    "source": "committed manifest"
+   },
+   "p1-02-v1/locked_test": {
+    "manifest_hash": "sha256:e1eb5d54ce8f8b6b5191d25d2f25d6b528085ad1977d5717b01e93742201c56a",
+    "source": "index commitment (sealed split)"
+   },
+   "p1-02-v1/train": {
+    "manifest_hash": "sha256:96a564819bdc6910708cb2891b043ae3fa6a3d9066d5927ba721aa61d44b442d",
+    "source": "committed manifest"
+   },
+   "t2-pilot@1": {
+    "cells": 24,
+    "source": "regenerated from the committed pilot cell list"
+   },
+   "t3-pilot@1": {
+    "cells": 42,
+    "source": "regenerated from the committed pilot cell list"
+   },
+   "t4-explore@v12": {
+    "cells": 74,
+    "source": "regenerated from the committed pilot cell list"
+   },
+   "t4-pilot@1": {
+    "cells": 52,
+    "source": "regenerated from the committed pilot cell list"
+   },
+   "t4-pilot@2": {
+    "cells": 74,
+    "source": "regenerated from the committed pilot cell list"
+   },
+   "t4-pilot@3": {
+    "cells": 74,
+    "source": "regenerated from the committed pilot cell list"
+   }
+  }
+ },
+ "historical_sets": [
+  "p1-02-v1/calibration",
+  "p1-02-v1/dev",
+  "p1-02-v1/locked_test",
+  "p1-02-v1/train",
+  "t2-pilot@1",
+  "t3-pilot@1",
+  "t4-explore@v12",
+  "t4-pilot@1",
+  "t4-pilot@2",
+  "t4-pilot@3"
+ ],
+ "lineages_per_family": [
+  3
+ ],
+ "manifest_hash": "sha256:14bc36318ddbc3e7798860c7dae28904be3c56740ca9e7ab4da352152bc150f2",
+ "namespace": "p1-09-selection@1",
+ "not_checked": [
+  "blind_test (secret seeds; family IDs and seeds derive from another root)",
+  "near-duplicate geometry against pilot maps (exact core hash only)"
+ ],
+ "overlap": {
+  "p1-02-v1/calibration": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "p1-02-v1/dev": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "p1-02-v1/locked_test": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "p1-02-v1/train": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "t2-pilot@1": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "t3-pilot@1": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "t4-explore@v12": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "t4-pilot@1": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "t4-pilot@2": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "t4-pilot@3": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  }
+ },
+ "pass": true,
+ "scenarios": 72,
+ "unique": {
+  "core_hash": true,
+  "lineage_id": true,
+  "scenario_hash": true,
+  "scenario_seed": true
+ }
+}
