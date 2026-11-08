@@ -13,9 +13,11 @@
  ],
  "compute": {
   "cpu_s_cap": 14400.0,
+  "enforcement": "live_supervisor_fail_closed",
   "per_decision_cpu_ms_cap": 30000.0,
   "replacement_cpu_s_cap": 7200.0,
-  "usd_cap": 15.0
+  "usd_cap": 15.0,
+  "wall_s_cap": 14400.0
  },
  "confirmation": {
   "families": 24,
@@ -33,7 +35,7 @@
    "t4-pilot@3"
   ],
   "lineages_per_family": 3,
-  "manifest_hash": "sha256:14bc36318ddbc3e7798860c7dae28904be3c56740ca9e7ab4da352152bc150f2",
+  "manifest_hash": "sha256:4e9283b206296d7251514140613f0f8cc234fe9e2dc68877f7a71e906dc5cf9e",
   "namespace": "p1-09-selection@1",
   "policy_seeds": {
    "T2": 20261107,
@@ -123,12 +125,23 @@
   "ci": 0.95,
   "comparison": "paired_vs_baseline",
   "metric": "casualties",
-  "sign_test_alpha": 0.05,
+  "multiplicity": {
+   "familywise_alpha": 0.05,
+   "hypotheses": [
+    "T0",
+    "T2",
+    "T3",
+    "T4"
+   ],
+   "method": "holm",
+   "reject": "holm_adjusted_p < familywise_alpha",
+   "test": "two_sided_exact_family_sign_test"
+  },
   "unit": "family"
  },
- "protocol_hash": "sha256:dbdae86b9ac874eba56b50ef701fc90b993f0231dd362573beb72c67ae1c5165",
+ "protocol_hash": "sha256:ae72c2cf1a0dae4f46b3a6d158f426af0853bc4100cd15706c74f203a6765c21",
  "protocol_id": "p1-09-teacher-selection",
- "protocol_version": "teacher-selection-protocol@1.1.0",
+ "protocol_version": "teacher-selection-protocol@1.2.0",
  "safety": {
   "casualties_plus_unresolved": "no_net_deterioration",
   "evacuated": "no_net_deterioration"
@@ -143,7 +156,10 @@
   "resource_cap_exceeded",
   "unverified_proposal_provenance",
   "rules_changed_after_results",
-  "blocked_t4_included"
+  "blocked_t4_included",
+  "working_tree_not_clean",
+  "confirmation_attempt_exists",
+  "run_aborted_by_supervisor"
  ],
  "t4_entry_rule": {
   "admitted": {

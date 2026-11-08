@@ -23,8 +23,9 @@ def _committed(path):
 @pytest.fixture(scope="module")
 def rebuilt():
     entries, fams, prov = C.historical_sets()
-    m = C.build_manifest(entries, fams)
-    return entries, fams, prov, m, C.isolation_report(m, entries, prov)
+    pilots = C.pilot_maps()
+    m = C.build_manifest(entries, fams, pilots=pilots)
+    return entries, fams, prov, m, C.isolation_report(m, entries, prov, pilots)
 
 
 # ----- dataset -------------------------------------------------------------------------------------------------
@@ -51,7 +52,8 @@ def test_manifest_uses_a_fresh_namespace_and_records_every_exclusion():
     slots = sorted([f["pool_slot"] for f in m["families"]] + [x["pool_slot"] for x in m["excluded_families"]]
                    + [x["pool_slot"] for x in m["pool"]["family_failures"]])
     assert slots == list(range(m["pool"]["slots_used"]))          # no slot silently dropped
-    assert all(x["reason"] in ("lineage_generation_failed", "isolation_collision") for x in m["excluded_families"])
+    assert all(x["reason"] in ("lineage_generation_failed", "isolation_collision", "pilot_map_duplicate")
+               for x in m["excluded_families"])
 
 
 def test_materialize_regenerates_every_scenario_and_refuses_tampering():
@@ -137,6 +139,15 @@ def test_run_teacher_is_matched_and_repeatable(c):
     for r in a["results"].values():
         assert r["config_hash"] == _identity(c)["config_hash"] and r["failure"] is None
         assert r["max_decision_cpu_ms"] >= 0 and r["policy_cpu_s"] >= 0
+        assert set(r) == sel.RESULT_KEYS and 0 <= r["budget_limited_decisions"] <= r["decisions"]
+
+
+def test_budget_limited_decisions_are_recognised_for_every_teacher_format():
+    assert C.budget_limited({"budget_exhausted": True})                         # T1
+    assert C.budget_limited({"budget": {"limit_hit": "rollouts"}})              # T2 / T3 / T4
+    assert C.budget_limited({"status": "budget_limited"})                       # T3
+    assert not C.budget_limited({"budget": {"limit_hit": None}, "budget_exhausted": False, "status": "complete"})
+    assert not C.budget_limited(None)
 
 
 def test_run_teacher_refuses_a_wrong_seed_or_identity():
@@ -222,11 +233,248 @@ def test_run_writes_evidence_once(repo, monkeypatch):
     m = _committed(C.MANIFEST_PATH)
     rows = [{"scenario_id": s["scenario_id"], "family_id": s["family_id"], "scenario_hash": s["scenario_hash"],
              "results": {}} for s in m["scenarios"]]
-    monkeypatch.setattr(C, "run_rows", lambda p, man: (rows, [], {}))      # synthetic: no teacher outcome
+    monkeypatch.setattr(C, "run_rows", lambda p, man, **k: (rows, [], _report()))    # synthetic: no outcome
     out = C.run(r.path, pref, mref, trusted_ref="main", evidence_path=ev_path)
     doc = json.loads(ev_path.read_text(encoding="utf-8"))
     assert out["evidence"] == str(ev_path) and doc["evidence_class"] == sel.PROSPECTIVE
+    assert out["complete"] is False and doc["complete"] is False          # rows without results are partial
     assert doc["protocol_commit"] == pref["commit"] and doc["manifest"]["manifest_hash"] == m["manifest_hash"]
     assert doc["evidence_hash"] == digest({k: v for k, v in doc.items() if k != "evidence_hash"})
     with pytest.raises(C.ConfirmationError, match="evidence already exists"):
         C.run(r.path, pref, mref, trusted_ref="main", evidence_path=ev_path)
+
+
+# ----- pilot-map near-duplicate screen (geometry only; no outcome) ----------------------------------------------
+def _map(fam, h=None, w=None, walls=None, exits=None, sid="fake"):
+    from types import SimpleNamespace
+    return SimpleNamespace(height=h or fam.height, width=w or fam.width,
+                           obstacles=tuple(fam.walls if walls is None else walls),
+                           exits=tuple((f"E{i}", p) for i, p in enumerate(exits or fam.exits)), scenario_id=sid)
+
+
+def _first_family():
+    from ember_v1.gen.generator import generate_family
+    from ember_v1.gen.spec import GeneratorSpec
+    m = C.build_manifest({}, [], families=1, max_slots=8)
+    return m, generate_family(GeneratorSpec.from_dict(m["plan"]["spec"]), m["families"][0]["family_seed"])[0]
+
+
+def test_pilot_match_finds_copies_rotations_and_rescaled_maps():
+    _, fam = _first_family()
+    assert C.pilot_match(fam, C.PilotMap("p", _map(fam))) == "topology_duplicate"
+    h, w = fam.height, fam.width
+    rot = _map(fam, h=w, w=h, walls=[(c, h - 1 - r) for r, c in fam.walls],
+               exits=[(c, h - 1 - r) for r, c in fam.exits])
+    assert C.pilot_match(fam, C.PilotMap("p", rot)) == "topology_duplicate"          # symmetry invariant
+    big = _map(fam, h=2 * h, w=2 * w,
+               walls=[(2 * r + a, 2 * c + b) for r, c in fam.walls for a in (0, 1) for b in (0, 1)],
+               exits=[(2 * r, 2 * c) for r, c in fam.exits])
+    assert C.pilot_match(fam, C.PilotMap("p", big)).startswith("scale_free")         # 4x area: past the scale gate
+    other = _map(fam, walls=[], exits=[(0, 0)])
+    assert C.pilot_match(fam, C.PilotMap("p", other)) is None
+
+
+def test_a_pilot_duplicate_excludes_the_whole_family_and_refills_in_pool_order():
+    base, fam = _first_family()
+    hit = C.build_manifest({}, [], families=1, max_slots=8, pilots=[C.PilotMap("t4-pilot@1", _map(fam, sid="x"))])
+    ex = hit["excluded_families"][0]
+    assert ex["family_id"] == fam.family_id and ex["reason"] == "pilot_map_duplicate"
+    assert (ex["pilot_set"], ex["pilot_scenario_id"], ex["rule"]) == ("t4-pilot@1", "x", "topology_duplicate")
+    assert fam.family_id not in {s["family_id"] for s in hit["scenarios"]}
+    assert hit["families"][0]["pool_slot"] > base["families"][0]["pool_slot"]       # next slot, same order
+
+
+def test_committed_audit_screens_every_pilot_map_without_hits(rebuilt):
+    *_, audit = rebuilt
+    g = audit["pilot_geometry"]
+    assert set(g["maps_per_set"]) == set(C.PILOT_SETS) and g["pilot_maps"] == sum(g["maps_per_set"].values()) > 0
+    fams = {f["family_id"] for f in _committed(C.MANIFEST_PATH)["families"]}
+    assert g["hits"] == [] and set(g["nearest_by_family"]) == fams
+    assert all(v["scale_free_wall_distance"] > 0.03 for v in g["nearest_by_family"].values())
+
+
+# ----- clean checkout -------------------------------------------------------------------------------------------
+def _ignore(r, *pats):
+    (r.path / ".gitignore").write_text("\n".join(pats) + "\n", encoding="utf-8")
+    r.git("add", ".gitignore")
+    r.git("commit", "-q", "-m", "ignore")
+
+
+def _write(r, rel, text="x"):
+    f = r.path / rel
+    f.parent.mkdir(parents=True, exist_ok=True)
+    f.write_text(text, encoding="utf-8")
+
+
+def test_tree_problems_reject_untracked_sources_and_configs_but_allow_caches(tmp_path):
+    r = Repo(tmp_path / "repo")
+    _ignore(r, "__pycache__/", ".venv/", ".pytest_cache/", "results/", ".env")
+    _write(r, "src/pkg/__pycache__/m.cpython-314.pyc")
+    _write(r, ".venv/Lib/site.py")
+    _write(r, ".pytest_cache/v/x")
+    assert C.tree_problems(r.path) == []
+    _write(r, "src/pkg/extra.py", "import os\n")
+    _write(r, "configs/run.toml", "a = 1\n")
+    got = C.tree_problems(r.path)
+    assert "untracked src/pkg/extra.py" in got and "untracked configs/run.toml" in got
+    _write(r, ".env", "SECRET=1\n")
+    _write(r, "results/x.json", "{}")
+    got = C.tree_problems(r.path)
+    assert "ignored .env" in got and "ignored results/" in got                   # ignored, not allowlisted
+
+
+def test_preconditions_refuse_untracked_python_and_configuration(repo):
+    r, pref, mref, ev_path = repo
+    _write(r, "src/ember_v1/teacher/shadow.py", "X = 1\n")
+    with pytest.raises(C.ConfirmationError, match="untracked src/ember_v1/teacher/shadow.py"):
+        _pre(r, pref, mref, ev_path)
+    (r.path / "src/ember_v1/teacher/shadow.py").unlink()
+    _write(r, "pyproject.local.toml", "[tool]\n")
+    with pytest.raises(C.ConfirmationError, match="untracked pyproject.local.toml"):
+        _pre(r, pref, mref, ev_path)
+
+
+def test_preconditions_refuse_a_modified_manifest(repo):
+    r, pref, mref, ev_path = repo
+    m = _committed(C.MANIFEST_PATH)
+    (r.path / mref["path"]).write_text(json.dumps({**m, "families": m["families"][:-1]}), encoding="utf-8")
+    with pytest.raises(C.ConfirmationError, match="modified selection/manifest.json"):
+        _pre(r, pref, mref, ev_path)
+
+
+def test_preconditions_refuse_a_changed_policy_identity(repo, monkeypatch):
+    r, pref, mref, ev_path = repo
+    monkeypatch.setattr(reg, "check_pins", lambda *a, **k: ["T4 1.2.0 config hash differs from its pin"])
+    with pytest.raises(C.ConfirmationError, match="identity drift"):
+        _pre(r, pref, mref, ev_path)
+
+
+def test_preconditions_refuse_a_missing_freeze_commit(repo):
+    r, pref, mref, ev_path = repo
+    with pytest.raises(C.ConfirmationError, match="protocol: "):
+        _pre(r, {**pref, "commit": "f" * 40}, mref, ev_path)
+
+
+def test_preconditions_refuse_existing_evidence_and_an_interrupted_attempt(repo):
+    r, pref, mref, ev_path = repo
+    marker, log = C.attempt_paths(ev_path)
+    C.create_attempt_marker(marker, {"note": "interrupted"})           # a crash left only the marker
+    with pytest.raises(C.ConfirmationError, match="previous confirmatory attempt exists"):
+        _pre(r, pref, mref, ev_path)
+    with pytest.raises(C.ConfirmationError, match="already started"):
+        C.create_attempt_marker(marker, {"note": "second"})              # atomic exclusive create
+    marker.unlink()
+    log.write_text("{}\n", encoding="utf-8")                              # a log alone also blocks
+    with pytest.raises(C.ConfirmationError, match="previous confirmatory attempt exists"):
+        _pre(r, pref, mref, ev_path)
+    log.unlink()
+    ev_path.write_text("{}", encoding="utf-8")
+    with pytest.raises(C.ConfirmationError, match="evidence already exists"):
+        _pre(r, pref, mref, ev_path)
+
+
+# ----- attempt marker and fail-closed evidence --------------------------------------------------------------------
+def _report(stage="completed", abort=None):
+    lim = {k: sel.draft_protocol()["compute"][k] for k in ("cpu_s_cap", "per_decision_cpu_ms_cap", "wall_s_cap")}
+    return {"limits": lim, "stage": stage, "abort": abort}
+
+
+def test_marker_is_written_before_the_first_scenario_and_a_crash_is_recorded_incomplete(repo, monkeypatch):
+    r, pref, mref, ev_path = repo
+    marker, log = C.attempt_paths(ev_path)
+
+    def crash(p, man, **k):
+        doc = json.loads(marker.read_text(encoding="utf-8"))
+        assert doc["protocol_hash"] == p["protocol_hash"] and doc["code_commit"] == r.git("rev-parse", "HEAD")
+        raise RuntimeError("worker pool died")
+    monkeypatch.setattr(C, "run_rows", crash)
+    out = C.run(r.path, pref, mref, trusted_ref="main", evidence_path=ev_path)
+    doc = json.loads(ev_path.read_text(encoding="utf-8"))
+    assert out["complete"] is False and out["stage"] == "supervisor_error" and doc["complete"] is False
+    assert doc["supervision"]["abort"]["error"].startswith("RuntimeError") and doc["attempt"]["attempt_hash"]
+    events = [json.loads(x)["event"] for x in log.read_text(encoding="utf-8").splitlines()]
+    assert events == ["attempt_start", "evidence_written"]
+    ev_path.unlink()                                                     # even without evidence: no second attempt
+    with pytest.raises(C.ConfirmationError, match="previous confirmatory attempt exists"):
+        C.run(r.path, pref, mref, trusted_ref="main", evidence_path=ev_path)
+
+
+def test_a_supervisor_abort_is_never_complete(repo, monkeypatch):
+    r, pref, mref, ev_path = repo
+    m = _committed(C.MANIFEST_PATH)
+    full = {c: {} for c in reg.CANDIDATES}
+    rows = [{"scenario_id": s["scenario_id"], "family_id": s["family_id"], "scenario_hash": s["scenario_hash"],
+             "results": full} for s in m["scenarios"]]
+    abort = _report("total_cpu_cap", {"stage": "total_cpu_cap"})
+    monkeypatch.setattr(C, "run_rows", lambda p, man, **k: (rows, [], abort))
+    out = C.run(r.path, pref, mref, trusted_ref="main", evidence_path=ev_path)
+    assert out["complete"] is False and out["stage"] == "total_cpu_cap"
+
+
+# ----- live supervisor on synthetic non-confirmation scenarios ------------------------------------------------------
+def tiny_loader(manifest):
+    return _tiny()
+
+
+def _burn(seconds):
+    import time
+    t = time.process_time()
+    while time.process_time() - t < seconds:
+        pass
+
+
+def stuck_decision_worker(name, identity, seed, manifest, q, slot, loader=None):
+    import time
+    q.put(("start", name, 0))
+    slot[C.DEC] = time.process_time()                                    # a decision that never returns
+    _burn(60)
+
+
+def cpu_hog_worker(name, identity, seed, manifest, q, slot, loader=None):
+    q.put(("start", name, 0))
+    _burn(60)
+
+
+def sleeper_worker(name, identity, seed, manifest, q, slot, loader=None):
+    import time
+    q.put(("start", name, 0))
+    time.sleep(60)
+
+
+def crash_worker(name, identity, seed, manifest, q, slot, loader=None):
+    import os
+    os._exit(7)
+
+
+LIMITS = {"cpu_s_cap": 600.0, "per_decision_cpu_ms_cap": 30000.0, "wall_s_cap": 120.0}
+
+
+def _jobs():
+    return [(c, _identity(c), sel.policy_seeds().get(c), {}) for c in ("T0", "T1")]
+
+
+def test_supervisor_runs_real_workers_to_completion_on_synthetic_scenarios(tmp_path):
+    log = C.AttemptLog(tmp_path / "log.jsonl")
+    out = C.supervise(_jobs(), LIMITS, log=log, loader=tiny_loader)
+    rep = out["report"]
+    assert rep["stage"] == "completed" and rep["abort"] is None and out["errors"] == [], rep
+    assert rep["exit_codes"] == {"T0": 0, "T1": 0} and rep["results_received"] == {"T0": 2, "T1": 2}
+    assert set(out["results"]["T0"]) == {"conf-test-0", "conf-test-1"} and rep["total_process_cpu_s"] > 0
+    events = [json.loads(x)["event"] for x in (tmp_path / "log.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert events[0] == "supervisor_start" and events[-1] == "supervisor_end" and events.count("result") == 4
+
+
+@pytest.mark.parametrize("target,limits,stage", [
+    (stuck_decision_worker, {**LIMITS, "per_decision_cpu_ms_cap": 1500.0}, "per_decision_cpu_cap"),
+    (cpu_hog_worker, {**LIMITS, "cpu_s_cap": 1.5}, "total_cpu_cap"),
+    (sleeper_worker, {**LIMITS, "wall_s_cap": 3.0}, "wall_time_cap"),
+    (crash_worker, LIMITS, "worker_crashed"),
+])
+def test_supervisor_stops_and_reaps_every_worker_at_the_first_breach(target, limits, stage):
+    import time
+    t0 = time.monotonic()
+    out = C.supervise(_jobs(), limits, target=target)
+    rep = out["report"]
+    assert rep["stage"] == stage and rep["abort"]["stage"] == stage, rep
+    assert all(code is not None for code in rep["exit_codes"].values())   # every worker reaped
+    assert time.monotonic() - t0 < 45                                     # stopped long before the 60 s burn ends

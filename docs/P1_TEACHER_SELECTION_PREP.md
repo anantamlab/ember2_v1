@@ -51,7 +51,7 @@ These totals come from **separate** comparisons on DEV, which was used for devel
 - a baseline other than eligible T1 on a `historical_exploratory_provisional` basis;
 - historical evidence used for anything other than `descriptive_only`;
 - a confirmation design with a historical namespace, < 10 families, a different generator revision, an isolation list without all of `p1-02-v1/{train,dev,calibration,locked_test}`, `t4-pilot@1`, `t4-pilot@2`, `t4-explore@v12`, `t4-pilot@3` (T4 v1.2.0 smoke and pilot, PR #36), or more than one run per identity;
-- a primary endpoint other than paired family-level casualties vs T1 (95 % cluster bootstrap with ≥ 1 000 seeded resamples, exact two-sided sign test at 0.05);
+- a primary endpoint other than paired family-level casualties vs T1 (95 % cluster bootstrap with ≥ 1 000 seeded resamples, exact two-sided sign tests with the Holm correction at familywise alpha 0.05);
 - missing safety guards (casualties + unresolved and evacuated, no net deterioration vs T1);
 - compute caps missing or a USD cap above $15;
 - a tie rule that does not order exactly the eligible candidates in the frozen simplicity order T0, T1, T3, T4, T2 (T0 one shortest path; T1 adds cooperative reservations; T3 adds a dynamic pheromone colony; T4 adds risk priority, transactional repair and an exact vacate proof; T2 adds stochastic forecast rollouts per action);
@@ -70,7 +70,7 @@ The S1 entrypoint (`s1.verify_protocol`) applies this same validator, so the sel
 4. an isolation audit against every preregistered historical set: no shared family, lineage, scenario hash or core geometry hash;
 5. complete matched results for every eligible candidate and no result for an excluded one (a blocked T4 in the evidence stops the gate); identities equal to the protocol; no failed episode; CPU within caps.
 
-Decision rule (frozen in code): a candidate replaces T1 only if the 95 % CI upper bound of the paired casualty difference is < 0, the family sign test has p < 0.05, casualties + unresolved and evacuated totals do not deteriorate vs T1, and its CPU is within `replacement_cpu_s_cap`. Several qualifiers: lower CPU, then the frozen simplicity order. None: `RETAIN_T1_NO_IMPROVEMENT`. The receipt draft has the `ember_v1.s1` receipt format; S1 refuses it until reviewers approve it and it is committed to the trusted ref.
+Decision rule (frozen in code): a candidate replaces T1 only if the 95 % CI upper bound of the paired casualty difference is < 0, the family sign test has Holm-adjusted p < 0.05 (Holm over every eligible candidate-vs-T1 test, protocol 1.2.0), casualties + unresolved and evacuated totals do not deteriorate vs T1, and its CPU is within `replacement_cpu_s_cap`. Several qualifiers: lower CPU, then the frozen simplicity order. None: `RETAIN_T1_NO_IMPROVEMENT`. The receipt draft has the `ember_v1.s1` receipt format; S1 refuses it until reviewers approve it and it is committed to the trusted ref.
 
 ## 6. Joint-map arbiter contract (`arbiter.py`)
 

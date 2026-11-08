@@ -1,6 +1,6 @@
 {
- "audit_hash": "sha256:4a08f3f0897e0fb94b5baf3189fff2a5524440f7c87ae99365560a3a8b15ef18",
- "conf_version": "p1-09-confirmation-set@1.0.0",
+ "audit_hash": "sha256:802b8fa509767c3b3cc881289a81c9285ae254498aa0a1de255fb0e035ea2ef2",
+ "conf_version": "p1-09-confirmation-set@1.1.0",
  "families": 24,
  "historical": {
   "reference_families": 120,
@@ -62,11 +62,12 @@
  "lineages_per_family": [
   3
  ],
- "manifest_hash": "sha256:14bc36318ddbc3e7798860c7dae28904be3c56740ca9e7ab4da352152bc150f2",
+ "manifest_hash": "sha256:4e9283b206296d7251514140613f0f8cc234fe9e2dc68877f7a71e906dc5cf9e",
  "namespace": "p1-09-selection@1",
  "not_checked": [
   "blind_test (secret seeds; family IDs and seeds derive from another root)",
-  "near-duplicate geometry against pilot maps (exact core hash only)"
+  "pilot maps: dynamic content (people, ignitions, fire model) is compared by exact core hash only; the geometry screen compares walls and exits",
+  "geometry screen: coarse 16x16 wall-fraction grid; local edits below the wall threshold, crops, translations and partial overlaps are not detected"
  ],
  "overlap": {
   "p1-02-v1/calibration": {
@@ -141,6 +142,175 @@
   }
  },
  "pass": true,
+ "pilot_geometry": {
+  "hits": [],
+  "maps_per_set": {
+   "t2-pilot@1": 24,
+   "t3-pilot@1": 42,
+   "t4-explore@v12": 74,
+   "t4-pilot@1": 52,
+   "t4-pilot@2": 74,
+   "t4-pilot@3": 74
+  },
+  "nearest_by_family": {
+   "fam-28faeaa5d0f47d2d": {
+    "exit_distance": 0.126295,
+    "pilot_set": "t4-pilot@2",
+    "scale_free_wall_distance": 0.293866,
+    "scenario_id": "t4-pilot2-base-irregular-16x20-1-stochastic-3"
+   },
+   "fam-2b68258532f73c11": {
+    "exit_distance": 0.549642,
+    "pilot_set": "t4-pilot@2",
+    "scale_free_wall_distance": 0.258617,
+    "scenario_id": "t4-pilot2-high_id_risk-corridor-16x20-50-deterministic-3"
+   },
+   "fam-2e2eac12b1974cdb": {
+    "exit_distance": 0.263316,
+    "pilot_set": "t2-pilot@1",
+    "scale_free_wall_distance": 0.064063,
+    "scenario_id": "t2-pilot-corridor-200-stochastic"
+   },
+   "fam-5040e52abccfe39a": {
+    "exit_distance": 0.138164,
+    "pilot_set": "t4-pilot@2",
+    "scale_free_wall_distance": 0.324275,
+    "scenario_id": "t4-pilot2-base-irregular-16x20-10-stochastic-3"
+   },
+   "fam-50833fbbc2256e41": {
+    "exit_distance": 0.570019,
+    "pilot_set": "t4-pilot@2",
+    "scale_free_wall_distance": 0.183351,
+    "scenario_id": "t4-pilot2-base-multi_room-48x64-1-stochastic-3"
+   },
+   "fam-54273110a241030f": {
+    "exit_distance": 0.493984,
+    "pilot_set": "t4-pilot@1",
+    "scale_free_wall_distance": 0.105048,
+    "scenario_id": "t4-pilot-base-corridor-48x64-100-deterministic-3"
+   },
+   "fam-668f9eb253138b17": {
+    "exit_distance": 0.460365,
+    "pilot_set": "t4-pilot@3",
+    "scale_free_wall_distance": 0.202271,
+    "scenario_id": "t4-pilot3-base-irregular-16x20-50-stochastic-3"
+   },
+   "fam-66ee0ffc628ef2cc": {
+    "exit_distance": 0.352768,
+    "pilot_set": "t2-pilot@1",
+    "scale_free_wall_distance": 0.277903,
+    "scenario_id": "t2-pilot-irregular-200-stochastic"
+   },
+   "fam-68cc68339c5a5934": {
+    "exit_distance": 0.045139,
+    "pilot_set": "t4-explore@v12",
+    "scale_free_wall_distance": 0.05,
+    "scenario_id": "t4-explore12-exits-open_room-48x64-50-stochastic-1"
+   },
+   "fam-7176d3bafab71aee": {
+    "exit_distance": 0.06558,
+    "pilot_set": "t4-pilot@3",
+    "scale_free_wall_distance": 0.119658,
+    "scenario_id": "t4-pilot3-base-open_room-16x20-100-stochastic-3"
+   },
+   "fam-7f4b5c05dfa9559d": {
+    "exit_distance": 0.60625,
+    "pilot_set": "t3-pilot@1",
+    "scale_free_wall_distance": 0.15635,
+    "scenario_id": "t3-pilot-corridor-48x64-50-stochastic-3"
+   },
+   "fam-82cd99204450dadb": {
+    "exit_distance": 0.21875,
+    "pilot_set": "t4-explore@v12",
+    "scale_free_wall_distance": 0.137726,
+    "scenario_id": "t4-explore12-high_id_risk-corridor-16x20-50-stochastic-3"
+   },
+   "fam-899dcf6c7068dcbf": {
+    "exit_distance": 0.682692,
+    "pilot_set": "t4-pilot@3",
+    "scale_free_wall_distance": 0.28629,
+    "scenario_id": "t4-pilot3-base-irregular-16x20-50-stochastic-3"
+   },
+   "fam-8ac68f727a2cd01b": {
+    "exit_distance": 0.528926,
+    "pilot_set": "t4-explore@v12",
+    "scale_free_wall_distance": 0.251763,
+    "scenario_id": "t4-explore12-base-irregular-16x20-200-stochastic-3"
+   },
+   "fam-8c88b8dd86308733": {
+    "exit_distance": 0.131076,
+    "pilot_set": "t4-pilot@1",
+    "scale_free_wall_distance": 0.043113,
+    "scenario_id": "t4-pilot-base-corridor-48x64-10-stochastic-3"
+   },
+   "fam-988659ee3dbb2b8d": {
+    "exit_distance": 0.578429,
+    "pilot_set": "t4-pilot@3",
+    "scale_free_wall_distance": 0.195629,
+    "scenario_id": "t4-pilot3-exits-multi_room-48x64-50-stochastic-6"
+   },
+   "fam-98eba9a8248c3137": {
+    "exit_distance": 0.433096,
+    "pilot_set": "t4-pilot@2",
+    "scale_free_wall_distance": 0.117094,
+    "scenario_id": "t4-pilot2-base-multi_room-16x20-50-stochastic-3"
+   },
+   "fam-a54c674b882e7e75": {
+    "exit_distance": 0.023438,
+    "pilot_set": "t3-pilot@1",
+    "scale_free_wall_distance": 0.068627,
+    "scenario_id": "t3-pilot-open_room-48x64-50-stochastic-1"
+   },
+   "fam-a7598cd5f1310780": {
+    "exit_distance": 0.788032,
+    "pilot_set": "t3-pilot@1",
+    "scale_free_wall_distance": 0.2035,
+    "scenario_id": "t3-pilot-multi_room-48x64-50-stochastic-1"
+   },
+   "fam-cad8572a2652a93d": {
+    "exit_distance": 0.410955,
+    "pilot_set": "t4-pilot@3",
+    "scale_free_wall_distance": 0.197166,
+    "scenario_id": "t4-pilot3-base-multi_room-48x64-100-deterministic-3"
+   },
+   "fam-e66fb46cff5f9365": {
+    "exit_distance": 0.75162,
+    "pilot_set": "t4-explore@v12",
+    "scale_free_wall_distance": 0.129861,
+    "scenario_id": "t4-explore12-near_entrapment-corridor-16x20-10-stochastic-3"
+   },
+   "fam-f5d5976157b6cd2a": {
+    "exit_distance": 0.354369,
+    "pilot_set": "t4-pilot@1",
+    "scale_free_wall_distance": 0.201066,
+    "scenario_id": "t4-pilot-base-multi_room-48x64-50-stochastic-6"
+   },
+   "fam-f6e2e633c2b0bf6f": {
+    "exit_distance": 0.691817,
+    "pilot_set": "t3-pilot@1",
+    "scale_free_wall_distance": 0.127143,
+    "scenario_id": "t3-pilot-multi_room-48x64-100-stochastic-3"
+   },
+   "fam-fbf8727759297525": {
+    "exit_distance": 0.626677,
+    "pilot_set": "t3-pilot@1",
+    "scale_free_wall_distance": 0.22316,
+    "scenario_id": "t3-pilot-multi_room-48x64-1-stochastic-3"
+   }
+  },
+  "pairs": 8160,
+  "pairs_within_scale_and_aspect_gates": 173,
+  "pilot_maps": 340,
+  "symmetries": "all 8 rotations/reflections of the grid",
+  "thresholds": {
+   "aspect": 1.15,
+   "exit_chamfer": 0.1,
+   "scale": 1.3,
+   "wall_mad": 0.03,
+   "wall_rule_min_fraction": 0.05
+  },
+  "unique_topologies": 340
+ },
  "scenarios": 72,
  "unique": {
   "core_hash": true,

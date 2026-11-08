@@ -739,10 +739,10 @@
   "label_mismatch:feasible": 134,
   "label_mismatch:unreachable": 29
  },
- "manifest_hash": "sha256:14bc36318ddbc3e7798860c7dae28904be3c56740ca9e7ab4da352152bc150f2",
+ "manifest_hash": "sha256:4e9283b206296d7251514140613f0f8cc234fe9e2dc68877f7a71e906dc5cf9e",
  "manifest_version": "1.0",
  "plan": {
-  "conf_version": "p1-09-confirmation-set@1.0.0",
+  "conf_version": "p1-09-confirmation-set@1.1.0",
   "families": 24,
   "lineages_per_family": 3,
   "master_seed": 20261108,
@@ -770,7 +770,16 @@
     "core_hash",
     "scenario_seed"
    ],
-   "lineage": "exclude the family if any lineage fails or collides with a historical set"
+   "lineage": "exclude the family if any lineage fails or collides with a historical set",
+   "pilot_maps": "exclude the family if its map has the topology hash of, or is a near or wall near duplicate (frozen generator thresholds, also without scale and aspect gates over all 8 grid symmetries) of, any map of the pilot sets",
+   "pilot_sets": [
+    "t2-pilot@1",
+    "t3-pilot@1",
+    "t4-pilot@1",
+    "t4-pilot@2",
+    "t4-pilot@3",
+    "t4-explore@v12"
+   ]
   },
   "seed_namespace": "p1-09-selection@1/seeds",
   "spec": {
@@ -911,7 +920,7 @@
    }
   }
  },
- "plan_hash": "sha256:21e64db40392cbe660f2d219c935fb67ce2c4787531e179f1d46d936847369d0",
+ "plan_hash": "sha256:82ae79c555b6c69a47634471fc960c2a37d33afcf54ef9ed51d022d4671e48db",
  "plan_id": "p1-09-selection@1",
  "pool": {
   "family_failures": [],
