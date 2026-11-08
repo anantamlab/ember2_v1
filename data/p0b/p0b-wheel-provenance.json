@@ -1,6 +1,6 @@
 {
  "lock": "infra/p0b-requirements.lock.txt",
- "lock_sha256": "ec7234eb34ed79461bd2d0801f4aa97878fbe95136fb5a54c57aa87d9805b629",
+ "lock_sha256": "9613f929b53c0fed65105b1f808f64e8f842dab29e837b3dca3e503cbd60bc2c", "lock_sha256_note": "sha256 of the committed (LF) blob; equals the A10 metadata.host.image_lock_sha256",
  "note": "Central directories and selected members read over HTTP range requests from PyPI; no package installed, imported or run. Wheels <= 60 MiB downloaded fully, sha256-checked and source-scanned.",
  "packages": {
   "accelerate": {

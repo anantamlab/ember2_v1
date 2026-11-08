@@ -6,7 +6,7 @@ Inputs:
 
 | Input | Pin |
 |---|---|
-| Lock | `infra/p0b-requirements.lock.txt`, sha256 `ec7234eb34ed79461bd2d0801f4aa97878fbe95136fb5a54c57aa87d9805b629` |
+| Lock | `infra/p0b-requirements.lock.txt`, sha256 `9613f929b53c0fed65105b1f808f64e8f842dab29e837b3dca3e503cbd60bc2c` (committed LF blob; equals the A10 `metadata.host.image_lock_sha256`) |
 | A10 record | `docs/p0b_attempts/attempt7-A10-inspect-pass.json` |
 | Clef source | `unsloth/_vendor/clef/joint_schema_model.py` in `unsloth-2026.10.11-py3-none-any.whl` (sha256 `baff520e…0992e`), file sha256 `0e304cf7…dc3a3` = `p0b.AUDITED_CLEF_SHA256` |
 | Tokenizer | `unsloth/Qwen3.5-2B@fffbc0d8711cf87df6d1f97938c5e50ef94aadc7` `tokenizer.json`, sha256 `87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4`, read with `tokenizers==0.22.2` |
@@ -15,8 +15,10 @@ Outputs:
 
 | File | sha256 |
 |---|---|
-| `data/p0b/p0b-wheel-provenance.json` (`experiments/p0b_wheel_inspect.py`) | `fff746dc1f69ba3d03ea495f258bede34c268f82be952afd97966f1f7a86623d` |
-| `data/p0b/p0b-g10-token-budget.json` (`experiments/p0b_token_budget.py`) | `42ed36b5fe87038576ba8f20b70f95d437b6920ac097dc1f32eabfc891296d43` |
+| `data/p0b/p0b-wheel-provenance.json` (`experiments/p0b_wheel_inspect.py`) | `8fef19f07cc8b412a78bb764aeaefb340b6aef191b4bf218c8f9b4a2ac72c4b4` |
+| `data/p0b/p0b-g10-token-budget.json` (`experiments/p0b_token_budget.py`) | `9590723a522b2ac1ea0582cc25476f43f319dca042bb4b140fcd280db520e99b` |
+
+All repository file hashes here are of the committed LF bytes (`git show HEAD:<path> | sha256sum`). A Windows checkout with `core.autocrlf=true` has CRLF bytes and other hashes. Both scripts write LF.
 
 Tokenizer identity: the sha256 of the serialized tokenizer state (`to_str()`, the `p0b._tokenizer_sha256` definition) is `a57b5c62cd5f242a06c632b82cc0b4f8239d08cc80fd9347fc1f629be977c6ca`. It equals `metadata.tokenizer_sha256` of the A10 record. The experiment refuses to run if it differs.
 

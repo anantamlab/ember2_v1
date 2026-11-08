@@ -135,7 +135,7 @@ def main(lock, out):
         r = res[name]
         print(name, r.get("mode"), r.get("size"), r.get("fla_paths", [])[:2], r.get("conv1d_paths", [])[:2],
               sorted(r.get("source_hits", {}))[:6], r.get("error", ""), flush=True)
-    json.dump({"lock": lock, "packages": res}, open(out, "w", encoding="utf-8"), indent=1, sort_keys=True)
+    json.dump({"lock": lock, "packages": res}, open(out, "w", encoding="utf-8", newline="\n"), indent=1, sort_keys=True)
 
 
 if __name__ == "__main__":

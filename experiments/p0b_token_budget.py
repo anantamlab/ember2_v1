@@ -168,7 +168,7 @@ def main(tok_path, out_path):
                 k = tb.max_chunk(tok, r["state"], r["questions"], LIMIT)
                 out["chunking"][f"train-worst/ascii/{style}"] = {"people": worst["people"], "max_k": k}
     out["padding"][f"train_initial_ascii_compact_chunk{PAD_K}"] = [_padding(lengths["ascii/compact"], b) for b in (4, 8, 16)]
-    Path(out_path).write_text(json.dumps(out, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    Path(out_path).write_text(json.dumps(out, indent=1, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps({k: out[k] for k in ("a10_validation", "max_synthetic_n", "chunking")}, indent=1))
     print(json.dumps({s: {k: v for k, v in d.items()} for s, d in out["real"].items()}, indent=1))
     print(json.dumps(out["padding"], indent=1))
