@@ -95,7 +95,8 @@ class Repo:
 
 
 def _protocol(eligibility=None, **over):
-    body = {"protocol_id": "p1-09-test", "frozen": True,
+    from ember_v1.teacher import selection          # the full #25 protocol (s1 applies its validator too)
+    body = {**selection.draft_protocol(), "protocol_id": "p1-09-test", "frozen": True,
             "eligibility": reg.default_eligibility() if eligibility is None else eligibility}
     body.update(over)
     return {**body, "protocol_hash": s1.protocol_hash(body)}
@@ -302,17 +303,55 @@ def _elig(fn):
     return e
 
 
+T4_OUT = {"status": "excluded", "reason": "excluded_by_protocol_rule", "rule": "test exclusion",
+          "blocked_identities": reg.blocked_records("T4")}
+
+
+def _t4_out_protocol(fn=lambda e: None, **over):
+    """A protocol that excludes T4 v1.2.0 by a written rule (no admission, T4 out of the tie order)."""
+    from ember_v1.teacher import selection
+    e = copy.deepcopy(reg.default_eligibility())
+    e["T4"] = copy.deepcopy(T4_OUT)
+    fn(e)
+    return _protocol(e, t4_entry_rule={**selection.t4_entry_rule(), "admitted": None},
+                     tie_rule={"order": "lower_cpu_then_simplicity", "simplicity_order": ["T0", "T1", "T3", "T2"]},
+                     **over)
+
+
+def _admission(**over):
+    from ember_v1.teacher import selection
+    r = selection.t4_entry_rule()
+    return {**r, "admitted": {**r["admitted"], **over}}
+
+
 BAD_PROTOCOLS = {
     "T4 eligible as blocked v1.1.0": _protocol(_elig(lambda e: e.update(
         T4={"status": "eligible", "identity": reg.identity("T4", "1.1.0").key()}))),
     "T4 silently missing": _protocol(_elig(lambda e: e.pop("T4"))),
-    "T4 excluded without blocked records": _protocol(_elig(lambda e: e["T4"].update(blocked_identities=[]))),
-    "T4 excluded with wrong verdict": _protocol(_elig(
-        lambda e: e["T4"]["blocked_identities"][0].update(verdict="PASSED"))),
-    "T4 excluded without reason": _protocol(_elig(lambda e: e["T4"].pop("reason"))),
+    "T4 eligible without admission record": _protocol(t4_entry_rule={**_admission(), "admitted": None}),
+    "T4 admission with wrong pilot report hash": _protocol(t4_entry_rule=_admission(report_sha256="sha256:" + "0" * 64)),
+    "T4 admission with wrong freeze commit": _protocol(t4_entry_rule=_admission(freeze_commit="0" * 40)),
+    "T4 entry rule drops blocked records": _protocol(t4_entry_rule={**_admission(), "blocked_identities": []}),
+    "T4 excluded as blocked although v1.2.0 is retained": _protocol(_elig(lambda e: e.update(T4={
+        "status": "excluded", "reason": "blocked_by_preregistered_gate", "blocked_identities": reg.blocked_records("T4")}))),
+    "T4 excluded without blocked records": _t4_out_protocol(lambda e: e["T4"].update(blocked_identities=[])),
+    "T4 excluded with wrong verdict": _t4_out_protocol(
+        lambda e: e["T4"]["blocked_identities"][0].update(verdict="PASSED")),
+    "T4 excluded without reason": _t4_out_protocol(lambda e: e["T4"].pop("reason")),
+    "T4 excluded but admission kept": _protocol(_elig(lambda e: e.update(T4=copy.deepcopy(T4_OUT))),
+                                                tie_rule={"order": "lower_cpu_then_simplicity",
+                                                          "simplicity_order": ["T0", "T1", "T3", "T2"]}),
     "not frozen": _protocol(frozen=False),
     "hash mismatch": {**_protocol(), "protocol_id": "edited"},
 }
+
+
+def test_five_teacher_protocol_and_rule_excluded_t4_protocol_both_verify():
+    p = _protocol()
+    assert s1.verify_protocol(p)["protocol_id"] == "p1-09-test"
+    assert all(p["eligibility"][c]["status"] == "eligible" for c in reg.CANDIDATES)
+    assert p["t4_entry_rule"]["admitted"]["version"] == "1.2.0"
+    assert s1.verify_protocol(_t4_out_protocol())["protocol_id"] == "p1-09-test"
 
 
 @pytest.mark.parametrize("case", sorted(BAD_PROTOCOLS))

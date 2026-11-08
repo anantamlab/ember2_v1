@@ -6,6 +6,9 @@ One place records, for the five candidate families T0..T4:
   class that implements it), pinned here so code drift is detected;
 - every blocked identity with its failed preregistered gate and the hash of
   the committed report that blocked it (T4 v1.0.0 G5, T4 v1.1.0 G4);
+- every admission record: a retained identity of a candidate that also has
+  blocked identities (T4 v1.2.0) must name the independent preregistered pilot
+  that admitted it (verdict, report hash, freeze commit, namespace);
 - the teachers that really compute per-action values (`VALUE_TEACHERS`).
 
 Retained is not eligible. Eligibility for one selection is a decision of a
@@ -27,7 +30,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-REGISTRY_VERSION = "teacher-registry@1.0.0"
+REGISTRY_VERSION = "teacher-registry@1.1.0"
 CANDIDATES = ("T0", "T1", "T2", "T3", "T4")
 VALUE_TEACHERS = frozenset({"T2"})        # only T2 computes per-action values (docs/P1_TEACHER_DIRECTION.md)
 RETAINED, BLOCKED = "retained", "blocked"
@@ -50,6 +53,18 @@ class Block:
 
 
 @dataclass(frozen=True)
+class Admission:
+    """The independent preregistered pilot that admitted a new identity of a once-blocked candidate."""
+    verdict: str
+    gate: str                 # the gate version the pilot passed
+    report: str               # repository path of the committed pilot report
+    report_sha256: str        # sha256 of the LF-normalized report bytes
+    record: str               # repository path of the written verdict
+    freeze_commit: str        # commit that preregistered the pilot before it ran
+    namespace: str            # pilot scenario namespace (never reused for selection)
+
+
+@dataclass(frozen=True)
 class Identity:
     candidate: str
     name: str
@@ -59,6 +74,7 @@ class Identity:
     cls_path: str             # "module:Class"
     status: str
     block: Block | None = None
+    admission: Admission | None = None
 
     def key(self) -> dict[str, str]:
         return {"name": self.name, "policy": self.policy, "version": self.version, "config_hash": self.config_hash}
@@ -68,6 +84,13 @@ class Identity:
             raise RegistryError(f"{self.name} {self.version} is not blocked")
         return {**self.key(), "verdict": self.block.verdict, "failed_gate": self.block.failed_gate,
                 "report": self.block.report, "report_sha256": self.block.report_sha256}
+
+    def admission_record(self) -> dict[str, str]:
+        if self.admission is None:
+            raise RegistryError(f"{self.name} {self.version} has no admission record")
+        a = self.admission
+        return {**self.key(), "verdict": a.verdict, "gate": a.gate, "report": a.report,
+                "report_sha256": a.report_sha256, "freeze_commit": a.freeze_commit, "namespace": a.namespace}
 
 
 IDENTITIES: tuple[Identity, ...] = (
@@ -95,7 +118,16 @@ IDENTITIES: tuple[Identity, ...] = (
              Block("T4_V2_BLOCKED", "G4", "data/baselines/p1-08-t4-v2-pilot.json",
                    "sha256:fc172cbc3d1382294bb0c927cbe0d53baca1f9f824b6dda201708a6e54b5a872",
                    "docs/overnight/T4_V2_VERDICT.md")),
+    Identity("T4", "T4", "risk_based_priority", "1.2.0",
+             "sha256:79bd3322b9cf7ccd25928f3a70502089732496af5427f88f00ecd2ff6ba12504",
+             "ember_v1.teacher.t4_v12:T4RiskPriorityV12", RETAINED,
+             admission=Admission("T4_READY_FOR_INDEPENDENT_SELECTION_EVALUATION", "gate_v2",
+                                 "data/baselines/p1-08-t4-v12-pilot.json",
+                                 "sha256:b64b5589a5bec04fadf3dc8d8f0008f75fc3d9d7d0ab09e53d8f8f5075ed2655",
+                                 "docs/P1_T4_V12_VERDICT.md", "b7ff040f8abe065ced5ed1331c0cd6854bd878a1",
+                                 "t4-pilot@3")),
 )
+ADMITTED_VERDICTS = frozenset({"T4_READY_FOR_INDEPENDENT_SELECTION_EVALUATION"})
 
 
 def identities(candidate: str | None = None) -> tuple[Identity, ...]:
@@ -147,6 +179,41 @@ def check_pins() -> list[str]:
         if got != i.key():
             errors.append(f"{i.cls_path}: pinned {i.key()} != code {got}")
     return errors
+
+
+def check_registry() -> list[str]:
+    """Structural rules of the registry itself (empty list = consistent).
+
+    One retained identity at most per candidate; blocked identities carry a
+    block and no admission; a retained identity of a candidate with blocked
+    identities carries an admission with an admitting verdict; every committed
+    report hash matches its file.
+    """
+    errors = []
+    for c in CANDIDATES:
+        ids = identities(c)
+        kept = [i for i in ids if i.status == RETAINED]
+        if len(kept) > 1:
+            errors.append(f"{c}: more than one retained identity")
+        for i in ids:
+            if i.status == BLOCKED and (i.block is None or i.admission is not None):
+                errors.append(f"{c} {i.version}: blocked identity needs a block and no admission")
+            if i.status == RETAINED and i.block is not None:
+                errors.append(f"{c} {i.version}: retained identity has a block")
+            for rec in (i.block, i.admission):
+                if rec is not None and report_sha256(rec.report) != rec.report_sha256:
+                    errors.append(f"{c} {i.version}: {rec.report} hash differs from the registry")
+        if kept and any(i.status == BLOCKED for i in ids):
+            a = kept[0].admission
+            if a is None or a.verdict not in ADMITTED_VERDICTS:
+                errors.append(f"{c} {kept[0].version}: retained after blocked identities without an admission")
+    return errors
+
+
+def admission_record(candidate: str) -> dict[str, str] | None:
+    """Admission record of the retained identity of `candidate`, or None (no admission needed or no identity)."""
+    kept = [i for i in identities(candidate) if i.status == RETAINED and i.admission is not None]
+    return kept[0].admission_record() if kept else None
 
 
 def report_sha256(path: str | Path) -> str:
@@ -214,6 +281,9 @@ def validate_eligibility(elig: Any) -> dict[str, dict[str, Any]]:
                 raise RegistryError(f"{c}: blocked_identities must equal the registry blocked records {want}")
             if reason == EXCLUSION_REASONS[0] and not want:
                 raise RegistryError(f"{c}: has no blocked identity; blocked_by_preregistered_gate is false")
+            if reason == EXCLUSION_REASONS[0] and any(i.status == RETAINED for i in identities(c)):
+                raise RegistryError(f"{c}: has a retained identity; blocked_by_preregistered_gate is false "
+                                    "(use excluded_by_protocol_rule with a written rule)")
         else:
             raise RegistryError(f"{c}: status must be {ELIGIBLE!r} or {EXCLUDED!r}")
     if not eligible:
@@ -225,5 +295,7 @@ def inventory() -> dict[str, Any]:
     """All five candidates with every retained and blocked identity (descriptive)."""
     return {"registry_version": REGISTRY_VERSION, "value_teachers": sorted(VALUE_TEACHERS),
             "candidates": {c: [{**i.key(), "status": i.status,
-                                **({"block": i.blocked_record()} if i.block else {})} for i in identities(c)]
+                                **({"block": i.blocked_record()} if i.block else {}),
+                                **({"admission": i.admission_record()} if i.admission else {})}
+                               for i in identities(c)]
                            for c in CANDIDATES}}

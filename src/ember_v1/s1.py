@@ -102,6 +102,11 @@ def verify_protocol(protocol: Any) -> dict[str, Any]:
         reg.validate_eligibility(protocol["eligibility"])
     except reg.RegistryError as e:
         raise ValueError(f"protocol eligibility invalid: {e}") from None
+    from .teacher import selection          # lazy: selection builds receipts with this module
+    try:
+        selection.verify_frozen_protocol(protocol)      # the full #25 rules: one validator for both gates
+    except selection.ProtocolError as e:
+        raise ValueError(f"selection protocol invalid: {e}") from None
     return {"protocol_id": protocol["protocol_id"], "protocol_hash": protocol["protocol_hash"]}
 
 
@@ -218,7 +223,7 @@ def build_s1_training_set(sources: Sequence[tuple[str | Path, str]], *, repo: st
     except (ValueError, KeyError, TypeError) as e:
         deps["generator_splits_6"] = False
         reasons.append(f"manifests: {e}")
-    drift = reg.check_pins()
+    drift = reg.check_pins() + reg.check_registry()
     deps["teachers_7_8_9"] = not drift
     reasons.extend(f"identity drift: {d}" for d in drift)
     if reasons:

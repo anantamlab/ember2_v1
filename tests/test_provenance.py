@@ -254,6 +254,7 @@ def test_bulk_s1_is_blocked_now_and_only_authorized_when_every_gate_holds():
                           spot_check=None, leakage=None)
     assert now["decision"] == "BULK_S1_BLOCKED" and len(now["reasons"]) >= 5
     assert pv.bulk_s1_gate(selection=_selection(), **GOOD)["decision"] == "BULK_S1_AUTHORIZED"
+    assert pv.bulk_s1_gate(selection=_selection(name="T4", version="1.2.0"), **GOOD)["decision"] ==         "BULK_S1_AUTHORIZED"                                          # admitted T4 v1.2.0 is a retained teacher
     assert "t4_24" not in pv.REQUIRED_DEPENDENCIES and "t4_24_resolved" in pv.REQUIRED_DEPENDENCIES
     bad_cases = [
         dict(selection=None),
@@ -261,7 +262,8 @@ def test_bulk_s1_is_blocked_now_and_only_authorized_when_every_gate_holds():
         dict(selection=_selection(name="T9")),
         dict(selection=_selection(name="T4", version="1.1.0")),          # blocked T4 v1.1.0 (G4)
         dict(selection=_selection(name="T4", version="1.0.0")),          # blocked T4 v1.0.0 (G5)
-        dict(selection=_selection(name="T4", version=None)),
+        dict(selection=_selection(name="T4", version=None)),            # version must be explicit
+        dict(selection=_selection(version=None)),
         dict(selection=_selection(), dependencies={**ALL_DEPS, "t4_24_resolved": False}),
         dict(selection=_selection(), provenance_failures=1),
         dict(selection=_selection(), records_checked=0),
@@ -285,9 +287,35 @@ def test_blocked_t4_never_creates_or_verifies_records(world):
                                "config_hash": pol.identity.config_hash})
     with pytest.raises(pv.ProvenanceError, match="blocked"):
         _verify(world, t4, d)
+    for v in ("1.0.0", "1.1.0"):
+        with pytest.raises(pv.ProvenanceError, match="blocked"):
+            pv.frozen_teacher("T4", None, version=v)
+    from ember_v1.teacher.t4_v12 import T4RiskPriorityV12
+    assert pv.REGISTRY["T4"] is T4RiskPriorityV12 and pv.VALUE_TEACHERS == frozenset({"T2"})
+
+
+def test_registered_t4_v12_records_verify_and_regenerate(world):
+    """Provenance regeneration works with the registered T4 v1.2.0 identity (action-only teacher)."""
+    from ember_v1.teacher.t4_v12 import T4RiskPriorityV12
+    s, obs, m = world
+    rec, d = _make(world, T4RiskPriorityV12)
+    assert rec["teacher"]["version"] == "1.2.0" and rec["values_digest"] is None
+    assert rec["teacher"]["config_hash"] == "sha256:79bd3322b9cf7ccd25928f3a70502089732496af5427f88f00ecd2ff6ba12504"
+    assert rec["code_fingerprint"] == pv.code_fingerprint(T4RiskPriorityV12)
+    assert _verify(world, rec, d)["status"] == "verified"
+    assert type(pv.frozen_teacher("T4", None)) is T4RiskPriorityV12
+    honest = {"record": rec, "observation": obs, "actions": d.actions, "values": None}
+    assert pv.regeneration_spot_check([honest], k=1, seed="t4")["pass"] is True
+    pid = sorted(d.actions)[0]
+    fake = {**d.actions, pid: next(a for a in obs["allowed_actions"] if a != d.actions[pid])}
+    bad = {"record": _rehash(rec, actions_digest=digest(fake)), "observation": obs, "actions": fake, "values": None}
+    r = pv.regeneration_spot_check([honest, bad], k=2, seed="t4")
+    assert r["pass"] is False and r["mismatches"] == [{"index": 1, "reason": "actions differ on regeneration"}]
+    from ember_v1.teacher import registry as reg
+    v11 = _rehash(rec, teacher={**rec["teacher"], "version": "1.1.0",
+                                "config_hash": reg.identity("T4", "1.1.0").config_hash})
     with pytest.raises(pv.ProvenanceError, match="blocked"):
-        pv.frozen_teacher("T4", None)
-    assert "T4" not in pv.REGISTRY and pv.VALUE_TEACHERS == frozenset({"T2"})
+        _verify(world, v11, d)
 
 
 # ----- ingestion (sources.ingest_zip) ---------------------------------------------------------------------
