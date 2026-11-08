@@ -81,11 +81,12 @@ def pilot_cells_v2() -> list[dict[str, Any]]:
     return cells
 
 
-def pilot_scenario_v2(cell: dict[str, Any]) -> Scenario:
-    """Synthetic v2 pilot scenario (own namespace and seeds; not a generator plan, family or split)."""
+def pilot_scenario_v2(cell: dict[str, Any], *, namespace: str = NAMESPACE, sid_prefix: str = "t4-pilot2") -> Scenario:
+    """Synthetic v2 pilot scenario (own namespace and seeds; not a generator plan, family or split).
+    The keyword defaults are the frozen v2 values; later pilots pass their own namespace and prefix."""
     (h, w), topo, n, model, n_exits, kind = cell["grid"], cell["topology"], cell["n"], cell["model"], \
         cell["exits"], cell["kind"]
-    parts = (NAMESPACE, kind, topo, h, w, n, model, n_exits)
+    parts = (namespace, kind, topo, h, w, n, model, n_exits)
     rng = GenRng(derive_seed(*parts))
     params = dict(LAYOUT_PARAMS)
     if kind == "unreachable":
@@ -113,7 +114,7 @@ def pilot_scenario_v2(cell: dict[str, Any]) -> Scenario:
     fire = {"model": model, "spread_interval": 2, "exits_flammable": False}
     if model == "stochastic":
         fire["spread_probability"] = 0.5
-    sid = f"t4-pilot2-{kind}-{topo}-{h}x{w}-{n}-{model}-{n_exits}"
+    sid = f"{sid_prefix}-{kind}-{topo}-{h}x{w}-{n}-{model}-{n_exits}"
     return Scenario.from_dict({
         "schema_version": "1.0", "scenario_id": sid, "grid": {"width": w, "height": h},
         "obstacles": [list(p) for p in sorted(walls)],
@@ -121,7 +122,7 @@ def pilot_scenario_v2(cell: dict[str, Any]) -> Scenario:
         "people": [{"id": f"P{i:03d}", "position": list(p)} for i, p in enumerate(people)],
         "ignitions": [list(ign)], "fire": fire,
         "movement": {"conflict_resolution": "lowest_id_wins", "enter_fire": "blocked"},
-        "termination": {"max_steps": 2 * (h + w)}, "seed": derive_seed(f"{NAMESPACE}/sim", *parts[1:])})
+        "termination": {"max_steps": 2 * (h + w)}, "seed": derive_seed(f"{namespace}/sim", *parts[1:])})
 
 
 def content_hash(s: Scenario) -> str:
@@ -183,10 +184,10 @@ def _spearman(xs: list[float], ys: list[float]) -> float | None:
     return None if sx == 0 or sy == 0 else sum((a - mx) * (b - my) for a, b in zip(rx, ry)) / (sx * sy)
 
 
-def run_cell(cell: dict[str, Any], s: Scenario, v: str, deadline: float
+def run_cell(cell: dict[str, Any], s: Scenario, v: str, deadline: float, *, ablations: dict = ABLATIONS_V11
              ) -> tuple[list[dict[str, Any]], dict[str, Any], bool]:
-    pol = ABLATIONS_V11[v]()
-    risk_cfg = dict(ABLATIONS_V11["A2"]().identity.config)
+    pol = ablations[v]()
+    risk_cfg = dict(ablations["A2"]().identity.config)
     sim = Simulator(s)
     rows: list[dict[str, Any]] = []
     tot: Counter = Counter()
@@ -335,9 +336,10 @@ def paired_state(obs: dict[str, Any], a0: dict[str, Any], a2: dict[str, Any], st
     return out, cases
 
 
-def run_neutral(cell: dict[str, Any], s: Scenario, deadline: float) -> tuple[Counter, list[dict[str, Any]], int, bool]:
+def run_neutral(cell: dict[str, Any], s: Scenario, deadline: float, *, ablations: dict = ABLATIONS_V11
+                ) -> tuple[Counter, list[dict[str, Any]], int, bool]:
     t1 = T1CongestionAware()
-    a0, a2 = ABLATIONS_V11["A0"](), ABLATIONS_V11["A2"]()
+    a0, a2 = ablations["A0"](), ablations["A2"]()
     risk_cfg = dict(a2.identity.config)
     sim = Simulator(s)
     tot: Counter = Counter()
@@ -460,12 +462,23 @@ def main(argv: list[str] | None = None) -> None:
     if args.out.exists():
         sys.exit(f"{args.out} exists: the v2 confirmation pilot runs once (protocol section 6)")
     t_start = time.perf_counter()
-    deadline = t_start + args.wall_limit_s
-    cpu0 = time.process_time()
-    teachers = {v: cls().identity.to_dict() for v, cls in ABLATIONS_V11.items()}
-    teachers["T1"] = T1CongestionAware().identity.to_dict()
-    cfg = dict(ABLATIONS_V11["A2"]().identity.config)
     kept, rejected, excl = select_cells()
+    report = build_report(kept, rejected, excl, t_start=t_start, wall_limit_s=args.wall_limit_s)
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    args.out.write_text(json.dumps(report, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps({"out": str(args.out), "gate": report["gate"], "resources": report["resources"]}, indent=1))
+
+
+def build_report(kept: list[tuple[dict[str, Any], Scenario]], rejected: list[dict[str, Any]], excl: dict[str, Any], *,
+                 t_start: float, wall_limit_s: float, ablations: dict = ABLATIONS_V11, namespace: str = NAMESPACE,
+                 pilot_version: str = PILOT_VERSION) -> dict[str, Any]:
+    """Run every kept cell (A0, A1, A2 closed loop and neutral paired states), the DEV cost profile and the gate.
+    The keyword defaults are the frozen v2 pilot; later pilots pass their own identities and namespace."""
+    deadline = t_start + wall_limit_s
+    cpu0 = time.process_time()
+    teachers = {v: cls().identity.to_dict() for v, cls in ablations.items()}
+    teachers["T1"] = T1CongestionAware().identity.to_dict()
+    cfg = dict(ablations["A2"]().identity.config)
     pilot: list[dict[str, Any]] = []
     episodes: list[dict[str, Any]] = []
     neutral: Counter = Counter()
@@ -475,12 +488,12 @@ def main(argv: list[str] | None = None) -> None:
     for cell, s in kept:
         try:
             for v in VARIANTS:
-                r, ep, ok = run_cell(cell, s, v, deadline)
+                r, ep, ok = run_cell(cell, s, v, deadline, ablations=ablations)
                 pilot.extend(r)
                 complete &= ok
                 if ep:
                     episodes.append(ep)
-            tot, cases, n, ok = run_neutral(cell, s, deadline)
+            tot, cases, n, ok = run_neutral(cell, s, deadline, ablations=ablations)
             neutral.update(tot)
             neutral["neutral_decisions"] += n
             g5c_cases.extend({"cell": _cell_json(cell), **c} for c in cases[: max(0, 40 - len(g5c_cases))])
@@ -496,9 +509,9 @@ def main(argv: list[str] | None = None) -> None:
     profile, ref_s, profile_complete = dev_profile(deadline) if complete else ([], {}, False)
     est = estimate(cfg, pilot, profile, ref_s) if profile_complete else {"error": "dev profile incomplete"}
     peak = peak_rss_mb()
-    report = {
-        "pilot_version": PILOT_VERSION, "namespace": NAMESPACE, "teachers": teachers,
-        "limits": {"wall_limit_s": args.wall_limit_s, "overrun_ms": OVERRUN_MS, "memory_limit_mb": MEMORY_LIMIT_MB,
+    return {
+        "pilot_version": pilot_version, "namespace": namespace, "teachers": teachers,
+        "limits": {"wall_limit_s": wall_limit_s, "overrun_ms": OVERRUN_MS, "memory_limit_mb": MEMORY_LIMIT_MB,
                    "dev_cpu_limit_s": DEV_CPU_LIMIT_S, "budget_hit_limit": BUDGET_HIT_LIMIT,
                    "fallback_limit": FALLBACK_LIMIT, "episode_factor": EPISODE_FACTOR, "workers": 1},
         "cells_defined": len(pilot_cells_v2()), "cells_run": len(kept), "rejected_cells": rejected,
@@ -517,9 +530,6 @@ def main(argv: list[str] | None = None) -> None:
                         "processor": platform.processor(), **ev._revision()},
         "dev_use": "frozen T1 replay for public workload and reference timing only; no T4 decision on DEV",
     }
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(report, indent=1, sort_keys=True) + "\n", encoding="utf-8")
-    print(json.dumps({"out": str(args.out), "gate": report["gate"], "resources": report["resources"]}, indent=1))
 
 
 if __name__ == "__main__":
