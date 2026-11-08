@@ -271,3 +271,20 @@ def test_pilot_entry_point_refuses_to_overwrite(tmp_path):
     for extra in ([], ["--exploratory"]):
         with pytest.raises(SystemExit, match="exists"):
             v12p.main(["--out", str(out), *extra])
+
+
+def test_committed_confirmation_report_is_reproducible_and_bound_to_the_freeze_commit():
+    rep = json.loads((v2p.ev.REPO / "data/baselines/p1-08-t4-v12-pilot.json").read_text(encoding="utf-8"))
+    assert rep["namespace"] == v12p.NAMESPACE and rep["pilot_version"] == v12p.PILOT_VERSION
+    assert rep["evidence_class"] == "prospective_confirmation"
+    assert {k: rep["teachers"][k]["config_hash"] for k in ABLATIONS_V12} == V12_HASHES
+    assert rep["cells_run"] == 74 and rep["rejected_cells"] == [] and rep["errors"] == []
+    assert rep["environment"]["git_sha"] == "b7ff040f8abe065ced5ed1331c0cd6854bd878a1"
+    assert rep["environment"]["src_dirty"] is False
+    assert rep["cell_content_hashes"] == [{"cell": v2p._cell_json(c), "content_hash": v2p.content_hash(s)}
+                                          for c, s in v12p.select_cells()[0]]
+    g = v2p.gate_v2(dict(ABLATIONS_V12["A2"]().identity.config), rep["pilot"], Counter(rep["neutral_paired_states"]),
+                    rep["pilot_complete"] and rep["dev_profile_complete"], rep["resources"]["peak_rss_mb"],
+                    rep["estimate"])
+    assert v12p.decide(g) == rep["gate"]
+    assert rep["gate"]["failed"] == [] and rep["gate"]["decision"] == v12p.READY
