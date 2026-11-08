@@ -1,0 +1,141 @@
+{
+  "schema": "overnight-status@1",
+  "session_start": "2026-11-08",
+  "verified_start": {
+    "main": "b68535ff6d282462663fcd073a57a2d3a92012f9",
+    "pr32_head": "45d8c2b9ae9d91f99d1ec642f017cd3611974a9f",
+    "t4_v1_protocol_commit": "99a65b8a947ef857f79514bac9e639ebaddb5b3a"
+  },
+  "last_successful_checkpoint": "P10 final report",
+  "phases": {
+    "P0": {
+      "status": "DONE",
+      "branch": "p1/t4-v11-repair",
+      "pr": 33,
+      "base_sha": "45d8c2b9ae9d91f99d1ec642f017cd3611974a9f",
+      "head_sha": "29ff686",
+      "dependencies": [],
+      "allowed_next_action": "P1",
+      "blocked_reason": null
+    },
+    "P1": {
+      "status": "DONE",
+      "branch": "p1/t4-v11-repair",
+      "pr": 33,
+      "head_sha": "2d7fc2f",
+      "dependencies": [
+        "P0"
+      ],
+      "artifacts": [
+        "docs/overnight/T4_V1_FAILURE_ANALYSIS.md",
+        "data/baselines/p1-08-t4-v1-diagnosis.json",
+        "src/ember_v1/teacher/t4_v1_diag.py"
+      ],
+      "result": "trace reproduces all 3755 frozen pilot decisions; A0 238 over-ID = 118/18/102"
+    },
+    "P2": {
+      "status": "DONE",
+      "branch": "p1/t4-v11-repair",
+      "pr": 33,
+      "head_sha": "8c8c753",
+      "dependencies": [
+        "P1"
+      ],
+      "tests": "full suite 814 passed, 10 xfailed (strict, v1 defects)",
+      "experiment_identity": "t4-priority-planner@1.1.0",
+      "frozen_config_hash": {
+        "A0": "sha256:97e134923cd63d55b79246c12e6e10b3800c4706bb2354e40fa8cc1588f675db",
+        "A1": "sha256:d1c5acb82cfb693a0d1e6898c3af5293b7f405ada7c94cfe794b405cb2b7f326",
+        "A2": "sha256:67a3517de6fd109d128c0cf31836867fa0a1ec30cb09844e7a1541acae237ad4"
+      },
+      "ci": "pass at 8c8c753"
+    },
+    "P3": {
+      "status": "DONE",
+      "branch": "p1/t4-v11-repair",
+      "pr": 33,
+      "dependencies": [
+        "P2"
+      ],
+      "artifacts": [
+        "docs/P1_T4_RISK_PRIORITY_V2.md",
+        "src/ember_v1/teacher/t4_v2_pilot.py",
+        "src/ember_v1/teacher/t4_v2_eval.py",
+        "tests/test_teacher_t4_v2.py"
+      ],
+      "note": "committed before any v1.1 policy ran on a v2 pilot cell or DEV"
+    },
+    "P4": {
+      "status": "DONE",
+      "branch": "p1/t4-v11-repair",
+      "dependencies": [
+        "P2",
+        "P3"
+      ],
+      "run_commit": "07bc90dcccb38657d73c556a18d8e57df42f9375",
+      "report": "data/baselines/p1-08-t4-v2-pilot.json",
+      "runs": 1,
+      "gate_decision": "T4_V2_BLOCKED",
+      "failed": [
+        "G4_planner_health"
+      ],
+      "note": "ran once; never rerun this sample (protocol section 6)",
+      "ci": "pass at 7cd38dd"
+    },
+    "P5": {
+      "status": "SKIPPED",
+      "branch": "p1/t4-v11-repair",
+      "dependencies": [
+        "P4"
+      ],
+      "blocked_reason": "P4 gate T4_V2_BLOCKED; protocol forbids the DEV run"
+    },
+    "P6": {
+      "status": "DONE",
+      "branch": "p1/t4-v11-repair",
+      "dependencies": [
+        "P4"
+      ],
+      "verdict": "T4_V2_BLOCKED",
+      "artifact": "docs/overnight/T4_V2_VERDICT.md"
+    },
+    "P7": {
+      "status": "DONE",
+      "branch": "p1/teacher-selection-prep",
+      "dependencies": [],
+      "pr": 35,
+      "head_sha": "e55a218637d2d3c39a482dc16c3fb76306fb4f86",
+      "tests": "724 passed",
+      "result": "NO_SELECTION (no frozen protocol; T4 no DEV evidence)"
+    },
+    "P8": {
+      "status": "DONE",
+      "branch": "p1/teacher-provenance",
+      "dependencies": [],
+      "pr": 34,
+      "head_sha": "7d42a4712da846cb5080680f72b03457feadf5a9",
+      "tests": "733 passed",
+      "result": "BULK_S1_BLOCKED"
+    },
+    "P9": {
+      "status": "DONE",
+      "dependencies": [
+        "P2",
+        "P7",
+        "P8"
+      ],
+      "artifact": "docs/overnight/FINAL_REPORT.md section 4"
+    },
+    "P10": {
+      "status": "DONE",
+      "dependencies": [
+        "P9"
+      ],
+      "artifact": "docs/overnight/FINAL_REPORT.md"
+    }
+  },
+  "pending_tasks": [
+    "owner review of draft PRs #32, #33, #34, #35"
+  ],
+  "spend_usd": 0
+}
