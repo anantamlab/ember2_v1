@@ -12,3 +12,11 @@ checkpoints/
 *.safetensors
 data/raw/
 data/ingested/
+
+# Locked test manifests are sealed: never commit them to training storage.
+data/sealed/
+# Blind test salts and private blind manifests live only on the evaluator machine.
+*.salt
+*.salt.hex
+data/blind/
+blind_private*.json

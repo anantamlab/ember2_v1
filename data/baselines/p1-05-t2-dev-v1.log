@@ -1,0 +1,57 @@
+# cmd: D:\Coding\ember_v1\.venv\Scripts\python.exe -m ember_v1.teacher.t2_eval --pilot-report data/baselines/p1-05-t2-pilot.json --out data/baselines/p1-05-t2-dev-v1.json
+# started_utc: 2026-11-07T08:07:31.320267+00:00
+{"position": 0, "T1_cas": 10, "T2_cas": 10, "T2_cpu_s": 57.6}
+{"position": 1, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 104.0}
+{"position": 2, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 58.7}
+{"position": 3, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 16.0}
+{"position": 4, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 33.0}
+{"position": 5, "T1_cas": 4, "T2_cas": 4, "T2_cpu_s": 40.0}
+{"position": 6, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 9.9}
+{"position": 7, "T1_cas": 35, "T2_cas": 35, "T2_cpu_s": 36.0}
+{"position": 8, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 32.7}
+{"position": 9, "T1_cas": 55, "T2_cas": 56, "T2_cpu_s": 20.6}
+{"position": 10, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 36.9}
+{"position": 11, "T1_cas": 8, "T2_cas": 8, "T2_cpu_s": 23.1}
+{"position": 12, "T1_cas": 28, "T2_cas": 28, "T2_cpu_s": 20.9}
+{"position": 13, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 6.7}
+{"position": 14, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 13.6}
+{"position": 15, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 91.3}
+{"position": 16, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 40.8}
+{"position": 17, "T1_cas": 1, "T2_cas": 1, "T2_cpu_s": 57.7}
+{"position": 18, "T1_cas": 4, "T2_cas": 4, "T2_cpu_s": 100.9}
+{"position": 19, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 3.5}
+{"position": 20, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 36.5}
+{"position": 21, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 1.4}
+{"position": 22, "T1_cas": 69, "T2_cas": 69, "T2_cpu_s": 7.6}
+{"position": 23, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 9.6}
+{"position": 24, "T1_cas": 7, "T2_cas": 7, "T2_cpu_s": 20.6}
+{"position": 25, "T1_cas": 1, "T2_cas": 1, "T2_cpu_s": 8.4}
+{"position": 26, "T1_cas": 17, "T2_cas": 13, "T2_cpu_s": 154.8}
+{"position": 27, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 1.0}
+{"position": 28, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 0.4}
+{"position": 29, "T1_cas": 1, "T2_cas": 1, "T2_cpu_s": 0.2}
+{"position": 30, "T1_cas": 11, "T2_cas": 2, "T2_cpu_s": 809.3}
+{"position": 31, "T1_cas": 4, "T2_cas": 4, "T2_cpu_s": 80.4}
+{"position": 32, "T1_cas": 27, "T2_cas": 27, "T2_cpu_s": 295.2}
+{"position": 33, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 37.1}
+{"position": 34, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 51.1}
+{"position": 35, "T1_cas": 3, "T2_cas": 3, "T2_cpu_s": 2.4}
+{"position": 36, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 64.4}
+{"position": 37, "T1_cas": 35, "T2_cas": 34, "T2_cpu_s": 362.0}
+{"position": 38, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 123.8}
+{"position": 39, "T1_cas": 6, "T2_cas": 6, "T2_cpu_s": 1.9}
+{"position": 40, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 3.5}
+{"position": 41, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 7.1}
+{"position": 42, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 186.6}
+{"position": 43, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 245.5}
+{"position": 44, "T1_cas": 19, "T2_cas": 19, "T2_cpu_s": 62.8}
+{"position": 45, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 3.1}
+{"position": 46, "T1_cas": 0, "T2_cas": 0, "T2_cpu_s": 0.3}
+{"position": 47, "T1_cas": 0, "T2_cas": 1, "T2_cpu_s": 3.4}
+{
+ "out": "data\\baselines\\p1-05-t2-dev-v1.json",
+ "complete": true,
+ "deterministic_digest": "sha256:9309c325a79c489682fc72ea70c404493a27ff80050abc7cfe767e9530a36bc6"
+}
+# exit_code: 0
+# meta: {"cmd": ["D:\\Coding\\ember_v1\\.venv\\Scripts\\python.exe", "-m", "ember_v1.teacher.t2_eval", "--pilot-report", "data/baselines/p1-05-t2-pilot.json", "--out", "data/baselines/p1-05-t2-dev-v1.json"], "started_utc": "2026-11-07T08:07:31.320267+00:00", "ended_utc": "2026-11-07T09:05:50.743494+00:00", "exit_code": 0, "wall_s": 3499.4192041999777, "cpu_user_s": 0.015625, "cpu_kernel_s": 0.0, "peak_working_set_mb": 4.3125, "peak_pagefile_mb": 0.8984375}

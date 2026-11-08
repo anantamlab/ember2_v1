@@ -54,7 +54,8 @@ def validate_observation(observation: Mapping[str, Any]) -> dict[str, Any]:
     if type(w) is not int or type(h) is not int or w < 1 or h < 1:
         raise ValueError("grid dimensions must be positive integers")
     walls = sorted(_pos(p, w, h, "obstacle") for p in m["obstacles"])
-    if len(walls) != len(set(walls)):
+    wall_set = set(walls)  # membership only; `walls` keeps the canonical order
+    if len(walls) != len(wall_set):
         raise ValueError("duplicate walls")
     exits = []
     for x in m["exits"]:
@@ -64,7 +65,7 @@ def validate_observation(observation: Mapping[str, Any]) -> dict[str, Any]:
         raise ValueError("duplicate exit ids")
     if len({tuple(x["position"]) for x in exits}) != len(exits):
         raise ValueError("duplicate exit positions")
-    if any(tuple(e["position"]) in walls for e in exits):
+    if any(tuple(e["position"]) in wall_set for e in exits):
         raise ValueError("exit overlaps wall")
     rules = _keys(d["rules"], _RULES, "rules")
     if rules["fire_model"] not in ("deterministic", "stochastic"):
@@ -95,12 +96,12 @@ def validate_observation(observation: Mapping[str, Any]) -> dict[str, Any]:
     active = [tuple(p["position"]) for p in people if p["status"] == "active"]
     if len(active) != len(set(active)):
         raise ValueError("multiple active people in one cell")
-    if any(x in walls for x in active):
+    if any(x in wall_set for x in active):
         raise ValueError("active person on wall")
     burning = sorted(_pos(p, w, h, "burning") for p in d["burning"])
     if len(burning) != len(set(burning)):
         raise ValueError("duplicate burning cells")
-    if any(x in walls for x in burning):
+    if any(x in wall_set for x in burning):
         raise ValueError("burning cell is wall")
     allowed = d["allowed_actions"]
     if not isinstance(allowed, (list, tuple)) or list(allowed) != list(ACTIONS):
