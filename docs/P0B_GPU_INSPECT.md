@@ -18,6 +18,15 @@ modal run infra/modal_app.py --task inspect --gpu L4 --authorize inspect
 - Output: `results/inspect-L4-bf16-compact.json` (git-ignored), the inspect report or a failure report (section 6). Exit 0 only for an explicit `PASS`; else 2.
 - After the run, stop. The next task (`smoke`) needs its own authorization.
 
+### 1.1 GPU preference and capacity fallback (2026-11-08 authorization)
+
+Order: **L4 → A10 → L40S**, as separate bounded attempts, never concurrent. Modal's ordered `gpu=[...]` fallback list is **not** used: the watchdog, the cost estimate and the queue rule assume one GPU type per call, and that interaction is not verified.
+
+1. Run the L4 command above.
+2. Go to the next GPU **only** if the attempt ended with stage `queue_timeout` (no container ever seen). Before the next attempt, check that the call is no longer queued or running (`modal app list`, `modal container list`, the report `cancellation` field) and record any uncertainty.
+3. A started container that fails (model load, any check) is a result. Do not retry it on another GPU.
+4. `run.allocated_gpu` records the device name and capability from CUDA in the container; `matches_request` is `null` when no container started. No GPU compatibility claim without it.
+
 ## 2. Dependency audit and pinned runtime strategy
 
 ### 2.1 Audit of the old image pins
@@ -69,7 +78,9 @@ Freeze rule (issue #2): after a PASSing `inspect`, the `pip_freeze` list in the 
 
 All numbers here are **estimates**. Nothing in this repository stops Modal charges at a dollar value. The real charges are on the Modal usage page; report them after the run. Use Modal's workspace budget settings for an enforced financial limit.
 
-Prices (inputs only, they can change): modal.com/pricing, read 2026-11-03: L4 $0.000222/s, L40S $0.000542/s, CPU $0.0000131/core/s, memory $0.00000222/GiB/s. Starter plan: $30/month free credit.
+Prices (inputs only, they can change): `modal billing rates` for this workspace, read 2026-11-08: L4 $0.80/h ($0.000222/s), A10G $1.10/h ($0.000306/s), L40S $1.95/h ($0.000542/s), CPU $0.0473/core/h, memory $0.008/GiB/h. Starter plan: $30/month free credit.
+
+Estimated envelope of one `inspect` attempt at the configured limits: L4 $0.52, A10 $0.65, L40S $1.00. With the sequential rule only one attempt can start a container, so the planned maximum for the 2026-11-08 preflight is one envelope (≤ $1.00) plus the image build, within the $2 authorization.
 
 ### 4.1 GPU container runtime (estimated)
 
@@ -108,7 +119,7 @@ Automatic, in the order they occur:
 
 1. **Image build fails, no GPU container:** a wheel hash differs, `pip check` fails, or `verify-install` is `FAIL` (upstream bytes or versions drifted). `modal run` builds the image when it creates the app, before the entrypoint runs.
 2. **App creation refused, no GPU container:** for example `InvalidError: Please add a payment method to use L4 GPU functions` (attempt 2). The entrypoint does not run.
-3. **Entrypoint refusal, no GPU container:** no `--authorize inspect`, uncommitted changes, model not `unsloth/Qwen3.5-2B`, GPU not L4/L40S, precision not bf16 (`p0b.gpu_run_plan`). The ephemeral app exists and the image build may already have run at this point.
+3. **Entrypoint refusal, no GPU container:** no `--authorize inspect`, uncommitted changes, model not `unsloth/Qwen3.5-2B`, GPU not L4/A10/L40S, precision not bf16 (`p0b.gpu_run_plan`). The ephemeral app exists and the image build may already have run at this point.
 4. **Confirmed queue wait > 300 s** (client watchdog, section 6): the call is cancelled. Modal's own timeouts do not cover queue time.
 5. **Container start > 900 s** (`startup_timeout`): Modal stops it. `retries=0`, `max_containers=1`.
 6. **`inspect` call > 600 s** (`timeout`): Modal stops it.

@@ -1,6 +1,6 @@
 """P0B GPU feasibility measurements for Unsloth FastDecisionModel (no training).
 
-Runs on any CUDA host; `infra/modal_app.py` runs it on Modal L4/L40S.
+Runs on any CUDA host; `infra/modal_app.py` runs it on Modal L4, A10 or L40S.
 Imports torch/unsloth lazily so the CPU package and tests stay dependency-free.
 
 Upstream contract, read from source at `unslothai/unsloth@AUDITED_UNSLOTH_COMMIT`
@@ -69,7 +69,10 @@ PINNED_RUNTIME = {"unsloth": "2026.10.11", "unsloth_zoo": "2026.10.11", "torch":
                   "trl": "0.22.2", "xformers": "0.0.32.post2", "triton": "3.4.0", "torchao": "0.14.0"}
 
 # ---- GPU spend guard (infra/modal_app.py). Pure Python so CPU CI tests it without Modal.
-ALLOWED_GPUS = ("L4", "L40S")
+# Preference order for bounded sequential attempts (never concurrent, never Modal's gpu=[...] list).
+ALLOWED_GPUS = ("L4", "A10", "L40S")
+# torch.cuda device names that each request may report (Modal "A10" is the AWS A10G part).
+GPU_DEVICE_NAMES = {"L4": ("NVIDIA L4",), "A10": ("NVIDIA A10G", "NVIDIA A10"), "L40S": ("NVIDIA L40S",)}
 # Modal limits per attempt: container start (download + load) and the method call are timed
 # separately, so with retries=0 the configured container time is STARTUP_TIMEOUT_S + TASK_TIMEOUT_S.
 STARTUP_TIMEOUT_S = 900
@@ -77,9 +80,10 @@ TASK_TIMEOUT_S = {"inspect": 600, "smoke": 1800, "padding": 1800, "throughput": 
 RETRIES = 0
 MAX_CONTAINERS = 1
 SCALEDOWN_WINDOW_S = 2
-# modal.com/pricing, read 2026-11-03. Prices can change; they are inputs to an estimate only.
-PRICES_READ = "modal.com/pricing, 2026-11-03"
-GPU_USD_PER_S = {"L4": 0.000222, "L40S": 0.000542}
+# `modal billing rates` (workspace rates), read 2026-11-08: L4 $0.80/h, A10G $1.10/h, L40S $1.95/h,
+# CPU $0.0473/core/h, memory $0.008/GiB/h. Prices can change; they are inputs to an estimate only.
+PRICES_READ = "modal billing rates, 2026-11-08"
+GPU_USD_PER_S = {"L4": 0.000222, "A10": 0.000306, "L40S": 0.000542}
 CPU_CORE_USD_PER_S = 0.0000131
 MEM_GIB_USD_PER_S = 0.00000222
 # Assumed CPU/memory held by the container (not measured, not a Modal limit).
@@ -139,6 +143,18 @@ def gpu_run_plan(task: str, gpu: str, model: str, precision: str, authorize: str
             "startup_timeout_s": STARTUP_TIMEOUT_S, "timeout_s": TASK_TIMEOUT_S[task], "retries": RETRIES,
             "max_containers": MAX_CONTAINERS, "scaledown_window_s": SCALEDOWN_WINDOW_S,
             "cost_estimate": cost_estimate(task, gpu), "phase_budget_usd": P0B_CAP_USD}
+
+def allocated_gpu(requested: str, metadata: Mapping[str, Any] | None) -> dict[str, Any]:
+    """The GPU that really ran, from the container's CUDA metadata, compared with the request.
+
+    `matches_request` is None when no CUDA metadata exists (no GPU container started, or the
+    load failed first): then nothing about GPU compatibility is established.
+    """
+    name = (metadata or {}).get("gpu")
+    return {"requested": requested, "device_name": name, "capability": (metadata or {}).get("gpu_capability"),
+            "matches_request": None if name is None else name in GPU_DEVICE_NAMES.get(requested, ()),
+            "source": "torch.cuda.get_device_properties(0) in the container" if name else "none"}
+
 
 PADDING_ORDERS = ("short_first", "short_last", "short_middle")
 # Stack identity that batched-forward evidence must share with the serving runtime.

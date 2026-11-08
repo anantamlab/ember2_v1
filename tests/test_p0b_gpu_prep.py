@@ -110,7 +110,7 @@ def test_inspect_plan_keeps_the_reviewed_resource_limits():
 
 def test_cost_estimate_is_labeled_and_separated():
     est = p0b.gpu_run_plan("inspect", "L4", p0b.PINNED_MODEL, "bf16", "inspect", CLEAN)["cost_estimate"]
-    assert est["kind"] == "ESTIMATE_NOT_A_BILLING_CAP" and "2026-11-03" in est["prices"]
+    assert est["kind"] == "ESTIMATE_NOT_A_BILLING_CAP" and "2026-11-08" in est["prices"]
     assert est["configured_container_s"] == 1500
     assert est["gpu_usd"] == pytest.approx(1500 * 0.000222, abs=1e-3)
     assert est["cpu_usd_assumed"] == pytest.approx(1500 * 4 * 0.0000131, abs=1e-3)
@@ -127,6 +127,25 @@ def test_l40s_estimate_uses_its_own_price():
     l4 = p0b.cost_estimate("inspect", "L4")
     l40s = p0b.cost_estimate("inspect", "L40S")
     assert l40s["gpu_usd"] == pytest.approx(1500 * 0.000542, abs=1e-3) and l40s["envelope_usd"] > l4["envelope_usd"]
+
+
+def test_a10_is_allowed_between_l4_and_l40s_with_its_own_price():
+    assert p0b.ALLOWED_GPUS == ("L4", "A10", "L40S")
+    a10 = p0b.gpu_run_plan("inspect", "A10", p0b.PINNED_MODEL, "bf16", "inspect", CLEAN)["cost_estimate"]
+    assert a10["gpu_usd"] == pytest.approx(1500 * 1.10 / 3600, abs=1e-3)
+    env = [p0b.cost_estimate("inspect", g)["envelope_usd"] for g in p0b.ALLOWED_GPUS]
+    assert env == sorted(env) and env[-1] < 2.0          # one bounded attempt on any allowed GPU < $2 estimate
+    for g in ("A100", "H100", "T4", "a10", "A10G"):
+        with pytest.raises(ValueError, match="gpu must be one of"):
+            p0b.gpu_run_plan("inspect", g, p0b.PINNED_MODEL, "bf16", "inspect", CLEAN)
+
+
+def test_allocated_gpu_comes_from_cuda_metadata_only():
+    assert p0b.allocated_gpu("A10", {"gpu": "NVIDIA A10G", "gpu_capability": "8.6"})["matches_request"] is True
+    assert p0b.allocated_gpu("L4", {"gpu": "NVIDIA L40S", "gpu_capability": "8.9"})["matches_request"] is False
+    none = p0b.allocated_gpu("L4", None)
+    assert none["matches_request"] is None and none["device_name"] is None and none["source"] == "none"
+    assert set(p0b.GPU_DEVICE_NAMES) == set(p0b.ALLOWED_GPUS)
 
 
 def test_modal_app_uses_the_plan_limits():

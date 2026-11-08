@@ -8,6 +8,9 @@ model, and runs under the timeouts of `p0b.gpu_run_plan`. A failed remote call w
 FAIL/UNVERIFIED report (`ember_v1.run_report`); an abrupt kill or a failed image build
 writes none (use Modal logs). First command (issue #2):
   modal run infra/modal_app.py --task inspect --gpu L4 --authorize inspect
+If L4 has no capacity (queue_timeout, cancel checked), one separate attempt each, never concurrent:
+  modal run infra/modal_app.py --task inspect --gpu A10 --authorize inspect
+  modal run infra/modal_app.py --task inspect --gpu L40S --authorize inspect
 Later tasks need their own written authorization (docs/P0B_GPU_INSPECT.md):
   modal run infra/modal_app.py --task smoke --gpu L4 --authorize smoke
   modal run infra/modal_app.py --task padding --gpu L4 --ns 1,10,50,200 --authorize padding
@@ -175,7 +178,7 @@ def main(task: str = "inspect", gpu: str = "L4", model: str = DEFAULT_MODEL, pre
          max_seq: int = 16384, question_style: str = "compact", repeats: int = 25,
          ns: str = "1,10,50,100,200", batch_sizes: str = "1,4,8,16,32,64", out_dir: str = "results",
          authorize: str = ""):
-    from ember_v1.p0b import gpu_run_plan
+    from ember_v1.p0b import allocated_gpu, gpu_run_plan
 
     # Runs after `modal run` has created the ephemeral app (the CPU image build may already have
     # happened) but before any GPU container starts: authorization, clean commit, pinned model, GPU.
@@ -226,7 +229,8 @@ def main(task: str = "inspect", gpu: str = "L4", model: str = DEFAULT_MODEL, pre
             a == 1.0 for a in result["adapter_agreement_with_predict"].values()) else "FAIL"
     # Client wall clock of the remote call (excludes image build). Compare it with the Modal
     # usage page; `plan.cost_estimate` is an estimate, not a bill.
-    result["run"] = {"plan": plan, "client_elapsed_s": round(elapsed, 1), "watchdog": watch}
+    result["run"] = {"plan": plan, "client_elapsed_s": round(elapsed, 1), "watchdog": watch,
+                     "allocated_gpu": allocated_gpu(gpu, result.get("metadata"))}
     write_json_atomic(path, result)
     from ember_v1.p0b import result_exit_code
 
