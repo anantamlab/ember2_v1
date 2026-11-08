@@ -85,11 +85,16 @@ def _traces(data: Any) -> Iterable[Mapping[str, Any]]:
             yield item
 
 
-def ingest_zip(zip_path: Path, *, source_id: str, quality: str) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+def ingest_zip(zip_path: Path, *, source_id: str, quality: str,
+               manifests: Mapping[str, Mapping[str, Any]] | None = None,
+               allowed_splits: tuple[str, ...] = ("train",)) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     """Validate every teacher trace in a zip. Return (records, manifest entry).
 
     Fail closed: an invalid trace raises; it is never repaired or skipped.
     JSON members without trace keys (e.g. a bare observation) are counted only.
+    With `manifests` (split -> verified split manifest), every `teacher_verified`
+    trace must also carry a `provenance` record (and `values` when its teacher
+    computes them) that passes `provenance.verify_provenance` (issue #10).
     """
     if quality not in QUALITIES:
         raise ValueError(f"quality must be one of {QUALITIES}")
@@ -128,6 +133,10 @@ def ingest_zip(zip_path: Path, *, source_id: str, quality: str) -> tuple[list[di
                     if quality == "teacher_verified":
                         try:
                             rec["replay"] = verify_teacher_decision(trace, replay_cache)
+                            if manifests is not None:
+                                rec["provenance"] = _verify_trace_provenance(trace, manifests, allowed_splits)
+                                rec["provenance_record"] = trace["provenance"]
+                                rec["values"] = trace.get("values")
                         except ValueError as e:
                             raise ValueError(f"{info.filename}[{i}]: {e}") from None
                     records.append(rec)
@@ -139,19 +148,44 @@ def ingest_zip(zip_path: Path, *, source_id: str, quality: str) -> tuple[list[di
         "decisions": sum(len(r["actions"]) for r in records),
         "groups": sorted({r["group_id"] for r in records}),
         "non_trace_json_members": other_json,
-        "training_eligible": quality in TRAINING_QUALITIES,
+        "training_eligible": quality in TRAINING_QUALITIES,      # quality tier only (legacy meaning)
+        "provenance_verified": manifests is not None and quality == "teacher_verified",
+        "s1_eligible": False,     # only ember_v1.s1.build_s1_training_set can authorize S1 (issue #10)
     }
     return records, manifest
 
 
-def training_records(records: Iterable[Mapping[str, Any]], *, allow_fixtures: bool = False) -> list[Mapping[str, Any]]:
-    """Filter to training-eligible records. `allow_fixtures` is for pipeline smoke only.
+def _verify_trace_provenance(trace: Mapping[str, Any], manifests: Mapping[str, Mapping[str, Any]],
+                             allowed_splits: tuple[str, ...]) -> dict[str, Any]:
+    from . import provenance                      # lazy: provenance imports the teacher package
+    if not isinstance(trace.get("provenance"), Mapping):
+        raise ValueError("provenance record required")
+    scenario_hash = Scenario.from_dict(trace["episode"]["scenario"]).content_hash()
+    return provenance.verify_provenance(trace["provenance"], observation=trace["observation"],
+                                        actions=trace["actions"], values=trace.get("values"),
+                                        scenario_hash=scenario_hash, manifests=manifests,
+                                        allowed_splits=allowed_splits)
+
+
+def training_records(records: Iterable[Mapping[str, Any]], *, allow_fixtures: bool = False,
+                     require_provenance: bool = False) -> list[Mapping[str, Any]]:
+    """Legacy filter to quality-eligible records. `allow_fixtures` is for pipeline smoke only.
+
+    This is NOT an S1 entrypoint and its output never authorizes bulk S1:
+    use `ember_v1.s1.build_s1_training_set`, which has no opt-out.
 
     A `teacher_verified` record without complete full-replay evidence raises (fail closed).
+    With `require_provenance` (required for S1 training, issue #10), a `teacher_verified`
+    record without verified provenance raises too, and fixtures are never allowed.
     """
+    if require_provenance and allow_fixtures:
+        raise ValueError("fixtures are never allowed together with require_provenance")
     allowed = TRAINING_QUALITIES | ({"synthetic_fixture"} if allow_fixtures else set())
     out = [r for r in records if r["quality"] in allowed]
     for r in out:
         if r["quality"] == "teacher_verified" and (r.get("replay") or {}).get("status") != "complete":
             raise ValueError("teacher_verified record lacks complete full-episode replay evidence")
+        if require_provenance and r["quality"] == "teacher_verified" and \
+                (r.get("provenance") or {}).get("status") != "verified":
+            raise ValueError("teacher_verified record lacks verified teacher provenance")
     return out
