@@ -22,7 +22,8 @@ protections that replay does not give:
   provenance, full replay, regeneration and the split audit mandatory.
 
 Teacher identities and `VALUE_TEACHERS` come from `teacher.registry`, shared
-with #25 selection. Blocked T4 identities never create or verify records.
+with #25 selection. T4 v1.2.0 (admitted by its independent pilot) creates and
+verifies records like T0..T3; blocked T4 v1.0.0/v1.1.0 never do.
 
 The digest is a hash binding, not a signature: it detects accidental and
 inconsistent edits, and a forger who does not also match the frozen code,
@@ -49,8 +50,9 @@ from .teacher import registry as reg
 from .teacher.interface import POLICY_INTERFACE_VERSION, PolicyDecision, ReferencePolicy
 
 PROVENANCE_VERSION = "teacher-provenance@1.0.0"
-# Retained frozen identities only (T0..T3). Blocked T4 v1.0.0/v1.1.0 stay in `teacher.registry` with their
-# verdicts and can never create or verify records. Shared with #25 selection (one registry, one VALUE_TEACHERS).
+# Retained frozen identities only (T0..T3 v1.0.0, T4 v1.2.0). Blocked T4 v1.0.0/v1.1.0 stay in `teacher.registry`
+# with their verdicts and can never create or verify records. Shared with #25 selection (one registry, one
+# VALUE_TEACHERS).
 REGISTRY: dict[str, type[ReferencePolicy]] = reg.retained_classes()
 VALUE_TEACHERS = reg.VALUE_TEACHERS
 TRAINING_SPLITS = ("train",)
@@ -292,8 +294,9 @@ def leakage_audit(records: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
 
 
 # ----- bulk S1 gate --------------------------------------------------------------------------------------
-# `t4_24_resolved`: T4 is an eligible retained identity under the frozen #25 protocol, or that protocol
-# excludes it with exactly the registry's blocked records (T4 v1.0.0 G5, v1.1.0 G4). Never a silent skip.
+# `t4_24_resolved`: T4 is an eligible retained identity under the frozen #25 protocol (today v1.2.0 with its
+# admission record), or that protocol excludes it by a written rule with exactly the registry's blocked records
+# (T4 v1.0.0 G5, v1.1.0 G4). Never a silent skip.
 REQUIRED_DEPENDENCIES = ("generator_splits_6", "teachers_7_8_9", "t3_23", "t4_24_resolved", "selection_gate_25")
 
 
@@ -318,6 +321,8 @@ def bulk_s1_gate(*, selection: Mapping[str, Any] | None, dependencies: Mapping[s
             reasons.append("#25 selection receipt is not verified")
         sel = selection.get("selected") or {}
         try:
+            if not isinstance(sel.get("version"), str):
+                raise reg.RegistryError("selected teacher needs an explicit version")
             if REGISTRY.get(sel.get("name")) is not reg.teacher_class(sel.get("name"), sel.get("version")):
                 raise reg.RegistryError("not retained")
         except reg.RegistryError as e:

@@ -24,7 +24,8 @@ def test_inventory_of_committed_dev_reports_is_historical_only():
     c = inv["candidates"]
     assert inv["evidence_class"] == sel.HISTORICAL and inv["counts_as_confirmation"] is False
     assert [t for t in sel.CANDIDATES if c[t]["status"] == "dev_evidence"] == ["T0", "T1", "T2", "T3"]
-    assert c["T4"]["status"] == "blocked"
+    assert c["T4"]["status"] == "admitted_without_historical_evidence" and c["T4"]["scenarios"] == 0
+    assert c["T4"]["admission"]["version"] == "1.2.0" and c["T4"]["admission"]["namespace"] == "t4-pilot@3"
     assert [b["failed_gate"] for b in c["T4"]["blocked_identities"]] == ["G5", "G4"]
     assert inv["cross_report_conflicts"] == [] and inv["same_dev_metadata"] and inv["same_positions"]
     for t in ("T0", "T1", "T2", "T3"):
@@ -34,8 +35,10 @@ def test_inventory_of_committed_dev_reports_is_historical_only():
 def test_status_keeps_the_five_views_separate():
     st = sel.status()
     assert set(st["retained_identities"]["candidates"]) == set(sel.CANDIDATES)
-    assert st["eligible"] == ["T0", "T1", "T2", "T3"]
-    assert list(st["excluded"]) == ["T4"] and st["excluded"]["T4"]["reason"] == "blocked_by_preregistered_gate"
+    assert st["eligible"] == ["T0", "T1", "T2", "T3", "T4"] and st["excluded"] == {}
+    t4 = st["retained_identities"]["candidates"]["T4"]
+    assert [(x["version"], x["status"]) for x in t4] == [("1.0.0", "blocked"), ("1.1.0", "blocked"),
+                                                          ("1.2.0", "retained")]
     assert st["historical_exploratory_evidence"]["T1"]["scenarios"] == 48
     assert st["prospective_confirmation_evidence"] is None and st["protocol_frozen"] is False
     assert st["decision"] == "NO_SELECTION" and st["operational_baseline"] == "T1"
@@ -80,14 +83,57 @@ def _prim(**over):
     return {**sel.draft_protocol()["primary"], **over}
 
 
+T4_OUT = {"status": "excluded", "reason": "excluded_by_protocol_rule", "rule": "test exclusion",
+          "blocked_identities": reg.blocked_records("T4")}
+FOUR = {"order": "lower_cpu_then_simplicity", "simplicity_order": ["T0", "T1", "T3", "T2"]}
+
+
+def _t4_out(fn=lambda e: None):
+    e = _elig(lambda e: e.update(T4=copy.deepcopy(T4_OUT)))
+    fn(e)
+    return {"eligibility": e, "t4_entry_rule": {**sel.t4_entry_rule(), "admitted": None}, "tie_rule": FOUR}
+
+
+def _adm(**over):
+    r = sel.t4_entry_rule()
+    return {"t4_entry_rule": {**r, "admitted": {**r["admitted"], **over}}}
+
+
+def test_draft_lists_all_five_candidates_with_t4_v12_admission_and_blocked_records():
+    d = sel.draft_protocol()
+    assert [c for c in sel.CANDIDATES if d["eligibility"][c]["status"] == "eligible"] == list(sel.CANDIDATES)
+    t4r = d["t4_entry_rule"]
+    assert t4r["admitted"] == reg.admission_record("T4") and t4r["admitted"]["version"] == "1.2.0"
+    assert t4r["blocked_identities"] == reg.blocked_records("T4")
+    assert d["tie_rule"]["simplicity_order"] == ["T0", "T1", "T3", "T4", "T2"]
+    assert d["protocol_version"] == "teacher-selection-protocol@1.1.0"
+    assert sel.verify_frozen_protocol(_frozen(**_t4_out()))["eligibility"]["T4"]["status"] == "excluded"
+
+
 BAD_PROTOCOL = {
     "T4 eligible as blocked v1.1.0": ({"eligibility": _elig(lambda e: e.update(
         T4={"status": "eligible", "identity": reg.identity("T4", "1.1.0").key()}))}, "blocked"),
-    "T4 excluded without blocked record": ({"eligibility": _elig(
-        lambda e: e["T4"].update(blocked_identities=[]))}, "blocked_identities"),
+    "T4 excluded without blocked record": (_t4_out(lambda e: e["T4"].update(blocked_identities=[])),
+                                           "blocked_identities"),
+    "T4 excluded as blocked although v1.2.0 retained": ({"eligibility": _elig(lambda e: e.update(T4={
+        "status": "excluded", "reason": "blocked_by_preregistered_gate",
+        "blocked_identities": reg.blocked_records("T4")}))}, "retained identity"),
+    "T4 excluded but admission kept": ({**_t4_out(), "t4_entry_rule": sel.t4_entry_rule()}, "admission"),
+    "T4 eligible without admission": ({"t4_entry_rule": {**sel.t4_entry_rule(), "admitted": None}}, "admission"),
+    "T4 admission wrong report hash": (_adm(report_sha256="sha256:" + "0" * 64), "admission"),
+    "T4 admission wrong verdict": (_adm(verdict="T4_V2_BLOCKED"), "admission"),
+    "T4 admission wrong namespace": (_adm(namespace="t4-pilot@2"), "admission"),
+    "T4 admission names v1.1.0": (_adm(**reg.identity("T4", "1.1.0").key()), "admission"),
+    "T4 entry rule drops blocked records": ({"t4_entry_rule": {**sel.t4_entry_rule(), "blocked_identities": []}},
+                                            "blocked T4 records"),
+    "T4 entry rule extra key": ({"t4_entry_rule": {**sel.t4_entry_rule(), "note": "x"}}, "t4_entry_rule"),
     "T4 missing": ({"eligibility": _elig(lambda e: e.pop("T4"))}, "exactly"),
     "four candidates": ({"candidates": ["T0", "T1", "T2", "T3"]}, "all five"),
     "T4 entry left open": ({"t4_entry_rule": {"deadline": "after_results"}}, "t4_entry_rule"),
+    "tie rule without T4": ({"tie_rule": FOUR}, "tie rule"),
+    "tie rule T4 last": ({"tie_rule": {"order": "lower_cpu_then_simplicity",
+                                       "simplicity_order": ["T0", "T1", "T3", "T2", "T4"]}}, "tie rule"),
+    "excluded T4 in tie rule": ({**_t4_out(), "tie_rule": sel.draft_protocol()["tie_rule"]}, "tie rule"),
     "baseline T2": ({"baseline": {"teacher": "T2", "basis": "historical_exploratory_provisional"}}, "baseline"),
     "baseline confirmed claim": ({"baseline": {"teacher": "T1", "basis": "confirmed"}}, "baseline"),
     "historical used as confirmation": ({"historical_evidence": {"use": "confirmation", "reports": []}},
@@ -100,8 +146,6 @@ BAD_PROTOCOL = {
     "few resamples": ({"primary": _prim(bootstrap_resamples=10)}, "primary"),
     "no safety guard": ({"safety": {"casualties_plus_unresolved": "no_net_deterioration"}}, "safety"),
     "budget over cap": ({"compute": {**sel.draft_protocol()["compute"], "usd_cap": 50}}, "compute"),
-    "tie rule with T4": ({"tie_rule": {"order": "lower_cpu_then_simplicity",
-                                       "simplicity_order": ["T0", "T1", "T3", "T2", "T4"]}}, "tie rule"),
     "inline arbiter": ({"arbiter": {"equal_compute_to_best_single": True}}, "separately frozen"),
     "calibration not excluded": ({"excluded_data": ["locked_test", "blind_test", "emberbench"]}, "exclude"),
     "stop rule missing": ({"stop_rules": ["freeze_commit_missing"]}, "stop rules"),
@@ -125,7 +169,8 @@ def test_protocol_missing_a_field_is_refused():
 
 
 # ----- prospective confirmation gate (synthetic numbers: gate logic only, no teacher run) ----------------------
-ELIGIBLE = ("T0", "T1", "T2", "T3")
+ELIGIBLE = ("T0", "T1", "T2", "T3", "T4")
+ARB_ELIGIBLE = ("T0", "T1", "T2", "T3")     # an arbiter protocol beside a T4-excluding selection protocol
 NS = "p1-09-selection@1"
 
 
@@ -206,7 +251,7 @@ def test_no_improvement_retains_t1_with_a_pending_receipt(frozen_repo):
     assert g["reasons"] == [] and g["decision"] == "RETAIN_T1_NO_IMPROVEMENT" and g["selected"] == "T1"
     r = g["receipt_draft"]
     assert r["review"]["status"] == "pending" and r["selected"]["name"] == "T1"
-    assert r["eligibility"]["T4"]["status"] == "excluded"
+    assert r["eligibility"]["T4"] == {"status": "eligible", "identity": reg.identity("T4", "1.2.0").key()}
     assert all(not a["qualifies"] for a in g["analyses"].values())
 
 
@@ -244,6 +289,30 @@ def test_two_qualifiers_prefer_lower_cpu_then_simplicity(frozen_repo):
     assert g["selected"] == "T0"
     g = _gate(repo, p, pref, _evidence(p, pref, run, per={"T3": _better("T3"), "T2": _better("T2")}))
     assert g["selected"] == "T3"             # equal CPU: T3 before T2 in the frozen simplicity order
+    g = _gate(repo, p, pref, _evidence(p, pref, run, per={"T4": _better("T4"), "T2": _better("T2")}))
+    assert g["selected"] == "T4"             # equal CPU: T4 before T2
+    g = _gate(repo, p, pref, _evidence(p, pref, run, per={"T4": _better("T4"), "T3": _better("T3")}))
+    assert g["selected"] == "T3"             # equal CPU: T3 before T4
+    g = _gate(repo, p, pref, _evidence(p, pref, run, per={"T4": _better("T4", cpu=0.5), "T3": _better("T3")}))
+    assert g["selected"] == "T4"             # lower CPU first
+
+
+def test_t4_v12_is_a_full_candidate_with_a_receipt_bound_to_its_code(frozen_repo):
+    repo, p, pref, run = frozen_repo
+    g = _gate(repo, p, pref, _evidence(p, pref, run, per={"T4": _better("T4")}))
+    assert g["decision"] == "SELECT_STANDALONE" and g["selected"] == "T4", g["reasons"]
+    sel_id = g["receipt_draft"]["selected"]
+    assert sel_id["version"] == "1.2.0" and sel_id["config_hash"] == reg.identity("T4", "1.2.0").config_hash
+    assert g["receipt_draft"]["review"]["status"] == "pending"
+
+
+def test_missing_t4_v12_results_stop_selection(frozen_repo):
+    repo, p, pref, run = frozen_repo
+    ev = _evidence(p, pref, run)
+    for r in ev["rows"][:1]:
+        del r["results"]["T4"]
+    body = {k: v for k, v in ev.items() if k != "evidence_hash"}
+    _no(_gate(repo, p, pref, {**body, "evidence_hash": digest(body)}), "T4 result missing")
 
 
 def test_casualty_gain_moved_into_unresolved_is_not_a_replacement(frozen_repo):
@@ -267,11 +336,18 @@ def test_over_budget_candidate_is_not_a_replacement(frozen_repo):
     assert not g["analyses"]["T3"]["compute_feasible"] and g["decision"] == "RETAIN_T1_NO_IMPROVEMENT"
 
 
-def test_blocked_t4_in_confirmation_evidence_stops_selection(frozen_repo):
+def test_blocked_t4_in_confirmation_evidence_stops_selection(frozen_repo, tmp_path):
     repo, p, pref, run = frozen_repo
-    ev = _evidence(p, pref, run, extra=lambda s: {"T4": {**_result("T1"), "config_hash":
-                                                         reg.identity("T4", "1.1.0").config_hash}})
-    _no(_gate(repo, p, pref, ev), "excluded candidate T4")
+    for v in ("1.0.0", "1.1.0"):
+        ev = _evidence(p, pref, run, extra=lambda s, v=v: {"T4": {**_result("T1"), "config_hash":
+                                                                  reg.identity("T4", v).config_hash}})
+        _no(_gate(repo, p, pref, ev), "T4 identity differs from the protocol")
+    repo2 = Repo(tmp_path / "repo")                 # a protocol that excludes T4 by rule
+    p2 = _frozen(**_t4_out())
+    pref2 = repo2.commit("selection/protocol.json", p2)
+    run2 = repo2.commit("selection/run-marker.json", {"run": 1})["commit"]
+    ev = _evidence(p2, pref2, run2)
+    _no(_gate(repo2, p2, pref2, ev), "excluded candidate T4")
 
 
 def test_evidence_before_or_beside_the_freeze_commit_is_refused(frozen_repo):
@@ -387,8 +463,8 @@ def _arb_protocol(**over):
     ({"fallback_teacher": "T0"}, "fallback"), ({"score_id": ""}, "score_id"), ({"frozen": False}, "frozen"),
 ])
 def test_arbiter_protocol_needs_every_safeguard(over, match):
-    assert arb.validate_arbiter_protocol(_arb_protocol(), eligible=ELIGIBLE)["protocol_id"] == "arb"
+    assert arb.validate_arbiter_protocol(_arb_protocol(), eligible=ARB_ELIGIBLE)["protocol_id"] == "arb"
     with pytest.raises(arb.ArbiterError, match=match):
-        arb.validate_arbiter_protocol(_arb_protocol(**over), eligible=ELIGIBLE)
+        arb.validate_arbiter_protocol(_arb_protocol(**over), eligible=ARB_ELIGIBLE)
     with pytest.raises(arb.ArbiterError, match="hash"):
-        arb.validate_arbiter_protocol({**_arb_protocol(), "score_id": "other"}, eligible=ELIGIBLE)
+        arb.validate_arbiter_protocol({**_arb_protocol(), "score_id": "other"}, eligible=ARB_ELIGIBLE)

@@ -14,8 +14,10 @@ Retain five independently identifiable policy families:
 - T4: endangered-person risk-priority routing
 
 **Current eligibility (decided before any P1-09 confirmation evidence):**
-- Eligible to be considered for prospective selection: frozen, previously validated T0, T1, T2, T3 identities, subject to fresh preflight and compute gates.
-- Ineligible: T4 v1.0.0 (mechanism G5 failed) and T4 v1.1.0 (v2 planner-health G4 failed on A1/A2). These are retained as failed reference-policy evidence but must not propose labels for the selection comparison, arbiter, or S1.
+- Eligible to be considered for prospective selection: frozen, previously validated T0, T1, T2, T3 v1.0.0 identities and T4 v1.2.0 (`sha256:79bd3322…2504`), subject to fresh preflight and compute gates.
+- T4 v1.2.0 entered under the T4 entry rule below, before the protocol freeze: its preregistered independent pilot `t4-pilot@3` (freeze commit `b7ff040`, report `data/baselines/p1-08-t4-v12-pilot.json`, `sha256:b64b5589…2655`) returned `T4_READY_FOR_INDEPENDENT_SELECTION_EVALUATION` (PR #36). Admission is not selection, and the pilot is not selection evidence. The frozen protocol carries this admission record in `t4_entry_rule.admitted`.
+- Ineligible: T4 v1.0.0 (mechanism G5 failed) and T4 v1.1.0 (v2 planner-health G4 failed on A1/A2). These are retained as failed reference-policy evidence but must not propose labels for the selection comparison, arbiter, or S1. The frozen protocol lists them in `t4_entry_rule.blocked_identities`.
+- Tie-break simplicity order (after lower CPU), fixed now: T0, T1, T3, T4, T2.
 - T4 is not silently discarded: every inventory, report, and selection receipt must include its ineligibility reason and its blocked experiment hashes.
 - A subsequent T4 version can enter only after a new, preregistered, independent synthetic mechanism/compute pilot passes its full gate AND before this selection protocol is frozen. If not ready at the freeze deadline, T4 remains excluded throughout this version. Do not unlock it after seeing selection outcomes. A later validated T4 requires a new protocol, new confirmation data, and separate decision.
 

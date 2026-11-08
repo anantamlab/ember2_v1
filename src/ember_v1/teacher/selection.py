@@ -2,8 +2,9 @@
 
 Five kinds of information stay separate:
 
-1 retained identities: `registry.inventory()` (all five candidates, T4 v1.0.0
-  and v1.1.0 kept as blocked records);
+1 retained identities: `registry.inventory()` (all five candidates; T4 v1.2.0
+  retained with its admission record, T4 v1.0.0 and v1.1.0 kept as blocked
+  records);
 2 eligible teachers: the `eligibility` record of a frozen protocol, checked by
   `registry.validate_eligibility` (a blocked identity is never eligible);
 3 blocked or excluded candidates: the same record, with reason and the exact
@@ -38,7 +39,7 @@ from . import evaluate as ev
 from . import registry as reg
 
 SELECTION_VERSION = "teacher-selection@2.0.0"
-PROTOCOL_VERSION = "teacher-selection-protocol@1.0.0"
+PROTOCOL_VERSION = "teacher-selection-protocol@1.1.0"
 EVIDENCE_VERSION = "teacher-selection-evidence@1.0.0"
 CANDIDATES = reg.CANDIDATES
 BASELINE = "T1"
@@ -57,6 +58,12 @@ REQUIRED_STOP_RULES = ("freeze_commit_missing", "scenario_isolation_invalid", "u
 PROTOCOL_FIELDS = ("protocol_version", "protocol_id", "candidates", "eligibility", "t4_entry_rule", "baseline",
                    "historical_evidence", "confirmation", "primary", "safety", "compute", "tie_rule", "arbiter",
                    "excluded_data", "stop_rules", "frozen")
+# Preregistered simplicity order (tie rule after lower CPU), fixed before any confirmation outcome:
+# T0 one shortest path per person; T1 adds congestion-aware cooperative reservations; T3 adds a
+# dynamic pheromone colony over T1-style routing; T4 adds risk-priority ordering, transactional repair
+# and an exact vacate-infeasibility proof; T2 adds stochastic fire-forecast rollouts per action.
+SIMPLICITY_ORDER = ("T0", "T1", "T3", "T4", "T2")
+T4_ENTRY_KEYS = {"deadline", "requires", "after_freeze", "admitted", "blocked_identities"}
 RESULT_KEYS = {"config_hash", "casualties", "evacuated", "unresolved", "people", "failure",
                "final_transition_hash", "policy_cpu_s", "max_decision_cpu_ms"}
 
@@ -101,8 +108,10 @@ def evidence_inventory(paths: Sequence[str | Path] = DEFAULT_REPORTS) -> dict[st
         for pos, r in rows.items():
             r["family_id"] = r["family_id"] or fam.get(pos)
         blocked = reg.blocked_records(t)
-        status = "dev_evidence" if rows else ("blocked" if blocked else "missing")
-        out[t] = {"status": status, "reports": p["reports"], "blocked_identities": blocked,
+        admitted = reg.admission_record(t)
+        status = ("dev_evidence" if rows else "admitted_without_historical_evidence" if admitted
+                  else "blocked" if blocked else "missing")
+        out[t] = {"status": status, "reports": p["reports"], "blocked_identities": blocked, "admission": admitted,
                   "config_hashes": sorted(p["config_hashes"]), "scenarios": len(rows),
                   "families": len({r["family_id"] for r in rows.values()}),
                   "casualties": sum(r["casualties"] for r in rows.values()),
@@ -134,9 +143,7 @@ def draft_protocol() -> dict[str, Any]:
     return {
         "protocol_version": PROTOCOL_VERSION, "protocol_id": "p1-09-teacher-selection",
         "candidates": list(CANDIDATES), "eligibility": reg.default_eligibility(),
-        "t4_entry_rule": {"deadline": "protocol_freeze",
-                          "requires": "new T4 identity passing a new preregistered independent pilot gate",
-                          "after_freeze": "excluded for this protocol version"},
+        "t4_entry_rule": t4_entry_rule(),
         "baseline": {"teacher": BASELINE, "basis": "historical_exploratory_provisional"},
         "historical_evidence": {"use": "descriptive_only",
                                 "reports": [{"report": k, "sha256": v} for k, v in sorted(inv["report_sha256"].items())]},
@@ -148,12 +155,20 @@ def draft_protocol() -> dict[str, Any]:
         "safety": {"casualties_plus_unresolved": "no_net_deterioration", "evacuated": "no_net_deterioration"},
         "compute": {"usd_cap": CPU_CAP_USD, "cpu_s_cap": 14400.0, "per_decision_cpu_ms_cap": 30000.0,
                     "replacement_cpu_s_cap": 7200.0},
-        "tie_rule": {"order": "lower_cpu_then_simplicity", "simplicity_order": ["T0", "T1", "T3", "T2"]},
+        "tie_rule": {"order": "lower_cpu_then_simplicity", "simplicity_order": list(SIMPLICITY_ORDER)},
         "arbiter": None,
         "excluded_data": list(REQUIRED_EXCLUDED_DATA),
         "stop_rules": list(REQUIRED_STOP_RULES),
         "frozen": False,
     }
+
+
+def t4_entry_rule() -> dict[str, Any]:
+    """T4 admission at protocol freeze: the registry admission (or None) and every blocked T4 record."""
+    return {"deadline": "protocol_freeze",
+            "requires": "new T4 identity passing a new preregistered independent pilot gate",
+            "after_freeze": "excluded for this protocol version",
+            "admitted": reg.admission_record("T4"), "blocked_identities": reg.blocked_records("T4")}
 
 
 def _num(x: Any, lo: float = 0.0, hi: float = math.inf, *, strict: bool = True) -> bool:
@@ -180,9 +195,21 @@ def validate_protocol(p: Any) -> dict[str, Any]:
         raise ProtocolError(f"eligibility: {e}") from None
     eligible = [c for c in CANDIDATES if elig[c]["status"] == reg.ELIGIBLE]
     t4r = p["t4_entry_rule"]
-    if not (isinstance(t4r, Mapping) and t4r.get("deadline") == "protocol_freeze"
+    if not (isinstance(t4r, Mapping) and set(t4r) == T4_ENTRY_KEYS and t4r.get("deadline") == "protocol_freeze"
             and t4r.get("after_freeze") == "excluded for this protocol version" and t4r.get("requires")):
-        raise ProtocolError("t4_entry_rule must close T4 entry at protocol freeze")
+        raise ProtocolError(f"t4_entry_rule must close T4 entry at protocol freeze with exactly {sorted(T4_ENTRY_KEYS)}")
+    if t4r["blocked_identities"] != reg.blocked_records("T4"):
+        raise ProtocolError("t4_entry_rule must list exactly the registry blocked T4 records (v1.0.0 G5, v1.1.0 G4)")
+    admitted = t4r["admitted"]
+    if elig["T4"]["status"] == reg.ELIGIBLE:
+        want = reg.admission_record("T4")
+        if want is None or admitted != want:
+            raise ProtocolError("eligible T4 needs the exact registry admission record (pilot verdict, report hash, "
+                                "freeze commit, namespace)")
+        if {k: admitted[k] for k in ("name", "policy", "version", "config_hash")} != dict(elig["T4"]["identity"]):
+            raise ProtocolError("T4 admission record names another identity than the eligible T4")
+    elif admitted is not None:
+        raise ProtocolError("excluded T4 must not carry an admission record")
     if p["baseline"] != {"teacher": BASELINE, "basis": "historical_exploratory_provisional"} or \
             BASELINE not in eligible:
         raise ProtocolError("baseline must be eligible T1 as the historical provisional baseline")
@@ -218,9 +245,10 @@ def validate_protocol(p: Any) -> dict[str, Any]:
             and _num(cm.get("per_decision_cpu_ms_cap")) and _num(cm.get("replacement_cpu_s_cap"))):
         raise ProtocolError(f"compute needs positive caps and usd_cap within the ${CPU_CAP_USD:g} CPU cap")
     tr = p["tie_rule"]
-    if not (isinstance(tr, Mapping) and tr.get("order") == "lower_cpu_then_simplicity"
-            and sorted(tr.get("simplicity_order") or []) == sorted(eligible)):
-        raise ProtocolError("tie rule must order exactly the eligible candidates")
+    if not (isinstance(tr, Mapping) and set(tr) == {"order", "simplicity_order"}
+            and tr.get("order") == "lower_cpu_then_simplicity"
+            and list(tr.get("simplicity_order") or []) == [c for c in SIMPLICITY_ORDER if c in eligible]):
+        raise ProtocolError(f"tie rule must order exactly the eligible candidates as {SIMPLICITY_ORDER}")
     arb = p["arbiter"]
     if arb is not None and not (isinstance(arb, Mapping) and set(arb) == {"protocol_ref", "protocol_hash"}):
         raise ProtocolError("an arbiter needs its own separately frozen protocol (protocol_ref, protocol_hash)")

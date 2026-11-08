@@ -223,7 +223,7 @@ def build_s1_training_set(sources: Sequence[tuple[str | Path, str]], *, repo: st
     except (ValueError, KeyError, TypeError) as e:
         deps["generator_splits_6"] = False
         reasons.append(f"manifests: {e}")
-    drift = reg.check_pins()
+    drift = reg.check_pins() + reg.check_registry()
     deps["teachers_7_8_9"] = not drift
     reasons.extend(f"identity drift: {d}" for d in drift)
     if reasons:

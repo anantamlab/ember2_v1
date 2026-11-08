@@ -12,7 +12,7 @@ One record per decision. `record_hash` = digest of all other fields.
 
 | Field | Binds the decision to |
 |---|---|
-| `teacher` | name, policy, version and config hash of a **retained** frozen teacher identity (`teacher.registry`: T0–T3 v1.0.0). Blocked T4 v1.0.0 and v1.1.0 can never create or verify a record |
+| `teacher` | name, policy, version and config hash of a **retained** frozen teacher identity (`teacher.registry`: T0–T3 v1.0.0, T4 v1.2.0). Blocked T4 v1.0.0 and v1.1.0 can never create or verify a record |
 | `code_fingerprint` | digest of the LF-normalized source of the teacher module and every `ember_v1` module it imports (transitive, AST-based) |
 | `utilities` | policy interface and grid-utility versions |
 | `policy_seed`, `step` | the teacher seed (deterministic teachers: `null`) and the observation step |
