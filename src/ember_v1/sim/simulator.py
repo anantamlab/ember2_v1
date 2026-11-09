@@ -99,6 +99,21 @@ class Simulator:
         """Evaluator-private snapshot (includes RNG position and trapped). Never give to a policy."""
         return self._private_state()
 
+    # ----- evaluator-only counterfactual fork ------------------------------
+    def fork_fire(self, fork_seed: int) -> None:
+        """Replace the stream of FUTURE fire draws (P1-13 matched replicates). Evaluator-only.
+
+        The current state, burning set and history are unchanged; only draws after this
+        point differ. The fork is bound into the transition chain, so a forked branch can
+        never pass as an unforked replay. Policies never see the fork seed.
+        """
+        if self._terminated:
+            raise SimulationError("cannot fork a terminated simulator")
+        if type(fork_seed) is not int or not 0 <= fork_seed < 2 ** 64:
+            raise ValueError("fork seed must be an integer in [0, 2**64)")
+        self._rng = SplitMix64(stream_seed(fork_seed, "fire-fork"))
+        self._chain = digest({"prev": self._chain, "fire_fork": {"step": self._step, "seed": fork_seed}})
+
     # ----- transition ------------------------------------------------------
     def step(self, actions: Mapping[str, str]) -> dict[str, Any]:
         if self._terminated:
