@@ -33,6 +33,19 @@ def hang_t3_in_decide(name, identity, seed, scenario, q, slot):
     ps.worker_main(name, identity, seed, scenario, q, slot)
 
 
+def flood_then_hang_t2(name, identity, seed, scenario, q, slot):
+    """T2 keeps its queue feeder busy with large messages while it burns CPU in decide(); the decision cap
+    kills it mid-write. With one SHARED queue this could leave the write lock held and block the others."""
+    if name == "T2":
+        q.put(("start", name, os.getpid(), _fp(name, identity)))
+        slot[DEC] = time.process_time()
+        blob = "x" * (1 << 20)
+        end = time.monotonic() + 60
+        while time.monotonic() < end:
+            q.put(("heartbeat_noise", name, blob))           # unknown kind: ignored by the supervisor
+    ps.worker_main(name, identity, seed, scenario, q, slot)
+
+
 def sleep_t1(name, identity, seed, scenario, q, slot):
     if name == "T1":
         q.put(("start", name, os.getpid(), _fp(name, identity)))

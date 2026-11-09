@@ -73,8 +73,14 @@ The run-8 plan `sha256:07ea910e…c25a5` was never frozen. It is superseded befo
 7. CI (Linux) showed that `s1_pipeline.module_fingerprint` gave different digests on Windows: on a
    case-insensitive file system `from .sim import Scenario` added a phantom module `ember_v1.sim.Scenario`
    (resolved to `sim/scenario.py`). Module paths are now case-exact, so every platform computes the same
-   identities. The first run-9 hash `sha256:4a188432…c19c` (Windows-only identities) is superseded by
-   `sha256:d006a31f…a4e1`. Teacher code fingerprints were not affected (no phantom module in their closures).
+   identities. The first run-9 hash `sha256:4a188432…c19c` (Windows-only identities) is superseded.
+   Teacher code fingerprints were not affected (no phantom module in their closures).
+8. CI (Linux, push run of #53) showed one more defect: the five workers shared one `multiprocessing.Queue`.
+   Killing one worker (here for `code_drift`) while its feeder thread held the queue's write lock made three
+   healthy teachers fail too. The supervisor now gives each worker its own queue, never reads a killed
+   worker's queue again (a cut message could block the reader), and reads at most 256 messages per worker
+   per poll (a flooding worker cannot delay the cap checks). Regression fake: `flood_then_hang_t2`. Hash
+   `sha256:d006a31f…a4e1` is superseded by `sha256:eb8dbe29…b664`.
 
 Scenario IDs, seeds, salt and selection rule are unchanged: the same eight scenarios.
 
@@ -96,7 +102,7 @@ Then `execute` writes `attempt-1.json` with `open("x")` + `fsync` before any wor
 
 | Item | Value |
 |---|---|
-| Process model | one spawned process per teacher per group (five live at most); groups in plan order |
+| Process model | one spawned process and one message queue per teacher per group (five live at most); groups in plan order; a killed worker's queue is not read again |
 | Per-decision CPU | OS process CPU since `decide()` began, polled every 0.1 s: T0/T1/T3/T4 5 s, T2 30 s; breach kills that worker |
 | Group wall | 7 200 s from group start; breach kills every live worker of the group |
 | Pilot wall | 14 400 s absolute deadline; breach kills live workers; no new group starts (`not_started`) |

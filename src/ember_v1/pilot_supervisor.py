@@ -37,6 +37,7 @@ from .teacher.registry import CANDIDATES
 SUPERVISOR_VERSION = "p1-12-pilot-supervisor@1.0.0"
 POLL_S = 0.1
 GRACE_S = 5.0              # terminate -> kill grace per worker
+MAX_MSGS_PER_POLL = 256    # per worker per poll
 STALL_S = 60.0             # heartbeat age that counts as unresponsive (only without an OS CPU reading)
 CLOCK = "worker time.thread_time_ns around decide(); caps on supervisor-read OS process CPU"
 FAILURE_KINDS = ("teacher_exception", "invalid_proposal", "decision_cpu_cap", "group_wall_cap", "pilot_wall_cap",
@@ -136,7 +137,11 @@ def run_group(scenario: Scenario, jobs: Sequence[Mapping[str, Any]], *, decision
     if names != list(CANDIDATES):
         raise ValueError("a group needs exactly the five teachers in registry order")
     ctx = mp.get_context("spawn")
-    q = ctx.Queue()
+    # One queue per worker. A worker killed while its feeder thread holds a SHARED queue's write lock would
+    # block every other worker (seen on Linux CI). A killed worker's own queue is never read again: a message
+    # cut by the kill could block the reader.
+    qs = {n: ctx.Queue() for n in names}
+    closed: set[str] = set()
     procs: dict[str, Any] = {}
     slots: dict[str, Any] = {}
     streams: dict[str, dict[int, dict[str, Any]]] = {n: {} for n in names}
@@ -163,7 +168,7 @@ def run_group(scenario: Scenario, jobs: Sequence[Mapping[str, Any]], *, decision
             log("worker_start", teacher=n, pid=msg[2])
             if msg[3] != want_fp[n]:
                 fail(n, "code_drift", f"worker code fingerprint {msg[3]} differs from the plan {want_fp[n]}")
-                _stop(procs[n])
+                stop(n)
         elif kind == "step":              # kept even after a failure: a true decision made before it
             streams[n][msg[2]] = msg[3]
         elif kind == "failure":
@@ -176,20 +181,39 @@ def run_group(scenario: Scenario, jobs: Sequence[Mapping[str, Any]], *, decision
                 cpu[n] = max(cpu[n], msg[3])
                 log("worker_done", teacher=n, decisions=msg[2], process_cpu_s=msg[3])
 
+    def drain_one(n: str) -> int:
+        got = 0
+        while n not in closed and got < MAX_MSGS_PER_POLL:     # a flooding worker cannot starve the cap checks
+            try:
+                msg = qs[n].get_nowait()
+            except queue_mod.Empty:
+                break
+            got += 1
+            handle(msg)
+        return got
+
     def drain(timeout: float) -> None:
-        try:
-            handle(q.get(timeout=timeout))
-            while True:
-                handle(q.get_nowait())
-        except queue_mod.Empty:
-            pass
+        if not sum(drain_one(n) for n in names):
+            time.sleep(timeout)
+            for n in names:
+                drain_one(n)
+
+    def stop(n: str) -> None:
+        if n in closed:
+            return
+        alive = procs[n].is_alive()
+        if alive:
+            drain_one(n)          # the writer is alive, so every message it started is complete
+        _stop(procs[n])
+        if alive:
+            closed.add(n)         # killed by the supervisor: its last message may be cut
 
     try:
         for j in jobs:
             n = j["name"]
             slots[n] = ctx.Array("d", [0.0, 0.0, -1.0], lock=False)
             procs[n] = ctx.Process(target=target or worker_main, name=f"p1-12-pilot-{n}", daemon=True,
-                                   args=(n, dict(j["identity"]), j["seed"], scenario.to_dict(), q, slots[n]))
+                                   args=(n, dict(j["identity"]), j["seed"], scenario.to_dict(), qs[n], slots[n]))
             procs[n].start()
         log("group_start", scenario_hash=scenario.content_hash(), pids={n: p.pid for n, p in procs.items()})
         while True:
@@ -209,23 +233,25 @@ def run_group(scenario: Scenario, jobs: Sequence[Mapping[str, Any]], *, decision
                     if d_s > decision_cpu_s[n]:
                         fail(n, "decision_cpu_cap", f"decision used {d_s:.2f} s CPU, cap {decision_cpu_s[n]} s",
                              decision_cpu_s=round(d_s, 3))
-                        _stop(p)
+                        stop(n)
                         continue
                 if ext is None and slots[n][BEAT] > 0 and time.time() - slots[n][BEAT] > STALL_S:
                     fail(n, "worker_unresponsive", f"no heartbeat for {STALL_S} s")
-                    _stop(p)
+                    stop(n)
             now = time.monotonic()
             live = [n for n, p in procs.items() if p.is_alive()]
             if live and now - t0 > group_wall_s:
                 for n in live:
                     fail(n, "group_wall_cap", f"group wall {now - t0:.1f} s over cap {group_wall_s} s")
-                    _stop(procs[n])
+                    stop(n)
             elif live and deadline is not None and now > deadline:
                 for n in live:
                     fail(n, "pilot_wall_cap", "pilot wall deadline reached")
-                    _stop(procs[n])
+                    stop(n)
             if all(not p.is_alive() for p in procs.values()):
                 drain(0.05)
+                while sum(drain_one(n) for n in names):   # every worker has exited: read what is left
+                    pass
                 for n, p in procs.items():
                     if n not in done and n not in failures:
                         if p.exitcode == 0:
@@ -244,8 +270,9 @@ def run_group(scenario: Scenario, jobs: Sequence[Mapping[str, Any]], *, decision
         for p in procs.values():
             _stop(p)
         codes = {n: p.exitcode for n, p in procs.items()}
-        q.close()
-        q.cancel_join_thread()
+        for q in qs.values():
+            q.close()
+            q.cancel_join_thread()
     sup = {"supervisor_version": SUPERVISOR_VERSION, "wall_s": round(time.monotonic() - t0, 3),
            "process_cpu_s": {n: round(v, 3) for n, v in cpu.items()}, "cpu_measurement": via,
            "peak_live_decision_cpu_ms": {n: round(v, 1) for n, v in peak.items()}, "exit_codes": codes,
