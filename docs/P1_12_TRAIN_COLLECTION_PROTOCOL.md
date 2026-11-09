@@ -32,7 +32,7 @@ states (normally step 0). Same-state disagreement and counterfactual work belong
 | Gate | Rule |
 |---|---|
 | Source | `data/splits/p1-02-v1/train.json`, manifest `sha256:96a56481…b442d`, spec `sha256:992f8be3…3644`, generator `gen-1.0.0`; regenerate each scenario from the manifest and compare its content hash. |
-| Split | TRAIN only. Refuse any scenario, family, lineage or geometry core hash that appears in DEV, calibration, P1-07/P1-09 selection, any pilot namespace (T2/T3/T4/s1-pilot@1), the sealed index or the blind firewall (reuse `s1_pipeline` held-out sets). |
+| Split | TRAIN only. Refuse any scenario, family, lineage or geometry core hash that appears in DEV, calibration, P1-07/P1-09 selection, any pilot namespace (T2/T3/T4/s1-pilot@1; one disclosed exception, §6 item 5), the sealed index or the blind firewall (reuse `s1_pipeline` held-out sets). |
 | Identity | `registry.check_pins() == []`; all five identities retained; T4 v1.0/v1.1 blocked identities refused. |
 | Code | Clean worktree at a pushed commit; collector, simulator and teacher fingerprints recorded. |
 | Output | Write-once directory; every group verified by `verify_fixture`; the manifest of groups hashed. |
@@ -173,3 +173,10 @@ create supervised targets: eligibility of a demonstration is decided by the froz
    not a substitute: T0/T1/T4 have none, and no internal budget stops a hang or an infinite loop.
 4. Owner decision: the approver allowlist (`sankalphs`, `Sathvikar01`, the two repository admins on
    2026-11-09). GitHub forbids self-approval, so the record needs a PR by one account approved by the other.
+5. Owner decision (run 10, 2026-11-09): the pilot keeps `g-0821b9cfcfbdc9a9`, which is also one of the five
+   scenarios of the obsolete T1-only `s1-pilot@1` (draft PR #43). Both are TRAIN. Accepted only while
+   `s1-pilot@1` has no outcome evidence, stays permanently blocked (no authorization will be issued; #43 is
+   superseded and must not be merged or run), neither pilot's data enters any validation or test set, the overlap
+   stays documented, and the scenario is never counted as two independent sources. The pilot plan's
+   disjointness audit does not cover `s1-pilot@1` because that selection exists only on #43; this item is the
+   record of the exception.

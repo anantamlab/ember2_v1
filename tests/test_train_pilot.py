@@ -135,7 +135,28 @@ def test_freeze_candidate_doc_cites_the_committed_plan_exactly():
         assert f"| {s['scenario_id']} | {s['scenario_hash']} | {s['family_id']} |" in doc
     for t, v in committed["teacher_pins"]["teachers"].items():
         assert f"| {t} | {v['version']} | {v['config_hash']} | {v['code_fingerprint']} |" in doc
-    assert not (REPO / tp.FROZEN_PLAN_FILE).exists() and not (REPO / tp.AUTH_FILE).exists()
+
+
+def test_frozen_plan_if_present_is_the_reviewed_plan_with_only_status_changed():
+    """Replaces the pre-freeze assertion "no plan.json exists" (run 10). The freeze commit may add only
+    `plan.json` = `plan_PROPOSED.json` with `status` FROZEN: same bytes otherwise, same hash, valid when frozen."""
+    proposed_raw = (REPO / tp.PLAN_FILE).read_bytes()
+    proposed = json.loads(proposed_raw.decode("utf-8"))
+    frozen_path, auth_path = REPO / tp.FROZEN_PLAN_FILE, REPO / tp.AUTH_FILE
+    if not frozen_path.exists():
+        assert not auth_path.exists(), "an authorization record without a frozen plan"
+        return
+    frozen_raw = frozen_path.read_bytes()
+    plan = json.loads(frozen_raw.decode("utf-8"))
+    assert plan["status"] == tp.FROZEN and tp.check_plan(plan) == []
+    assert plan["plan_hash"] == proposed["plan_hash"] == tp.digest(tp.plan_body(plan))
+    assert {k: v for k, v in plan.items() if k != "status"} == {k: v for k, v in proposed.items() if k != "status"}
+    lf = lambda b: b.replace(b"\r\n", b"\n")  # noqa: E731 - working-tree bytes may be CRLF on Windows
+    want = lf(proposed_raw).replace(b'"status": "%s"' % tp.PLAN_STATUS.encode(), b'"status": "%s"' % tp.FROZEN.encode())
+    assert lf(frozen_raw) == want, "plan.json must differ from plan_PROPOSED.json only in the status value"
+    if auth_path.exists():
+        auth = json.loads(auth_path.read_text(encoding="utf-8"))
+        assert auth["plan_hash"] == plan["plan_hash"] and auth["plan_freeze"]["path"] == tp.FROZEN_PLAN_FILE
 
 
 # ----- authorization content ----------------------------------------------------------------------------------
