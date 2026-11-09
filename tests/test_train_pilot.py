@@ -402,6 +402,7 @@ def _failed(tmp_path, mini_plan, target, plan_changes=None):
     (fk.sleep_t1, "T1", "group_wall_cap", {"group_wall_s": 15}),
     (fk.silent_exit_t4, "T4", "missing_policy_response", {}),
     (fk.invalid_action_t0, "T0", "invalid_proposal", {}),
+    (fk.flood_then_hang_t2, "T2", "decision_cpu_cap", {"decision_cpu_s": {**tp.LIMITS["decision_cpu_s"], "T2": 1}}),
 ])
 def test_teacher_failure_marks_the_group_incomplete_and_keeps_evidence(tmp_path, mini_plan, target, teacher, kind,
                                                                        limits):

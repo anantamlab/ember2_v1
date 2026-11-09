@@ -438,9 +438,9 @@
  "identities": {
   "collector": {
    "module_fingerprint": "sha256:061eb525303c1689e7b77040b1055e9323222acff62309e6fc6e03b2a3d56d16",
-   "runner_fingerprint": "sha256:06a4479dbf4ef3f7b5df0def714c6f0eb944c6c907082ee591d2e8947be32223",
+   "runner_fingerprint": "sha256:d9839da83b343e3599ff745b7606e5cfde26ba95c34d062a4d278dbd624f5d79",
    "schema_version": "matched-multi-teacher@0.2.0",
-   "supervisor_fingerprint": "sha256:8f86fb47ac96a6833b561c6d553eafcfbd2353d80480ac06cc208ebd9e08dee6",
+   "supervisor_fingerprint": "sha256:5920da88408c5a0336ea926907463a8e758531c5dd3fd1e7dfc6dd71dd65212a",
    "supervisor_version": "p1-12-pilot-supervisor@1.0.0"
   },
   "generator": {
@@ -476,7 +476,7 @@
   "regenerations": "regen/<scenario_id>.json"
  },
  "pilot_version": "p1-12-train-pilot@0.2.0-draft",
- "plan_hash": "sha256:d006a31f795d7d97f3d90c0e25dee9d6f862fadd99b4907526986cbb85b3a4e1",
+ "plan_hash": "sha256:eb8dbe293db7f1c1e1b4f342c07f21853031e9e6ab5419eda2833c51f761b664",
  "regeneration": {
   "counts_against": "pilot_wall_s",
   "rule": "the two smallest-N scenarios (ties by rank) are run a second time inside the same attempt, after all eight groups, under the same caps; both must reproduce content_hash",
