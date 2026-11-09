@@ -1,0 +1,11 @@
+#!/bin/sh
+# Installed by scripts/verify_local.py install-hook (EMBER v1 local-testing policy, AGENTS.md).
+root=$(git rev-parse --show-toplevel) || exit 1
+script="$root/scripts/verify_local.py"
+if [ ! -f "$script" ]; then
+  echo "pre-push: $script is missing on this branch; merge the local-testing policy first. Push refused." >&2
+  exit 1
+fi
+PY="${EMBER_VERIFY_PYTHON:-python}"
+command -v "$PY" >/dev/null 2>&1 || PY=python3
+exec "$PY" "$script" check-push "$@"
