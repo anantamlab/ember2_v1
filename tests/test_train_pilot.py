@@ -117,6 +117,16 @@ def test_committed_proposed_plan_matches_a_fresh_rebuild():
     assert committed["geometry_audit"]["pass"] and committed["disjointness_audit"]["pass"]
 
 
+def test_module_fingerprint_is_case_exact_on_every_platform():
+    """CI (Linux) found Windows-only phantom modules: `from .sim import Scenario` resolved `ember_v1.sim.Scenario`
+    to `sim/scenario.py` on a case-insensitive file system, so plan identities differed by platform."""
+    from ember_v1 import s1_pipeline as sp
+    assert sp._exact_module_path("ember_v1.sim.Scenario") is None
+    assert sp._exact_module_path("ember_v1.sim.Simulator") is None
+    assert sp._exact_module_path("ember_v1.sim.scenario") is not None
+    assert sp._exact_module_path("ember_v1.sim") is not None
+
+
 def test_freeze_candidate_doc_cites_the_committed_plan_exactly():
     committed = json.loads((REPO / tp.PLAN_FILE).read_text(encoding="utf-8"))
     doc = (REPO / "docs/P1_12_PILOT_FREEZE_CANDIDATE.md").read_text(encoding="utf-8")
