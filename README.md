@@ -8,6 +8,9 @@ Read the phase-by-phase [High-Level Design](docs/HLD.md). This initial project i
 
 ## Run locally
 
+There is no GitHub CI. Before every push, run the complete suite locally on Python 3.11 and 3.12 with
+`python scripts/verify_local.py run` — see [AGENTS.md](AGENTS.md).
+
 ```bash
 python -m pip install -e '.[test]'
 python -m pytest -q

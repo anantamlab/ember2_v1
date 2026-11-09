@@ -67,7 +67,7 @@ own code fingerprint; a mismatch is a `code_drift` teacher failure.
 | Geometry within the pilot (28 pairs) | 0 hits |
 | Nearest held-out maps (not duplicates under the frozen rules) | g-0ee55267388889cc vs t4-pilot@1 open_room 48×64: wall 0.019, exits 0.114 (exit rule 0.10); g-5082bdcde677aea4 vs t4-pilot@2 open_room 48×64: wall 0.050 (rule 0.03), exits 0.056. Sparse open rooms; the wall-only rule does not apply below 5 % walls by design |
 | Policy input | exactly the public observation keys; no private key anywhere (checked per stored observation) |
-| Disclosed TRAIN-internal overlap | g-0821b9cfcfbdc9a9 is also one of five scenarios of `s1-pilot@1` (draft PR #43, `FROZEN_SELECTION_NOT_RUN`, T1-only, obsolete after the pivot). Both are TRAIN, no outcome exists, so it is not leakage. Kept; owner may object before freeze |
+| Disclosed TRAIN-internal overlap | g-0821b9cfcfbdc9a9 is also one of five scenarios of `s1-pilot@1` (draft PR #43, `FROZEN_SELECTION_NOT_RUN`, T1-only, obsolete after the pivot). Both are TRAIN, no outcome exists, so it is not leakage. **Owner decision (run 10, 2026-11-09): accepted** only while (a) `s1-pilot@1` has no outcome evidence (checked: every remote branch holds only its selection `pilot.json`, status `FROZEN_SELECTION_NOT_RUN`), (b) `s1-pilot@1` stays permanently blocked (never authorized, never run; PR #43 is superseded), (c) neither pilot's data enters any validation or test set, (d) the overlap stays documented, (e) it is never counted as two independent sources. Scenario identities are not changed for this overlap |
 
 ## 5. Runtime caps and failure policy
 
@@ -124,7 +124,8 @@ T2 central 1 496 CPU-s, upper 3 725 CPU-s (acceptance limit), worst case 24 500 
 - [ ] Approver allowlist (`sankalphs`, `Sathvikar01`) correct; trust boundary (protocol §4.6) accepted.
 - [ ] `tests/test_train_pilot.py` passes, including crash, hang, silent exit, invalid action, code drift,
       forged stream, interrupt, tampered plan, missing approval and existing-marker cases.
-- [ ] CI green on the exact head.
+- [ ] Complete local suite PASS on Python 3.11 and 3.12 on the exact head (`scripts/verify_local.py run`,
+      receipt in the PR; `AGENTS.md`). GitHub CI was removed in run 10 and is not evidence.
 
 ## 12. Steps after review (owner only; the agent does none of them)
 
