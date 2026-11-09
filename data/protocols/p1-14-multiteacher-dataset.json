@@ -1,0 +1,46 @@
+{
+  "protocol_id": "p1-14-multiteacher-dataset",
+  "version": "0.1.0-draft",
+  "status": "DRAFT_NOT_FROZEN",
+  "issue": 47,
+  "authorizes": "nothing: no TRAIN collection, no labels, no training, no GPU",
+  "depends_on": {
+    "p1-12": "matched-multi-teacher@0.2.0",
+    "p1-13": "joint-counterfactual-fixture@0.2.0"
+  },
+  "classes": {
+    "A": {"name": "successful_demonstration", "use": "sft_positive"},
+    "B": {"name": "unsuccessful_demonstration", "use": "contrastive_only"},
+    "C": {"name": "counterfactual_preference", "use": "preference_pair"},
+    "D": {"name": "inconclusive_intervention", "use": "excluded_inconclusive"},
+    "E": {"name": "student_visited_state", "use": "reserved_blocked_until_p1-16"}
+  },
+  "demonstration_rule": {
+    "group": "complete five-teacher matched group, verify_fixture passed",
+    "primary": "casualties_plus_unresolved",
+    "class_A": "teacher primary equals the group minimum (ties allowed) AND teacher casualties equal the group minimum casualties",
+    "class_B": "every other complete trajectory; kept as evidence, never a positive SFT target",
+    "failed_trajectory": "excluded from A and B; reported"
+  },
+  "preference_rule": {
+    "source": "verify_counterfactual passed",
+    "class_C": "contrast preference_candidate AND replicates >= 3 (stochastic fire) or 1 (deterministic) AND strict improvements >= 2 (stochastic) or 1 (deterministic) AND not censored",
+    "min_replicates_stochastic": 3,
+    "min_strict_improvements_stochastic": 2,
+    "class_D": "every other contrast (inconclusive, no_difference, weak a/b verdict below thresholds)"
+  },
+  "weighting": {
+    "unit": "scenario",
+    "scenario_budget": 1.0,
+    "uninformative_scenario_factor": 0.25,
+    "uninformative_definition": "all five teachers have the same primary and the same casualties",
+    "within_scenario": "equal split over distinct (observation_digest, joint action) records of the class",
+    "duplicate_state_action": "merged; weight split equally over the proposing teachers for share accounting",
+    "max_teacher_share_A": 0.5,
+    "max_family_share": 0.05,
+    "min_scenarios_for_share_caps": 20
+  },
+  "forbidden_fields": ["probability", "probabilities", "logprob", "confidence", "value_estimate", "causal_label", "blame"],
+  "teacher_values": "only T2 proposal values that T2 actually computed; never filled for other teachers or unscored people",
+  "scope": {"allowed_now": ["synthetic_fixture"], "real_split": "requires FROZEN status, owner authorization and the P1-12 TRAIN gate"}
+}
