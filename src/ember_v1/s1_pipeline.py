@@ -66,13 +66,29 @@ class S1PipelineError(RuntimeError):
 
 
 # ----- fingerprints ---------------------------------------------------------------------------------------
+def _exact_module_path(mod: str) -> Path | None:
+    """`provenance._module_path`, but every path part must match the directory listing exactly. On a
+    case-insensitive file system (Windows) `from .sim import Scenario` otherwise resolves the phantom module
+    `ember_v1.sim.Scenario` to `sim/scenario.py`, and the digest differs from Linux."""
+    path = pv._module_path(mod)
+    if path is None:
+        return None
+    d = pv._PKG
+    for part in path.relative_to(pv._PKG).parts:
+        if part not in {p.name for p in d.iterdir()}:
+            return None
+        d = d / part
+    return path
+
+
 def module_fingerprint(module: str) -> str:
-    """Digest of one `ember_v1` module and its transitive `ember_v1` imports (same rule as teacher fingerprints)."""
+    """Digest of one `ember_v1` module and its transitive `ember_v1` imports (same rule as teacher fingerprints;
+    module paths are case-exact, so the digest is the same on Windows and Linux)."""
     seen: dict[str, str] = {}
     todo = [module]
     while todo:
         mod = todo.pop()
-        path = pv._module_path(mod)
+        path = _exact_module_path(mod)
         if mod in seen or path is None:
             continue
         seen[mod] = "sha256:" + hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
@@ -261,6 +277,11 @@ def build_shard(out_dir: str | Path, *, shard_id: str, repo: str | Path, protoco
 
     if not shard_id or "/" in shard_id or "\\" in shard_id:
         raise blocked("shard_id must be nonempty and contain no path separator")
+    # 0 research-direction gate (2026-11-09, #45/#47): the project repository may not make single-teacher
+    # S1 labels, even after its T1 receipt is approved. Multi-teacher data uses the P1-12/P1-14 gates.
+    if Path(repo).resolve() == reg.REPO.resolve():
+        raise blocked("single-teacher S1 labelling of the project repository is superseded by the "
+                      "five-teacher direction (#45/#47)")
     # 1 receipt gate (before any teacher call)
     try:
         protocol, p_trust = trust.load_trusted_json(repo, protocol_ref, trusted_ref=trusted_ref)
