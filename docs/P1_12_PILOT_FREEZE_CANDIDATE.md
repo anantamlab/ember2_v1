@@ -5,11 +5,11 @@ Prepared in run 9 (2026-11-09) on PR #50 (issue #45). Protocol: `docs/P1_12_TRAI
 
 Proposed plan: `data/collection/p1-12-train-pilot@1/plan_PROPOSED.json`
 
-**Proposed plan hash: `sha256:4a188432f1150c8923136c6b6c9fbfa79ebd79a4d0c8acae5fe35cfe5bcac19c`**
+**Proposed plan hash: `sha256:d006a31f795d7d97f3d90c0e25dee9d6f862fadd99b4907526986cbb85b3a4e1`**
 
 `status` is outside the hash: the FROZEN copy keeps this hash. `tests/test_train_pilot.py` rebuilds the plan from
 the current code and data and fails if the committed plan differs (no stale hash). Run-8 hash
-`sha256:07ea910e…c25a5` is superseded before freeze; reasons in protocol §4.1. Same eight scenarios.
+`sha256:07ea910e…c25a5` and the first run-9 hash `sha256:4a188432…c19c` are superseded before freeze; reasons in protocol §4.1. Same eight scenarios.
 
 ## 1. Scenarios (exactly eight, TRAIN `p1-02-v1/train`)
 
@@ -36,11 +36,11 @@ This is a pipeline feasibility pilot. Eight cases support no population-level te
 |---|---|
 | TRAIN manifest | `sha256:96a564819bdc6910708cb2891b043ae3fa6a3d9066d5927ba721aa61d44b442d` |
 | Spec / split plan | `sha256:992f8be3…3644` / `sha256:94ef33df…afaa` |
-| Generator | revision `gen-1.0.0`; `gen.generator` `sha256:1f2da083…61ea`; `gen.splits` `sha256:f13c20a0…4c89` |
+| Generator | revision `gen-1.0.0`; `gen.generator` `sha256:58335ff4…7a0a`; `gen.splits` `sha256:d1ed4077…2e45` |
 | Simulator | observation `1.0`; `sim.simulator` `sha256:4c961d54…6d2d` (includes the evaluator-only `fork_fire` of P1-13, moved here so the identity is final for the whole stack) |
-| Collector | `matched-multi-teacher@0.2.0`; `multiteacher` `sha256:474d7add…e8ad` |
-| Supervisor | `p1-12-pilot-supervisor@1.0.0`; `sha256:569b1b6c…b7a8` |
-| Runner | `train_pilot` `sha256:7de03118…d2a7` |
+| Collector | `matched-multi-teacher@0.2.0`; `multiteacher` `sha256:061eb525…6d16` |
+| Supervisor | `p1-12-pilot-supervisor@1.0.0`; `sha256:8f86fb47…dee6` |
+| Runner | `train_pilot` `sha256:06a4479d…2223` |
 
 Full values: `plan.identities`. Fingerprints are digests of the module and its transitive `ember_v1` imports
 (LF-normalized).
@@ -110,7 +110,7 @@ T2 central 1 496 CPU-s, upper 3 725 CPU-s (acceptance limit), worst case 24 500 
 
 ## 10. Plan hash
 
-`sha256:4a188432f1150c8923136c6b6c9fbfa79ebd79a4d0c8acae5fe35cfe5bcac19c`
+`sha256:d006a31f795d7d97f3d90c0e25dee9d6f862fadd99b4907526986cbb85b3a4e1`
 
 ## 11. Independent reviewer checklist
 
