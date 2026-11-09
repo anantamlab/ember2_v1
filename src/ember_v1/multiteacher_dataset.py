@@ -18,7 +18,9 @@ uninformative scenarios down-weighted, teacher and family shares reported and ca
 """
 from __future__ import annotations
 
+import copy
 import json
+from fractions import Fraction
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping, Sequence
 from pathlib import Path
@@ -30,13 +32,14 @@ from .sim import Scenario
 from .sim.canonical import digest
 from .teacher.registry import VALUE_TEACHERS
 
-RECORD_VERSION = "mt-dataset-record@0.2.0"
+RECORD_VERSION = "mt-dataset-record@0.3.0"
 REPO = Path(__file__).resolve().parents[2]
 PROTOCOL_PATH = REPO / "data" / "protocols" / "p1-14-multiteacher-dataset.json"
 CLASSES = ("A", "B", "C", "D", "E")
 USE = {"A": "sft_positive", "B": "contrastive_only", "C": "preference_candidate", "D": "excluded_inconclusive",
        "E": "reserved_blocked_until_p1-16"}
-JOINT_TARGET_RULE = "p1-14-whole-joint-target@0.1.0"
+JOINT_TARGET_RULE = "p1-14-whole-joint-target@0.2.0"
+JOINT_TARGET_MODES = ("select_one", "sample_whole_maps")      # select_one = Stage A initial approach
 EXCLUSIONS = {
     "A": "competing_class_A_joint_map_at_same_state",
     "B": "contrast_only_not_a_positive_target",
@@ -153,24 +156,46 @@ def demonstrations(report: Mapping[str, Any], scenario: Scenario,
     return [_seal(r) for r in merged.values()]
 
 
+def _mean(xs: Sequence[int]) -> Fraction:
+    return Fraction(sum(xs), len(xs))
+
+
 def _target_key(r: Mapping[str, Any], wins: Mapping[str, int]) -> tuple:
-    """Preregistered order (lower is better). Every criterion is training evidence; no teacher name is used."""
+    """Preregistered order (lower is better). Every criterion is training evidence; no teacher name is used.
+
+    Criteria 3 and 4 use the MEAN over the proposing teachers' trajectories (exact fractions). A minimum would
+    favour a map that more teachers proposed (more draws, lower minimum), so a common T0/T1 map would beat a
+    rare T2/T3/T4 map by count alone. Neither the number of proposers nor teacher CPU cost is a criterion."""
     outs = r["evidence"]["trajectory_outcomes"]
     return (-wins.get(digest(r["actions"]), 0),                                 # 1 approved same-state preference
             r["step_diagnostics"]["blocked_moves"],                             # 2 joint-map coherence at this state
-            min(outs[t]["blocked_moves"] for t in r["teachers"]),               # 3 trajectory congestion
-            min(outs[t]["steps"] for t in r["teachers"]),                       # 4 earlier completion
+            _mean([outs[t]["blocked_moves"] for t in r["teachers"]]),           # 3 trajectory congestion (mean)
+            _mean([outs[t]["steps"] for t in r["teachers"]]),                   # 4 earlier completion (mean)
             digest(r["actions"]))                                               # 5 name-free deterministic tie-break
 
 
-_TARGET_CRITERIA = ("approved_same_state_preference", "blocked_moves_at_state", "trajectory_blocked_moves",
-                    "trajectory_steps", "action_digest_tie_break")
+_TARGET_CRITERIA = ("approved_same_state_preference", "blocked_moves_at_state", "mean_trajectory_blocked_moves",
+                    "mean_trajectory_steps", "action_digest_tie_break")
 
 
-def select_joint_targets(records: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
-    """Option A (whole-joint demonstration selection): at each state, exactly ONE complete class-A joint map is
-    the SFT target. Competing class-A maps at the same state are kept (provenance, weight 0) and never mixed
-    person by person. Approved class C preferences between two competing maps decide first."""
+def target_mode(protocol: Mapping[str, Any]) -> str:
+    mode = (protocol.get("joint_target_rule") or {}).get("mode")
+    if mode not in JOINT_TARGET_MODES:
+        raise DatasetError(f"protocol joint_target_rule.mode {mode!r} is not one of {JOINT_TARGET_MODES}")
+    return mode
+
+
+def select_joint_targets(records: Sequence[Mapping[str, Any]], protocol: Mapping[str, Any] | None = None
+                         ) -> list[dict[str, Any]]:
+    """Whole-joint demonstration selection under the protocol's preregistered `joint_target_rule.mode`.
+
+    `select_one` (Stage A initial approach): at each state exactly ONE complete class-A joint map is the SFT
+    target. Competing class-A maps at the same state are kept (provenance, weight 0) and never mixed person by
+    person. Approved class C preferences between two competing maps decide first.
+    `sample_whole_maps` (preregistered, not active for Stage A): every distinct complete class-A map at a state
+    is selected as a whole demonstration; `assign_weights` splits the state's mass EQUALLY over the distinct
+    maps, so a map is not favoured because more teachers proposed it. The ranking is still recorded."""
+    mode = target_mode(protocol or load_protocol())
     recs = [dict(r) for r in records]
     groups: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
     for r in recs:
@@ -192,11 +217,20 @@ def select_joint_targets(records: Sequence[Mapping[str, Any]]) -> list[dict[str,
         else:
             a, b = _target_key(ranked[0], wins), _target_key(ranked[1], wins)
             decided = next(name for name, x, y in zip(_TARGET_CRITERIA, a, b) if x != y)
+        if mode == "sample_whole_maps" and len(ranked) > 1:
+            decided = "sample_whole_maps"
         for i, r in enumerate(ranked):
-            r["selection"] = {"rule": JOINT_TARGET_RULE, "selected": i == 0, "decided_by": decided,
+            chosen = i == 0 or mode == "sample_whole_maps"
+            if not chosen:
+                why = "another complete class-A map was selected at this state; never mixed per person"
+            elif mode == "select_one":
+                why = "whole joint map selected as the SFT target"
+            else:
+                why = f"one of {len(maps)} distinct complete class-A maps, sampled as a whole; never mixed per person"
+            r["selection"] = {"rule": JOINT_TARGET_RULE, "mode": mode, "selected": chosen, "rank": i,
+                              "decided_by": decided, "distinct_maps_at_state": len(maps),
                               "competing_map_digests": [h for h in competitors if h != digest(r["actions"])],
-                              "reason": "whole joint map selected as the SFT target" if i == 0 else
-                              "another complete class-A map was selected at this state; never mixed per person"}
+                              "reason": why}
     return [_seal(r) for r in recs]
 
 
@@ -294,8 +328,14 @@ def assign_weights(records: Sequence[Mapping[str, Any]], protocol: Mapping[str, 
     """Training weights. Re-sealed. Every record ends with a weight > 0 or a weight 0 and an exclusion reason.
 
     Class A: one budget per scenario (x0.25 when uninformative), split EQUALLY over the class-A trajectories
-    (tied-best teachers), then equally over each trajectory's SELECTED records; a merged record gets the share of
-    every teacher that proposed it. A short tied-best trajectory is not drowned by a long one.
+    (tied-best teachers). A short tied-best trajectory is not drowned by a long one, and a rare teacher's
+    trajectory gets the same total as a common one.
+      select_one: each trajectory's share is split equally over ITS selected records; a merged record gets the
+      share of every teacher that proposed it. A teacher whose map lost at a shared state keeps its share on its
+      other selected records (its budget never moves to another teacher's map).
+      sample_whole_maps: each trajectory's share is split equally over the states it visited; a state's mass is
+      split EQUALLY over the distinct class-A maps at that state (independent of how many teachers proposed
+      each map).
     Class C: one budget per scenario over APPROVED records only (none under the draft protocol).
     B, D, unapproved C and non-selected A: weight 0 with the class's exclusion reason."""
     protocol = protocol or load_protocol()
@@ -310,14 +350,31 @@ def assign_weights(records: Sequence[Mapping[str, Any]], protocol: Mapping[str, 
         weights = {id(r): 0.0 for r in rs}
         if k == "A":
             factor = w["uninformative_scenario_factor"] if rs[0]["evidence"].get("uninformative_scenario") else 1.0
+            budget = w["scenario_budget"] * factor
+            modes = {r["selection"].get("mode") for r in rs}
+            if len(modes) != 1 or not modes <= set(JOINT_TARGET_MODES):
+                raise DatasetError(f"class A records of one scenario need one joint-target mode, got {sorted(map(str, modes))}")
             chosen = [r for r in rs if r["selection"]["selected"]]
-            per_teacher = defaultdict(list)
-            for r in chosen:
-                for t in r["teachers"]:
-                    per_teacher[t].append(r)
-            for t, mine in per_teacher.items():
-                for r in mine:
-                    weights[id(r)] += w["scenario_budget"] * factor / len(per_teacher) / len(mine)
+            if modes == {"select_one"}:
+                per_teacher = defaultdict(list)
+                for r in chosen:
+                    for t in r["teachers"]:
+                        per_teacher[t].append(r)
+                for t, mine in per_teacher.items():
+                    for r in mine:
+                        weights[id(r)] += budget / len(per_teacher) / len(mine)
+            else:
+                states_of: dict[str, set] = defaultdict(set)
+                for r in chosen:
+                    for t in r["teachers"]:
+                        states_of[t].add(r["observation_digest"])
+                mass: dict[str, float] = defaultdict(float)
+                for t, states in states_of.items():
+                    for od in states:
+                        mass[od] += budget / len(states_of) / len(states)
+                maps_at = Counter(r["observation_digest"] for r in chosen)
+                for r in chosen:
+                    weights[id(r)] = mass[r["observation_digest"]] / maps_at[r["observation_digest"]]
         elif k == "C":
             ok = [r for r in rs if r["approval"]["status"] == "approved"]
             for r in ok:
@@ -359,6 +416,10 @@ def audit(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             "states_with_competing_A_maps": sum(n > 1 for n in contested.values()),
             "selection_decided_by": dict(sorted(Counter(r["selection"]["decided_by"] for r in a
                                                         if r["selection"] and r["selection"]["selected"]).items())),
+            # review only: class-A maps a teacher proposed that were not selected (rare-strategy loss check)
+            "unselected_A_maps_by_teacher": dict(sorted(Counter(t for r in a if r["selection"]
+                                                                and not r["selection"]["selected"]
+                                                                for t in r["teachers"]).items())),
             "records_with_teacher_values": sum(1 for r in records if r.get("teacher_values")),
             "exclusions": dict(sorted(Counter(r["exclusion_reason"] for r in records if r.get("exclusion_reason")).items())),
             "preference_candidates": sum(1 for r in records if r["class"] == "C"),
@@ -408,6 +469,8 @@ def record_problems(r: Mapping[str, Any], protocol: Mapping[str, Any]) -> list[s
     sel = r["selection"]
     if not isinstance(sel, Mapping) or sel.get("rule") != JOINT_TARGET_RULE or not sel.get("reason"):
         errs.append("selection rationale is missing or not under the preregistered rule")
+    elif k == "A" and sel.get("mode") != (protocol.get("joint_target_rule") or {}).get("mode"):
+        errs.append(f"class A: selection mode {sel.get('mode')!r} is not the protocol's preregistered mode")
     elif k == "A" and (not isinstance(sel.get("selected"), bool) or
                        (isinstance(r["weight"], (int, float)) and r["weight"] > 0 and not sel["selected"])):
         errs.append("class A: only a selected whole joint map can carry weight")
@@ -506,21 +569,41 @@ def validate_dataset(records: Iterable[Mapping[str, Any]], protocol: Mapping[str
 
 
 def coherence_problems(records: Sequence[Mapping[str, Any]]) -> list[str]:
-    """Contradictory demonstrations: at most one weighted SFT target per state, and it is one complete map."""
+    """Contradictory demonstrations. select_one: at most one weighted SFT target per state, and it is one
+    complete map. sample_whole_maps: every distinct map at a state is selected, with EQUAL weight."""
     out = []
-    weighted = Counter((r["scenario_hash"], r["observation_digest"]) for r in records
-                       if r["class"] == "A" and r["weight"] > 0)
-    out += [f"contradictory class-A targets at one state {k[1][:19]}: {n} weighted joint maps"
-            for k, n in weighted.items() if n > 1]
     groups = defaultdict(list)
     for r in records:
         if r["class"] == "A":
             groups[(r["scenario_hash"], r["observation_digest"])].append(r)
+    modes = {r["selection"].get("mode") for rs in groups.values() for r in rs}
+    if len(modes) > 1:
+        out.append(f"class A records mix joint-target modes {sorted(map(str, modes))}")
     for k, rs in groups.items():
-        if sum(bool(r["selection"]["selected"]) for r in rs) != 1:
-            out.append(f"state {k[1][:19]}: exactly one class-A map must be selected, got "
-                       f"{sum(bool(r['selection']['selected']) for r in rs)}")
+        n_sel = sum(bool(r["selection"]["selected"]) for r in rs)
+        if rs[0]["selection"].get("mode") == "sample_whole_maps":
+            ws = {round(r["weight"], 9) for r in rs}
+            if n_sel != len(rs):
+                out.append(f"state {k[1][:19]}: sample_whole_maps selects every distinct class-A map, "
+                           f"got {n_sel}/{len(rs)}")
+            if len(ws) != 1:
+                out.append(f"state {k[1][:19]}: sample_whole_maps needs equal weight per distinct map, got {sorted(ws)}")
+            continue
+        weighted = sum(r["weight"] > 0 for r in rs)
+        if weighted > 1:
+            out.append(f"contradictory class-A targets at one state {k[1][:19]}: {weighted} weighted joint maps")
+        if n_sel != 1:
+            out.append(f"state {k[1][:19]}: exactly one class-A map must be selected, got {n_sel}")
     return out
+
+
+def model_example(r: Mapping[str, Any]) -> dict[str, Any]:
+    """The ONLY view a trainer may read from a positive record: input observation, whole target map, weight.
+    Teacher names, proposal hashes, provenance, outcomes and selection data are never a model input, so the
+    student cannot use teacher identity as an inference-time oracle."""
+    if r.get("class") != "A" or not (r.get("selection") or {}).get("selected") or not r.get("weight"):
+        raise DatasetError("only a selected, weighted class-A record is an SFT example")
+    return {"observation": copy.deepcopy(r["observation"]), "actions": dict(r["actions"]), "weight": r["weight"]}
 
 
 def check_targets_against_report(records: Sequence[Mapping[str, Any]], report: Mapping[str, Any]) -> list[str]:

@@ -283,3 +283,117 @@ def test_duplicated_family_copy_is_refused(built):
     copy_other_family = _reseal({**rec, "family_id": "another-family", "lineage_id": "another-family"})
     v = ds.validate_dataset([*recs, copy_other_family])
     assert not v["ok"] and any("duplicate record" in e for e in v["problems"])
+
+
+# ----- run 9: conflicting valid whole maps, count neutrality, preregistered sampling, no identity oracle ------
+def _sample_protocol():
+    p = ds.load_protocol()
+    return {**p, "joint_target_rule": {**p["joint_target_rule"], "mode": "sample_whole_maps"}}
+
+
+def _unselected(rec):
+    return _reseal({**rec, "selection": None, "weight": None, "exclusion_reason": None})
+
+
+def _conflict(built, common=("T0", "T1", "T3", "T4"), rare=("T2",), common_blocked=(0, 9, 9, 9), rare_blocked=(1,)):
+    """Two valid class-A whole maps at one state: a common map (four teachers) and a rare one (one teacher).
+    Equal at criteria 1-2; the common map has one lucky low-congestion trajectory and three bad ones."""
+    a, b = (copy.deepcopy(x) for x in _competing(built[2])[:2])
+    for rec, names, blocked in ((a, common, common_blocked), (b, rare, rare_blocked)):
+        o = next(iter(rec["evidence"]["trajectory_outcomes"].values()))
+        rec["teachers"] = list(names)
+        rec["proposal_hashes"] = [f"sha256:{n}" for n in names]
+        rec["evidence"]["trajectory_outcomes"] = {n: {**o, "blocked_moves": k, "steps": 10}
+                                                  for n, k in zip(names, blocked)}
+        rec["step_diagnostics"] = {**rec["step_diagnostics"], "blocked_moves": 0}
+    assert a["actions"] != b["actions"] and a["observation_digest"] == b["observation_digest"]
+    return _unselected(a), _unselected(b)
+
+
+def test_rare_valid_map_is_not_discarded_because_more_teachers_proposed_the_other(built):
+    a, b = _conflict(built)
+    sel = {x["teachers"][0]: x for x in ds.select_joint_targets([a, b])}
+    assert sel["T2"]["selection"]["selected"] and not sel["T0"]["selection"]["selected"]
+    assert sel["T2"]["selection"]["decided_by"] == "mean_trajectory_blocked_moves"
+    # the replaced minimum rule would have chosen the common map by its single lucky draw
+    assert min(a["evidence"]["trajectory_outcomes"][t]["blocked_moves"] for t in a["teachers"]) < \
+        b["evidence"]["trajectory_outcomes"]["T2"]["blocked_moves"]
+    # both maps keep complete provenance and stay whole; the loser is kept with weight 0
+    w = {x["teachers"][0]: x for x in ds.assign_weights(ds.select_joint_targets([a, b]))}
+    assert w["T0"]["weight"] == 0 and w["T0"]["exclusion_reason"] == ds.EXCLUSIONS["A"]
+    assert w["T0"]["teachers"] == ["T0", "T1", "T3", "T4"] and w["T0"]["actions"] == a["actions"]
+    assert w["T2"]["weight"] > 0 and w["T2"]["actions"] == b["actions"]
+
+
+def test_selection_and_weights_do_not_depend_on_teacher_names(built):
+    def by_map(recs):
+        return {ds.digest(x["actions"]): (x["selection"]["selected"], x["weight"]) for x in recs}
+    a, b = _conflict(built)
+    base = by_map(ds.assign_weights(ds.select_joint_targets([a, b])))
+    swap = {"T2": "T1", "T1": "T2"}
+    renamed = []
+    for x in (a, b):
+        y = copy.deepcopy(x)
+        y["teachers"] = [swap.get(t, t) for t in y["teachers"]]
+        y["evidence"]["trajectory_outcomes"] = {swap.get(t, t): o for t, o in y["evidence"]["trajectory_outcomes"].items()}
+        renamed.append(_reseal(y))
+    assert by_map(ds.assign_weights(ds.select_joint_targets(renamed))) == base
+    # count alone never decides: equal mean, four proposers vs one -> decided by the name-free digest
+    a2, b2 = _conflict(built, common_blocked=(1, 1, 1, 1), rare_blocked=(1,))
+    out = ds.select_joint_targets([a2, b2])
+    assert {x["selection"]["decided_by"] for x in out} == {"action_digest_tie_break"}
+    winner = min((a2, b2), key=lambda x: ds.digest(x["actions"]))
+    assert next(x for x in out if x["selection"]["selected"])["actions"] == winner["actions"]
+
+
+def test_preregistered_sampling_keeps_every_valid_whole_map_with_equal_weight(built):
+    s, r, recs = built
+    p = _sample_protocol()
+    raw = [_unselected(x) if x["class"] == "A" else x for x in recs]
+    out = ds.assign_weights(ds.select_joint_targets(raw, p), p)
+    v = ds.validate_dataset(out, p)
+    assert v["ok"], v["problems"]
+    comp = [x for x in out if x["class"] == "A" and x["observation_digest"] == _competing(recs)[0]["observation_digest"]]
+    assert len(comp) >= 2 and all(x["selection"]["selected"] and x["selection"]["mode"] == "sample_whole_maps"
+                                  for x in comp)
+    assert len({x["weight"] for x in comp}) == 1 and comp[0]["weight"] > 0
+    assert sum(x["weight"] for x in out if x["class"] == "A") == pytest.approx(1.0)
+    assert ds.check_targets_against_report(out, r) == []                 # every weighted map is a whole proposal
+    # the conflict pair: equal weight regardless of four proposers vs one
+    a, b = _conflict(built)
+    w = ds.assign_weights(ds.select_joint_targets([a, b], p), p)
+    assert w[0]["weight"] == w[1]["weight"] > 0
+    # a select_one dataset is refused under the sampling protocol and vice versa (no silent mode switch)
+    assert any("preregistered mode" in e for e in ds.record_problems(next(x for x in recs if x["class"] == "A"), p))
+    assert any("preregistered mode" in e for e in _problems(next(x for x in out if x["class"] == "A")))
+    unequal = [(_reseal({**x, "weight": x["weight"] * 1.5}) if x is comp[0] else x) for x in out]
+    v = ds.validate_dataset(unequal, p)
+    assert not v["ok"] and any("equal weight per distinct map" in e for e in v["problems"])
+    with pytest.raises(ds.DatasetError, match="mode"):
+        ds.select_joint_targets(raw, {**p, "joint_target_rule": {**p["joint_target_rule"], "mode": "mix_per_person"}})
+
+
+def test_stage_a_mode_is_select_one_and_sampling_is_preregistered_but_inactive():
+    rule = ds.load_protocol()["joint_target_rule"]
+    assert rule["id"] == ds.JOINT_TARGET_RULE and rule["mode"] == "select_one"
+    assert set(rule["modes"]) == set(ds.JOINT_TARGET_MODES)
+    assert "NOT active" in rule["modes"]["sample_whole_maps"]["status"]
+    assert any("MIXTURE" in x for x in rule["modes"]["sample_whole_maps"]["admissible_only_if"])
+
+
+def test_teacher_identity_is_never_a_model_input(built):
+    import json
+    recs = built[2]
+    sel = [x for x in recs if x["class"] == "A" and x["weight"] > 0]
+    ex = [ds.model_example(x) for x in sel]
+    assert all(set(e) == {"observation", "actions", "weight"} for e in ex)
+    text = json.dumps(ex)
+    for name in mt.CANDIDATES:
+        assert f'"{name}"' not in text
+    for field in ("teachers", "proposal_hashes", "provenance", "teacher_values", "trajectory_outcomes", "selection"):
+        assert f'"{field}"' not in text
+    for bad in (next(x for x in recs if x["class"] == "B"),
+                next(x for x in recs if x["class"] == "A" and x["weight"] == 0),
+                next(x for x in recs if x["class"] == "C")):
+        with pytest.raises(ds.DatasetError, match="SFT example"):
+            ds.model_example(bad)

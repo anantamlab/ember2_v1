@@ -1,6 +1,6 @@
 # P1-14 multi-teacher outcome-aware dataset — protocol draft
 
-**Status:** `DRAFT_NOT_FROZEN` (`data/protocols/p1-14-multiteacher-dataset.json`, version `0.2.0-draft`).
+**Status:** `DRAFT_NOT_FROZEN` (`data/protocols/p1-14-multiteacher-dataset.json`, version `0.3.0-draft`).
 **Authorizes nothing.** `multiteacher_dataset.export` always raises `DATASET_GENERATION_BLOCKED`. Records can be
 built only from `synthetic_fixture` reports. Issue #47. Depends on #45 (P1-12) and #46 (P1-13).
 
@@ -30,7 +30,7 @@ Rules that follow from the classes:
 - B records are **not** unlikelihood targets: a B action at a B state can be correct. B states feed the
   P1-13 probe queue.
 
-## 2. Record schema `mt-dataset-record@0.2.0`
+## 2. Record schema `mt-dataset-record@0.3.0`
 
 Common: `record_version, class, use, scope, scenario_hash, family_id, lineage_id, source, provenance,
 observation, observation_digest, selection, weight, exclusion_reason, record_hash`.
@@ -108,13 +108,45 @@ both trains a mixture of marginals; its argmax can be a joint map no teacher pro
 | N = 200 | unchanged; chunk rows teacher-forced on the selected map | each alternative needs its own reserved rows | strategy row also coordinates chunks |
 | Beyond teachers | learns which teacher's whole plan wins in which condition; Stage B preferences can rank composite maps | same | can combine strategies with person moves; most expressive |
 
-**Decision: A for Stage A SFT** (`select_joint_targets`, rule `p1-14-whole-joint-target@0.1.0`): at each
-state exactly one complete class-A map is the target, ordered by (1) approved same-state class C wins,
-(2) fewest blocked moves of the map at this state, (3) fewest trajectory blocked moves, (4) fewest trajectory
-steps, (5) action-map digest. No teacher name is a criterion or a model input; teacher identity stays in
+**Decision: A for Stage A SFT** (`select_joint_targets`, rule `p1-14-whole-joint-target@0.2.0`, protocol
+`joint_target_rule.mode = "select_one"`): at each state exactly one complete class-A map is the target, ordered
+by (1) approved same-state class C wins, (2) fewest blocked moves of the map at this state, (3) fewest MEAN
+trajectory blocked moves over the proposing teachers, (4) fewest MEAN trajectory steps over the proposing
+teachers, (5) action-map digest. No teacher name is a criterion or a model input; teacher identity stays in
 provenance. B's set likelihood is implemented as an ablation (`student_objective.set_nll`). C is the
 stage-A2 option if DEV shows mode averaging across *similar* states (exact contradictions are removed by A; near
 duplicates are not), reported as the blocked-move rate of the student's raw assembled map.
+
+### 4a. Conflicting valid maps (run 9)
+
+When two successful teachers propose different valid maps at one state:
+
+| Requirement | Implementation |
+|---|---|
+| Keep both, with provenance | every class-A map is a record with its proposing teachers, proposal hashes, replay and trajectory outcomes; the map that is not selected keeps weight 0 and reason `competing_class_A_joint_map_at_same_state` |
+| Keep each map whole; no per-person mixing | `check_targets_against_report` refuses a map that is not one teacher's whole proposal; `coherence_problems` refuses two weighted maps at one state under `select_one` |
+| Different whole maps as demonstrations, by a preregistered rule | protocol mode `sample_whole_maps`: every distinct class-A map at a state is selected; the state's mass is split EQUALLY over the distinct maps; the validator refuses unequal weights and a mode that differs from the protocol. **Preregistered, not active for Stage A** (see below) |
+| No teacher-identity oracle | `model_example(record)` returns only `observation`, `actions`, `weight`; tests check that no teacher name or provenance field reaches it and that renaming teachers changes no selection or weight |
+| Successful and unsuccessful policies separate | class B stays contrast-only with weight 0 |
+
+Why `sample_whole_maps` is not active: the audited Clef head scores the people of one row conditionally
+independently. Weighted SFT on two different maps at one state then learns per-person marginals, and the most
+likely joint map can be a per-person mixture that no teacher proposed
+(`test_sampled_whole_maps_need_person_level_conditioning_or_decode_to_a_mixture`). With one person per
+reservation chunk, the SFT optimum is the exact mixture of whole maps and its mode is a teacher's map. Enabling
+the mode therefore needs (1) person-level reservation conditioning (or another whole-map mechanism), (2) a
+measured mixture-decode rate on held-out conflicting states, and (3) a protocol change in a reviewed commit
+before any TRAIN data exists.
+
+### 4b. Class A weighting audit (rare T2/T3/T4 strategies)
+
+| Concern | v0.2 behaviour | v0.3 change |
+|---|---|---|
+| Selection criteria 3–4 took the MINIMUM over proposing teachers | a map that four teachers proposed had four draws; one lucky low-congestion trajectory beat a rare map that was better on average | MEAN over proposing teachers (exact fractions); the count of proposers is never a criterion (test: four proposers vs one, equal mean → name-free digest decides) |
+| Teacher CPU cost | not a criterion | unchanged; stated in the protocol (`count_and_cost_neutrality`) |
+| Per-teacher budget | every class-A trajectory gets an equal share; a teacher whose map lost at a shared state keeps its share on its own other selected records | unchanged (verified); a rare teacher's trajectory total equals a common one's |
+| Merged record at a shared state | receives the share of every proposing teacher (visitation weighting) | unchanged under `select_one` (teacher totals stay equal); under `sample_whole_maps` the state mass is split equally per distinct map |
+| Rare-strategy loss visibility | not reported | `audit.unselected_A_maps_by_teacher` (review only) |
 
 ## 5. Gates before real generation
 
