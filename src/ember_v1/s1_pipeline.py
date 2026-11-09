@@ -261,6 +261,11 @@ def build_shard(out_dir: str | Path, *, shard_id: str, repo: str | Path, protoco
 
     if not shard_id or "/" in shard_id or "\\" in shard_id:
         raise blocked("shard_id must be nonempty and contain no path separator")
+    # 0 research-direction gate (2026-11-09, #45/#47): the project repository may not make single-teacher
+    # S1 labels, even after its T1 receipt is approved. Multi-teacher data uses the P1-12/P1-14 gates.
+    if Path(repo).resolve() == reg.REPO.resolve():
+        raise blocked("single-teacher S1 labelling of the project repository is superseded by the "
+                      "five-teacher direction (#45/#47)")
     # 1 receipt gate (before any teacher call)
     try:
         protocol, p_trust = trust.load_trusted_json(repo, protocol_ref, trusted_ref=trusted_ref)
