@@ -68,7 +68,11 @@ def test_five_full_trajectories_replay_and_pair_fire():
 def test_rollouts_identical_when_all_policies_choose_same_actions():
     a = mt.collect_fixture(room(), factories())
     b = mt.collect_fixture(room(), factories())
-    assert a["evidence_hash"] == b["evidence_hash"]
+    # Runtime metadata is intentionally in the evidence hash and varies by host.
+    for report in (a, b):
+        assert report["evidence_hash"] == digest({k: v for k, v in report.items() if k != "evidence_hash"})
+    assert {p["final_transition_hash"] for p in a["policies"].values()} == \
+           {p["final_transition_hash"] for p in b["policies"].values()}
     hashes = {p["final_transition_hash"] for p in a["policies"].values()}
     assert len(hashes) == 1
 
