@@ -171,3 +171,13 @@ before any TRAIN data exists.
 3. This protocol frozen in its own commit with its hash; owner authorization in writing.
 4. Leakage audit: no family, lineage or geometry core of DEV, calibration, selection, P1-15 test or the sealed
    index in any record.
+5. `selection_bias_audit` reviewed for the real dataset (below); flagged strata reported with any trained student.
+
+## 6. Run 12 additions (fixture scope; export still blocked)
+
+| Item | Change |
+|---|---|
+| Shared-state binding | `preferences(study, scenario, fixture_report)` first runs `counterfactual.verify_shared_state_study` against the SOURCE fixture: prefix, re-hashed probe on the replayed common observation, exact teacher alternatives, and every outcome/delta/censoring/verdict re-derived by replay. A re-hashed relabelled study is refused (test). |
+| Preference model view | `preference_example(r)`: only an APPROVED, weighted class-C record; returns observation, chosen and rejected whole maps, weight. Proposer sets, outcomes, evidence and provenance never pass (test: no teacher name, no `sources`). |
+| Outcome-selection bias | `selection_bias_audit(records)` (review only, not a gate): pool share (all A/B state-map records) vs class-A weight share by people band x fire model, step band, teacher and scenario; ratio outside [1/2, 2] flagged; scenarios with no class-A weight; minority evidence kept (B, unselected A, D). |
+| Student readiness | Tests: exact chain rule at N = 120, k = 40 with reservations (one term per person, later chunks do not cancel); CPU mock training loop (5-parameter toy head, exact SFT objective of an ingested epoch, loss decreases; not the student); Qwen3.5-2B and audited Clef head pins cross-checked. |

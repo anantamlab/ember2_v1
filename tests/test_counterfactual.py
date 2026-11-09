@@ -246,3 +246,123 @@ def test_composite_requires_a_whole_unblocked_joint_map():
     alts, sources = cf.alternatives_from_probe(probe)
     assert set(alts) == {"T0", "T1", "T2", "T3+T4"}
     assert sources["T3+T4"]["proposed_by"] == ["T3", "T4"]
+
+
+# ----- run 12: verification re-derives every label; complete shared-state verification ------------------
+def _reseal(r):
+    return {**r, "report_hash": digest(mt.deterministic_view({k: v for k, v in r.items() if k != "report_hash"}))}
+
+
+@pytest.fixture(scope="module")
+def stoch():
+    s = busy_room()
+    alts = {"stay": stay(Simulator(s)), "north": {p: "north" for p in Simulator(s).active_ids()}}
+    return s, cf.counterfactual_fixture(s, [], alts, horizon=6, replicates=3)
+
+
+def test_resealed_guard_delta_edit_cannot_change_the_label(stoch):
+    s, rep = stoch
+    bad = copy.deepcopy(rep)
+    for r in bad["contrasts"][0]["per_replicate"]:
+        r["delta_casualties"] = 0                      # hide a guard difference, keep the verdict consistent
+    bad["contrasts"][0].update(cf.classify(bad["contrasts"][0]["per_replicate"], stochastic=True))
+    if bad == rep:
+        pytest.skip("fixture has no guard difference to hide")
+    with pytest.raises(cf.CounterfactualError, match="per-replicate delta"):
+        cf.verify_counterfactual(_reseal(bad), s)
+
+
+def test_resealed_censoring_or_outcome_edit_fails(stoch):
+    s, rep = stoch
+    bad = copy.deepcopy(rep)
+    bad["branches"]["north"]["replicates"][1]["outcome"]["casualties"] += 1
+    with pytest.raises(cf.CounterfactualError, match="outcome does not regenerate"):
+        cf.verify_counterfactual(_reseal(bad), s)
+    bad = copy.deepcopy(rep)
+    flip = not bad["branches"]["stay"]["outcome"]["censored"]
+    for r in [bad["branches"]["stay"]["outcome"], bad["branches"]["stay"]["replicates"][0]["outcome"]]:
+        r["censored"] = flip
+    with pytest.raises(cf.CounterfactualError, match="outcome does not regenerate"):
+        cf.verify_counterfactual(_reseal(bad), s)
+
+
+def test_censored_contrast_cannot_be_relabelled_as_a_preference():
+    rep = cf.counterfactual_fixture(room(), [], alternatives(), horizon=1)
+    assert rep["contrasts"][0]["verdict"] == "inconclusive" and rep["contrasts"][0]["reason"] == "censored"
+    bad = copy.deepcopy(rep)
+    c = bad["contrasts"][0]
+    for r in c["per_replicate"]:
+        r["censored"] = False
+    c.update({"censored": False, "verdict": "b_better", "reason": "weakly dominant in every replicate",
+              "preference_candidate": True})
+    with pytest.raises(cf.CounterfactualError, match="per-replicate delta"):
+        cf.verify_counterfactual(_reseal(bad), room())
+
+
+def test_dropped_replicate_contrast_or_branch_summary_edit_fails(stoch):
+    s, rep = stoch
+    bad = copy.deepcopy(rep)
+    bad["branches"]["north"]["replicates"].pop()
+    with pytest.raises(cf.CounterfactualError, match="replicate set"):
+        cf.verify_counterfactual(_reseal(bad), s)
+    bad = copy.deepcopy(rep)
+    bad["contrasts"] = []
+    with pytest.raises(cf.CounterfactualError, match="every pair"):
+        cf.verify_counterfactual(_reseal(bad), s)
+    bad = copy.deepcopy(rep)
+    bad["branches"]["stay"]["outcome"] = bad["branches"]["stay"]["replicates"][2]["outcome"]
+    if bad["branches"]["stay"]["outcome"] != rep["branches"]["stay"]["outcome"]:
+        with pytest.raises(cf.CounterfactualError, match="branch summary"):
+            cf.verify_counterfactual(_reseal(bad), s)
+    bad = copy.deepcopy(rep)
+    bad["contrasts"][0]["training_preference_allowed"] = True
+    with pytest.raises(cf.CounterfactualError, match="unsupported preference"):
+        cf.verify_counterfactual(_reseal(bad), s)
+
+
+def test_truncated_branch_is_not_a_silent_early_stop(stoch):
+    s, rep = stoch
+    bad = copy.deepcopy(rep)
+    br = bad["branches"]["stay"]
+    if br["outcome"]["censored"] is False:
+        pytest.skip("branch terminated; truncation not applicable")
+    for r in br["replicates"]:
+        r["records"] = r["records"][:-1]
+    with pytest.raises(cf.CounterfactualError, match="chain hash|before the horizon"):
+        cf.verify_counterfactual(_reseal(bad), s)
+
+
+def test_continuation_provenance_rerun(stoch):
+    s, rep = stoch
+    from ember_v1.teacher.t1 import T1CongestionAware
+    assert cf.verify_counterfactual(rep, s, continuation_factory=T1CongestionAware)["continuation_reproduced"]
+    # stored continuation actions replay, but another policy would not have chosen them
+    with pytest.raises(cf.CounterfactualError, match="continuation does not reproduce"):
+        cf.verify_counterfactual(rep, s, continuation_factory=lambda: FixturePolicy("T1"))
+
+
+def test_complete_shared_state_verification(study):
+    s, r = study
+    out = cf.shared_state_study(s, r, "T1", 3, real_factories(), horizon=10, max_horizon=10, replicates=5)
+    ok = cf.verify_shared_state_study(out, s, r, factories=real_factories())
+    assert ok["verified"] and ok["teachers_reasked"] and ok["status"] == "contrasted"
+    none = cf.shared_state_study(s, r, "T1", 1, real_factories())
+    assert cf.verify_shared_state_study(none, s, r)["status"] == "no_disagreement"
+    # an alternative that no teacher proposed at that state
+    bad = copy.deepcopy(out)
+    name = sorted(bad["report"]["branches"])[0]
+    bad["report"]["branches"][name]["sources"]["proposed_by"] = ["T9"]
+    bad["report"] = _reseal(bad["report"])
+    with pytest.raises(cf.CounterfactualError, match="distinct teacher joint actions"):
+        cf.verify_shared_state_study(bad, s, r)
+    # a probe taken on another state
+    bad = copy.deepcopy(out)
+    bad["report"]["prefix_source"]["step"] = 2
+    bad["report"] = _reseal(bad["report"])
+    with pytest.raises(cf.CounterfactualError, match="common state|trajectory prefix"):
+        cf.verify_shared_state_study(bad, s, r)
+    # a tampered probe proposal
+    bad = copy.deepcopy(out)
+    bad["probe"]["distinct_joint_actions"] = 1
+    with pytest.raises(cf.CounterfactualError, match="probe hash"):
+        cf.verify_shared_state_study(bad, s, r)

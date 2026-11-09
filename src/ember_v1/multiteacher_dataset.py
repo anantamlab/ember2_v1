@@ -234,14 +234,18 @@ def select_joint_targets(records: Sequence[Mapping[str, Any]], protocol: Mapping
     return [_seal(r) for r in recs]
 
 
-def preferences(study: Mapping[str, Any], scenario: Scenario,
+def preferences(study: Mapping[str, Any], scenario: Scenario, fixture_report: Mapping[str, Any],
                 protocol: Mapping[str, Any] | None = None) -> list[dict[str, Any]]:
-    """Class C/D records from one verified `counterfactual.shared_state_study` result."""
+    """Class C/D records from one `counterfactual.shared_state_study` result.
+
+    Complete shared-state verification first (`cf.verify_shared_state_study` against the SOURCE fixture):
+    prefix, probe, common observation and alternatives are bound, and every outcome, delta, censoring flag and
+    verdict is re-derived from replay. A stored label is never trusted."""
     protocol = protocol or load_protocol()
+    cf.verify_shared_state_study(study, scenario, fixture_report)
     if study.get("status") != "contrasted":
         return []
     rep = study["report"]
-    cf.verify_counterfactual(rep, scenario)
     rule = protocol["preference_rule"]
     stochastic = rep["fire_model"] != "deterministic"
     min_rep = rule["min_replicates_stochastic"] if stochastic else 1
@@ -604,6 +608,74 @@ def model_example(r: Mapping[str, Any]) -> dict[str, Any]:
     if r.get("class") != "A" or not (r.get("selection") or {}).get("selected") or not r.get("weight"):
         raise DatasetError("only a selected, weighted class-A record is an SFT example")
     return {"observation": copy.deepcopy(r["observation"]), "actions": dict(r["actions"]), "weight": r["weight"]}
+
+
+def preference_example(r: Mapping[str, Any]) -> dict[str, Any]:
+    """The ONLY view a preference trainer may read from a class-C record: the common observation and the two
+    whole joint maps. Proposer sets (`sources`), outcomes, verdict evidence and provenance never pass, so the
+    student cannot learn "prefer T2's map" from identity. Only an APPROVED, weighted record qualifies
+    (none under the draft protocol)."""
+    if r.get("class") != "C" or (r.get("approval") or {}).get("status") != "approved" or not r.get("weight"):
+        raise DatasetError("only an approved, weighted class-C record is a preference example")
+    return {"observation": copy.deepcopy(r["observation"]), "chosen_actions": dict(r["chosen"]["actions"]),
+            "rejected_actions": dict(r["rejected"]["actions"]), "weight": r["weight"]}
+
+
+_STEP_BANDS = ((0, 4), (5, 14), (15, 39), (40, 10 ** 9))
+
+
+def _step_band(step: int) -> str:
+    lo, hi = next(b for b in _STEP_BANDS if b[0] <= step <= b[1])
+    return f"step {lo}-{hi}" if hi < 10 ** 9 else f"step >={lo}"
+
+
+def selection_bias_audit(records: Sequence[Mapping[str, Any]], *, flag_ratio: float = 2.0) -> dict[str, Any]:
+    """Review-only audit of OUTCOME-BASED selection (class A = tied-best trajectories). Not a gate.
+
+    The pool is every demonstrated state-map record (A and B, unweighted, one count per record); the selected set
+    is the class-A training weight. For each dimension (people band x fire model, step band, teacher, scenario)
+    it reports pool share, selected share and their ratio. Ratios above `flag_ratio` or below 1/`flag_ratio`
+    are flagged: winners end earlier (fewer late states), drop hard scenarios, or favour some teachers. Also
+    reports scenarios with no class-A weight and minority evidence kept (B records, unselected A maps)."""
+    pool = [r for r in records if r["class"] in ("A", "B")]
+    sel = [r for r in records if r["class"] == "A" and (r.get("weight") or 0) > 0]
+    total_w = sum(r["weight"] for r in sel)
+
+    def dims(r: Mapping[str, Any]) -> dict[str, list[str]]:
+        return {"strata": [_strata(r)], "step_band": [_step_band(r["step"])], "teacher": list(r["teachers"]),
+                "scenario": [r["scenario_hash"]]}
+
+    out: dict[str, Any] = {}
+    for dim in ("strata", "step_band", "teacher", "scenario"):
+        pc, sc = Counter(), Counter()
+        for r in pool:
+            for v in dims(r)[dim]:
+                pc[v] += 1 / len(dims(r)[dim])
+        for r in sel:
+            for v in dims(r)[dim]:
+                sc[v] += r["weight"] / len(dims(r)[dim])
+        pn = sum(pc.values())
+        rows = {}
+        for v in sorted(set(pc) | set(sc)):
+            ps, ss = (pc[v] / pn if pn else 0.0), (sc[v] / total_w if total_w else 0.0)
+            ratio = None if ps == 0 else round(ss / ps, 6)
+            rows[v] = {"pool_share": round(ps, 6), "selected_share": round(ss, 6), "ratio": ratio,
+                       "flag": ratio is None or ratio > flag_ratio or ratio < 1 / flag_ratio}
+        out[dim] = rows
+    scen = {r["scenario_hash"] for r in pool}
+    with_a = {r["scenario_hash"] for r in sel}
+    return {"kind": "outcome_selection_bias_audit", "gate": False, "flag_ratio": flag_ratio,
+            "pool_records": len(pool), "selected_records": len(sel), "by": out,
+            "scenarios_without_class_A_weight": sorted(scen - with_a),
+            "uninformative_scenarios": sorted({r["scenario_hash"] for r in pool
+                                               if r["evidence"].get("uninformative_scenario")}),
+            "minority_evidence_kept": {"class_B_records": sum(r["class"] == "B" for r in records),
+                                       "unselected_class_A_maps": sum(1 for r in records if r["class"] == "A" and
+                                                                      not (r.get("selection") or {}).get("selected")),
+                                       "class_D_records": sum(r["class"] == "D" for r in records)},
+            "flagged": sorted(f"{d}:{v}" for d, rows in out.items() if d != "scenario"
+                              for v, x in rows.items() if x["flag"]),
+            "note": "Selection on outcome changes the state distribution; report it with any trained student."}
 
 
 def check_targets_against_report(records: Sequence[Mapping[str, Any]], report: Mapping[str, Any]) -> list[str]:
