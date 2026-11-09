@@ -1,0 +1,57 @@
+{
+  "protocol_id": "p1-15-student-evaluation",
+  "version": "0.1.0-draft",
+  "status": "DRAFT_NOT_FROZEN",
+  "issue": 48,
+  "authorizes": "nothing: no test generation, no student run, no GPU",
+  "written_before_any_student_outcome": true,
+  "sets": {
+    "comparator_selection": "new family-disjoint set, used ONLY to name the strongest single deployable teacher",
+    "test": "new family-disjoint set, sealed until the student, comparator and this protocol are frozen",
+    "forbidden_sources": ["p1-02-v1/train", "p1-02-v1/dev", "p1-02-v1/calibration", "p1-09-selection@1",
+                          "sealed index", "EMBERBench", "any P1-12/P1-13/P1-14 TRAIN or counterfactual scenario",
+                          "any development family used for model selection"]
+  },
+  "design": {
+    "test_families": 32,
+    "scenarios_per_family": 3,
+    "fire_seeds_per_scenario": 1,
+    "matching": "student and all five teachers run on the identical scenario, seed and simulator code"
+  },
+  "comparator_rule": {
+    "rank_by": ["casualties_plus_unresolved", "casualties", "teacher_order"],
+    "teacher_order": ["T0", "T1", "T2", "T3", "T4"],
+    "data": "comparator_selection set totals only; never test outcomes",
+    "deployable": "a retained registry identity running alone within the latency budget"
+  },
+  "oracle": "per-scenario best teacher in hindsight; reported separately; never a deployable baseline",
+  "primary": {
+    "metric": "casualties_plus_unresolved",
+    "contrast": "student minus comparator, paired per scenario, averaged per family",
+    "test": "one-sided family bootstrap, upper bound of the mean family difference < 0",
+    "alpha_one_sided": 0.025,
+    "bootstrap_resamples": 10000,
+    "bootstrap_seed": 20261109
+  },
+  "guards": {
+    "casualties_upper_bound_max": 0.0,
+    "unresolved_upper_bound_max": 0.5,
+    "severe_regression": "student primary exceeds comparator primary by >= max(3, 0.10 * N) in a scenario",
+    "severe_regression_max_fraction": 0.05,
+    "safety_failures_max": 0,
+    "teacher_calls_in_student_path_max": 0,
+    "latency_ms": {"p50_max": null, "p95_max": null, "p99_max": null,
+                   "note": "set from the measured GPU preflight and the deployment deadline (HLD A7) before freeze; null blocks freeze"}
+  },
+  "secondary": {
+    "vs_each_teacher": "same primary test against every teacher, Holm adjustment over 5 at one-sided 0.025",
+    "arms": ["raw_student", "student_plus_deterministic_shield"],
+    "claim_arm": "raw_student"
+  },
+  "metrics": ["casualties", "unresolved", "evacuated", "casualties_plus_unresolved", "severe_regressions",
+              "safety_failures", "movement_conflicts", "latency_p50_ms", "latency_p95_ms", "latency_p99_ms",
+              "cpu_seconds", "gpu_seconds", "teacher_calls_in_student_path"],
+  "verdicts": ["SUPERIOR_TO_STRONGEST_TEACHER", "NOT_SUPERIOR", "INVALID_RUN"],
+  "not_success": ["matching T1", "beating only weaker teachers", "beating the oracle is not required",
+                  "shielded-arm improvement alone"]
+}
