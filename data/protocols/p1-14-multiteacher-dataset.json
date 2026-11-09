@@ -1,6 +1,6 @@
 {
   "protocol_id": "p1-14-multiteacher-dataset",
-  "version": "0.2.0-draft",
+  "version": "0.3.0-draft",
   "status": "DRAFT_NOT_FROZEN",
   "issue": 47,
   "authorizes": "nothing: no TRAIN collection, no labels, no training, no GPU",
@@ -8,7 +8,7 @@
     "p1-12": "matched-multi-teacher@0.2.0",
     "p1-13": "joint-counterfactual-fixture@0.2.0"
   },
-  "record_version": "mt-dataset-record@0.2.0",
+  "record_version": "mt-dataset-record@0.3.0",
   "classes": {
     "A": {"name": "successful_demonstration", "use": "sft_positive"},
     "B": {"name": "unsuccessful_demonstration", "use": "contrastive_only"},
@@ -24,12 +24,28 @@
     "failed_trajectory": "excluded from A and B; reported"
   },
   "joint_target_rule": {
-    "id": "p1-14-whole-joint-target@0.1.0",
+    "id": "p1-14-whole-joint-target@0.2.0",
     "option": "A: whole-joint demonstration selection",
     "unit": "one (scenario, observation_digest) state",
-    "rule": "exactly one complete class-A joint map is the SFT target; competing class-A maps at the same state are kept with weight 0; no per-person mixing",
-    "order": ["most approved same-state class C wins among the competing maps", "fewest blocked moves of the map at this state", "fewest trajectory blocked moves of a proposing teacher", "fewest trajectory steps of a proposing teacher", "lowest action-map digest (teacher-name-free tie-break)"],
-    "teacher_identity": "provenance only; never a model input and never a selection criterion"
+    "mode": "select_one",
+    "modes": {
+      "select_one": {
+        "status": "Stage A initial approach (active)",
+        "rule": "exactly one complete class-A joint map is the SFT target; competing class-A maps at the same state are kept with weight 0 and full provenance; no per-person mixing"
+      },
+      "sample_whole_maps": {
+        "status": "preregistered, NOT active for Stage A; enabling it is a protocol change in a reviewed commit before any TRAIN data exists",
+        "rule": "every distinct complete class-A map at a state is a demonstration, scored as a whole map with its own row/reservation chain; the state's mass is split EQUALLY over the distinct maps, not by the number of proposing teachers; never mixed per person",
+        "admissible_only_if": [
+          "the student scores each person conditioned on the actions already chosen for that state (reservation chunks of one person, or another whole-map mechanism); with conditionally independent person heads, weighted SFT on two different maps learns per-person marginals and greedy or sampled decoding can return a per-person MIXTURE that no teacher proposed",
+          "the mixture decode rate is measured on held-out conflicting states before training data is weighted this way"
+        ]
+      }
+    },
+    "order": ["most approved same-state class C wins among the competing maps", "fewest blocked moves of the map at this state", "fewest MEAN trajectory blocked moves over the proposing teachers", "fewest MEAN trajectory steps over the proposing teachers", "lowest action-map digest (teacher-name-free tie-break)"],
+    "count_and_cost_neutrality": "the number of teachers that proposed a map and the teachers' CPU cost are never selection criteria; criteria 3 and 4 use the mean, because a minimum over more proposers favours common (T0/T1) maps by count alone",
+    "teacher_identity": "provenance only; never a model input and never a selection criterion",
+    "model_input": "multiteacher_dataset.model_example: observation (input), actions (whole target map), weight; nothing else"
   },
   "preference_rule": {
     "source": "verify_counterfactual passed",
@@ -49,7 +65,8 @@
     "scenario_budget": 1.0,
     "uninformative_scenario_factor": 0.25,
     "uninformative_definition": "all five teachers have the same primary and the same casualties",
-    "within_scenario_A": "equal split over tied-best class-A trajectories, then equal over each trajectory's selected records; a merged record receives the share of every proposing teacher",
+    "within_scenario_A": "equal split over tied-best class-A trajectories (a rare teacher's trajectory gets the same total as a common one); select_one: then equal over each trajectory's selected records, a merged record receives the share of every proposing teacher, and a teacher whose map lost at a shared state keeps its share on its own other selected records; sample_whole_maps: then equal over the states each trajectory visited, and each state's mass equal over its distinct maps",
+    "rare_strategy_audit": "audit.unselected_A_maps_by_teacher and teacher_share_A are reported for review; a teacher's class-A budget is never moved to another teacher",
     "within_scenario_C": "equal split over approved class C records only",
     "zero_weight_classes": "B, D, unapproved C and non-selected A; each carries its exclusion reason",
     "teacher_share_A_review": 0.5,

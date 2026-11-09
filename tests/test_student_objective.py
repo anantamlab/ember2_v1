@@ -113,6 +113,51 @@ def test_set_likelihood_scores_whole_maps_only():
         so.set_nll(scorer, obs, [a1, dict(a1)], CHUNKS)
 
 
+def test_sampled_whole_maps_need_person_level_conditioning_or_decode_to_a_mixture():
+    """Why `sample_whole_maps` is not active for Stage A. Weighted SFT on three whole maps at one state:
+    X=(north,north) 0.4, Y=(east,east) 0.3, Z=(east,west) 0.3. The SFT optimum of conditionally independent heads
+    is the per-person marginals; its most likely joint map is (east,north), which no teacher proposed. With one
+    person per reservation chunk the optimum is the exact mixture and its mode is the whole map X."""
+    obs = _obs(2)
+    maps = {("north", "north"): 0.4, ("east", "east"): 0.3, ("east", "west"): 0.3}
+    ids = ["P000", "P001"]
+
+    def logits(dist):
+        return [math.log(dist.get(a, 0.0) + 1e-12) for a in so.ACTION_ORDER]
+
+    def marg(i, cond=None):
+        d = {}
+        for m, w in maps.items():
+            if cond is None or m[0] == cond:
+                d[m[i]] = d.get(m[i], 0.0) + w
+        z = sum(d.values())
+        return {a: v / z for a, v in d.items()}
+
+    def independent(row):
+        return {pid: logits(marg(ids.index(pid))) for pid in row["ids"]}
+
+    def chained(row):
+        out = {}
+        for pid in row["ids"]:
+            if pid == "P000":
+                out[pid] = logits(marg(0))
+            else:
+                prior = row["state"].split("R:P000=")[1]
+                out[pid] = logits(marg(1, prior))
+        return out
+
+    def mode(sc, chunks, res=None):
+        return max(itertools.product(so.ACTION_ORDER, repeat=2),
+                   key=lambda c: so.joint_logprob(sc, obs, dict(zip(ids, c)), chunks, res)["logp"])
+
+    assert mode(independent, [ids]) == ("east", "north") and ("east", "north") not in maps   # per-person mixture
+    one_each = [["P000"], ["P001"]]
+    assert mode(chained, one_each, reserve) == ("north", "north")                            # a whole teacher map
+    for m, w in maps.items():
+        p = math.exp(so.joint_logprob(chained, obs, dict(zip(ids, m)), one_each, reserve)["logp"])
+        assert p == pytest.approx(w, abs=1e-9)
+
+
 def test_invalid_scorer_outputs_fail_closed():
     obs = _obs()
     a = {"P000": "east", "P001": "stay", "P002": "north"}
