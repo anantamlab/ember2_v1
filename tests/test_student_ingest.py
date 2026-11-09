@@ -152,3 +152,83 @@ def test_large_n_chunk_rows_partition_people_and_reserve_earlier_chunks(n, k):
     assert [len(r["reserved_ids"]) for r in rows] == [j * k for j in range(len(rows))]
     assert all(r["targets"] == {i: acts[i] for i in r["ids"]} for r in rows)
     assert rows[0]["state"] != rows[-1]["state"]          # reservation block of earlier chunks is in the input
+
+
+# ----- run 12: exact chain rule at N>100, CPU mock training loop, model and head pins -----------------------
+def _hash_scorer(row):
+    """Deterministic toy logits that depend on the WHOLE row input (state incl. reservation block) and the person."""
+    import hashlib
+    out = {}
+    for pid in row["ids"]:
+        h = hashlib.sha256(f"{row['state']}|{pid}".encode()).digest()
+        out[pid] = [(b - 128) / 64 for b in h[:5]]
+    return out
+
+
+def test_large_n_chain_rule_is_exact_and_covers_every_person():
+    import math
+    obs = _large_obs(120)
+    active = sorted(p["id"] for p in obs["people"] if p["status"] == "active")
+    assert len(active) == 120
+    acts = {pid: so.ACTION_ORDER[i % 5] for i, pid in enumerate(active)}
+    chunks = si.id_chunks(obs, 40)
+    res = lambda o, d: "" if not d else "\nRES " + ",".join(f"{k}={v}" for k, v in sorted(d.items()))  # noqa: E731
+    jl = so.joint_logprob(_hash_scorer, obs, acts, chunks, res)
+    assert sorted(jl["per_person"]) == active                       # one term per active person, no duplicate
+    manual, decided = 0.0, {}
+    for part in chunks:
+        row = {"index": 0, "state": so.encode_observation(obs, mode="ascii") + res(obs, decided), "ids": part,
+               "reserved_ids": sorted(decided)}
+        z = _hash_scorer(row)
+        for pid in part:
+            m = max(z[pid])
+            manual += z[pid][so.ACTION_ORDER.index(acts[pid])] - (m + math.log(sum(math.exp(x - m) for x in z[pid])))
+        decided.update({pid: acts[pid] for pid in part})
+    assert jl["logp"] == pytest.approx(manual, abs=1e-9)
+    # change one action in chunk 0: later chunks see another reservation block, so their terms do not cancel
+    other = {**acts, active[0]: so.ACTION_ORDER[(so.ACTION_ORDER.index(acts[active[0]]) + 1) % 5]}
+    keep = so.cancelling_persons(obs, acts, other, chunks, res)
+    assert keep == set(active[1:40])                                # only same-row, same-action persons cancel
+    lo = so.joint_logprob(_hash_scorer, obs, other, chunks, res)["per_person"]
+    assert any(lo[p] != jl["per_person"][p] for p in active[40:])
+
+
+def test_cpu_mock_training_loop_reduces_the_exact_objective(built):  # noqa: F811
+    """A 5-parameter toy head (shared action bias), plain gradient descent on the exact SFT objective of the
+    ingested epoch. Checks the data path end to end on CPU. Not the student; no Qwen, no GPU."""
+    import math
+    ex = si.prepare_examples(built[2])["examples"]
+    ep = si.sample_epoch(ex, seed="mock-train", token_budget=600, cost=_cost)
+    by = {e["example_id"]: e for e in ex}
+    theta = [0.0] * 5
+
+    def scorer(row):
+        return {pid: list(theta) for pid in row["ids"]}
+
+    def epoch_loss():
+        return sum(so.sft_nll(scorer, by[e]["observation"], by[e]["actions"],
+                              si.id_chunks(by[e]["observation"], 2))["loss"] for e in ep["draws"]) / len(ep["draws"])
+
+    rows = si.epoch_rows(ex, ep, k=2)
+    people = {n: sum(len(r["ids"]) for r in rows if r["draw"] == n) for n in range(len(ep["draws"]))}
+    losses = [epoch_loss()]
+    for _ in range(25):
+        m = max(theta)
+        p = [math.exp(t - m) for t in theta]
+        p = [x / sum(p) for x in p]
+        grad = [0.0] * 5
+        for r in rows:
+            for a in r["targets"].values():
+                for j in range(5):
+                    grad[j] += (p[j] - (j == so.ACTION_ORDER.index(a))) / people[r["draw"]] / len(ep["draws"])
+        theta = [t - 0.5 * g for t, g in zip(theta, grad)]
+        losses.append(epoch_loss())
+    assert all(b <= a + 1e-12 for a, b in zip(losses, losses[1:])) and losses[-1] < losses[0]
+    assert losses[0] == pytest.approx(math.log(5))                  # uniform head: -log(1/5) per person
+
+
+def test_student_model_and_head_pins_are_preserved():
+    from ember_v1 import p0b
+    assert p0b.PINNED_MODEL == "unsloth/Qwen3.5-2B"
+    sha = p0b.AUDITED_CLEF_SHA256
+    assert len(sha) == 64 and f"`{sha[:8]}…{sha[-5:]}`" in so.__doc__

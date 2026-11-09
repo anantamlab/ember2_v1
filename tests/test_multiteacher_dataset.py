@@ -11,6 +11,7 @@ import pytest
 from ember_v1 import counterfactual as cf
 from ember_v1 import multiteacher as mt
 from ember_v1 import multiteacher_dataset as ds
+from ember_v1.sim.canonical import digest
 from test_multiteacher import CrashPolicy, busy_room, factories, real_factories, room
 
 
@@ -21,7 +22,7 @@ def built():
     recs = ds.demonstrations(r, s)
     for step in (0, 3):
         study = cf.shared_state_study(s, r, "T1", step, real_factories(), horizon=10, max_horizon=10, replicates=5)
-        recs += ds.preferences(study, s)
+        recs += ds.preferences(study, s, r)
     return s, r, ds.assign_weights(ds.select_joint_targets(recs))
 
 
@@ -154,7 +155,7 @@ def test_uninformative_scenario_is_down_weighted():
 def test_no_disagreement_study_gives_no_preference(built):
     s, r, _ = built
     study = cf.shared_state_study(s, r, "T1", 1, real_factories())
-    assert study["status"] == "no_disagreement" and ds.preferences(study, s) == []
+    assert study["status"] == "no_disagreement" and ds.preferences(study, s, r) == []
 
 
 # ----- run 8: coherent joint targets, approval, provenance and adversarial records --------------------------
@@ -397,3 +398,76 @@ def test_teacher_identity_is_never_a_model_input(built):
                 next(x for x in recs if x["class"] == "C")):
         with pytest.raises(ds.DatasetError, match="SFT example"):
             ds.model_example(bad)
+
+
+# ----- run 12: shared-state binding, preference view, outcome-selection bias audit -------------------------
+def _study(built, step=3):
+    s, r, _ = built
+    return cf.shared_state_study(s, r, "T1", step, real_factories(), horizon=10, max_horizon=10, replicates=5)
+
+
+def test_preferences_refuse_a_relabelled_study(built):
+    s, r, _ = built
+    study = copy.deepcopy(_study(built))
+    rep = study["report"]
+    c = rep["contrasts"][0]
+    for x in c["per_replicate"]:
+        x["censored"] = True                          # claim censoring that the replay does not show
+    c.update(cf.classify(c["per_replicate"], stochastic=True), censored=True, preference_candidate=False)
+    study["report"] = {**rep, "report_hash": digest(mt.deterministic_view(
+        {k: v for k, v in rep.items() if k != "report_hash"}))}
+    with pytest.raises(cf.CounterfactualError, match="per-replicate delta"):
+        ds.preferences(study, s, r)
+
+
+def test_preferences_refuse_a_study_from_another_fixture(built):
+    s, r, _ = built
+    other = copy.deepcopy(r)
+    other["policies"]["T1"]["outcome"]["casualties"] += 1
+    with pytest.raises(mt.MultiTeacherError, match="hash mismatch"):
+        ds.preferences(_study(built), s, other)
+
+
+def test_preference_example_hides_teacher_identity(built):
+    recs = built[2]
+    c = next(x for x in recs if x["class"] == "C")
+    with pytest.raises(ds.DatasetError, match="preference example"):
+        ds.preference_example(c)                       # draft protocol: never approved
+    approved = {**c, "approval": {**c["approval"], "status": "approved"}, "weight": 1.0}
+    ex = ds.preference_example(approved)
+    assert set(ex) == {"observation", "chosen_actions", "rejected_actions", "weight"}
+    import json
+    text = json.dumps(ex)
+    for name in mt.CANDIDATES:
+        assert f'"{name}"' not in text and f"{name}+" not in text
+    for field in ("sources", "proposed_by", "proposal_hashes", "provenance", "outcome_replicate0", "evidence"):
+        assert f'"{field}"' not in text
+    assert ex["chosen_actions"] != ex["rejected_actions"]
+
+
+def test_selection_bias_audit_compares_pool_and_selected(built):
+    recs = built[2]
+    a = ds.selection_bias_audit(recs)
+    assert a["gate"] is False and a["pool_records"] == sum(r["class"] in ("A", "B") for r in recs)
+    for dim in ("strata", "step_band", "teacher", "scenario"):
+        rows = a["by"][dim]
+        assert sum(x["pool_share"] for x in rows.values()) == pytest.approx(1.0, abs=1e-5)
+        assert sum(x["selected_share"] for x in rows.values()) == pytest.approx(1.0, abs=1e-5)
+    assert set(a["by"]["teacher"]) <= set(mt.CANDIDATES)
+    kept = a["minority_evidence_kept"]
+    assert kept["class_B_records"] == sum(r["class"] == "B" for r in recs) and kept["class_D_records"] >= 0
+    # a teacher that is only in class B has pool share > 0 and selected share 0: flagged
+    for t, x in a["by"]["teacher"].items():
+        if x["selected_share"] == 0:
+            assert x["flag"] and f"teacher:{t}" in a["flagged"]
+
+
+def test_selection_bias_audit_flags_a_distorted_selection():
+    def rec(cls, step, teacher, w):
+        obs = {"people": [{"status": "active"}], "rules": {"fire_model": "stochastic"}}
+        return {"class": cls, "step": step, "teachers": [teacher], "scenario_hash": "s", "observation": obs,
+                "weight": w, "evidence": {}, "selection": {"selected": cls == "A"}}
+    recs = [rec("A", 0, "T1", 1.0)] + [rec("B", 50, "T2", 0.0) for _ in range(9)]
+    a = ds.selection_bias_audit(recs)
+    assert a["by"]["step_band"]["step 0-4"]["ratio"] == pytest.approx(10.0)
+    assert {"step_band:step 0-4", "step_band:step >=40", "teacher:T1", "teacher:T2"} <= set(a["flagged"])
