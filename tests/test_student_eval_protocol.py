@@ -35,11 +35,20 @@ def rows(student_delta=(-2, 0), comparator="T4", families=12, per=3, people=50, 
     return out
 
 
+DEPLOY = {t: True for t in CANDIDATES}
+SEL_FAMILIES = [f"sel{i}" for i in range(6)]
+# Run 12: decide() needs a sealed comparator record (re-derived from its own selection totals), the frozen
+# protocol hash, one-shot test use and the family-isolation audit, so these fixtures carry them.
+ISOLATION = {k: [f"{k}-f{i}" for i in range(3)] for k in ep.REQUIRED_ISOLATION}
+ISOLATION["comparator_selection"] = SEL_FAMILIES
 RUN = {"set_kind": "test", "safety_failures": 0, "teacher_calls_in_student_path": 0,
        "model_input_privacy_violations": 0,
-       "latency_p50_ms": 200, "latency_p95_ms": 900, "latency_p99_ms": 2000}
-DEPLOY = {t: True for t in CANDIDATES}
-COMP = {"comparator": "T4", "set_kind": "comparator_selection"}
+       "latency_p50_ms": 200, "latency_p95_ms": 900, "latency_p99_ms": 2000,
+       "protocol_hash": ep.protocol_hash(frozen()), "test_evaluations_before": 0, "isolation": ISOLATION}
+SEL_TOTALS = {t: {"casualties_plus_unresolved": 100, "casualties": 90} for t in CANDIDATES}
+SEL_TOTALS["T4"] = {"casualties_plus_unresolved": 90, "casualties": 80}
+COMP = ep.select_comparator(SEL_TOTALS, set_kind="comparator_selection", deployable=DEPLOY, protocol=frozen(),
+                            selection_families=SEL_FAMILIES)
 
 
 def test_committed_protocol_is_a_draft_that_cannot_freeze_without_latency_limits():
@@ -179,3 +188,67 @@ def test_clopper_pearson_upper_bound():
 def test_privacy_audit_is_required_and_must_be_clean():
     assert ep.decide(rows(), COMP, {**RUN, "model_input_privacy_violations": 1}, frozen())["verdict"] == ep.INVALID
     assert ep.decide(rows(), COMP, {**RUN, "model_input_privacy_violations": None}, frozen())["verdict"] == ep.INVALID
+
+
+# ----- run 12: independent comparator, exact protocol, one-shot test, isolation, row integrity, tail ---------
+def test_comparator_record_is_sealed_and_rederived():
+    assert COMP["comparator"] == "T4" and ep.comparator_problems(COMP, frozen()) == []
+    forged = {**COMP, "comparator": "T1"}
+    assert "hash mismatch" in ep.comparator_problems(forged, frozen())[0]
+    resealed = {k: v for k, v in forged.items() if k != "comparator_hash"}
+    resealed["comparator_hash"] = ep.digest(resealed)
+    assert any("preregistered rule" in e for e in ep.comparator_problems(resealed, frozen()))
+    d = ep.decide(rows(comparator="T1"), resealed, RUN, frozen())
+    assert d["verdict"] == ep.INVALID and any("comparator" in m for m in d["reasons"])
+    draft_time = ep.select_comparator(SEL_TOTALS, set_kind="comparator_selection", deployable=DEPLOY,
+                                      selection_families=SEL_FAMILIES)       # under the DRAFT protocol
+    assert any("another protocol" in e for e in ep.comparator_problems(draft_time, frozen()))
+    nofam = ep.select_comparator(SEL_TOTALS, set_kind="comparator_selection", deployable=DEPLOY, protocol=frozen())
+    assert any("no selection families" in e for e in ep.comparator_problems(nofam, frozen()))
+
+
+def test_run_must_name_the_frozen_protocol_and_use_test_once():
+    other = frozen()
+    other["primary"]["bootstrap_resamples"] = 1999                  # any later edit changes the hash
+    assert ep.decide(rows(), COMP, {**RUN, "protocol_hash": ep.protocol_hash(other)}, frozen())["verdict"] == ep.INVALID
+    for n in (1, None):
+        d = ep.decide(rows(), COMP, {**RUN, "test_evaluations_before": n}, frozen())
+        assert d["verdict"] == ep.INVALID and "tuning" in d["reasons"][0]
+
+
+def test_family_isolation_is_audited_inside_decide():
+    leak = {**ISOLATION, "train": ["fam3"]}                          # a test family seen in training
+    d = ep.decide(rows(), COMP, {**RUN, "isolation": leak}, frozen())
+    assert d["verdict"] == ep.INVALID and "overlap" in d["reasons"][0]
+    partial = {k: v for k, v in ISOLATION.items() if k != "counterfactual"}
+    d = ep.decide(rows(), COMP, {**RUN, "isolation": partial}, frozen())
+    assert d["verdict"] == ep.INVALID and "counterfactual" in d["reasons"][0]
+    other_sel = {**ISOLATION, "comparator_selection": ["x"]}
+    assert ep.decide(rows(), COMP, {**RUN, "isolation": other_sel}, frozen())["verdict"] == ep.INVALID
+
+
+@pytest.mark.parametrize("edit", [
+    lambda r: r[0].pop("T2"),
+    lambda r: r[0]["raw_student"].update(casualties_plus_unresolved=0),
+    lambda r: r[1].update(scenario_id=r[0]["scenario_id"]),
+    lambda r: r[0].update(people=0),
+    lambda r: r[0]["T4"].update(casualties=-1),
+    lambda r: r[0]["raw_student"].update(casualties=60, casualties_plus_unresolved=61),
+])
+def test_malformed_rows_are_refused(edit):
+    r = rows()
+    edit(r)
+    with pytest.raises(ep.EvalProtocolError, match="malformed"):
+        ep.decide(r, COMP, RUN, frozen())
+
+
+def test_tail_report_shows_a_regressing_people_band_without_gating():
+    r = rows()
+    for x in r[:6]:
+        x["people"] = 150                                            # a large-N band where the student is worse
+        x["raw_student"] = outcome(x["T4"]["casualties"] + 1, 1)
+    d = ep.decide(r, COMP, RUN, frozen())
+    t = d["tail"]
+    assert t["gate"] is False and t["people_bands"]["people >=111"]["point_estimate_worse"]
+    assert not t["people_bands"]["people 0-50"]["point_estimate_worse"]
+    assert t["worst_scenarios_primary"][0]["diff"] > 0 and d["comparator_hash"] == COMP["comparator_hash"]

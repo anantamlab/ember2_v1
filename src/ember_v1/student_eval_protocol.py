@@ -25,11 +25,17 @@ from collections.abc import Iterable, Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
+from .sim.canonical import digest
 from .teacher.registry import CANDIDATES
 
 REPO = Path(__file__).resolve().parents[2]
 PROTOCOL_PATH = REPO / "data" / "protocols" / "p1-15-student-evaluation.json"
 SUPERIOR, NOT_SUPERIOR, INVALID = "SUPERIOR_TO_STRONGEST_TEACHER", "NOT_SUPERIOR", "INVALID_RUN"
+# Family sets the sealed test must be disjoint from (protocol `sets.forbidden_sources`); every one must be given.
+REQUIRED_ISOLATION = ("train", "dev", "calibration", "p1-09-selection", "counterfactual", "model_selection",
+                      "comparator_selection")
+PEOPLE_BANDS = ((0, 50), (51, 110), (111, 10 ** 9))
+_OUTCOMES = ("casualties", "unresolved", "casualties_plus_unresolved")
 
 
 class EvalProtocolError(ValueError):
@@ -79,13 +85,21 @@ def check_test_isolation(test: Iterable[str], others: Mapping[str, Iterable[str]
         raise EvalProtocolError(f"test families overlap other sets: {sorted(bad)}")
 
 
+def protocol_hash(p: Mapping[str, Any]) -> str:
+    return digest(dict(p))
+
+
 def select_comparator(totals: Mapping[str, Mapping[str, int]], *, set_kind: str,
-                      deployable: Mapping[str, bool], protocol: Mapping[str, Any] | None = None) -> dict[str, Any]:
+                      deployable: Mapping[str, bool], protocol: Mapping[str, Any] | None = None,
+                      selection_families: Iterable[str] = ()) -> dict[str, Any]:
     """Strongest single DEPLOYABLE teacher from comparator-selection totals ONLY.
 
     `deployable[t]` is True when teacher t, running alone, met the frozen latency budget on the deployment
     hardware (measured on the comparator-selection set). A non-deployable teacher is ranked and reported but is
-    never the comparator; it stays in the secondary comparisons. A per-scenario hindsight best is never one."""
+    never the comparator; it stays in the secondary comparisons. A per-scenario hindsight best is never one.
+
+    The returned record is sealed (`comparator_hash`) and binds the selection totals, the selection families and
+    the protocol hash, so `decide` can re-derive the comparator and prove it used no test outcome."""
     p = protocol or load_protocol()
     if set_kind != "comparator_selection":
         raise EvalProtocolError("the comparator is named from the comparator-selection set, never from test")
@@ -97,8 +111,74 @@ def select_comparator(totals: Mapping[str, Mapping[str, int]], *, set_kind: str,
     ok = [t for t in ranked if deployable[t] is True]
     if not ok:
         raise EvalProtocolError("no teacher is deployable within the latency budget")
-    return {"comparator": ok[0], "ranking": ranked, "deployable": dict(deployable),
-            "rule": p["comparator_rule"]["rank_by"], "set_kind": set_kind}
+    body = {"comparator": ok[0], "ranking": ranked, "deployable": dict(deployable),
+            "rule": p["comparator_rule"]["rank_by"], "set_kind": set_kind,
+            "totals": {t: {k: totals[t][k] for k in ("casualties_plus_unresolved", "casualties")} for t in CANDIDATES},
+            "selection_families": sorted(set(selection_families)), "protocol_hash": protocol_hash(p)}
+    return {**body, "comparator_hash": digest(body)}
+
+
+def comparator_problems(comparator: Mapping[str, Any], p: Mapping[str, Any]) -> list[str]:
+    """Why a comparator record is not a valid, independent selection under protocol `p` (empty = valid)."""
+    body = {k: v for k, v in comparator.items() if k != "comparator_hash"}
+    if comparator.get("set_kind") != "comparator_selection":
+        return ["comparator was not named from the comparator-selection set"]
+    if digest(body) != comparator.get("comparator_hash"):
+        return ["comparator record hash mismatch (edited or not produced by select_comparator)"]
+    errs = []
+    if comparator.get("protocol_hash") != protocol_hash(p):
+        errs.append("comparator was selected under another protocol (or before the freeze)")
+    if not comparator.get("selection_families"):
+        errs.append("comparator record names no selection families")
+    try:
+        again = select_comparator(comparator["totals"], set_kind="comparator_selection",
+                                  deployable=comparator["deployable"], protocol=p,
+                                  selection_families=comparator["selection_families"])
+    except (EvalProtocolError, KeyError, TypeError) as e:
+        return errs + [f"comparator cannot be re-derived: {e}"]
+    if again["comparator"] != comparator["comparator"] or again["ranking"] != comparator["ranking"]:
+        errs.append("comparator does not follow the preregistered rule on its own selection totals")
+    return errs
+
+
+def row_problems(rows: Sequence[Mapping[str, Any]]) -> list[str]:
+    """Malformed paired rows (empty = well formed): every arm complete, counts consistent and within N."""
+    errs, seen = [], set()
+    if not rows:
+        return ["no test rows"]
+    for i, r in enumerate(rows):
+        sid = r.get("scenario_id")
+        if not isinstance(sid, str) or sid in seen:
+            errs.append(f"row {i}: missing or duplicate scenario_id")
+        seen.add(sid)
+        n = r.get("people")
+        if not isinstance(r.get("family_id"), str) or type(n) is not int or n < 1:
+            errs.append(f"row {i}: family_id or people missing")
+            continue
+        for arm in ("raw_student", *CANDIDATES):
+            o = r.get(arm)
+            if not isinstance(o, Mapping) or any(type(o.get(k)) is not int or o[k] < 0 for k in _OUTCOMES):
+                errs.append(f"row {i}: arm {arm} missing or not non-negative integers")
+            elif o["casualties_plus_unresolved"] != o["casualties"] + o["unresolved"] or \
+                    o["casualties_plus_unresolved"] > n:
+                errs.append(f"row {i}: arm {arm} counts inconsistent with each other or with N")
+    return errs
+
+
+def tail_report(rows: Sequence[Mapping[str, Any]], arm: str, ref: str) -> dict[str, Any]:
+    """Reported, not a gate (severe regressions gate the tail): worst family mean, worst scenarios, people bands."""
+    fam = _diffs(rows, arm, ref, "casualties_plus_unresolved")
+    per = sorted(((r[arm]["casualties_plus_unresolved"] - r[ref]["casualties_plus_unresolved"], r["scenario_id"])
+                  for r in rows), reverse=True)
+    bands = {}
+    for lo, hi in PEOPLE_BANDS:
+        sub = [r for r in rows if lo <= r["people"] <= hi]
+        if sub:
+            d = {m: sum(r[arm][m] - r[ref][m] for r in sub) / len(sub) for m in _OUTCOMES}
+            bands[f"people {lo}-{hi}" if hi < 10 ** 9 else f"people >={lo}"] = {
+                "scenarios": len(sub), "mean_diff": d, "point_estimate_worse": any(v > 0 for v in d.values())}
+    return {"gate": False, "worst_family_mean_primary": max(sum(v) / len(v) for v in fam.values()),
+            "worst_scenarios_primary": [{"scenario_id": s, "diff": x} for x, s in per[:5]], "people_bands": bands}
 
 
 def clopper_pearson_upper(x: int, n: int, alpha: float) -> float:
@@ -187,6 +267,28 @@ def decide(rows: Sequence[Mapping[str, Any]], comparator: Mapping[str, Any], run
         raise EvalProtocolError("decide() runs on the sealed test set only")
     if p.get("status") != "FROZEN":
         return {"verdict": INVALID, "reasons": ["protocol is not FROZEN"]}
+    bad = row_problems(rows)
+    if bad:
+        raise EvalProtocolError(f"malformed test rows: {bad[:5]}")
+    # Integrity of the run itself: exact frozen protocol, one-shot test use, independent comparator, isolation.
+    if run.get("protocol_hash") != protocol_hash(p):
+        return {"verdict": INVALID, "reasons": ["the run does not name the hash of this frozen protocol"]}
+    if run.get("test_evaluations_before") != 0:
+        return {"verdict": INVALID, "reasons": ["the sealed test set was evaluated before (or not recorded): "
+                                                "no tuning or re-run on test"]}
+    cp = comparator_problems(comparator, p)
+    if cp:
+        return {"verdict": INVALID, "reasons": [f"comparator: {e}" for e in cp]}
+    iso = run.get("isolation")
+    missing = [k for k in REQUIRED_ISOLATION if not isinstance(iso, Mapping) or k not in iso]
+    if missing:
+        return {"verdict": INVALID, "reasons": [f"family isolation not audited for: {missing}"]}
+    if set(iso["comparator_selection"]) != set(comparator["selection_families"]):
+        return {"verdict": INVALID, "reasons": ["comparator-selection families differ from the comparator record"]}
+    try:
+        check_test_isolation({r["family_id"] for r in rows}, {k: iso[k] for k in REQUIRED_ISOLATION})
+    except EvalProtocolError as e:
+        return {"verdict": INVALID, "reasons": [str(e)]}
     reasons = []
     g = p["guards"]
     if run["teacher_calls_in_student_path"] > g["teacher_calls_in_student_path_max"]:
@@ -233,6 +335,7 @@ def decide(rows: Sequence[Mapping[str, Any]], comparator: Mapping[str, Any], run
             "upper_bounds": ub, "estimates": est, "severe_regressions": len(sev), "severe_detail": sev,
             "severe_rate_upper": sev_ub, "claims": claims, "separate_outcome_p": po,
             "secondary_beats_teacher_holm": holm(pv, pr["alpha_one_sided"]), "secondary_p": pv,
+            "tail": tail_report(rows, arm, ref), "comparator_hash": comparator["comparator_hash"],
             "oracle": oracle_reference({r.get("scenario_id", str(i)): {t: r[t]["casualties_plus_unresolved"]
                                                                        for t in CANDIDATES}
                                         for i, r in enumerate(rows)})}

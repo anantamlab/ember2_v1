@@ -86,3 +86,18 @@ end-to-end step latency with n ≥ 100 steps for p99; cold start reported apart.
    Clopper-Pearson upper bound of 0.038; 4 gives > 0.10 (the rate guard then fails).
 3. Generator plan for the two new sets (new lineages; firewall against all used families and cores).
 4. Privacy audit tool: field-level check of every model input against the public observation schema.
+
+## Run 12: run-integrity checks inside `decide` (decision rule unchanged)
+
+`decide` now returns `INVALID_RUN` (or raises for malformed input) before any statistic when:
+
+| Check | Rule |
+|---|---|
+| Independent comparator | The comparator record is sealed by `select_comparator` (`comparator_hash`) and binds the five selection totals, deployability, the selection families and the protocol hash. `decide` re-derives the comparator from those totals with the preregistered rule; a hand-written, edited or re-hashed record that names another teacher is refused. A comparator chosen under the draft (or any other) protocol is refused. |
+| Exact frozen protocol | `run.protocol_hash` must equal the hash of the frozen protocol that `decide` applies. |
+| One-shot test, no tuning | `run.test_evaluations_before` must be `0` (recorded, not assumed). |
+| Family-disjoint test | `run.isolation` must give the families of every set in `REQUIRED_ISOLATION` (train, dev, calibration, P1-09 selection, counterfactual, model selection, comparator selection); test families must not overlap any; comparator-selection families must equal the comparator record. |
+| Row integrity | Unique `scenario_id`; `family_id`; `people >= 1`; raw student and all five teachers present with non-negative integer counts; `casualties_plus_unresolved = casualties + unresolved <= people`. |
+
+`tail` (reported, not a gate; severe regressions remain the tail gate): worst family mean primary difference,
+five worst scenarios, mean differences per people band (0–50, 51–110, ≥111) with a `point_estimate_worse` flag.
