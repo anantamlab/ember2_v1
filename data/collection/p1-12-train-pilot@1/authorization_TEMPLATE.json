@@ -27,7 +27,7 @@
   "commit": "<40-hex commit that adds the FROZEN plan>",
   "path": "data/collection/p1-12-train-pilot@1/plan.json"
  },
- "plan_hash": "sha256:d006a31f795d7d97f3d90c0e25dee9d6f862fadd99b4907526986cbb85b3a4e1",
+ "plan_hash": "sha256:eb8dbe293db7f1c1e1b4f342c07f21853031e9e6ab5419eda2833c51f761b664",
  "plan_version": "p1-12-train-pilot@0.2.0-draft",
  "reviewer": {
   "github_login": "<approver login from the plan allowlist>"
