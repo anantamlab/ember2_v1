@@ -45,6 +45,10 @@ from .teacher.registry import CANDIDATES
 
 SCHEMA_VERSION = "matched-multi-teacher@0.2.0"
 SCOPE_FIXTURE = "synthetic_fixture"
+# Real TRAIN pilot groups; written only by `train_pilot.execute` after every gate passed. Still never
+# training-eligible in this schema: an incomplete group stays diagnostic evidence for ever.
+SCOPE_TRAIN_PILOT = "p1-12-train-pilot@1"
+SCOPES = (SCOPE_FIXTURE, SCOPE_TRAIN_PILOT)
 SUPERVISION_NOT_ASSESSED = "not_assessed: needs a frozen P1-14 dataset protocol (#47)"
 CAUSALITY_NOTE = (
     "Closed-loop outcomes are associated with complete policy trajectories; "
@@ -164,19 +168,91 @@ def _outcome(scenario: Scenario, sim: Simulator, records: list[dict[str, Any]],
     }
 
 
-def _rollout(scenario: Scenario, policy: Any, *, cpu_ms_cap: float) -> dict[str, Any]:
-    sim = Simulator(scenario)
-    decisions: list[dict[str, Any]] = []
-    records: list[dict[str, Any]] = []
-    diags: list[dict[str, Any]] = []
-    cpu: list[float] = []
-    wall: list[float] = []
-    reported: list[float | None] = []
-    status_counts: Counter[str] = Counter()
-    failure = None
-    while not sim.terminated:
-        obs = sim.observe()
+def reported_cpu_ms(d: Any) -> float | None:
+    r = d.runtime.get("cpu_ms") if isinstance(getattr(d, "runtime", None), Mapping) else None
+    return r if isinstance(r, (int, float)) and not isinstance(r, bool) else None
+
+
+class Trajectory:
+    """One teacher's closed-loop trajectory, built step by step in the collector's own simulator.
+
+    Shared by in-process fixture collection (`_rollout`) and the killable pilot supervisor
+    (`pilot_supervisor`), which replays the proposals a worker process streamed. The collector's
+    simulator is the source of truth for every observation, transition and outcome.
+    """
+
+    def __init__(self, scenario: Scenario, name: str, *, clock: str) -> None:
+        self.scenario, self.name, self.clock = scenario, name, clock
+        self.sim = Simulator(scenario)
+        self.decisions: list[dict[str, Any]] = []
+        self.records: list[dict[str, Any]] = []
+        self.diags: list[dict[str, Any]] = []
+        self.cpu: list[float] = []
+        self.wall: list[float] = []
+        self.reported: list[float | None] = []
+        self.status_counts: Counter[str] = Counter()
+        self.failure: dict[str, Any] | None = None
+
+    @property
+    def done(self) -> bool:
+        return self.sim.terminated or self.failure is not None
+
+    def observation(self) -> dict[str, Any]:
+        obs = self.sim.observe()
         check_public_observation(obs)
+        return obs
+
+    def apply(self, obs: Mapping[str, Any], raw_proposal: Mapping[str, Any], *, status: str, cpu_ms: float,
+              wall_ms: float, reported: float | None) -> None:
+        """Validate one proposal against `obs` (raise `_TeacherFailure` if invalid) and step the simulator."""
+        try:
+            prop = proposals.validate_proposal(obs, raw_proposal)
+        except proposals.ProposalError as exc:
+            raise _TeacherFailure("invalid_proposal", str(exc)[:500]) from None
+        if prop["teacher"].get("name") != self.name:
+            raise MultiTeacherError("decision teacher identity mismatch")
+        self.cpu.append(round(cpu_ms, 6))
+        self.wall.append(round(wall_ms, 6))
+        self.reported.append(reported)
+        self.status_counts[status] += 1
+        rec = self.sim.step(prop["actions"])
+        diag = step_diagnostics(obs, prop["actions"], rec)
+        self.decisions.append({"observation": dict(obs), "observation_digest": digest(obs), "proposal": prop,
+                               "teacher_status": status, "record": rec, "diagnostics": diag})
+        self.records.append(rec)
+        self.diags.append(diag)
+
+    def fail(self, kind: str, message: str) -> None:
+        if self.failure is None:
+            self.failure = {"kind": kind, "step": self.sim.observe()["step"], "message": str(message)[:500]}
+
+    def finish(self, identity: Mapping[str, Any], policy_seed: Any) -> dict[str, Any]:
+        """The rollout record. A trajectory without a failure must be terminal; replay is re-verified."""
+        if self.failure is None and not self.sim.terminated:
+            self.fail("missing_policy_response", "trajectory ended before the episode terminated")
+        failure = self.failure
+        verdict = verify_replay(self.scenario, None, self.records, partial=failure is not None)
+        want = "partial" if failure is not None else "complete"
+        if verdict.status != want or verdict.final_transition_hash != self.sim.chain_hash:
+            raise MultiTeacherError(f"{self.name} replay failed: {verdict.reason}")
+        return {
+            "identity": dict(identity), "policy_seed": policy_seed,
+            "status": "failed" if failure else "complete", "failure": failure,
+            "decisions": self.decisions,
+            "outcome": None if failure else _outcome(self.scenario, self.sim, self.records, self.diags),
+            "decision_status_counts": dict(sorted(self.status_counts.items())),
+            "final_transition_hash": self.sim.chain_hash,
+            "replay": {"status": verdict.status, "steps": verdict.steps_verified},
+            "runtime": {"collector_cpu_ms": self.cpu, "collector_wall_ms": self.wall,
+                        "teacher_reported_cpu_ms": self.reported, "total_cpu_ms": round(sum(self.cpu), 6),
+                        "clock": self.clock},
+        }
+
+
+def _rollout(scenario: Scenario, policy: Any, *, cpu_ms_cap: float) -> dict[str, Any]:
+    traj = Trajectory(scenario, policy.identity.name, clock="time.thread_time_ns around decide()")
+    while not traj.done:
+        obs = traj.observation()
         try:
             w0, c0 = time.perf_counter_ns(), time.thread_time_ns()
             try:
@@ -188,43 +264,18 @@ def _rollout(scenario: Scenario, policy: Any, *, cpu_ms_cap: float) -> dict[str,
             if d.teacher.get("name") != policy.identity.name:
                 raise MultiTeacherError("decision teacher identity mismatch")
             try:
-                prop = proposals.validate_proposal(obs, proposals.proposal(d))
+                raw = proposals.proposal(d)
             except proposals.ProposalError as exc:
                 raise _TeacherFailure("invalid_proposal", str(exc)[:500]) from None
             # Post-hoc check on collector-measured thread CPU (the teacher's own figure is kept, not trusted).
-            # In-process collection cannot preempt one decide(); a TRAIN pilot needs a killable subprocess.
-            if ms > cpu_ms_cap or sum(cpu) + ms > cpu_ms_cap:
+            # In-process collection cannot preempt one decide(); the TRAIN pilot uses `pilot_supervisor`.
+            if ms > cpu_ms_cap or sum(traj.cpu) + ms > cpu_ms_cap:
                 raise _TeacherFailure("cpu_cap", f"{ms:.1f} ms decision, cap {cpu_ms_cap} ms per episode")
+            traj.apply(obs, raw, status=_decision_status(d), cpu_ms=ms, wall_ms=(w1 - w0) / 1e6,
+                       reported=reported_cpu_ms(d))
         except _TeacherFailure as f:
-            failure = {"kind": f.kind, "step": sim.observe()["step"], "message": str(f)}
-            break
-        cpu.append(round(ms, 6))
-        wall.append(round((w1 - w0) / 1e6, 6))
-        r = d.runtime.get("cpu_ms")
-        reported.append(r if isinstance(r, (int, float)) and not isinstance(r, bool) else None)
-        status = _decision_status(d)
-        status_counts[status] += 1
-        rec = sim.step(prop["actions"])
-        diag = step_diagnostics(obs, prop["actions"], rec)
-        decisions.append({"observation": obs, "observation_digest": digest(obs), "proposal": prop,
-                          "teacher_status": status, "record": rec, "diagnostics": diag})
-        records.append(rec)
-        diags.append(diag)
-    verdict = verify_replay(scenario, None, records, partial=failure is not None)
-    want = "partial" if failure is not None else "complete"
-    if verdict.status != want or verdict.final_transition_hash != sim.chain_hash:
-        raise MultiTeacherError(f"{policy.identity.name} replay failed: {verdict.reason}")
-    return {
-        "identity": policy.identity.to_dict(), "policy_seed": policy.seed,
-        "status": "failed" if failure else "complete", "failure": failure,
-        "decisions": decisions,
-        "outcome": None if failure else _outcome(scenario, sim, records, diags),
-        "decision_status_counts": dict(sorted(status_counts.items())),
-        "final_transition_hash": sim.chain_hash,
-        "replay": {"status": verdict.status, "steps": verdict.steps_verified},
-        "runtime": {"collector_cpu_ms": cpu, "collector_wall_ms": wall, "teacher_reported_cpu_ms": reported,
-                    "total_cpu_ms": round(sum(cpu), 6), "clock": "time.thread_time_ns around decide()"},
-    }
+            traj.fail(f.kind, str(f))
+    return traj.finish(policy.identity.to_dict(), policy.seed)
 
 
 def _teacher_provenance(policy: Any) -> dict[str, Any]:
@@ -290,6 +341,16 @@ def collect_fixture(
     policies = {name: _new_policy(factories[name], name) for name in CANDIDATES}
     result = {name: _rollout(scenario, policies[name], cpu_ms_cap=cpu_ms_per_teacher_cap)
               for name in CANDIDATES}
+    return assemble_group(scenario, result, provenance(scenario, policies, source), scope=scope)
+
+
+def assemble_group(scenario: Scenario, result: Mapping[str, Mapping[str, Any]], prov: Mapping[str, Any], *,
+                   scope: str, extra: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    """Seal one matched five-teacher group. Never training-eligible here (P1-14 decides, from complete groups)."""
+    if scope not in SCOPES:
+        raise MultiTeacherError(f"unknown collection scope {scope!r}")
+    if list(result) != list(CANDIDATES):
+        raise MultiTeacherError("a group holds exactly the five teachers in registry order")
     check_matched_fire(result)
     complete = all(r["status"] == "complete" for r in result.values())
     body = {
@@ -301,8 +362,8 @@ def collect_fixture(
         "scenario_seed_evaluator_only": scenario.seed,
         "matched_initial_state": True, "matched_exogenous_fire_prefix": True,
         "common_state_steps": _common_state_steps(result),
-        "teacher_order": list(CANDIDATES), "provenance": provenance(scenario, policies, source),
-        "policies": result, "causality": CAUSALITY_NOTE,
+        "teacher_order": list(CANDIDATES), "provenance": dict(prov),
+        "policies": dict(result), "causality": CAUSALITY_NOTE, **dict(extra or {}),
     }
     return seal(body)
 
@@ -337,8 +398,9 @@ def verify_fixture(report: Mapping[str, Any], scenario: Scenario) -> dict[str, A
         raise MultiTeacherError("report hash mismatch: content was altered")
     if report.get("scenario_hash") != scenario.content_hash():
         raise MultiTeacherError("report belongs to another scenario")
-    if report.get("schema_version") != SCHEMA_VERSION or report.get("training_eligible") is not False:
-        raise MultiTeacherError("unsupported schema or eligibility claim")
+    if report.get("schema_version") != SCHEMA_VERSION or report.get("training_eligible") is not False \
+            or report.get("scope") not in SCOPES:
+        raise MultiTeacherError("unsupported schema, scope or eligibility claim")
     if list(report["policies"]) != list(CANDIDATES):
         raise MultiTeacherError("report does not hold exactly the five teachers in order")
     for name, roll in report["policies"].items():

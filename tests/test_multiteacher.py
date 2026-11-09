@@ -329,3 +329,35 @@ def test_public_congestion_diagnostics_count_contested_targets():
     assert r["policies"]["T0"]["outcome"]["contested_targets"] >= 1
     table = mt.outcome_table(r)
     assert table["descriptive_only"] and table["rows"]["T0"]["blocked_moves"] >= 1
+
+
+def _stay(sim):
+    return {pid: "stay" for pid in sim.active_ids()}
+
+
+def test_fire_fork_changes_only_future_draws_and_is_bound_into_the_chain():
+    """Evaluator-only fork used by P1-13 (#51). Lives here so the simulator identity is final before freeze."""
+    from ember_v1.sim.simulator import SimulationError
+    s = busy_room()
+    a, b, c = Simulator(s), Simulator(s), Simulator(s)
+    for x in (a, b, c):
+        x.step(_stay(x))
+    state = a.private_state()
+    b.fork_fire(7)
+    c.fork_fire(7)
+    assert {k: v for k, v in b.private_state().items() if k != "rng"} == \
+           {k: v for k, v in state.items() if k != "rng"}
+    assert b.chain_hash == c.chain_hash != a.chain_hash
+    rb, rc = [], []
+    for _ in range(6):
+        if b.terminated:
+            break
+        rb.append(b.step(_stay(b))["ignitions"])
+        rc.append(c.step(_stay(c))["ignitions"])
+    assert rb == rc
+    with pytest.raises(ValueError):
+        Simulator(s).fork_fire(-1)
+    t = Simulator(scenario(["E.", ".."], {"P1": (0, 1)}, max_steps=1, sid="t"))
+    t.step({"P1": "west"})
+    with pytest.raises(SimulationError, match="terminated"):
+        t.fork_fire(1)

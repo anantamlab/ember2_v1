@@ -7,42 +7,188 @@
   "leakage_failures_max": 0,
   "on_failure": "keep and report; no substitution, no retry; re-plan before full TRAIN",
   "pilot_wall_s_max": 14400,
-  "regenerated_identical_min": 2,
-  "t2_cpu_mean_per_scenario_max": "cost_estimate.t2_cpu_s_per_scenario_limit",
-  "verified_by": "multiteacher.verify_fixture equivalent on each group"
+  "regenerated_identical": "both regeneration.scenario_ids",
+  "t2_cpu_s_total_max": "cost_estimate.t2_cpu_s_total_limit",
+  "verified_by": "multiteacher.verify_fixture on each group"
  },
+ "attempt": 1,
  "attempt_marker": {
+  "atomic": "open(x)+fsync",
   "path": "data/collection/p1-12-train-pilot@1/attempt-<n>.json",
-  "rule": "an existing marker blocks a new run; attempt n+1 needs a new authorization",
+  "rule": "any existing marker, log, group or evidence file blocks a run; attempt n+1 needs a new authorization naming n+1 and a new plan version",
   "write_once": true,
-  "written": "before the first teacher call; holds plan_hash, authorization hash, commit"
+  "written": "after every gate, before the first teacher call; holds the plan hash, authorization sha256 and commit, execution commit, limits, platform"
  },
- "code": {
-  "commit_at_proposal": "aa161d38aeb9a99d1792fac7dcfb715fc89abeb5"
+ "authorization_policy": {
+  "approver_logins": [
+   "sankalphs",
+   "Sathvikar01"
+  ],
+  "base": "main",
+  "kind": "github_pr_review",
+  "repository": "anantamlab/ember_v1",
+  "rules": [
+   "the pull request that adds the authorization record is merged into main",
+   "its merge commit is in the history of the trusted ref",
+   "the latest non-comment review by an allowlisted approver is APPROVED",
+   "the approver is not the pull request author",
+   "the approved commit (review commit_id) holds a byte-identical authorization record",
+   "the record names that approver login (a record cannot name its own commit)"
+  ],
+  "trust_boundary": "binds approval to a GitHub account action; it cannot tell the owner from anyone holding that account's token (see the protocol doc, Trust boundary)"
  },
  "cost_estimate": {
-  "basis": "P1-09 mean CPU per scenario (72 scenarios), x2 safety; T1 is about T0 scale",
-  "caveat": "TRAIN N differs from P1-09; measured pilot T2 CPU decides the full-TRAIN plan",
+  "basis": "P1-09 per-scenario T2 CPU (72 scenarios, data/selection/p1-09-selection@1/evidence.json) in the same people bin [[0, 12], [12, 40], [40, 100], [100, 1000000]]",
+  "caveats": [
+   "one host; T2 internal budget is thread CPU (20 s) so slower hosts hit it more",
+   "a T2 budget-limited decision depends on host speed: that group may not regenerate",
+   "worst case exceeds the pilot wall cap; then the caps end the pilot (recorded)"
+  ],
   "modal_usd": 0,
-  "others_cpu_s": 48.2,
-  "people_in_pilot": [
-   120,
-   33,
+  "others_cpu_s_central": 42.6,
+  "per_scenario": [
+   {
+    "bin_scenarios": 10,
+    "n_bin": [
+     100,
+     1000000
+    ],
+    "people": 120,
+    "scenario_id": "g-a2993d188ad45093",
+    "t2_budget_limited_share": 0.3,
+    "t2_cpu_s_max": 847.8,
+    "t2_cpu_s_mean": 418.8,
+    "t2_worst_case_s": 6000.0
+   },
+   {
+    "bin_scenarios": 23,
+    "n_bin": [
+     12,
+     40
+    ],
+    "people": 33,
+    "scenario_id": "g-6dfef26f38a144d0",
+    "t2_budget_limited_share": 0.0,
+    "t2_cpu_s_max": 223.4,
+    "t2_cpu_s_mean": 57.3,
+    "t2_worst_case_s": 2820.0
+   },
+   {
+    "bin_scenarios": 22,
+    "n_bin": [
+     0,
+     12
+    ],
+    "people": 8,
+    "scenario_id": "g-b9f6d81f3b5bfce7",
+    "t2_budget_limited_share": 0.0,
+    "t2_cpu_s_max": 33.5,
+    "t2_cpu_s_mean": 5.8,
+    "t2_worst_case_s": 3720.0
+   },
+   {
+    "bin_scenarios": 23,
+    "n_bin": [
+     12,
+     40
+    ],
+    "people": 24,
+    "scenario_id": "g-35cca9f1d42320be",
+    "t2_budget_limited_share": 0.0,
+    "t2_cpu_s_max": 223.4,
+    "t2_cpu_s_mean": 57.3,
+    "t2_worst_case_s": 3380.0
+   },
+   {
+    "bin_scenarios": 22,
+    "n_bin": [
+     0,
+     12
+    ],
+    "people": 6,
+    "scenario_id": "g-0821b9cfcfbdc9a9",
+    "t2_budget_limited_share": 0.0,
+    "t2_cpu_s_max": 33.5,
+    "t2_cpu_s_mean": 5.8,
+    "t2_worst_case_s": 1140.0
+   },
+   {
+    "bin_scenarios": 10,
+    "n_bin": [
+     100,
+     1000000
+    ],
+    "people": 114,
+    "scenario_id": "g-0ee55267388889cc",
+    "t2_budget_limited_share": 0.3,
+    "t2_cpu_s_max": 847.8,
+    "t2_cpu_s_mean": 418.8,
+    "t2_worst_case_s": 2580.0
+   },
+   {
+    "bin_scenarios": 17,
+    "n_bin": [
+     40,
+     100
+    ],
+    "people": 46,
+    "scenario_id": "g-1a8b6230b6107b0e",
+    "t2_budget_limited_share": 0.0,
+    "t2_cpu_s_max": 667.5,
+    "t2_cpu_s_mean": 113.1,
+    "t2_worst_case_s": 2180.0
+   },
+   {
+    "bin_scenarios": 10,
+    "n_bin": [
+     100,
+     1000000
+    ],
+    "people": 115,
+    "scenario_id": "g-5082bdcde677aea4",
+    "t2_budget_limited_share": 0.3,
+    "t2_cpu_s_max": 847.8,
+    "t2_cpu_s_mean": 418.8,
+    "t2_worst_case_s": 2680.0
+   }
+  ],
+  "superseded_v0_1_estimate": {
+   "rule": "global mean x 8 x 2",
+   "t2_cpu_s": 1678.9,
+   "why_replaced": "ignored N: 3 of 8 pilot scenarios have N >= 100, where P1-09 T2 CPU is about 4x its global mean"
+  },
+  "t2_cpu_s_central": 1495.7,
+  "t2_cpu_s_total_limit": 3724.7,
+  "t2_cpu_s_upper": 3724.7,
+  "t2_worst_case_s": 24500.0,
+  "wall_s_expected": 1495.7
+ },
+ "design": {
+  "claim_scope": "pipeline feasibility; no population-level teacher comparison from 8 cases",
+  "families": 8,
+  "fire_models": {
+   "deterministic": 5,
+   "stochastic": 3
+  },
+  "fire_seeds_per_scenario": 1,
+  "groups_per_scenario": 1,
+  "labels": {
+   "difficult": 3,
+   "feasible": 4,
+   "unreachable": 1
+  },
+  "max_steps_total": 1225,
+  "people": [
+   6,
    8,
    24,
-   6,
-   114,
+   33,
    46,
-   115
+   114,
+   115,
+   120
   ],
-  "per_scenario_cpu_s": {
-   "T0": 0.1,
-   "T2": 104.93,
-   "T3": 1.86,
-   "T4": 0.95
-  },
-  "t2_cpu_s": 1678.9,
-  "t2_cpu_s_per_scenario_limit": 209.9
+  "scenarios": 8
  },
  "disjointness_audit": {
   "heldout_counts": {
@@ -189,6 +335,124 @@
    "scenario": 189
   }
  },
+ "failure_policy": {
+  "effect": "the matched group is incomplete: kept as diagnostic evidence with every streamed decision, never retried, never replaced, never training-eligible; the acceptance gate then fails",
+  "integrity_error": "a worker stream that does not replay in the supervisor's simulator is a collector fault: the group is recorded as integrity_error and the gate fails",
+  "later_groups": "still run in plan order while the pilot deadline holds (diagnostic cost evidence); after an interrupt or the pilot deadline no new group starts (recorded not_started)",
+  "retries": 0,
+  "substitutes": "none",
+  "teacher_failures": [
+   "teacher_exception",
+   "invalid_proposal",
+   "decision_cpu_cap",
+   "group_wall_cap",
+   "pilot_wall_cap",
+   "worker_crashed",
+   "worker_unresponsive",
+   "missing_policy_response",
+   "code_drift",
+   "identity_drift",
+   "interrupted",
+   "supervisor_error"
+  ]
+ },
+ "geometry_audit": {
+  "hits": [],
+  "maps_compared": 420,
+  "nearest": {
+   "g-0821b9cfcfbdc9a9": {
+    "against": "t4-explore@v12",
+    "exit_distance": 0.123661,
+    "id": "t4-explore12-base-corridor-16x20-50-stochastic-3",
+    "wall_distance": 0.157614
+   },
+   "g-0ee55267388889cc": {
+    "against": "t4-pilot@1",
+    "exit_distance": 0.114047,
+    "id": "t4-pilot-base-open_room-48x64-1-stochastic-3",
+    "wall_distance": 0.019305
+   },
+   "g-1a8b6230b6107b0e": {
+    "against": "t4-pilot@3",
+    "exit_distance": 0.066856,
+    "id": "t4-pilot3-base-open_room-16x20-1-stochastic-3",
+    "wall_distance": 0.079545
+   },
+   "g-35cca9f1d42320be": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.58466,
+    "id": "fam-899dcf6c7068dcbf",
+    "wall_distance": 0.274937
+   },
+   "g-5082bdcde677aea4": {
+    "against": "t4-pilot@2",
+    "exit_distance": 0.055933,
+    "id": "t4-pilot2-base-open_room-48x64-200-stochastic-3",
+    "wall_distance": 0.049689
+   },
+   "g-6dfef26f38a144d0": {
+    "against": "family:fam-b949006eed10cd9d",
+    "exit_distance": 0.473485,
+    "id": "fam-b949006eed10cd9d",
+    "wall_distance": 0.218885
+   },
+   "g-a2993d188ad45093": {
+    "against": "family:fam-fa7b4a7cd8cd8cff",
+    "exit_distance": 0.220546,
+    "id": "fam-fa7b4a7cd8cd8cff",
+    "wall_distance": 0.264597
+   },
+   "g-b9f6d81f3b5bfce7": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.232143,
+    "id": "fam-82cd99204450dadb",
+    "wall_distance": 0.148266
+   }
+  },
+  "pass": true,
+  "rules": [
+   "topology_duplicate",
+   "near_duplicate",
+   "wall_near_duplicate",
+   "scale_free_near_duplicate",
+   "scale_free_wall_near_duplicate"
+  ],
+  "sets": {
+   "family": 56,
+   "p1-09-selection@1": 24,
+   "t2-pilot@1": 24,
+   "t3-pilot@1": 42,
+   "t4-explore@v12": 74,
+   "t4-pilot@1": 52,
+   "t4-pilot@2": 74,
+   "t4-pilot@3": 74
+  },
+  "sources": {
+   "p1_02_heldout_family_maps": 56,
+   "p1_09_family_maps": 24,
+   "pilot_set_maps": 340
+  },
+  "symmetries": "all 8 rotations/reflections; topology hash also ignores exit renaming",
+  "within_pilot_hits": []
+ },
+ "identities": {
+  "collector": {
+   "module_fingerprint": "sha256:474d7add0f97fd64e040b7b987d75d27857bcf588ece36145696b779e978e8ad",
+   "runner_fingerprint": "sha256:7de031189d6eb6f5cf3d57c8b5251b587ee0b5bded723c9f876925c2a06dd2a7",
+   "schema_version": "matched-multi-teacher@0.2.0",
+   "supervisor_fingerprint": "sha256:569b1b6c4e3e8d88870ba8079885797c639ea74295cb7260e3253600fb63b7a8",
+   "supervisor_version": "p1-12-pilot-supervisor@1.0.0"
+  },
+  "generator": {
+   "module_fingerprint": "sha256:1f2da0833108193f8bff7f4e3c9a163764f4a123b3c3baab1328d3e71bd361ea",
+   "revision": "gen-1.0.0",
+   "splits_fingerprint": "sha256:f13c20a0759c62f722872c4872c606a03f2225c62a0d54f593ab96e87e004c89"
+  },
+  "simulator": {
+   "module_fingerprint": "sha256:4c961d54c3fc001f27aa0d1045d29090b8889716c0db720d7cb474e7a0e86d2d",
+   "observation_version": "1.0"
+  }
+ },
  "limits": {
   "decision_cpu_s": {
    "T0": 5,
@@ -197,15 +461,30 @@
    "T3": 5,
    "T4": 5
   },
-  "decisions_per_teacher": "scenario max_steps (one per step; no extra calls)",
+  "decisions_per_teacher": "one per simulator step until termination (at most max_steps)",
   "group_wall_s": 7200,
   "pilot_wall_s": 14400,
+  "process_model": "one spawned, killable process per teacher per group; groups run in plan order",
   "processes_per_teacher": 1,
   "retries": 0
  },
- "output_schema": "matched-multi-teacher@0.2.0 per group (multiteacher.collect report) + group manifest",
- "pilot_version": "p1-12-train-pilot@0.1.0-draft",
- "plan_hash": "sha256:07ea910e8dd384bbf3f6e7f4be25d2d669cb927d3cd5db5f6c748f67f01c25a5",
+ "output": {
+  "attempt_dir": "data/collection/p1-12-train-pilot@1/attempt-<n>/",
+  "evidence": "evidence.json (write-once)",
+  "groups": "groups/<scenario_id>.json (write-once, matched-multi-teacher@0.2.0, scope p1-12-train-pilot@1, training_eligible false)",
+  "log": "log.jsonl (append, fsync per line)",
+  "regenerations": "regen/<scenario_id>.json"
+ },
+ "pilot_version": "p1-12-train-pilot@0.2.0-draft",
+ "plan_hash": "sha256:4a188432f1150c8923136c6b6c9fbfa79ebd79a4d0c8acae5fe35cfe5bcac19c",
+ "regeneration": {
+  "counts_against": "pilot_wall_s",
+  "rule": "the two smallest-N scenarios (ties by rank) are run a second time inside the same attempt, after all eight groups, under the same caps; both must reproduce content_hash",
+  "scenario_ids": [
+   "g-0821b9cfcfbdc9a9",
+   "g-b9f6d81f3b5bfce7"
+  ]
+ },
  "salt": "p1-12-train-pilot@1",
  "scenarios": [
   {
@@ -306,6 +585,13 @@
   }
  ],
  "selection_rule": {
+  "inputs": [
+   "scenario_hash",
+   "label",
+   "family_id",
+   "diagnostics.fire_model",
+   "diagnostics.people"
+  ],
   "largest_people_forced": true,
   "max_per_fire_model": 5,
   "one_per_family": true,
@@ -314,7 +600,8 @@
    "difficult": 3,
    "feasible": 4,
    "unreachable": 1
-  }
+  },
+  "teacher_outcomes_consulted": false
  },
  "source": {
   "generator_revision": "gen-1.0.0",
@@ -330,29 +617,33 @@
    "T0": {
     "code_fingerprint": "sha256:8ddf9370263284107ae5249c9adafe7323ed8deab2d45077fe9894979e6c84aa",
     "config_hash": "sha256:bdc4d3580bcf3889348c563aaf622334d135a535d9cb2aaeedc3c0528f10208a",
+    "seed": null,
     "version": "1.0.0"
    },
    "T1": {
     "code_fingerprint": "sha256:52dc61f4ff9599e55bfd29f47068bf301895321ce85f6c9aaa9feec1dc568eac",
     "config_hash": "sha256:5047e942db3326706b6184c9f29e0b992078920f03c8a53adc8cc24258345361",
+    "seed": null,
     "version": "1.0.0"
    },
    "T2": {
     "code_fingerprint": "sha256:afe987d862caaa32701777050f19fb3126c03f9edd6ab8ac6ed375a95504db74",
     "config_hash": "sha256:302139e18ba05fdcdc5561b7390b95f725600ec8791e336d065f77cea0c507e5",
+    "seed": 20261107,
     "version": "1.0.0"
    },
    "T3": {
     "code_fingerprint": "sha256:82294a3f0d7aa3caf38598505dbffd367c5cb14ade1f725fd9ee23e73c2c14f1",
     "config_hash": "sha256:5a8d4985b1f65d5de18a06c86d8dd522e2ca95e2accd583165b7e7d7ea1d02e0",
+    "seed": 20261123,
     "version": "1.0.0"
    },
    "T4": {
     "code_fingerprint": "sha256:fa66a0f354dc82f992d1f0a1896851fc90dc9e19dea244f815a76857361ce75e",
     "config_hash": "sha256:79bd3322b9cf7ccd25928f3a70502089732496af5427f88f00ecd2ff6ba12504",
+    "seed": null,
     "version": "1.2.0"
    }
   }
- },
- "timeout_rule": "a decision over its CPU cap or a group over its wall cap is a recorded teacher failure: the group is incomplete, kept and reported, never retried or replaced; the pilot gate then fails"
+ }
 }
