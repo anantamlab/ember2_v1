@@ -437,16 +437,16 @@
  },
  "identities": {
   "collector": {
-   "module_fingerprint": "sha256:474d7add0f97fd64e040b7b987d75d27857bcf588ece36145696b779e978e8ad",
-   "runner_fingerprint": "sha256:7de031189d6eb6f5cf3d57c8b5251b587ee0b5bded723c9f876925c2a06dd2a7",
+   "module_fingerprint": "sha256:061eb525303c1689e7b77040b1055e9323222acff62309e6fc6e03b2a3d56d16",
+   "runner_fingerprint": "sha256:06a4479dbf4ef3f7b5df0def714c6f0eb944c6c907082ee591d2e8947be32223",
    "schema_version": "matched-multi-teacher@0.2.0",
-   "supervisor_fingerprint": "sha256:569b1b6c4e3e8d88870ba8079885797c639ea74295cb7260e3253600fb63b7a8",
+   "supervisor_fingerprint": "sha256:8f86fb47ac96a6833b561c6d553eafcfbd2353d80480ac06cc208ebd9e08dee6",
    "supervisor_version": "p1-12-pilot-supervisor@1.0.0"
   },
   "generator": {
-   "module_fingerprint": "sha256:1f2da0833108193f8bff7f4e3c9a163764f4a123b3c3baab1328d3e71bd361ea",
+   "module_fingerprint": "sha256:58335ff478528a6d0e526e3ffc79ddb11ad1f3f33812a5b9e501ecdc844d7a0a",
    "revision": "gen-1.0.0",
-   "splits_fingerprint": "sha256:f13c20a0759c62f722872c4872c606a03f2225c62a0d54f593ab96e87e004c89"
+   "splits_fingerprint": "sha256:d1ed4077c6df51cd278a34e0c3e62f74b3418042c342769f3561c204ea872e45"
   },
   "simulator": {
    "module_fingerprint": "sha256:4c961d54c3fc001f27aa0d1045d29090b8889716c0db720d7cb474e7a0e86d2d",
@@ -476,7 +476,7 @@
   "regenerations": "regen/<scenario_id>.json"
  },
  "pilot_version": "p1-12-train-pilot@0.2.0-draft",
- "plan_hash": "sha256:4a188432f1150c8923136c6b6c9fbfa79ebd79a4d0c8acae5fe35cfe5bcac19c",
+ "plan_hash": "sha256:d006a31f795d7d97f3d90c0e25dee9d6f862fadd99b4907526986cbb85b3a4e1",
  "regeneration": {
   "counts_against": "pilot_wall_s",
   "rule": "the two smallest-N scenarios (ties by rank) are run a second time inside the same attempt, after all eight groups, under the same caps; both must reproduce content_hash",

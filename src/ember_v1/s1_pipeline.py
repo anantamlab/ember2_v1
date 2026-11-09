@@ -66,13 +66,29 @@ class S1PipelineError(RuntimeError):
 
 
 # ----- fingerprints ---------------------------------------------------------------------------------------
+def _exact_module_path(mod: str) -> Path | None:
+    """`provenance._module_path`, but every path part must match the directory listing exactly. On a
+    case-insensitive file system (Windows) `from .sim import Scenario` otherwise resolves the phantom module
+    `ember_v1.sim.Scenario` to `sim/scenario.py`, and the digest differs from Linux."""
+    path = pv._module_path(mod)
+    if path is None:
+        return None
+    d = pv._PKG
+    for part in path.relative_to(pv._PKG).parts:
+        if part not in {p.name for p in d.iterdir()}:
+            return None
+        d = d / part
+    return path
+
+
 def module_fingerprint(module: str) -> str:
-    """Digest of one `ember_v1` module and its transitive `ember_v1` imports (same rule as teacher fingerprints)."""
+    """Digest of one `ember_v1` module and its transitive `ember_v1` imports (same rule as teacher fingerprints;
+    module paths are case-exact, so the digest is the same on Windows and Linux)."""
     seen: dict[str, str] = {}
     todo = [module]
     while todo:
         mod = todo.pop()
-        path = pv._module_path(mod)
+        path = _exact_module_path(mod)
         if mod in seen or path is None:
             continue
         seen[mod] = "sha256:" + hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()

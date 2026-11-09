@@ -69,7 +69,12 @@ The run-8 plan `sha256:07ea910e…c25a5` was never frozen. It is superseded befo
 3. the T2 cost estimate ignored N (see 4.4); the acceptance limit changed accordingly;
 4. a geometry near-duplicate audit and an approval policy were added;
 5. `status` is now outside the hash, so freezing does not change the reviewed hash;
-6. the stale `commit_at_proposal` field was removed (a commit cannot name itself; the freeze commit binds).
+6. the stale `commit_at_proposal` field was removed (a commit cannot name itself; the freeze commit binds);
+7. CI (Linux) showed that `s1_pipeline.module_fingerprint` gave different digests on Windows: on a
+   case-insensitive file system `from .sim import Scenario` added a phantom module `ember_v1.sim.Scenario`
+   (resolved to `sim/scenario.py`). Module paths are now case-exact, so every platform computes the same
+   identities. The first run-9 hash `sha256:4a188432…c19c` (Windows-only identities) is superseded by
+   `sha256:d006a31f…a4e1`. Teacher code fingerprints were not affected (no phantom module in their closures).
 
 Scenario IDs, seeds, salt and selection rule are unchanged: the same eight scenarios.
 
