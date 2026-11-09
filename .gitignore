@@ -20,3 +20,6 @@ data/sealed/
 *.salt.hex
 data/blind/
 blind_private*.json
+
+# Local full-suite verification logs (scripts/verify_local.py; AGENTS.md).
+.local-test-logs/
