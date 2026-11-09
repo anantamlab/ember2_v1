@@ -1,0 +1,649 @@
+{
+ "acceptance": {
+  "complete_groups": 8,
+  "group_wall_s_max": 7200,
+  "groups": 8,
+  "incomplete_rate_per_stratum_max": 0.0,
+  "leakage_failures_max": 0,
+  "on_failure": "keep and report; no substitution, no retry; re-plan before full TRAIN",
+  "pilot_wall_s_max": 14400,
+  "regenerated_identical": "both regeneration.scenario_ids",
+  "t2_cpu_s_total_max": "cost_estimate.t2_cpu_s_total_limit",
+  "verified_by": "multiteacher.verify_fixture on each group"
+ },
+ "attempt": 1,
+ "attempt_marker": {
+  "atomic": "open(x)+fsync",
+  "path": "data/collection/p1-12-train-pilot@1/attempt-<n>.json",
+  "rule": "any existing marker, log, group or evidence file blocks a run; attempt n+1 needs a new authorization naming n+1 and a new plan version",
+  "write_once": true,
+  "written": "after every gate, before the first teacher call; holds the plan hash, authorization sha256 and commit, execution commit, limits, platform"
+ },
+ "authorization_policy": {
+  "approver_logins": [
+   "sankalphs",
+   "Sathvikar01"
+  ],
+  "base": "main",
+  "kind": "github_pr_review",
+  "repository": "anantamlab/ember_v1",
+  "rules": [
+   "the pull request that adds the authorization record is merged into main",
+   "its merge commit is in the history of the trusted ref",
+   "the latest non-comment review by an allowlisted approver is APPROVED",
+   "the approver is not the pull request author",
+   "the approved commit (review commit_id) holds a byte-identical authorization record",
+   "the record names that approver login (a record cannot name its own commit)"
+  ],
+  "trust_boundary": "binds approval to a GitHub account action; it cannot tell the owner from anyone holding that account's token (see the protocol doc, Trust boundary)"
+ },
+ "cost_estimate": {
+  "basis": "P1-09 per-scenario T2 CPU (72 scenarios, data/selection/p1-09-selection@1/evidence.json) in the same people bin [[0, 12], [12, 40], [40, 100], [100, 1000000]]",
+  "caveats": [
+   "one host; T2 internal budget is thread CPU (20 s) so slower hosts hit it more",
+   "a T2 budget-limited decision depends on host speed: that group may not regenerate",
+   "worst case exceeds the pilot wall cap; then the caps end the pilot (recorded)"
+  ],
+  "modal_usd": 0,
+  "others_cpu_s_central": 42.6,
+  "per_scenario": [
+   {
+    "bin_scenarios": 10,
+    "n_bin": [
+     100,
+     1000000
+    ],
+    "people": 120,
+    "scenario_id": "g-a2993d188ad45093",
+    "t2_budget_limited_share": 0.3,
+    "t2_cpu_s_max": 847.8,
+    "t2_cpu_s_mean": 418.8,
+    "t2_worst_case_s": 6000.0
+   },
+   {
+    "bin_scenarios": 23,
+    "n_bin": [
+     12,
+     40
+    ],
+    "people": 33,
+    "scenario_id": "g-6dfef26f38a144d0",
+    "t2_budget_limited_share": 0.0,
+    "t2_cpu_s_max": 223.4,
+    "t2_cpu_s_mean": 57.3,
+    "t2_worst_case_s": 2820.0
+   },
+   {
+    "bin_scenarios": 22,
+    "n_bin": [
+     0,
+     12
+    ],
+    "people": 8,
+    "scenario_id": "g-b9f6d81f3b5bfce7",
+    "t2_budget_limited_share": 0.0,
+    "t2_cpu_s_max": 33.5,
+    "t2_cpu_s_mean": 5.8,
+    "t2_worst_case_s": 3720.0
+   },
+   {
+    "bin_scenarios": 23,
+    "n_bin": [
+     12,
+     40
+    ],
+    "people": 24,
+    "scenario_id": "g-35cca9f1d42320be",
+    "t2_budget_limited_share": 0.0,
+    "t2_cpu_s_max": 223.4,
+    "t2_cpu_s_mean": 57.3,
+    "t2_worst_case_s": 3380.0
+   },
+   {
+    "bin_scenarios": 22,
+    "n_bin": [
+     0,
+     12
+    ],
+    "people": 6,
+    "scenario_id": "g-0821b9cfcfbdc9a9",
+    "t2_budget_limited_share": 0.0,
+    "t2_cpu_s_max": 33.5,
+    "t2_cpu_s_mean": 5.8,
+    "t2_worst_case_s": 1140.0
+   },
+   {
+    "bin_scenarios": 10,
+    "n_bin": [
+     100,
+     1000000
+    ],
+    "people": 114,
+    "scenario_id": "g-0ee55267388889cc",
+    "t2_budget_limited_share": 0.3,
+    "t2_cpu_s_max": 847.8,
+    "t2_cpu_s_mean": 418.8,
+    "t2_worst_case_s": 2580.0
+   },
+   {
+    "bin_scenarios": 17,
+    "n_bin": [
+     40,
+     100
+    ],
+    "people": 46,
+    "scenario_id": "g-1a8b6230b6107b0e",
+    "t2_budget_limited_share": 0.0,
+    "t2_cpu_s_max": 667.5,
+    "t2_cpu_s_mean": 113.1,
+    "t2_worst_case_s": 2180.0
+   },
+   {
+    "bin_scenarios": 10,
+    "n_bin": [
+     100,
+     1000000
+    ],
+    "people": 115,
+    "scenario_id": "g-5082bdcde677aea4",
+    "t2_budget_limited_share": 0.3,
+    "t2_cpu_s_max": 847.8,
+    "t2_cpu_s_mean": 418.8,
+    "t2_worst_case_s": 2680.0
+   }
+  ],
+  "superseded_v0_1_estimate": {
+   "rule": "global mean x 8 x 2",
+   "t2_cpu_s": 1678.9,
+   "why_replaced": "ignored N: 3 of 8 pilot scenarios have N >= 100, where P1-09 T2 CPU is about 4x its global mean"
+  },
+  "t2_cpu_s_central": 1495.7,
+  "t2_cpu_s_total_limit": 3724.7,
+  "t2_cpu_s_upper": 3724.7,
+  "t2_worst_case_s": 24500.0,
+  "wall_s_expected": 1495.7
+ },
+ "design": {
+  "claim_scope": "pipeline feasibility; no population-level teacher comparison from 8 cases",
+  "families": 8,
+  "fire_models": {
+   "deterministic": 5,
+   "stochastic": 3
+  },
+  "fire_seeds_per_scenario": 1,
+  "groups_per_scenario": 1,
+  "labels": {
+   "difficult": 3,
+   "feasible": 4,
+   "unreachable": 1
+  },
+  "max_steps_total": 1225,
+  "people": [
+   6,
+   8,
+   24,
+   33,
+   46,
+   114,
+   115,
+   120
+  ],
+  "scenarios": 8
+ },
+ "disjointness_audit": {
+  "heldout_counts": {
+   "p1-02-v1/calibration": {
+    "core": 48,
+    "family": 16,
+    "lineage": 48,
+    "scenario": 48
+   },
+   "p1-02-v1/dev": {
+    "core": 48,
+    "family": 16,
+    "lineage": 48,
+    "scenario": 48
+   },
+   "p1-02-v1/locked_test": {
+    "core": 70,
+    "family": 24,
+    "lineage": 70,
+    "scenario": 70
+   },
+   "p1-09-selection@1": {
+    "core": 72,
+    "family": 24,
+    "lineage": 72,
+    "scenario": 72
+   },
+   "t2-pilot@1": {
+    "core": 24,
+    "family": 24,
+    "lineage": 24,
+    "scenario": 24
+   },
+   "t3-pilot@1": {
+    "core": 42,
+    "family": 42,
+    "lineage": 42,
+    "scenario": 42
+   },
+   "t4-explore@v12": {
+    "core": 74,
+    "family": 74,
+    "lineage": 74,
+    "scenario": 74
+   },
+   "t4-pilot@1": {
+    "core": 52,
+    "family": 52,
+    "lineage": 52,
+    "scenario": 52
+   },
+   "t4-pilot@2": {
+    "core": 74,
+    "family": 74,
+    "lineage": 74,
+    "scenario": 74
+   },
+   "t4-pilot@3": {
+    "core": 74,
+    "family": 74,
+    "lineage": 74,
+    "scenario": 74
+   }
+  },
+  "heldout_sets": [
+   "p1-02-v1/calibration",
+   "p1-02-v1/dev",
+   "p1-02-v1/locked_test",
+   "p1-09-selection@1",
+   "t2-pilot@1",
+   "t3-pilot@1",
+   "t4-explore@v12",
+   "t4-pilot@1",
+   "t4-pilot@2",
+   "t4-pilot@3"
+  ],
+  "overlap": {
+   "p1-02-v1/calibration": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "p1-02-v1/dev": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "p1-02-v1/locked_test": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "p1-09-selection@1": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "t2-pilot@1": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "t3-pilot@1": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "t4-explore@v12": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "t4-pilot@1": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "t4-pilot@2": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "t4-pilot@3": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   }
+  },
+  "pass": true,
+  "train_counts": {
+   "core": 189,
+   "family": 64,
+   "lineage": 189,
+   "scenario": 189
+  }
+ },
+ "failure_policy": {
+  "effect": "the matched group is incomplete: kept as diagnostic evidence with every streamed decision, never retried, never replaced, never training-eligible; the acceptance gate then fails",
+  "integrity_error": "a worker stream that does not replay in the supervisor's simulator is a collector fault: the group is recorded as integrity_error and the gate fails",
+  "later_groups": "still run in plan order while the pilot deadline holds (diagnostic cost evidence); after an interrupt or the pilot deadline no new group starts (recorded not_started)",
+  "retries": 0,
+  "substitutes": "none",
+  "teacher_failures": [
+   "teacher_exception",
+   "invalid_proposal",
+   "decision_cpu_cap",
+   "group_wall_cap",
+   "pilot_wall_cap",
+   "worker_crashed",
+   "worker_unresponsive",
+   "missing_policy_response",
+   "code_drift",
+   "identity_drift",
+   "interrupted",
+   "supervisor_error"
+  ]
+ },
+ "geometry_audit": {
+  "hits": [],
+  "maps_compared": 420,
+  "nearest": {
+   "g-0821b9cfcfbdc9a9": {
+    "against": "t4-explore@v12",
+    "exit_distance": 0.123661,
+    "id": "t4-explore12-base-corridor-16x20-50-stochastic-3",
+    "wall_distance": 0.157614
+   },
+   "g-0ee55267388889cc": {
+    "against": "t4-pilot@1",
+    "exit_distance": 0.114047,
+    "id": "t4-pilot-base-open_room-48x64-1-stochastic-3",
+    "wall_distance": 0.019305
+   },
+   "g-1a8b6230b6107b0e": {
+    "against": "t4-pilot@3",
+    "exit_distance": 0.066856,
+    "id": "t4-pilot3-base-open_room-16x20-1-stochastic-3",
+    "wall_distance": 0.079545
+   },
+   "g-35cca9f1d42320be": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.58466,
+    "id": "fam-899dcf6c7068dcbf",
+    "wall_distance": 0.274937
+   },
+   "g-5082bdcde677aea4": {
+    "against": "t4-pilot@2",
+    "exit_distance": 0.055933,
+    "id": "t4-pilot2-base-open_room-48x64-200-stochastic-3",
+    "wall_distance": 0.049689
+   },
+   "g-6dfef26f38a144d0": {
+    "against": "family:fam-b949006eed10cd9d",
+    "exit_distance": 0.473485,
+    "id": "fam-b949006eed10cd9d",
+    "wall_distance": 0.218885
+   },
+   "g-a2993d188ad45093": {
+    "against": "family:fam-fa7b4a7cd8cd8cff",
+    "exit_distance": 0.220546,
+    "id": "fam-fa7b4a7cd8cd8cff",
+    "wall_distance": 0.264597
+   },
+   "g-b9f6d81f3b5bfce7": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.232143,
+    "id": "fam-82cd99204450dadb",
+    "wall_distance": 0.148266
+   }
+  },
+  "pass": true,
+  "rules": [
+   "topology_duplicate",
+   "near_duplicate",
+   "wall_near_duplicate",
+   "scale_free_near_duplicate",
+   "scale_free_wall_near_duplicate"
+  ],
+  "sets": {
+   "family": 56,
+   "p1-09-selection@1": 24,
+   "t2-pilot@1": 24,
+   "t3-pilot@1": 42,
+   "t4-explore@v12": 74,
+   "t4-pilot@1": 52,
+   "t4-pilot@2": 74,
+   "t4-pilot@3": 74
+  },
+  "sources": {
+   "p1_02_heldout_family_maps": 56,
+   "p1_09_family_maps": 24,
+   "pilot_set_maps": 340
+  },
+  "symmetries": "all 8 rotations/reflections; topology hash also ignores exit renaming",
+  "within_pilot_hits": []
+ },
+ "identities": {
+  "collector": {
+   "module_fingerprint": "sha256:061eb525303c1689e7b77040b1055e9323222acff62309e6fc6e03b2a3d56d16",
+   "runner_fingerprint": "sha256:d9839da83b343e3599ff745b7606e5cfde26ba95c34d062a4d278dbd624f5d79",
+   "schema_version": "matched-multi-teacher@0.2.0",
+   "supervisor_fingerprint": "sha256:5920da88408c5a0336ea926907463a8e758531c5dd3fd1e7dfc6dd71dd65212a",
+   "supervisor_version": "p1-12-pilot-supervisor@1.0.0"
+  },
+  "generator": {
+   "module_fingerprint": "sha256:58335ff478528a6d0e526e3ffc79ddb11ad1f3f33812a5b9e501ecdc844d7a0a",
+   "revision": "gen-1.0.0",
+   "splits_fingerprint": "sha256:d1ed4077c6df51cd278a34e0c3e62f74b3418042c342769f3561c204ea872e45"
+  },
+  "simulator": {
+   "module_fingerprint": "sha256:4c961d54c3fc001f27aa0d1045d29090b8889716c0db720d7cb474e7a0e86d2d",
+   "observation_version": "1.0"
+  }
+ },
+ "limits": {
+  "decision_cpu_s": {
+   "T0": 5,
+   "T1": 5,
+   "T2": 30,
+   "T3": 5,
+   "T4": 5
+  },
+  "decisions_per_teacher": "one per simulator step until termination (at most max_steps)",
+  "group_wall_s": 7200,
+  "pilot_wall_s": 14400,
+  "process_model": "one spawned, killable process per teacher per group; groups run in plan order",
+  "processes_per_teacher": 1,
+  "retries": 0
+ },
+ "output": {
+  "attempt_dir": "data/collection/p1-12-train-pilot@1/attempt-<n>/",
+  "evidence": "evidence.json (write-once)",
+  "groups": "groups/<scenario_id>.json (write-once, matched-multi-teacher@0.2.0, scope p1-12-train-pilot@1, training_eligible false)",
+  "log": "log.jsonl (append, fsync per line)",
+  "regenerations": "regen/<scenario_id>.json"
+ },
+ "pilot_version": "p1-12-train-pilot@0.2.0-draft",
+ "plan_hash": "sha256:eb8dbe293db7f1c1e1b4f342c07f21853031e9e6ab5419eda2833c51f761b664",
+ "regeneration": {
+  "counts_against": "pilot_wall_s",
+  "rule": "the two smallest-N scenarios (ties by rank) are run a second time inside the same attempt, after all eight groups, under the same caps; both must reproduce content_hash",
+  "scenario_ids": [
+   "g-0821b9cfcfbdc9a9",
+   "g-b9f6d81f3b5bfce7"
+  ]
+ },
+ "salt": "p1-12-train-pilot@1",
+ "scenarios": [
+  {
+   "core_hash": "sha256:c89fbfda1a9435366be89476ce7102b3a6dd983382a9a75c87abd29e8d82e18c",
+   "family_id": "fam-a30f0e46d2991ba4",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-a2993d188ad45093",
+   "max_steps": 300,
+   "people": 120,
+   "rank": "0a047c479530a7be0a8a4e331d910476eea00c3b39a401c75e49c936d4cf530f",
+   "scenario_hash": "sha256:0e85ca6079f2002b7706c2cc43796fc47ae42098af324d0d5334ffa03c641108",
+   "scenario_id": "g-a2993d188ad45093"
+  },
+  {
+   "core_hash": "sha256:e920abc1f0642dfd94bf39d376aaa9ce0e9323d4b0e3366e31330beb51077d34",
+   "family_id": "fam-b31994dc6f5d7f16",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-6dfef26f38a144d0",
+   "max_steps": 141,
+   "people": 33,
+   "rank": "006353b6f07f3636101fa40ce524bf3c089b69de50d67a22627a2b279c76505a",
+   "scenario_hash": "sha256:99fa0d0409db18edb77b86fe6c0a31bea365380169be04b933d9ca316f3fc8ff",
+   "scenario_id": "g-6dfef26f38a144d0"
+  },
+  {
+   "core_hash": "sha256:0aa69a4f4e7b1cf1cc2a18cc438d0cda0b2d5cd05cc51f189ca6114a51b8ffba",
+   "family_id": "fam-ace58bfa33b4b50c",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-b9f6d81f3b5bfce7",
+   "max_steps": 186,
+   "people": 8,
+   "rank": "02b9f4797ba8cce4d653d710f4b63d298b3026ad09e5b7fc558aa9fa8b41034d",
+   "scenario_hash": "sha256:8f871dec96187985b941894b131f23281edaf0f755c3fc352e89ca32ee8918c3",
+   "scenario_id": "g-b9f6d81f3b5bfce7"
+  },
+  {
+   "core_hash": "sha256:7e7b5db11e04111afc4a16c0fe4f4ffa0cadb234a6b33f75d33f3d31243b078a",
+   "family_id": "fam-f388fe3b7e57ed9b",
+   "fire_model": "deterministic",
+   "label": "unreachable",
+   "lineage_id": "lin-35cca9f1d42320be",
+   "max_steps": 169,
+   "people": 24,
+   "rank": "03691e26e581ed72fd27aca58221cdff8afb4be688db7ee2336a28d1895e22b4",
+   "scenario_hash": "sha256:6333c75294fbaa6c19e904ae1feb8c1cc64c177f8cd4e344206a63d7ef0d8f6d",
+   "scenario_id": "g-35cca9f1d42320be"
+  },
+  {
+   "core_hash": "sha256:357c98f8dc8a48eb35e63c1ba66ebe0574081fca1e71d0ebf6beeeb255c281a3",
+   "family_id": "fam-bf7d52a86541e7be",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-0821b9cfcfbdc9a9",
+   "max_steps": 57,
+   "people": 6,
+   "rank": "0411d269d0eafc6f822d6bbbd4a5163b634ced0125b3986b586f3716bbcb2110",
+   "scenario_hash": "sha256:c43b142da86e55a9cd8d9e120ba885ed3044a6b7eb0af6a1f7b712b947e5bb84",
+   "scenario_id": "g-0821b9cfcfbdc9a9"
+  },
+  {
+   "core_hash": "sha256:8eacc637348a397e441fc9a9319e98d9f01323104efb39795c04aa1a95d16b49",
+   "family_id": "fam-349e5a71b9f50060",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-0ee55267388889cc",
+   "max_steps": 129,
+   "people": 114,
+   "rank": "05d962b0190eda7d64dfc45507ad7434b08dd5a8d026e11a07c18918250566f4",
+   "scenario_hash": "sha256:45e5807ee9a0eaf9f5f38fbdc5e82b3463f35d65251fb953a05f618c34172294",
+   "scenario_id": "g-0ee55267388889cc"
+  },
+  {
+   "core_hash": "sha256:29db4be7950490236bdb43ef5d85a6ed43f2245aa26b2b3450217776f9ef4c33",
+   "family_id": "fam-514ba4d9f9c920d9",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-1a8b6230b6107b0e",
+   "max_steps": 109,
+   "people": 46,
+   "rank": "0b79c537d96852642585e7b8aed20955eeb2426f94483fbc0fd540e8ee581d83",
+   "scenario_hash": "sha256:07635cf78bd747464e6e97be8b6260240bb051ea05625df084c9044c44eabf75",
+   "scenario_id": "g-1a8b6230b6107b0e"
+  },
+  {
+   "core_hash": "sha256:bc4ef4ec8acd0811523cecc49ab44d07a7776d7af229ff4da64b828f6a32f45c",
+   "family_id": "fam-59e9dcf5b2a3a27a",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-5082bdcde677aea4",
+   "max_steps": 134,
+   "people": 115,
+   "rank": "142b15c094c61c2b558bc147f54dcf1b9842c5fc72d89ebc1606ecece4c426ba",
+   "scenario_hash": "sha256:54f05807b587a5e7557f1e90b9b488f688d63c1c338def7cf8fd051ec1497c7f",
+   "scenario_id": "g-5082bdcde677aea4"
+  }
+ ],
+ "selection_rule": {
+  "inputs": [
+   "scenario_hash",
+   "label",
+   "family_id",
+   "diagnostics.fire_model",
+   "diagnostics.people"
+  ],
+  "largest_people_forced": true,
+  "max_per_fire_model": 5,
+  "one_per_family": true,
+  "rank": "sha256(salt|scenario_hash)",
+  "strata": {
+   "difficult": 3,
+   "feasible": 4,
+   "unreachable": 1
+  },
+  "teacher_outcomes_consulted": false
+ },
+ "source": {
+  "generator_revision": "gen-1.0.0",
+  "manifest_hash": "sha256:96a564819bdc6910708cb2891b043ae3fa6a3d9066d5927ba721aa61d44b442d",
+  "plan_hash": "sha256:94ef33df208ae247757baeb91e6921690991ecd940f7d718882f34e9b55fafaa",
+  "spec_hash": "sha256:992f8be306d7f23f6c1b35defba26f92fb471aa8d01afb1966174714e7633644",
+  "split": "train"
+ },
+ "status": "FROZEN",
+ "teacher_pins": {
+  "pin_problems": [],
+  "teachers": {
+   "T0": {
+    "code_fingerprint": "sha256:8ddf9370263284107ae5249c9adafe7323ed8deab2d45077fe9894979e6c84aa",
+    "config_hash": "sha256:bdc4d3580bcf3889348c563aaf622334d135a535d9cb2aaeedc3c0528f10208a",
+    "seed": null,
+    "version": "1.0.0"
+   },
+   "T1": {
+    "code_fingerprint": "sha256:52dc61f4ff9599e55bfd29f47068bf301895321ce85f6c9aaa9feec1dc568eac",
+    "config_hash": "sha256:5047e942db3326706b6184c9f29e0b992078920f03c8a53adc8cc24258345361",
+    "seed": null,
+    "version": "1.0.0"
+   },
+   "T2": {
+    "code_fingerprint": "sha256:afe987d862caaa32701777050f19fb3126c03f9edd6ab8ac6ed375a95504db74",
+    "config_hash": "sha256:302139e18ba05fdcdc5561b7390b95f725600ec8791e336d065f77cea0c507e5",
+    "seed": 20261107,
+    "version": "1.0.0"
+   },
+   "T3": {
+    "code_fingerprint": "sha256:82294a3f0d7aa3caf38598505dbffd367c5cb14ade1f725fd9ee23e73c2c14f1",
+    "config_hash": "sha256:5a8d4985b1f65d5de18a06c86d8dd522e2ca95e2accd583165b7e7d7ea1d02e0",
+    "seed": 20261123,
+    "version": "1.0.0"
+   },
+   "T4": {
+    "code_fingerprint": "sha256:fa66a0f354dc82f992d1f0a1896851fc90dc9e19dea244f815a76857361ce75e",
+    "config_hash": "sha256:79bd3322b9cf7ccd25928f3a70502089732496af5427f88f00ecd2ff6ba12504",
+    "seed": null,
+    "version": "1.2.0"
+   }
+  }
+ }
+}
