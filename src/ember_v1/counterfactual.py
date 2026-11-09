@@ -143,20 +143,68 @@ def _run_branch(scenario: Scenario, prefix: Sequence[Mapping[str, Any]], actions
                         "termination_reason": sim.termination_reason}}
 
 
-def replay_branch(scenario: Scenario, prefix: Sequence[Mapping[str, Any]], fork_seed: int | None,
-                  records: Sequence[Mapping[str, Any]]) -> str:
-    """Re-execute a stored (possibly forked) branch; return its chain hash or raise."""
+def _replay_branch_outcome(scenario: Scenario, prefix: Sequence[Mapping[str, Any]], fork_seed: int | None,
+                           records: Sequence[Mapping[str, Any]]) -> tuple[Simulator, dict[str, Any]]:
+    """Re-execute a stored branch WITHOUT any policy; re-derive its outcome exactly as `_run_branch` does."""
     sim = _replay_prefix(scenario, prefix)
+    before = _statuses(sim)
     if fork_seed is not None:
         sim.fork_fire(fork_seed)
+    if not records:
+        raise CounterfactualError("branch has no intervention step")
+    diags = []
     for t, r in enumerate(records):
+        if sim.terminated:
+            raise CounterfactualError(f"branch continues after termination at horizon step {t + 1}")
+        obs = sim.observe()
         if sim.step(r["actions"]) != r:
             raise CounterfactualError(f"branch does not regenerate at horizon step {t + 1}")
+        diags.append(mt.step_diagnostics(obs, r["actions"], r))
     if fork_seed is None:
         proof = verify_replay(scenario, None, [*prefix, *records], partial=not sim.terminated)
         if proof.status != ("complete" if sim.terminated else "partial"):
             raise CounterfactualError(f"branch replay failed: {proof.reason}")
-    return sim.chain_hash
+    after = _statuses(sim)
+    return sim, {**after, "casualties_plus_unresolved": after["casualties"] + after["unresolved"],
+                 "new_casualties": after["casualties"] - before["casualties"],
+                 "new_evacuations": after["evacuated"] - before["evacuated"],
+                 "blocked_moves": sum(x["blocked_moves"] for x in diags),
+                 "contested_targets": sum(x["contested_targets"] for x in diags),
+                 "steps_run": len(records), "censored": not sim.terminated,
+                 "termination_reason": sim.termination_reason}
+
+
+def replay_branch(scenario: Scenario, prefix: Sequence[Mapping[str, Any]], fork_seed: int | None,
+                  records: Sequence[Mapping[str, Any]]) -> str:
+    """Re-execute a stored (possibly forked) branch; return its chain hash or raise."""
+    return _replay_branch_outcome(scenario, prefix, fork_seed, records)[0].chain_hash
+
+
+def _per_replicate(ca: Mapping[str, Any], cb: Mapping[str, Any], k: int) -> dict[str, Any]:
+    return {"replicate": k, "censored": ca["censored"] or cb["censored"],
+            "delta_casualties": cb["casualties"] - ca["casualties"],
+            "delta_unresolved": cb["unresolved"] - ca["unresolved"],
+            "delta_casualties_plus_unresolved": cb["casualties_plus_unresolved"] - ca["casualties_plus_unresolved"],
+            "delta_evacuated": cb["evacuated"] - ca["evacuated"],
+            "delta_blocked_moves": cb["blocked_moves"] - ca["blocked_moves"]}
+
+
+def _summary(per_rep: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    dp = [r["delta_casualties_plus_unresolved"] for r in per_rep]
+    return {"replicates": len(per_rep), "b_better": sum(x < 0 for x in dp), "a_better": sum(x > 0 for x in dp),
+            "ties": sum(x == 0 for x in dp), "mean_delta_primary": sum(dp) / len(dp),
+            "sign_test_p_two_sided": sign_test_p(sum(x < 0 for x in dp), sum(x > 0 for x in dp))}
+
+
+def _check_matched_fire(runs: Mapping[str, Sequence[Sequence[Mapping[str, Any]]]], replicates: int) -> None:
+    """Within each replicate, every alternative sees the same ignitions and fire draws at every common step."""
+    names = sorted(runs)
+    for k in range(replicates):
+        for b in names[1:]:
+            a_rec, b_rec = runs[names[0]][k], runs[b][k]
+            for t in range(min(len(a_rec), len(b_rec))):
+                if a_rec[t]["ignitions"] != b_rec[t]["ignitions"] or a_rec[t]["fire_draws"] != b_rec[t]["fire_draws"]:
+                    raise CounterfactualError(f"future fire differs at common step {t + 1}, replicate {k}")
 
 
 def sign_test_p(wins: int, losses: int) -> float | None:
@@ -239,13 +287,7 @@ def counterfactual_fixture(
     for name in names:
         runs[name] = [_run_branch(scenario, prefix_records, validated[name], s, horizon,
                                   continuation_factory, cpu_ms_per_branch_cap) for s in seeds]
-    for k in range(replicates):                     # matched fire within each replicate
-        for b in names[1:]:
-            a_rec, b_rec = runs[names[0]][k]["records"], runs[b][k]["records"]
-            for t in range(min(len(a_rec), len(b_rec))):
-                if a_rec[t]["ignitions"] != b_rec[t]["ignitions"] or \
-                        a_rec[t]["fire_draws"] != b_rec[t]["fire_draws"]:
-                    raise CounterfactualError(f"future fire differs at common step {t + 1}, replicate {k}")
+    _check_matched_fire({n: [r["records"] for r in runs[n]] for n in names}, replicates)
     for name in names:
         r0 = runs[name][0]
         branches[name] = {
@@ -263,20 +305,8 @@ def counterfactual_fixture(
     contrasts = []
     for i, a in enumerate(names):
         for b in names[i + 1:]:
-            per_rep = []
-            for k in range(replicates):
-                ca, cb = runs[a][k]["outcome"], runs[b][k]["outcome"]
-                per_rep.append({
-                    "replicate": k, "censored": ca["censored"] or cb["censored"],
-                    "delta_casualties": cb["casualties"] - ca["casualties"],
-                    "delta_unresolved": cb["unresolved"] - ca["unresolved"],
-                    "delta_casualties_plus_unresolved": cb["casualties_plus_unresolved"]
-                    - ca["casualties_plus_unresolved"],
-                    "delta_evacuated": cb["evacuated"] - ca["evacuated"],
-                    "delta_blocked_moves": cb["blocked_moves"] - ca["blocked_moves"],
-                })
+            per_rep = [_per_replicate(runs[a][k]["outcome"], runs[b][k]["outcome"], k) for k in range(replicates)]
             ca, cb = branches[a]["outcome"], branches[b]["outcome"]
-            dp = [r["delta_casualties_plus_unresolved"] for r in per_rep]
             verdict = classify(per_rep, stochastic=stochastic)
             contrasts.append({
                 "a": a, "b": b, **verdict,
@@ -285,10 +315,7 @@ def counterfactual_fixture(
                 "delta_b_minus_a_new_evacuations": cb["new_evacuations"] - ca["new_evacuations"],
                 "censored": any(r["censored"] for r in per_rep),
                 "per_replicate": per_rep,
-                "summary": {"replicates": replicates, "b_better": sum(x < 0 for x in dp),
-                            "a_better": sum(x > 0 for x in dp), "ties": sum(x == 0 for x in dp),
-                            "mean_delta_primary": sum(dp) / len(dp),
-                            "sign_test_p_two_sided": sign_test_p(sum(x < 0 for x in dp), sum(x > 0 for x in dp))},
+                "summary": _summary(per_rep),
                 "inference": "paired matched-fire replicates of one state under one frozen continuation; "
                              "uncertainty is over future fire only, not over states or populations",
                 "preference_candidate": verdict["verdict"] in ("a_better", "b_better"),
@@ -309,41 +336,136 @@ def counterfactual_fixture(
     return {**body, "report_hash": digest(mt.deterministic_view(body))}
 
 
-def verify_counterfactual(report: Mapping[str, Any], scenario: Scenario) -> dict[str, Any]:
-    """Re-execute every stored branch and replicate without running any policy; re-derive verdicts."""
+def _check_continuation_record(ident: Any) -> None:
+    if not isinstance(ident, Mapping):
+        raise CounterfactualError("continuation identity missing")
+    try:
+        pinned = reg.identity(ident.get("name"), ident.get("version"))
+    except (reg.RegistryError, TypeError):
+        pinned = None
+    key = {k: ident.get(k) for k in ("name", "policy", "version", "config_hash")}
+    if pinned is None or pinned.status != reg.RETAINED or pinned.key() != key:
+        raise CounterfactualError("continuation must be a frozen, retained, registry-pinned teacher")
+
+
+def _rerun_continuation(scenario: Scenario, prefix: Sequence[Mapping[str, Any]], fork_seed: int | None,
+                        records: Sequence[Mapping[str, Any]], factory: Callable[[], Any]) -> None:
+    """Optional provenance check: the pinned continuation, re-run, chooses every stored post-intervention action."""
+    sim = _replay_prefix(scenario, prefix)
+    if fork_seed is not None:
+        sim.fork_fire(fork_seed)
+    sim.step(records[0]["actions"])
+    policy = factory()
+    for t, r in enumerate(records[1:], 2):
+        obs = sim.observe()
+        prop = proposals.validate_proposal(obs, proposals.proposal(policy.decide(copy.deepcopy(obs))))
+        if prop["actions"] != r["actions"]:
+            raise CounterfactualError(f"continuation does not reproduce the stored action at horizon step {t}")
+        sim.step(r["actions"])
+
+
+def verify_counterfactual(report: Mapping[str, Any], scenario: Scenario, *,
+                          continuation_factory: Callable[[], Any] | None = None) -> dict[str, Any]:
+    """Re-execute every stored branch and replicate without running any policy, then RE-DERIVE every
+    outcome, per-replicate delta, censoring flag, summary and verdict from the regenerated simulators.
+    Stored labels are never trusted: a re-hashed report with an edited guard delta, censoring flag or
+    outcome fails. With `continuation_factory`, the pinned continuation is also re-run and must choose
+    every stored post-intervention action (provenance of the continuation, not only replayability)."""
     body = {k: v for k, v in report.items() if k != "report_hash"}
     if digest(mt.deterministic_view(body)) != report.get("report_hash"):
         raise CounterfactualError("report hash mismatch: content was altered")
     if report.get("scenario_hash") != scenario.content_hash() or report.get("training_eligible") is not False:
         raise CounterfactualError("report belongs to another scenario or claims eligibility")
+    if report.get("scope") != SCOPE or report.get("counterfactual_version") != CF_VERSION:
+        raise CounterfactualError("unsupported counterfactual scope or version")
+    if report.get("fire_model") != scenario.fire_model or report.get("verdict_rule") != VERDICT_RULE:
+        raise CounterfactualError("fire model or verdict rule differs from the preregistered rule")
+    stochastic = scenario.fire_model != "deterministic"
+    n_rep, horizon = report.get("replicates"), report.get("horizon")
+    if type(n_rep) is not int or not 1 <= n_rep <= MAX_REPLICATES or (not stochastic and n_rep != 1):
+        raise CounterfactualError("invalid replicate count")
+    if type(horizon) is not int or not 1 <= horizon <= HARD_MAX_HORIZON:
+        raise CounterfactualError("invalid horizon")
     prefix = report["prefix_records"]
-    if digest(list(prefix)) != report["prefix_hash"]:
+    if digest(list(prefix)) != report["prefix_hash"] or len(prefix) != report.get("prefix_steps"):
         raise CounterfactualError("prefix hash mismatch")
-    seeds = fork_seeds(scenario, report["prefix_hash"], report["replicates"])
-    obs = _replay_prefix(scenario, prefix).observe()
+    seeds = fork_seeds(scenario, report["prefix_hash"], n_rep)
+    common = _replay_prefix(scenario, prefix)
+    obs = common.observe()
     if digest(obs) != report["common_observation_digest"]:
         raise CounterfactualError("common observation does not regenerate")
-    runs = {}
-    for name, br in report["branches"].items():
-        runs[name] = []
-        for k, rep in enumerate(br["replicates"]):
+    if report.get("status_before") != _statuses(common) or \
+            report.get("people_active_at_intervention") != len(common.active_ids()):
+        raise CounterfactualError("status before the intervention does not regenerate")
+    _check_continuation_record(report.get("continuation"))
+    branches = report["branches"]
+    if not isinstance(branches, Mapping) or not 2 <= len(branches) <= 5:
+        raise CounterfactualError("requires two to five joint-action alternatives")
+    if len({digest(br["intervention_actions"]) for br in branches.values()}) != len(branches):
+        raise CounterfactualError("identical alternatives cannot make a causal contrast")
+    outcomes: dict[str, list[dict[str, Any]]] = {}
+    records: dict[str, list[Sequence[Mapping[str, Any]]]] = {}
+    for name, br in branches.items():
+        try:
+            if validate_actions(obs, dict(br["intervention_actions"])) != br["intervention_actions"]:
+                raise ValueError("not in canonical validated form")
+        except ValueError as exc:
+            raise CounterfactualError(f"{name}: intervention is not a complete legal joint map: {exc}") from None
+        if br.get("continuation") != report["continuation"]:
+            raise CounterfactualError(f"{name}: continuation differs from the report continuation")
+        reps = br["replicates"]
+        if len(reps) != n_rep or [r.get("replicate") for r in reps] != list(range(n_rep)):
+            raise CounterfactualError(f"{name}: replicate set is not 0..{n_rep - 1}")
+        outcomes[name], records[name] = [], []
+        for k, rep in enumerate(reps):
             if rep["fork_seed_evaluator_only"] != seeds[k]:
                 raise CounterfactualError(f"{name}: fork seed is not the preregistered derivation")
-            if rep["records"][0]["actions"] != br["intervention_actions"]:
+            if not rep["records"] or rep["records"][0]["actions"] != br["intervention_actions"]:
                 raise CounterfactualError(f"{name}: replicate {k} did not apply the intervention")
-            if replay_branch(scenario, prefix, seeds[k], rep["records"]) != rep["chain_hash"]:
+            if len(rep["records"]) > horizon:
+                raise CounterfactualError(f"{name}: replicate {k} runs past the horizon")
+            sim, out = _replay_branch_outcome(scenario, prefix, seeds[k], rep["records"])
+            if sim.chain_hash != rep["chain_hash"]:
                 raise CounterfactualError(f"{name}: replicate {k} chain hash mismatch")
-            runs[name].append(rep["outcome"])
+            if not sim.terminated and len(rep["records"]) != horizon:
+                raise CounterfactualError(f"{name}: replicate {k} stops before the horizon without termination")
+            if rep["outcome"] != out:
+                raise CounterfactualError(f"{name}: replicate {k} outcome does not regenerate")
+            if continuation_factory is not None:
+                _rerun_continuation(scenario, prefix, seeds[k], rep["records"], continuation_factory)
+            outcomes[name].append(out)
+            records[name].append(rep["records"])
+        r0 = reps[0]
+        if br["outcome"] != r0["outcome"] or br["horizon_records"] != r0["records"] or \
+                br["intervention_transition"] != r0["records"][0] or br["chain_hash"] != r0["chain_hash"] or \
+                br["replay"] != ("complete" if not r0["outcome"]["censored"] else "partial"):
+            raise CounterfactualError(f"{name}: branch summary differs from replicate 0 (the factual stream)")
+    _check_matched_fire(records, n_rep)
+    names = sorted(branches)
+    want_pairs = [(a, b) for i, a in enumerate(names) for b in names[i + 1:]]
+    if [(c.get("a"), c.get("b")) for c in report["contrasts"]] != want_pairs:
+        raise CounterfactualError("contrasts must cover every pair of alternatives exactly once, in order")
     for c in report["contrasts"]:
-        got = classify(c["per_replicate"], stochastic=report["fire_model"] != "deterministic")
-        if got["verdict"] != c["verdict"]:
-            raise CounterfactualError(f"{c['a']} vs {c['b']}: verdict does not follow the rule")
-        for r in c["per_replicate"]:
-            ca, cb = runs[c["a"]][r["replicate"]], runs[c["b"]][r["replicate"]]
-            if r["delta_casualties_plus_unresolved"] != cb["casualties_plus_unresolved"] - \
-                    ca["casualties_plus_unresolved"]:
-                raise CounterfactualError("per-replicate delta does not match branch outcomes")
-    return {"verified": True, "report_hash": report["report_hash"]}
+        a, b = c["a"], c["b"]
+        per_rep = [_per_replicate(outcomes[a][k], outcomes[b][k], k) for k in range(n_rep)]
+        if c["per_replicate"] != per_rep:
+            raise CounterfactualError(f"{a} vs {b}: per-replicate delta does not match branch outcomes")
+        got = classify(per_rep, stochastic=stochastic)
+        if got["verdict"] != c["verdict"] or got["reason"] != c.get("reason"):
+            raise CounterfactualError(f"{a} vs {b}: verdict does not follow the rule")
+        ca, cb = outcomes[a][0], outcomes[b][0]
+        if (c.get("delta_b_minus_a_new_casualties"), c.get("delta_b_minus_a_unresolved"),
+                c.get("delta_b_minus_a_new_evacuations")) != (cb["new_casualties"] - ca["new_casualties"],
+                                                               cb["unresolved"] - ca["unresolved"],
+                                                               cb["new_evacuations"] - ca["new_evacuations"]):
+            raise CounterfactualError(f"{a} vs {b}: factual-stream deltas do not match branch outcomes")
+        if c.get("censored") != any(r["censored"] for r in per_rep) or c.get("summary") != _summary(per_rep):
+            raise CounterfactualError(f"{a} vs {b}: censoring or summary does not match the replicates")
+        if c.get("preference_candidate") != (got["verdict"] in ("a_better", "b_better")) or \
+                c.get("training_preference_allowed") is not False:
+            raise CounterfactualError(f"{a} vs {b}: unsupported preference label")
+    return {"verified": True, "report_hash": report["report_hash"],
+            "continuation_reproduced": continuation_factory is not None}
 
 
 # ----- alternatives from five same-state teacher proposals -----------------------------------------
@@ -395,5 +517,61 @@ def shared_state_study(scenario: Scenario, fixture_report: Mapping[str, Any], te
         return {"counterfactual_version": CF_VERSION, "status": "no_disagreement", "prefix_source": src,
                 "probe": probe, "training_eligible": False}
     report = counterfactual_fixture(scenario, prefix, alts, alternative_sources=sources, prefix_source=src, **kw)
+    if report["common_observation_digest"] != probe["observation_digest"]:
+        raise CounterfactualError("probe observation is not the replayed common state")
     return {"counterfactual_version": CF_VERSION, "status": "contrasted", "probe": probe, "report": report,
             "training_eligible": False}
+
+
+def verify_shared_state_study(study: Mapping[str, Any], scenario: Scenario, fixture_report: Mapping[str, Any], *,
+                              factories: Mapping[str, Callable[[], Any]] | None = None,
+                              continuation_factory: Callable[[], Any] | None = None) -> dict[str, Any]:
+    """Complete shared-state verification of a `shared_state_study` result, without trusting stored labels.
+
+    Binds: the verified source fixture; the prefix = the source teacher's first `step` records; the probe
+    (re-hashed) was taken on exactly the replayed common observation; the alternatives are exactly the
+    distinct teacher joint actions of that probe with their proposer sets; then `verify_counterfactual`.
+    With `factories`, all five teachers are re-asked on the common observation and must give the stored
+    proposals (Markov teachers; fixture data only)."""
+    mt.verify_fixture(fixture_report, scenario)
+    if study.get("training_eligible") is not False or study.get("counterfactual_version") != CF_VERSION:
+        raise CounterfactualError("study claims eligibility or has another version")
+    probe = study["probe"]
+    pbody = {k: v for k, v in probe.items() if k != "probe_hash"}
+    if digest(mt.deterministic_view(pbody)) != probe.get("probe_hash") or probe.get("training_eligible") is not False:
+        raise CounterfactualError("probe hash mismatch: content was altered")
+    if set(probe["proposals"]) != set(mt.CANDIDATES):
+        raise CounterfactualError("the probe must hold one proposal from each of the five teachers")
+    src = study.get("prefix_source") if study.get("status") == "no_disagreement" else study["report"]["prefix_source"]
+    teacher, step = src["teacher"], src["step"]
+    if src.get("kind") != "p1-12-fixture" or src.get("content_hash") != fixture_report["content_hash"] or \
+            src.get("probe_hash") != probe["probe_hash"]:
+        raise CounterfactualError("study does not bind the source fixture and probe")
+    decisions = fixture_report["policies"][teacher]["decisions"]
+    if type(step) is not int or not 0 <= step < len(decisions):
+        raise CounterfactualError("step is outside the source trajectory")
+    common = _replay_prefix(scenario, [d["record"] for d in decisions[:step]]).observe()
+    if probe["observation_digest"] != digest(common) or decisions[step]["observation_digest"] != digest(common):
+        raise CounterfactualError("probe observation is not the replayed common state")
+    for name, prop in probe["proposals"].items():
+        proposals.validate_proposal(common, prop)
+    if factories is not None:
+        again = mt.probe_shared_state(common, factories)
+        if again["probe_hash"] != probe["probe_hash"]:
+            raise CounterfactualError("teachers re-asked on the common state give other proposals")
+    alts, sources = alternatives_from_probe(probe)
+    if study["status"] == "no_disagreement":
+        if len(alts) >= 2:
+            raise CounterfactualError("the probe disagrees; 'no_disagreement' is not supported")
+        return {"verified": True, "status": "no_disagreement", "probe_hash": probe["probe_hash"]}
+    if study["status"] != "contrasted":
+        raise CounterfactualError(f"unknown study status {study.get('status')!r}")
+    rep = study["report"]
+    if [d["record"] for d in decisions[:step]] != rep["prefix_records"]:
+        raise CounterfactualError("prefix is not the source teacher's trajectory prefix")
+    got = {n: (b["intervention_actions"], b["sources"]) for n, b in rep["branches"].items()}
+    if got != {n: (alts[n], sources[n]) for n in alts}:
+        raise CounterfactualError("alternatives are not exactly the probe's distinct teacher joint actions")
+    out = verify_counterfactual(rep, scenario, continuation_factory=continuation_factory)
+    return {**out, "status": "contrasted", "probe_hash": probe["probe_hash"],
+            "teachers_reasked": factories is not None}

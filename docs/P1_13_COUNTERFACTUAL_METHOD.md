@@ -25,6 +25,29 @@ It is not proof that one person's move caused a death, and not an effect over a 
 | 9 Horizon, censoring, uncertainty | Branch ends at termination or horizon; non-terminal = censored. Per-replicate deltas, mean, exact sign test (descriptive). Uncertainty covers future fire only. |
 | 10 Provenance | Prefix records and hash, fixture content hash, probe hash, proposal hashes, fork seeds, continuation identity, all in `report_hash`; `verify_counterfactual` re-executes every branch and re-derives every verdict. |
 
+### Verification (run 12, stricter; report format unchanged)
+
+`verify_counterfactual(report, scenario, continuation_factory=None)` trusts no stored label. A report that was
+edited and then re-hashed still fails if any of these differ from what the replayed simulators give:
+
+- every replicate's outcome (casualties, evacuated, unresolved, new casualties/evacuations, blocked moves,
+  contested targets, steps run, `censored`, termination reason), the status before the intervention;
+- the branch summary = replicate 0 (factual stream); the replicate set is exactly `0..K-1`;
+- a branch that is not terminal must run to the horizon (no silent early stop); none runs past it;
+- matched future fire across alternatives in every replicate (re-checked, not only at generation);
+- every pair of alternatives is contrasted exactly once; per-replicate deltas (primary AND guard), censoring,
+  summary, verdict and reason are re-derived; `preference_candidate` follows the verdict; no training preference;
+- interventions are complete legal joint maps at the common state; the continuation is registry-pinned.
+
+With `continuation_factory`, the pinned continuation is re-run and must choose every stored post-intervention
+action (provenance, not only replayability).
+
+`verify_shared_state_study(study, scenario, fixture_report, factories=None)` adds the shared-state binding: the
+verified source fixture; the prefix is the source teacher's first `step` records; the re-hashed probe holds five
+proposals taken on exactly the replayed common observation; the alternatives are exactly the probe's distinct
+teacher joint actions with their proposer sets; a `no_disagreement` result really has one distinct action. With
+`factories`, all five teachers are re-asked on the common observation and must reproduce the probe.
+
 ## Verdict rule (preregistered constant `VERDICT_RULE`)
 
 - Any censored replicate → `inconclusive (censored)`.
