@@ -317,3 +317,12 @@ def test_real_repository_status_is_blocked():
     rep = sp.status(REPO)
     assert rep["decision"] == "BULK_S1_BLOCKED"
     assert all(v.startswith("refused") for v in rep["receipts"].values())
+
+
+def test_project_repository_cannot_make_single_teacher_labels_after_pivot(tmp_path, plan, monkeypatch):
+    # Even with otherwise valid refs, the project repository is refused before any receipt read or teacher call.
+    monkeypatch.setattr(T1CongestionAware, "decide", lambda *a, **k: (_ for _ in ()).throw(AssertionError("called")))
+    refs = {**_refs(tmp_path), "repo": REPO}
+    with pytest.raises(sp.S1PipelineError, match="superseded by the five-teacher direction"):
+        _build(tmp_path, plan, refs=refs, out=tmp_path / "pivot-out")
+    assert not (tmp_path / "pivot-out").exists()
