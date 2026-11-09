@@ -93,6 +93,21 @@ Weighting audit (run 8):
 | Sparse, expensive T2 | a T2 timeout makes the whole group incomplete, and timeouts concentrate in large-N scenarios → silent difficulty bias | P1-12 pilot measures T2 cost per stratum; incomplete-group rate per stratum is a pilot gate |
 | Minority strategies | a teacher that wins only rare scenarios keeps its full scenario budget there | no cap removes it |
 
+### 3a. Trainer ingestion interface (run 10, `student_ingest`, `p1-14-ingest@0.1.0`)
+
+The only path from records to trainer rows. Synthetic fixtures only; real use stays behind `export`.
+
+| Step | Rule |
+|---|---|
+| `prepare_examples` | refuses the WHOLE dataset if `validate_dataset` fails or any record has a held-out family or scenario (pass DEV, calibration, locked test, selection and P1-15 test sets); only selected, weighted class-A records pass, through `model_example`; example id = digest of observation + whole map (name-free) |
+| `sample_epoch` | draws ∝ weight with replacement in a fixed order; uniforms are SHA-256(seed, i), identical on every platform and Python; stops at the first draw that does not fit the token budget (skipping would favour small examples); manifest = seed, budget, draws, hash |
+| `epoch_rows` | `student_objective.rows_for` on the drawn map (teacher forcing on that map only); chunks of at most `k` active people in ID order; **`loss_weight` = 1 on every row: the weight is applied once, by sampling** (weighting the loss too would square it) |
+| Contract | row keys are exactly `index, state, ids, reserved_ids, targets, loss_weight, example_id, draw`; no teacher, provenance, outcome or weight field |
+
+Tests (`tests/test_student_ingest.py`): class filter, whole-dataset refusal, held-out refusal, reproducible epoch,
+prefix property, pinned uniforms, weight-proportional frequencies, exact rows, renamed teachers change nothing,
+N = 100/150/200 chunk partitions with reservation of earlier chunks.
+
 ## 4. Coherent joint demonstrations (decided for Stage A; review before freeze)
 
 Problem: when two class-A teachers propose different joint maps at the same state, per-person cross-entropy on
