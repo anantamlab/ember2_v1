@@ -198,7 +198,7 @@ def run_one(python: str, root: Path) -> dict[str, Any]:
     print(f"[verify] Python {info['version']} -> {log}", flush=True)
     started = _dt.datetime.now(_dt.timezone.utc)
     lines: list[str] = []
-    with log.open("w", encoding="utf-8", newline="\n") as out:
+    with log.open("w", encoding="utf-8", newline="\n", buffering=1) as out:  # line-buffered: a crash keeps output
         out.write("\n".join(header) + "\n")
         proc = subprocess.Popen(cmd, cwd=root, env=_env_for(root), stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT)
