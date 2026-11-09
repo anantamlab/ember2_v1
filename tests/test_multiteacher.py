@@ -276,14 +276,14 @@ class ForgedPolicy(FixturePolicy):
 class SlowPolicy(FixturePolicy):
     def _plan(self, obs):
         t0 = time.thread_time()
-        while time.thread_time() - t0 < 0.03:
+        while time.thread_time() - t0 < 0.3:
             pass
         return super()._plan(obs)
 
 
 @pytest.mark.parametrize("cls,kind,kw", [(CrashPolicy, "teacher_exception", {}),
                                          (ForgedPolicy, "invalid_proposal", {}),
-                                         (SlowPolicy, "cpu_cap", {"cpu_ms_per_teacher_cap": 5})])
+                                         (SlowPolicy, "cpu_cap", {"cpu_ms_per_teacher_cap": 100})])
 def test_teacher_failure_is_recorded_and_group_is_not_comparable(cls, kind, kw):
     fs = factories({"T1": "north"})
     fs["T3"] = lambda: cls("T3")
