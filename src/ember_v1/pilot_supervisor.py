@@ -34,7 +34,7 @@ from .teacher import registry as reg
 from .teacher.confirmation import BEAT, CPU, DEC, AttemptLog, budget_limited, process_cpu_s
 from .teacher.registry import CANDIDATES
 
-SUPERVISOR_VERSION = "p1-12-pilot-supervisor@1.0.0"
+SUPERVISOR_VERSION = "p1-12-pilot-supervisor@1.1.0"   # 1.1.0: stop hook, scope argument (P1-17)
 POLL_S = 0.1
 GRACE_S = 5.0              # terminate -> kill grace per worker
 MAX_MSGS_PER_POLL = 256    # per worker per poll
@@ -126,11 +126,13 @@ def _stop(p: Any) -> None:
 
 def run_group(scenario: Scenario, jobs: Sequence[Mapping[str, Any]], *, decision_cpu_s: Mapping[str, float],
               group_wall_s: float, deadline: float | None = None, log: AttemptLog | None = None,
-              target: Callable[..., None] | None = None, poll_s: float = POLL_S) -> dict[str, Any]:
+              target: Callable[..., None] | None = None, poll_s: float = POLL_S,
+              stop_requested: Callable[[], bool] | None = None) -> dict[str, Any]:
     """Run one matched group under live limits.
 
     jobs: one per teacher in CANDIDATES order: {"name", "identity" (registry key), "seed",
     "code_fingerprint" (expected)}. Returns {"streams", "failures", "supervision", "interrupted"}.
+    `stop_requested` (checked every poll): True ends every live teacher as an `interrupted` failure.
     """
     log = log or AttemptLog(None)
     names = [j["name"] for j in jobs]
@@ -248,6 +250,11 @@ def run_group(scenario: Scenario, jobs: Sequence[Mapping[str, Any]], *, decision
                 for n in live:
                     fail(n, "pilot_wall_cap", "pilot wall deadline reached")
                     stop(n)
+            elif live and stop_requested is not None and stop_requested():
+                interrupted = True
+                for n in live:
+                    fail(n, "interrupted", "stop requested (parent supervisor gone or operator stop)")
+                    stop(n)
             if all(not p.is_alive() for p in procs.values()):
                 drain(0.05)
                 while sum(drain_one(n) for n in names):   # every worker has exited: read what is left
@@ -286,7 +293,7 @@ def run_group(scenario: Scenario, jobs: Sequence[Mapping[str, Any]], *, decision
 
 def build_group(scenario: Scenario, run: Mapping[str, Any], identities: Mapping[str, Mapping[str, Any]],
                 seeds: Mapping[str, Any], prov: Mapping[str, Any], *, extra: Mapping[str, Any],
-                run_kind: str = "primary") -> dict[str, Any]:
+                run_kind: str = "primary", scope: str = mt.SCOPE_TRAIN_PILOT) -> dict[str, Any]:
     """Replay every streamed proposal in the supervisor's simulator and seal the group report.
 
     Raise GroupIntegrityError if a stream does not replay (observation digest or step order mismatch).
@@ -322,7 +329,7 @@ def build_group(scenario: Scenario, run: Mapping[str, Any], identities: Mapping[
         except mt.MultiTeacherError as e:
             raise GroupIntegrityError(str(e)) from None
     try:
-        return mt.assemble_group(scenario, result, prov, scope=mt.SCOPE_TRAIN_PILOT,
+        return mt.assemble_group(scenario, result, prov, scope=scope,
                                  extra={**dict(extra), "runtime": {"run": run_kind,
                                                                     "supervision": run["supervision"]}})
     except mt.MultiTeacherError as e:

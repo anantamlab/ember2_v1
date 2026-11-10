@@ -48,7 +48,8 @@ SCOPE_FIXTURE = "synthetic_fixture"
 # Real TRAIN pilot groups; written only by `train_pilot.execute` after every gate passed. Still never
 # training-eligible in this schema: an incomplete group stays diagnostic evidence for ever.
 SCOPE_TRAIN_PILOT = "p1-12-train-pilot@1"
-SCOPES = (SCOPE_FIXTURE, SCOPE_TRAIN_PILOT)
+SCOPE_TRAIN_FULL = "p1-17-train-full@1"          # full five-teacher TRAIN collection (P1-17)
+SCOPES = (SCOPE_FIXTURE, SCOPE_TRAIN_PILOT, SCOPE_TRAIN_FULL)
 SUPERVISION_NOT_ASSESSED = "not_assessed: needs a frozen P1-14 dataset protocol (#47)"
 CAUSALITY_NOTE = (
     "Closed-loop outcomes are associated with complete policy trajectories; "

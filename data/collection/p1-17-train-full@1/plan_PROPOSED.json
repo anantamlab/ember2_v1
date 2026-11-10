@@ -1,0 +1,3549 @@
+{
+ "acceptance": {
+  "coverage": "reported exactly; incomplete or missing groups are never hidden",
+  "full_train_verified": "all 189 groups verified complete (verify command)",
+  "leakage_failures_max": 0,
+  "regeneration": "non-budget-limited regeneration groups identical",
+  "training_eligible": false
+ },
+ "attempt": 1,
+ "authorization_policy": {
+  "approver_logins": [
+   "sankalphs",
+   "Sathvikar01"
+  ],
+  "base": "main",
+  "kind": "single_owner_merged_pr",
+  "repository": "anantamlab/ember_v1",
+  "required_owner_approvals": 1,
+  "rules": [
+   "the pull request that adds the authorization record is merged into main",
+   "its merge commit is in the history of the trusted ref",
+   "the record names one allowlisted owner login, and that login merged the pull request",
+   "the pull request head commit holds a byte-identical authorization record",
+   "approval.owner_instruction states the owner's decision; approval.recorded_by states who wrote the record (the owner, or an agent on the owner's instruction)"
+  ],
+  "supersedes": "plan 0.2.0 two-owner rule (an approving review by an allowlisted owner who is not the PR author)",
+  "trust_boundary": "binds approval to a GitHub account action; it cannot tell the owner from anyone holding that account's token, including an agent session (see the protocol doc)"
+ },
+ "calibration": {
+  "calibration_version": "p1-17-calibration@1.0.0",
+  "chosen_concurrency": 8,
+  "code": {
+   "base_commit": "43abb33651593cbc9de46b2d85c9422d145c9b71",
+   "note": "working tree of the P1-17 branch before the plan commit"
+  },
+  "expected_storage_gib": 3.0,
+  "host": {
+   "disk_free_gib_D": 55.3,
+   "logical_cpus": 24,
+   "physical_cores": 12,
+   "ram_total_gib": 23.1
+  },
+  "max_group_peak_rss_mb": 327.9,
+  "raw_root": "D:/Coding/ember-evidence/p1-17-calibration",
+  "reasons": "Measured on this host (12 physical cores, 24 logical, 23 GiB RAM). Peak RSS per group <= 330 MB (runner ~140 MB + five workers ~30 MB); 8 concurrent groups use ~2.3 GiB and host free RAM stayed >= 6.98 GiB. Eight simultaneous copies of a heavy N=114 group (c8x) all reproduced every pilot teacher trajectory exactly; T2 CPU per group 141-143 s vs 113 s alone (+26% from shared cores) and equal to the pilot's own 141.7 s, so contention at 8 matches the pilot's host conditions. Throughput 5.4x sequential. 8 leaves 4 physical cores for the OS and the owner. Admission needs >= 2 GiB free RAM. T2 algorithm, budget and caps are unchanged; a budget-limited T2 decision stays host- and load-dependent and is reported, never called deterministic.",
+  "runs": {
+   "c1": {
+    "all_complete_verified": true,
+    "all_teachers_match_pilot": true,
+    "concurrency": 1,
+    "groups": 1,
+    "host_free_gib_before": 7.478,
+    "host_min_free_gib": 7.478,
+    "per_group": {
+     "g-0ee55267388889cc": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 282.7,
+      "peak_rss_mb": {
+       "T0": 26.5,
+       "T1": 28.4,
+       "T2": 29.6,
+       "T3": 29.4,
+       "T4": 29.6,
+       "runner": 139.2
+      },
+      "people": 114,
+      "pilot_t2_cpu_s": 141.672,
+      "t2_cpu_ratio_vs_pilot": 0.796,
+      "t2_cpu_s": 112.766,
+      "wall_s": 115.141
+     }
+    },
+    "wall_s": 129.172
+   },
+   "c2": {
+    "all_complete_verified": true,
+    "all_teachers_match_pilot": true,
+    "concurrency": 2,
+    "groups": 2,
+    "host_free_gib_before": 7.536,
+    "host_min_free_gib": 7.47,
+    "per_group": {
+     "g-0ee55267388889cc": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 283.1,
+      "peak_rss_mb": {
+       "T0": 26.6,
+       "T1": 28.5,
+       "T2": 29.8,
+       "T3": 29.4,
+       "T4": 29.6,
+       "runner": 139.2
+      },
+      "people": 114,
+      "pilot_t2_cpu_s": 141.672,
+      "t2_cpu_ratio_vs_pilot": 0.867,
+      "t2_cpu_s": 122.781,
+      "wall_s": 124.5
+     },
+     "g-5082bdcde677aea4": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 279.4,
+      "peak_rss_mb": {
+       "T0": 26.6,
+       "T1": 28.4,
+       "T2": 37.8,
+       "T3": 29.5,
+       "T4": 29.7,
+       "runner": 127.4
+      },
+      "people": 115,
+      "pilot_t2_cpu_s": 485.547,
+      "t2_cpu_ratio_vs_pilot": 0.812,
+      "t2_cpu_s": 394.375,
+      "wall_s": 398.813
+     }
+    },
+    "wall_s": 414.375
+   },
+   "c6": {
+    "all_complete_verified": true,
+    "all_teachers_match_pilot": true,
+    "concurrency": 6,
+    "groups": 7,
+    "host_free_gib_before": 7.566,
+    "host_min_free_gib": 7.287,
+    "per_group": {
+     "g-0821b9cfcfbdc9a9": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 176.1,
+      "peak_rss_mb": {
+       "T0": 26.0,
+       "T1": 28.3,
+       "T2": 28.9,
+       "T3": 29.3,
+       "T4": 29.4,
+       "runner": 34.2
+      },
+      "people": 6,
+      "pilot_t2_cpu_s": 2.203,
+      "t2_cpu_ratio_vs_pilot": 1.064,
+      "t2_cpu_s": 2.344,
+      "wall_s": 2.828
+     },
+     "g-0ee55267388889cc": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 284.5,
+      "peak_rss_mb": {
+       "T0": 26.7,
+       "T1": 28.5,
+       "T2": 30.0,
+       "T3": 29.5,
+       "T4": 29.6,
+       "runner": 140.2
+      },
+      "people": 114,
+      "pilot_t2_cpu_s": 141.672,
+      "t2_cpu_ratio_vs_pilot": 0.859,
+      "t2_cpu_s": 121.75,
+      "wall_s": 123.781
+     },
+     "g-1a8b6230b6107b0e": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 179.5,
+      "peak_rss_mb": {
+       "T0": 26.0,
+       "T1": 28.4,
+       "T2": 28.7,
+       "T3": 29.3,
+       "T4": 29.5,
+       "runner": 37.6
+      },
+      "people": 46,
+      "pilot_t2_cpu_s": 3.625,
+      "t2_cpu_ratio_vs_pilot": 1.159,
+      "t2_cpu_s": 4.203,
+      "wall_s": 4.454
+     },
+     "g-35cca9f1d42320be": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 327.9,
+      "peak_rss_mb": {
+       "T0": 26.8,
+       "T1": 28.6,
+       "T2": 28.8,
+       "T3": 29.3,
+       "T4": 29.5,
+       "runner": 184.9
+      },
+      "people": 24,
+      "pilot_t2_cpu_s": 45.641,
+      "t2_cpu_ratio_vs_pilot": 0.892,
+      "t2_cpu_s": 40.703,
+      "wall_s": 41.5
+     },
+     "g-5082bdcde677aea4": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 279.8,
+      "peak_rss_mb": {
+       "T0": 26.5,
+       "T1": 28.4,
+       "T2": 38.1,
+       "T3": 29.4,
+       "T4": 29.5,
+       "runner": 127.9
+      },
+      "people": 115,
+      "pilot_t2_cpu_s": 485.547,
+      "t2_cpu_ratio_vs_pilot": 0.791,
+      "t2_cpu_s": 384.234,
+      "wall_s": 388.516
+     },
+     "g-6dfef26f38a144d0": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 193.0,
+      "peak_rss_mb": {
+       "T0": 25.9,
+       "T1": 28.6,
+       "T2": 28.6,
+       "T3": 29.4,
+       "T4": 29.7,
+       "runner": 50.8
+      },
+      "people": 33,
+      "pilot_t2_cpu_s": 10.625,
+      "t2_cpu_ratio_vs_pilot": 1.044,
+      "t2_cpu_s": 11.094,
+      "wall_s": 11.641
+     },
+     "g-b9f6d81f3b5bfce7": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 177.9,
+      "peak_rss_mb": {
+       "T0": 26.3,
+       "T1": 28.5,
+       "T2": 28.7,
+       "T3": 29.3,
+       "T4": 29.6,
+       "runner": 35.5
+      },
+      "people": 8,
+      "pilot_t2_cpu_s": 1.391,
+      "t2_cpu_ratio_vs_pilot": 1.011,
+      "t2_cpu_s": 1.406,
+      "wall_s": 1.875
+     }
+    },
+    "wall_s": 400.203
+   },
+   "c8x": {
+    "all_complete_verified": true,
+    "all_teachers_match_pilot": true,
+    "concurrency": 8,
+    "groups": 8,
+    "host_free_gib_before": 7.573,
+    "host_min_free_gib": 7.091,
+    "per_group": {
+     "g-0ee55267388889cc~r0": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 284.6,
+      "peak_rss_mb": {
+       "T0": 26.7,
+       "T1": 28.6,
+       "T2": 29.9,
+       "T3": 29.2,
+       "T4": 29.3,
+       "runner": 140.9
+      },
+      "people": 114,
+      "pilot_t2_cpu_s": 141.672,
+      "t2_cpu_ratio_vs_pilot": 0.998,
+      "t2_cpu_s": 141.344,
+      "wall_s": 143.687
+     },
+     "g-0ee55267388889cc~r1": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 285.1,
+      "peak_rss_mb": {
+       "T0": 26.7,
+       "T1": 28.7,
+       "T2": 29.9,
+       "T3": 29.6,
+       "T4": 29.5,
+       "runner": 140.7
+      },
+      "people": 114,
+      "pilot_t2_cpu_s": 141.672,
+      "t2_cpu_ratio_vs_pilot": 1.002,
+      "t2_cpu_s": 141.906,
+      "wall_s": 144.0
+     },
+     "g-0ee55267388889cc~r2": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 284.4,
+      "peak_rss_mb": {
+       "T0": 26.5,
+       "T1": 28.5,
+       "T2": 29.7,
+       "T3": 29.5,
+       "T4": 29.2,
+       "runner": 141.0
+      },
+      "people": 114,
+      "pilot_t2_cpu_s": 141.672,
+      "t2_cpu_ratio_vs_pilot": 1.01,
+      "t2_cpu_s": 143.062,
+      "wall_s": 145.406
+     },
+     "g-0ee55267388889cc~r3": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 285.0,
+      "peak_rss_mb": {
+       "T0": 26.6,
+       "T1": 28.3,
+       "T2": 29.6,
+       "T3": 29.4,
+       "T4": 29.7,
+       "runner": 141.4
+      },
+      "people": 114,
+      "pilot_t2_cpu_s": 141.672,
+      "t2_cpu_ratio_vs_pilot": 1.006,
+      "t2_cpu_s": 142.516,
+      "wall_s": 145.016
+     },
+     "g-0ee55267388889cc~r4": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 285.5,
+      "peak_rss_mb": {
+       "T0": 26.7,
+       "T1": 28.3,
+       "T2": 30.1,
+       "T3": 29.4,
+       "T4": 29.4,
+       "runner": 141.6
+      },
+      "people": 114,
+      "pilot_t2_cpu_s": 141.672,
+      "t2_cpu_ratio_vs_pilot": 0.996,
+      "t2_cpu_s": 141.094,
+      "wall_s": 143.203
+     },
+     "g-0ee55267388889cc~r5": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 284.9,
+      "peak_rss_mb": {
+       "T0": 26.9,
+       "T1": 28.5,
+       "T2": 29.9,
+       "T3": 29.2,
+       "T4": 29.3,
+       "runner": 141.1
+      },
+      "people": 114,
+      "pilot_t2_cpu_s": 141.672,
+      "t2_cpu_ratio_vs_pilot": 0.998,
+      "t2_cpu_s": 141.359,
+      "wall_s": 143.453
+     },
+     "g-0ee55267388889cc~r6": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 284.3,
+      "peak_rss_mb": {
+       "T0": 26.6,
+       "T1": 28.3,
+       "T2": 29.8,
+       "T3": 29.4,
+       "T4": 29.6,
+       "runner": 140.6
+      },
+      "people": 114,
+      "pilot_t2_cpu_s": 141.672,
+      "t2_cpu_ratio_vs_pilot": 0.996,
+      "t2_cpu_s": 141.125,
+      "wall_s": 143.015
+     },
+     "g-0ee55267388889cc~r7": {
+      "budget_limited_t2": 0,
+      "group_peak_rss_mb_sum": 284.6,
+      "peak_rss_mb": {
+       "T0": 26.8,
+       "T1": 28.5,
+       "T2": 29.6,
+       "T3": 29.4,
+       "T4": 29.6,
+       "runner": 140.7
+      },
+      "people": 114,
+      "pilot_t2_cpu_s": 141.672,
+      "t2_cpu_ratio_vs_pilot": 1.003,
+      "t2_cpu_s": 142.125,
+      "wall_s": 144.5
+     }
+    },
+    "wall_s": 169.39
+   }
+  },
+  "scenarios": "already-collected P1-12 pilot scenarios only (outcomes known; resource measurement, not evidence)",
+  "storage_basis": "pilot group files: 385 bytes per person x max_step x teacher (2.6 GiB for TRAIN) plus regeneration and logs; upper 605 bytes per person-step at max_steps",
+  "storage_upper_gib": 5.0
+ },
+ "collection_version": "p1-17-train-full@1.0.0",
+ "cost_estimate": {
+  "basis": "measured T2 CPU per scenario in the same people bin: P1-09 (72) + P1-12 pilot (8)",
+  "caveats": [
+   "T2 CPU varies 100x inside a bin (fire spread, bottlenecks); bin means are coarse",
+   "a T2 budget-limited decision depends on host speed and contention: such groups may not regenerate identically",
+   "upper = every scenario at its bin maximum"
+  ],
+  "concurrency": 8,
+  "modal_usd": 0,
+  "per_bin": {
+   "0-12": {
+    "basis_scenarios": 24,
+    "budget_limited_share": 0.0,
+    "t2_cpu_s_max": 33.5,
+    "t2_cpu_s_mean": 5.5,
+    "train_scenarios": 44
+   },
+   "100-1000000": {
+    "basis_scenarios": 13,
+    "budget_limited_share": 0.308,
+    "t2_cpu_s_max": 2660.9,
+    "t2_cpu_s_mean": 575.1,
+    "train_scenarios": 29
+   },
+   "12-40": {
+    "basis_scenarios": 25,
+    "budget_limited_share": 0.0,
+    "t2_cpu_s_max": 223.4,
+    "t2_cpu_s_mean": 54.9,
+    "train_scenarios": 62
+   },
+   "40-100": {
+    "basis_scenarios": 18,
+    "budget_limited_share": 0.0,
+    "t2_cpu_s_max": 667.5,
+    "t2_cpu_s_mean": 107.0,
+    "train_scenarios": 54
+   }
+  },
+  "t2_cpu_s_central": 26102.0,
+  "t2_cpu_s_total_cap": 160672.0,
+  "t2_cpu_s_upper": 128537.6,
+  "t2_cpu_s_worst_case": 568420.0,
+  "wall_s_central_at_concurrency": 3274.8,
+  "wall_s_upper_at_concurrency": 16079.1
+ },
+ "design": {
+  "families": 64,
+  "fire_models": {
+   "deterministic": 82,
+   "stochastic": 107
+  },
+  "fire_seeds_per_scenario": 1,
+  "groups_per_scenario": 1,
+  "labels": {
+   "difficult": 59,
+   "feasible": 109,
+   "unreachable": 21
+  },
+  "max_steps_total": 28421,
+  "people_bins": {
+   "0-12": 44,
+   "100-1000000": 29,
+   "12-40": 62,
+   "40-100": 54
+  },
+  "people_max": 120,
+  "people_total": 8571,
+  "scenarios": 189,
+  "teacher_episodes": 945
+ },
+ "disjointness_audit": {
+  "heldout_counts": {
+   "p1-02-v1/calibration": {
+    "core": 48,
+    "family": 16,
+    "lineage": 48,
+    "scenario": 48
+   },
+   "p1-02-v1/dev": {
+    "core": 48,
+    "family": 16,
+    "lineage": 48,
+    "scenario": 48
+   },
+   "p1-02-v1/locked_test": {
+    "core": 70,
+    "family": 24,
+    "lineage": 70,
+    "scenario": 70
+   },
+   "p1-09-selection@1": {
+    "core": 72,
+    "family": 24,
+    "lineage": 72,
+    "scenario": 72
+   },
+   "t2-pilot@1": {
+    "core": 24,
+    "family": 24,
+    "lineage": 24,
+    "scenario": 24
+   },
+   "t3-pilot@1": {
+    "core": 42,
+    "family": 42,
+    "lineage": 42,
+    "scenario": 42
+   },
+   "t4-explore@v12": {
+    "core": 74,
+    "family": 74,
+    "lineage": 74,
+    "scenario": 74
+   },
+   "t4-pilot@1": {
+    "core": 52,
+    "family": 52,
+    "lineage": 52,
+    "scenario": 52
+   },
+   "t4-pilot@2": {
+    "core": 74,
+    "family": 74,
+    "lineage": 74,
+    "scenario": 74
+   },
+   "t4-pilot@3": {
+    "core": 74,
+    "family": 74,
+    "lineage": 74,
+    "scenario": 74
+   }
+  },
+  "heldout_sets": [
+   "p1-02-v1/calibration",
+   "p1-02-v1/dev",
+   "p1-02-v1/locked_test",
+   "p1-09-selection@1",
+   "t2-pilot@1",
+   "t3-pilot@1",
+   "t4-explore@v12",
+   "t4-pilot@1",
+   "t4-pilot@2",
+   "t4-pilot@3"
+  ],
+  "overlap": {
+   "p1-02-v1/calibration": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "p1-02-v1/dev": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "p1-02-v1/locked_test": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "p1-09-selection@1": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "t2-pilot@1": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "t3-pilot@1": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "t4-explore@v12": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "t4-pilot@1": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "t4-pilot@2": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   },
+   "t4-pilot@3": {
+    "core": [],
+    "family": [],
+    "lineage": [],
+    "scenario": []
+   }
+  },
+  "pass": true,
+  "train_counts": {
+   "core": 189,
+   "family": 64,
+   "lineage": 189,
+   "scenario": 189
+  }
+ },
+ "failure_policy": {
+  "effect": "the matched group is incomplete: kept as diagnostic evidence with every streamed decision, never retried, never replaced, never training-eligible",
+  "fresh_clone": "the evidence root is outside the checkout and bound by the plan; a fresh clone sees the same markers and is refused",
+  "integrity_error": "a worker stream that does not replay is a collector fault: recorded integrity_error",
+  "interrupted": "a group that started (started/<sid>.json) but has no row when a later session opens is recorded interrupted/<sid>.json; it is never rerun in this attempt",
+  "not_started": "groups that never started (stop request, session wall cap, T2 CPU total cap) may run in a later session of the same attempt, at most max_sessions sessions",
+  "retry": "a retry of an incomplete, crashed or interrupted group needs a NEW authorization that names the group ids; this plan version allows none",
+  "runner_crashed": "a group runner that exits without a row: recorded runner_crashed, kept, never rerun",
+  "substitutes": "none",
+  "teacher_failures": [
+   "teacher_exception",
+   "invalid_proposal",
+   "decision_cpu_cap",
+   "group_wall_cap",
+   "pilot_wall_cap",
+   "worker_crashed",
+   "worker_unresponsive",
+   "missing_policy_response",
+   "code_drift",
+   "identity_drift",
+   "interrupted",
+   "supervisor_error"
+  ]
+ },
+ "geometry_audit": {
+  "hits": [],
+  "maps_compared": 420,
+  "nearest": {
+   "g-045f6e95eec0cad6": {
+    "against": "t4-explore@v12",
+    "exit_distance": 0.400374,
+    "id": "t4-explore12-base-irregular-48x64-1-stochastic-3",
+    "wall_distance": 0.172852
+   },
+   "g-0718767cc7988413": {
+    "against": "t4-pilot@3",
+    "exit_distance": 0.113269,
+    "id": "t4-pilot3-base-open_room-16x20-100-deterministic-3",
+    "wall_distance": 0.039683
+   },
+   "g-077d462265ad3f6a": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.625913,
+    "id": "fam-f6e2e633c2b0bf6f",
+    "wall_distance": 0.153647
+   },
+   "g-09dec40f5e22fb2f": {
+    "against": "family:fam-92b71e2df97332aa",
+    "exit_distance": 0.481483,
+    "id": "fam-92b71e2df97332aa",
+    "wall_distance": 0.307504
+   },
+   "g-0f5c45250316491b": {
+    "against": "family:fam-5f1c452a62a4749f",
+    "exit_distance": 0.51875,
+    "id": "fam-5f1c452a62a4749f",
+    "wall_distance": 0.149421
+   },
+   "g-10d70d91ec798044": {
+    "against": "t4-pilot@2",
+    "exit_distance": 0.392824,
+    "id": "t4-pilot2-base-irregular-16x20-1-stochastic-3",
+    "wall_distance": 0.271238
+   },
+   "g-1310670dc1523ece": {
+    "against": "t4-pilot@3",
+    "exit_distance": 0.558594,
+    "id": "t4-pilot3-exits-multi_room-48x64-50-stochastic-1",
+    "wall_distance": 0.172852
+   },
+   "g-160353455784c59c": {
+    "against": "family:fam-b949006eed10cd9d",
+    "exit_distance": 0.473485,
+    "id": "fam-b949006eed10cd9d",
+    "wall_distance": 0.218885
+   },
+   "g-1702706048b6449b": {
+    "against": "t4-pilot@1",
+    "exit_distance": 0.688363,
+    "id": "t4-pilot-base-multi_room-48x64-50-stochastic-6",
+    "wall_distance": 0.164615
+   },
+   "g-1a9985e23275ac4e": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.498018,
+    "id": "fam-f6e2e633c2b0bf6f",
+    "wall_distance": 0.171004
+   },
+   "g-1cc63b508fc405e9": {
+    "against": "t4-explore@v12",
+    "exit_distance": 0.631076,
+    "id": "t4-explore12-base-multi_room-48x64-10-deterministic-3",
+    "wall_distance": 0.17079
+   },
+   "g-1f4c91385316cc71": {
+    "against": "t4-pilot@1",
+    "exit_distance": 0.900136,
+    "id": "t4-pilot-base-multi_room-48x64-1-stochastic-3",
+    "wall_distance": 0.086515
+   },
+   "g-21707803b954ae94": {
+    "against": "t2-pilot@1",
+    "exit_distance": 0.800057,
+    "id": "t2-pilot-irregular-50-stochastic",
+    "wall_distance": 0.270455
+   },
+   "g-25b27c9194d02b76": {
+    "against": "t4-pilot@2",
+    "exit_distance": 0.361204,
+    "id": "t4-pilot2-base-multi_room-48x64-50-stochastic-3",
+    "wall_distance": 0.188189
+   },
+   "g-29054703d8890510": {
+    "against": "family:fam-73cf65d8b612b305",
+    "exit_distance": 0.553114,
+    "id": "fam-73cf65d8b612b305",
+    "wall_distance": 0.240145
+   },
+   "g-2e3ac555e9850688": {
+    "against": "t4-pilot@2",
+    "exit_distance": 0.566964,
+    "id": "t4-pilot2-high_id_risk-multi_room-16x20-50-stochastic-3",
+    "wall_distance": 0.216398
+   },
+   "g-3a2e31927736945c": {
+    "against": "t4-pilot@3",
+    "exit_distance": 0.700335,
+    "id": "t4-pilot3-base-multi_room-48x64-100-stochastic-3",
+    "wall_distance": 0.118543
+   },
+   "g-3c43e12ffff3a96d": {
+    "against": "t4-pilot@3",
+    "exit_distance": 0.482887,
+    "id": "t4-pilot3-base-irregular-16x20-50-stochastic-3",
+    "wall_distance": 0.170313
+   },
+   "g-414b0f658f7c4580": {
+    "against": "family:fam-fa7b4a7cd8cd8cff",
+    "exit_distance": 0.220546,
+    "id": "fam-fa7b4a7cd8cd8cff",
+    "wall_distance": 0.264597
+   },
+   "g-438849247e97074c": {
+    "against": "t4-pilot@2",
+    "exit_distance": 0.787366,
+    "id": "t4-pilot2-base-multi_room-48x64-100-deterministic-3",
+    "wall_distance": 0.151863
+   },
+   "g-4f31dde2ac967ce4": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.58466,
+    "id": "fam-899dcf6c7068dcbf",
+    "wall_distance": 0.274937
+   },
+   "g-5213de4813e992bb": {
+    "against": "t4-pilot@1",
+    "exit_distance": 0.114047,
+    "id": "t4-pilot-base-open_room-48x64-1-stochastic-3",
+    "wall_distance": 0.019305
+   },
+   "g-5bf033109b31daf3": {
+    "against": "t4-pilot@2",
+    "exit_distance": 0.024322,
+    "id": "t4-pilot2-exits-open_room-48x64-50-stochastic-1",
+    "wall_distance": 0.049811
+   },
+   "g-5c0ccafad5aef14a": {
+    "against": "t4-pilot@2",
+    "exit_distance": 0.055933,
+    "id": "t4-pilot2-base-open_room-48x64-200-stochastic-3",
+    "wall_distance": 0.049689
+   },
+   "g-5ea99e40847e9d1b": {
+    "against": "family:fam-ec631533e67fff23",
+    "exit_distance": 0.804567,
+    "id": "fam-ec631533e67fff23",
+    "wall_distance": 0.316356
+   },
+   "g-6296999d9a448789": {
+    "against": "family:fam-73cf65d8b612b305",
+    "exit_distance": 0.40035,
+    "id": "fam-73cf65d8b612b305",
+    "wall_distance": 0.285702
+   },
+   "g-70eaf86834cb32f2": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.658066,
+    "id": "fam-2b68258532f73c11",
+    "wall_distance": 0.234898
+   },
+   "g-7341268c7a056017": {
+    "against": "t4-pilot@3",
+    "exit_distance": 0.086902,
+    "id": "t4-pilot3-base-open_room-16x20-100-stochastic-3",
+    "wall_distance": 0.0
+   },
+   "g-7417569b20afbca5": {
+    "against": "t4-explore@v12",
+    "exit_distance": 0.548264,
+    "id": "t4-explore12-bottleneck-corridor-16x20-100-deterministic-1",
+    "wall_distance": 0.160069
+   },
+   "g-750880448f7524f0": {
+    "against": "t4-pilot@1",
+    "exit_distance": 0.092882,
+    "id": "t4-pilot-base-open_room-48x64-1-stochastic-3",
+    "wall_distance": 0.126984
+   },
+   "g-750bb4b60fc963d4": {
+    "against": "family:fam-836024deeebc7b8c",
+    "exit_distance": 0.36279,
+    "id": "fam-836024deeebc7b8c",
+    "wall_distance": 0.074882
+   },
+   "g-7aa74cd8ddab1897": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.453279,
+    "id": "fam-a7598cd5f1310780",
+    "wall_distance": 0.198766
+   },
+   "g-7b84169d2fea5737": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.266428,
+    "id": "fam-f6e2e633c2b0bf6f",
+    "wall_distance": 0.140997
+   },
+   "g-80dc8935243a3be5": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.752663,
+    "id": "fam-f6e2e633c2b0bf6f",
+    "wall_distance": 0.124253
+   },
+   "g-859498c686fa602b": {
+    "against": "t4-pilot@2",
+    "exit_distance": 0.893637,
+    "id": "t4-pilot2-exits-multi_room-48x64-50-stochastic-1",
+    "wall_distance": 0.12358
+   },
+   "g-89b59c902fdfac5b": {
+    "against": "t4-pilot@2",
+    "exit_distance": 0.618803,
+    "id": "t4-pilot2-base-irregular-16x20-10-stochastic-3",
+    "wall_distance": 0.267548
+   },
+   "g-8d3842d548773aa2": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.531671,
+    "id": "fam-a7598cd5f1310780",
+    "wall_distance": 0.198843
+   },
+   "g-8f02b88396e08267": {
+    "against": "t4-pilot@1",
+    "exit_distance": 0.265272,
+    "id": "t4-pilot-base-corridor-16x20-1-stochastic-3",
+    "wall_distance": 0.118642
+   },
+   "g-9b2dab4932f6a63d": {
+    "against": "t4-pilot@2",
+    "exit_distance": 0.319048,
+    "id": "t4-pilot2-base-irregular-16x20-10-stochastic-3",
+    "wall_distance": 0.167687
+   },
+   "g-9c0009b1aacfdda4": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.318172,
+    "id": "fam-a7598cd5f1310780",
+    "wall_distance": 0.202198
+   },
+   "g-9ce175f8e7926df6": {
+    "against": "t4-pilot@1",
+    "exit_distance": 0.418211,
+    "id": "t4-pilot-base-corridor-48x64-10-stochastic-3",
+    "wall_distance": 0.06852
+   },
+   "g-9ffd354f21e820c2": {
+    "against": "t4-explore@v12",
+    "exit_distance": 0.060454,
+    "id": "t4-explore12-base-open_room-48x64-10-stochastic-3",
+    "wall_distance": 0.009881
+   },
+   "g-a2108dc770cfe0dd": {
+    "against": "t4-explore@v12",
+    "exit_distance": 0.123661,
+    "id": "t4-explore12-base-corridor-16x20-50-stochastic-3",
+    "wall_distance": 0.157614
+   },
+   "g-a5df6180cbf52469": {
+    "against": "family:fam-73cf65d8b612b305",
+    "exit_distance": 0.961594,
+    "id": "fam-73cf65d8b612b305",
+    "wall_distance": 0.244697
+   },
+   "g-aa9cafe4b3073ab9": {
+    "against": "t2-pilot@1",
+    "exit_distance": 0.368105,
+    "id": "t2-pilot-irregular-200-stochastic",
+    "wall_distance": 0.299743
+   },
+   "g-abe436d168a92ecf": {
+    "against": "t4-pilot@3",
+    "exit_distance": 0.46875,
+    "id": "t4-pilot3-bottleneck-corridor-16x20-50-stochastic-1",
+    "wall_distance": 0.189271
+   },
+   "g-b150f801c6c86b21": {
+    "against": "t4-pilot@2",
+    "exit_distance": 0.309028,
+    "id": "t4-pilot2-base-irregular-16x20-1-stochastic-3",
+    "wall_distance": 0.200521
+   },
+   "g-b9f6d81f3b5bfce7": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.232143,
+    "id": "fam-82cd99204450dadb",
+    "wall_distance": 0.148266
+   },
+   "g-bba6c2e43b07648e": {
+    "against": "t4-pilot@1",
+    "exit_distance": 0.276526,
+    "id": "t4-pilot-base-corridor-48x64-10-stochastic-3",
+    "wall_distance": 0.070786
+   },
+   "g-bc9d78ab06685110": {
+    "against": "family:fam-1fbebf4f8de9591f",
+    "exit_distance": 0.22,
+    "id": "fam-1fbebf4f8de9591f",
+    "wall_distance": 0.12
+   },
+   "g-bcbfd684f9a93d82": {
+    "against": "t4-pilot@2",
+    "exit_distance": 0.231771,
+    "id": "t4-pilot2-base-corridor-48x64-200-stochastic-3",
+    "wall_distance": 0.150499
+   },
+   "g-bccd59e80e25fbd5": {
+    "against": "t4-explore@v12",
+    "exit_distance": 0.445667,
+    "id": "t4-explore12-base-corridor-16x20-100-stochastic-3",
+    "wall_distance": 0.13616
+   },
+   "g-c5b36f1e60a13258": {
+    "against": "t4-pilot@3",
+    "exit_distance": 0.392045,
+    "id": "t4-pilot3-base-multi_room-16x20-10-deterministic-3",
+    "wall_distance": 0.097393
+   },
+   "g-c6fc5ee6acff9bac": {
+    "against": "family:fam-836024deeebc7b8c",
+    "exit_distance": 0.873016,
+    "id": "fam-836024deeebc7b8c",
+    "wall_distance": 0.137489
+   },
+   "g-ce3a77b4f8fd4587": {
+    "against": "t4-pilot@3",
+    "exit_distance": 0.088802,
+    "id": "t4-pilot3-high_id_risk-open_room-16x20-50-deterministic-3",
+    "wall_distance": 0.019608
+   },
+   "g-ce63413098d90e82": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.501865,
+    "id": "fam-66ee0ffc628ef2cc",
+    "wall_distance": 0.274318
+   },
+   "g-cfb6909ae1c502a3": {
+    "against": "t4-pilot@2",
+    "exit_distance": 0.262009,
+    "id": "t4-pilot2-base-irregular-16x20-200-stochastic-3",
+    "wall_distance": 0.278672
+   },
+   "g-d9fcc5087ca96388": {
+    "against": "t2-pilot@1",
+    "exit_distance": 0.4762,
+    "id": "t2-pilot-corridor-1-stochastic",
+    "wall_distance": 0.120954
+   },
+   "g-e9a7dab72dca367f": {
+    "against": "t2-pilot@1",
+    "exit_distance": 0.310445,
+    "id": "t2-pilot-corridor-1-stochastic",
+    "wall_distance": 0.103564
+   },
+   "g-ec207981b011ab0d": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.496437,
+    "id": "fam-899dcf6c7068dcbf",
+    "wall_distance": 0.289658
+   },
+   "g-f0d6ae35a19c98a0": {
+    "against": "p1-09-selection@1",
+    "exit_distance": 0.586337,
+    "id": "fam-66ee0ffc628ef2cc",
+    "wall_distance": 0.325426
+   },
+   "g-f3ed186eb2bd001d": {
+    "against": "t4-pilot@1",
+    "exit_distance": 0.225379,
+    "id": "t4-pilot-unreachable-multi_room-48x64-50-stochastic-3",
+    "wall_distance": 0.180079
+   },
+   "g-f5e8eb41d67c0d02": {
+    "against": "t4-pilot@3",
+    "exit_distance": 0.066856,
+    "id": "t4-pilot3-base-open_room-16x20-1-stochastic-3",
+    "wall_distance": 0.079545
+   },
+   "g-f9ef2085290bb225": {
+    "against": "t4-pilot@2",
+    "exit_distance": 0.151023,
+    "id": "t4-pilot2-bottleneck-corridor-16x20-50-stochastic-1",
+    "wall_distance": 0.045175
+   }
+  },
+  "pass": true,
+  "rule": "fail on any hit against a held-out evaluation set; flag hits against teacher-development pilot sets (teacher-comparison caveat, no exclusion)",
+  "rules": [
+   "topology_duplicate",
+   "near_duplicate",
+   "wall_near_duplicate",
+   "scale_free_near_duplicate",
+   "scale_free_wall_near_duplicate"
+  ],
+  "sets": {
+   "family": 56,
+   "p1-09-selection@1": 24,
+   "t2-pilot@1": 24,
+   "t3-pilot@1": 42,
+   "t4-explore@v12": 74,
+   "t4-pilot@1": 52,
+   "t4-pilot@2": 74,
+   "t4-pilot@3": 74
+  },
+  "sources": {
+   "p1_02_heldout_family_maps": 56,
+   "p1_09_family_maps": 24,
+   "pilot_set_maps": 340
+  },
+  "symmetries": "all 8 rotations/reflections; topology hash also ignores exit renaming",
+  "teacher_dev_similar_families": [
+   "fam-3de0109c7324e29e",
+   "fam-872f364d45255ac3",
+   "fam-cb18a7ae2d90994a"
+  ],
+  "teacher_dev_similarity_hits": [
+   {
+    "against": "t4-pilot@3",
+    "id": "t4-pilot3-base-open_room-16x20-100-stochastic-3",
+    "rule": "scale_free_near_duplicate",
+    "scenario_id": "g-7341268c7a056017"
+   },
+   {
+    "against": "t4-pilot@1",
+    "id": "t4-pilot-base-open_room-48x64-100-stochastic-3",
+    "rule": "scale_free_near_duplicate",
+    "scenario_id": "g-ce3a77b4f8fd4587"
+   },
+   {
+    "against": "t4-pilot@1",
+    "id": "t4-pilot-base-open_room-48x64-10-deterministic-3",
+    "rule": "scale_free_near_duplicate",
+    "scenario_id": "g-ce3a77b4f8fd4587"
+   },
+   {
+    "against": "t4-pilot@2",
+    "id": "t4-pilot2-base-open_room-16x20-100-stochastic-3",
+    "rule": "scale_free_near_duplicate",
+    "scenario_id": "g-ce3a77b4f8fd4587"
+   },
+   {
+    "against": "t4-pilot@2",
+    "id": "t4-pilot2-base-open_room-16x20-100-deterministic-3",
+    "rule": "scale_free_near_duplicate",
+    "scenario_id": "g-ce3a77b4f8fd4587"
+   },
+   {
+    "against": "t4-pilot@3",
+    "id": "t4-pilot3-high_id_risk-open_room-16x20-50-deterministic-3",
+    "rule": "scale_free_near_duplicate",
+    "scenario_id": "g-ce3a77b4f8fd4587"
+   },
+   {
+    "against": "t4-pilot@1",
+    "id": "t4-pilot-base-open_room-16x20-100-stochastic-3",
+    "rule": "scale_free_near_duplicate",
+    "scenario_id": "g-9ffd354f21e820c2"
+   },
+   {
+    "against": "t4-pilot@3",
+    "id": "t4-pilot3-base-open_room-16x20-1-stochastic-3",
+    "rule": "scale_free_near_duplicate",
+    "scenario_id": "g-9ffd354f21e820c2"
+   },
+   {
+    "against": "t4-pilot@3",
+    "id": "t4-pilot3-base-open_room-16x20-100-stochastic-3",
+    "rule": "scale_free_near_duplicate",
+    "scenario_id": "g-9ffd354f21e820c2"
+   },
+   {
+    "against": "t4-pilot@3",
+    "id": "t4-pilot3-base-open_room-16x20-100-deterministic-3",
+    "rule": "scale_free_near_duplicate",
+    "scenario_id": "g-9ffd354f21e820c2"
+   },
+   {
+    "against": "t4-explore@v12",
+    "id": "t4-explore12-base-open_room-48x64-10-stochastic-3",
+    "rule": "scale_free_near_duplicate",
+    "scenario_id": "g-9ffd354f21e820c2"
+   }
+  ],
+  "within_pilot_hits": [],
+  "within_train_note": "TRAIN-internal similarity is not leakage"
+ },
+ "identities": {
+  "collection": {
+   "module_fingerprint": "sha256:6c392bd78427b7f454d57728d81973d7b1383ce674b0175b3e8635f669f8a020",
+   "version": "p1-17-train-full@1.0.0"
+  },
+  "collector": {
+   "module_fingerprint": "sha256:e92885a31e49d615dc86cf492d8081af59373d81b648f9400adc72756d3d9887",
+   "runner_fingerprint": "sha256:4494581159545a29978dee742492b3294788030ee6421d3e91ff8515437c0bcf",
+   "schema_version": "matched-multi-teacher@0.2.0",
+   "supervisor_fingerprint": "sha256:eae6a705ad0d4417a48af9f85e3d446ada9e6b38f62c2536bc3c364723b565c9",
+   "supervisor_version": "p1-12-pilot-supervisor@1.1.0"
+  },
+  "generator": {
+   "module_fingerprint": "sha256:58335ff478528a6d0e526e3ffc79ddb11ad1f3f33812a5b9e501ecdc844d7a0a",
+   "revision": "gen-1.0.0",
+   "splits_fingerprint": "sha256:d1ed4077c6df51cd278a34e0c3e62f74b3418042c342769f3561c204ea872e45"
+  },
+  "simulator": {
+   "module_fingerprint": "sha256:4c961d54c3fc001f27aa0d1045d29090b8889716c0db720d7cb474e7a0e86d2d",
+   "observation_version": "1.0"
+  }
+ },
+ "limits": {
+  "decision_cpu_s": {
+   "T0": 5,
+   "T1": 5,
+   "T2": 30,
+   "T3": 5,
+   "T4": 5
+  },
+  "decisions_per_teacher": "one per simulator step until termination (at most max_steps)",
+  "group_wall_s": 7200,
+  "max_concurrent_groups": 8,
+  "max_sessions": 4,
+  "min_free_ram_gib_to_start": 2.0,
+  "process_model": "one group-runner process per matched group, which spawns one killable process per teacher; at most max_concurrent_groups runners at once",
+  "processes_per_teacher": 1,
+  "retries": 0,
+  "session_wall_s": 129600,
+  "t2_cpu_s_total_cap": 160672.0,
+  "worker_processes_max": 40
+ },
+ "namespace": "p1-17-train-full@1",
+ "pilot_overlap": {
+  "decision": "fresh_collection",
+  "not_a_retry": "this is a new, separately authorized experiment (attempt 1 of p1-17-train-full@1), not attempt 2 of the pilot",
+  "rule": "all 189 TRAIN scenarios, including the 8 P1-12 pilot scenarios, are collected in this namespace under this plan; pilot records stay in p1-12-train-pilot@1, immutable and diagnostic only; they are never counted, merged or promoted to training data. The 8 overlapping groups are compared with the pilot as an extra cross-run regeneration check (per-teacher final transition hashes).",
+  "scenario_ids": [
+   "g-0821b9cfcfbdc9a9",
+   "g-0ee55267388889cc",
+   "g-1a8b6230b6107b0e",
+   "g-35cca9f1d42320be",
+   "g-5082bdcde677aea4",
+   "g-6dfef26f38a144d0",
+   "g-a2993d188ad45093",
+   "g-b9f6d81f3b5bfce7"
+  ]
+ },
+ "plan_hash": "sha256:bff49b473c82d89c041a1aa5e279bff612aec80148f088228cad644bfe07c341",
+ "regeneration": {
+  "rule": "the 2 lowest-rank scenarios of each people bin run a second time in the same attempt after every primary group, same caps and concurrency. A group with no budget-limited decision must reproduce content_hash exactly; a group with T2 budget-limited decisions is reported (host-dependent decisions)",
+  "scenario_ids": [
+   "g-0821b9cfcfbdc9a9",
+   "g-f3ed186eb2bd001d",
+   "g-c92b6cdf6d8ae760",
+   "g-7490c1432df58c70",
+   "g-525081107b864f7d",
+   "g-e5bdfae1ec8e1b79",
+   "g-9655b53de725243e",
+   "g-96d986d2052d1417"
+  ]
+ },
+ "salt": "p1-17-train-full@1",
+ "scenarios": [
+  {
+   "core_hash": "sha256:c89fbfda1a9435366be89476ce7102b3a6dd983382a9a75c87abd29e8d82e18c",
+   "family_id": "fam-a30f0e46d2991ba4",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-a2993d188ad45093",
+   "max_steps": 300,
+   "people": 120,
+   "rank": "a00fbd1e62c57140a02c35955fbd5a501be3efda3056d3c9d570d085220e0a23",
+   "scenario_hash": "sha256:0e85ca6079f2002b7706c2cc43796fc47ae42098af324d0d5334ffa03c641108",
+   "scenario_id": "g-a2993d188ad45093"
+  },
+  {
+   "core_hash": "sha256:cf569912deacd3a81edd3438f3309aa7788433ec7689c0069ea1fad3cc5b1167",
+   "family_id": "fam-a5a06cca73bcfb12",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-6b946b4f393e4cf2",
+   "max_steps": 278,
+   "people": 120,
+   "rank": "4ec74081987da398b0e676b32fdf20549330996381ab92261b4a34328c9379f3",
+   "scenario_hash": "sha256:f0a05679a0aff1eeb2e41bea7320c6881cafd91f3b6429ab4444202d1d9b49c5",
+   "scenario_id": "g-6b946b4f393e4cf2"
+  },
+  {
+   "core_hash": "sha256:16b1544475d34df41e90ef1ec48025d2a392ad476696c7019671c11439f1d6f1",
+   "family_id": "fam-8b07a1025ed9f336",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-f72d9c3b1cb40c1f",
+   "max_steps": 258,
+   "people": 120,
+   "rank": "fb327aea02568f9ec7ce1f239b038ceda7a6908b1072e67fd8ace2d2167f7cf4",
+   "scenario_hash": "sha256:9369370f949ba8beb7734d1667627bb6fb9306dc35797cf4741daa053eb521fb",
+   "scenario_id": "g-f72d9c3b1cb40c1f"
+  },
+  {
+   "core_hash": "sha256:869c226135d196142712a540bfe48335edb4979b132a562afdfcc06ba98f71f4",
+   "family_id": "fam-76f7016179e556da",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-b089aac02f848500",
+   "max_steps": 257,
+   "people": 120,
+   "rank": "a1a6f598cca5f50c6677e14e4a6e89617e16cec692bd03a7d3449d6348dc8df5",
+   "scenario_hash": "sha256:efbf5a2e621bdac460da560e51ca017d104be21773c3e5feabfcf296b96d5f0f",
+   "scenario_id": "g-b089aac02f848500"
+  },
+  {
+   "core_hash": "sha256:b127f613a11cc93db530a8c01e24be576dbbb700cf52282324547bb35b1402c8",
+   "family_id": "fam-a30f0e46d2991ba4",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-f23f7721f8a9f026",
+   "max_steps": 255,
+   "people": 120,
+   "rank": "f659f148ce919e3b0aeb9cb92d320001c8b2a32f88b6a72e915c2fab3060b7fb",
+   "scenario_hash": "sha256:8448dd8ff45e12d527bb7ab8ac151eefe5582cab9bc94d843b3d365e596e5522",
+   "scenario_id": "g-f23f7721f8a9f026"
+  },
+  {
+   "core_hash": "sha256:e227ab53cac3d9be95306deb5e41eecda9690a53db9db7e2bdcabd18ba716551",
+   "family_id": "fam-cda0e9782cd89ef4",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-e61051116a76c842",
+   "max_steps": 253,
+   "people": 120,
+   "rank": "950273ff02a5bb785d08aab7d4c8c04985d6a0f2ca86a37f45c494a06575a3e5",
+   "scenario_hash": "sha256:25e9294fc6e9fb1b6f5ea52a1bc3bbd9292530d5dd36a1b5aef56dd71034ab38",
+   "scenario_id": "g-e61051116a76c842"
+  },
+  {
+   "core_hash": "sha256:143e4107ed32e73d0f6dac40cb146ed2e02a1a0886d3611bdb8cca2c53101331",
+   "family_id": "fam-3de0109c7324e29e",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-24520018dfd407b2",
+   "max_steps": 237,
+   "people": 120,
+   "rank": "a0d5b27bbfa594061fd92f9b7c1cc0d0522c986aeefd3a3c266a8cab78fbc4ea",
+   "scenario_hash": "sha256:a29564b63319b940fc0bd35f4bd1755536e8cd93ae81afe8356a800a8ff0cac8",
+   "scenario_id": "g-24520018dfd407b2"
+  },
+  {
+   "core_hash": "sha256:e3bd055fcdd8c72b5058343c19169c6bbea7e2c3216e8b5492f20d3e36227a81",
+   "family_id": "fam-cf7548ce87fd7b61",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-e902a986217e9a2f",
+   "max_steps": 224,
+   "people": 120,
+   "rank": "0c0b57b0dd0c63ec7704d1bc98d86e7a38f76c8d3b60bbd42d2a7081f12afefe",
+   "scenario_hash": "sha256:17321a2c10da49974d972c4190a12c6b23ad521a25089a5328910d079ba49d01",
+   "scenario_id": "g-e902a986217e9a2f"
+  },
+  {
+   "core_hash": "sha256:b2f4e3bbdc1866c7699f143f096119b3eb0c05f94dbb0837d935f17beb8dcde7",
+   "family_id": "fam-a27d1fd56ab9a214",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-1d6372a91d4e2c88",
+   "max_steps": 207,
+   "people": 120,
+   "rank": "b4f7485a31341e2107994d172cfc6b54e3ef5c1f362a739e0a9b5858911629cf",
+   "scenario_hash": "sha256:db23a2b574e52b99e4b41a4a65497ac6fee20fa11e3eee5250854e0e44a0e405",
+   "scenario_id": "g-1d6372a91d4e2c88"
+  },
+  {
+   "core_hash": "sha256:6d7bf111a109649a2f8a6f72b88871a528645e8a9fb2d898810c38c0f6f30ab6",
+   "family_id": "fam-2f08130e8cdefa2c",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-b692b37fe6591491",
+   "max_steps": 203,
+   "people": 120,
+   "rank": "ad9ffcb88258481079b9d0fcee1a94aef6be6f4abc55597b5d3a67ec0f6e7f5e",
+   "scenario_hash": "sha256:44e23b1c96227616ad0717ad07e8034a96a1bf505afa296a570504f4c9f3116c",
+   "scenario_id": "g-b692b37fe6591491"
+  },
+  {
+   "core_hash": "sha256:dd7f8afc1f57015591b1bf159ce21de1858ed50a70bea348734487c243cfad48",
+   "family_id": "fam-2582511797758c64",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-9e7bf311d99b5ee5",
+   "max_steps": 198,
+   "people": 120,
+   "rank": "f0f26011f5c8f8fe808c1d7ebbf5cf15f976ef732663fc4ec66f5cae1e537fb0",
+   "scenario_hash": "sha256:c25a1498e95071fa4f7ff891b2f620efb615ba61e57148f5f871a655c7d12db8",
+   "scenario_id": "g-9e7bf311d99b5ee5"
+  },
+  {
+   "core_hash": "sha256:82bf11b5c3ed0466114408b3debca395c273e95090dc25dae1d39aa6273f22f8",
+   "family_id": "fam-2f08130e8cdefa2c",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-53030ed4d09f3638",
+   "max_steps": 197,
+   "people": 120,
+   "rank": "1e8d734519487dee23b3ed2b8b6db181f982d26c18e2c3be30018b56bcd0476b",
+   "scenario_hash": "sha256:457ecbdefed53f4e818c425fe31ef3a1ed131c6e196f9a8faad68cb02eaa4f81",
+   "scenario_id": "g-53030ed4d09f3638"
+  },
+  {
+   "core_hash": "sha256:fac62308dfc812731d890456d42e21c770cc1f5be6a7493ab5ddab576ae0629f",
+   "family_id": "fam-8b07a1025ed9f336",
+   "fire_model": "deterministic",
+   "label": "unreachable",
+   "lineage_id": "lin-1833efa4dd054e4b",
+   "max_steps": 190,
+   "people": 120,
+   "rank": "609b32b77f55e3078a6c7f0d29d0c32443c08f189dce34bbcc73729c657943cc",
+   "scenario_hash": "sha256:728bcaf8f606fc38f2a860963d400053486d9e99792cfd0b3bfdee756ac72a1e",
+   "scenario_id": "g-1833efa4dd054e4b"
+  },
+  {
+   "core_hash": "sha256:57ad8aef799ae67df925420285712d77c83eed69f979f091334dbd53ca016e45",
+   "family_id": "fam-cda0e9782cd89ef4",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-96d986d2052d1417",
+   "max_steps": 167,
+   "people": 120,
+   "rank": "05bb5fd113de041b003f661e8bffc7588ef533734998acb34852fe0a24d039d9",
+   "scenario_hash": "sha256:3883fd2c7e1fc6798938eb0720c8e9868933dd3c813cab379a75357c8e63b73a",
+   "scenario_id": "g-96d986d2052d1417"
+  },
+  {
+   "core_hash": "sha256:1fc5d64951f8ded05335e84bcf09b3359a6f2cf9f162f4798730fbb745e49870",
+   "family_id": "fam-349e5a71b9f50060",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-813546e1ab6b094f",
+   "max_steps": 149,
+   "people": 120,
+   "rank": "fd4ad037b218d60da9c05ecedb0c89c3f03a8535f9e293b9c12e2b902913f2b5",
+   "scenario_hash": "sha256:eb87f7fe9c5c762b0e0252e1ec759af4717ea895137f8c4615249ff93d161560",
+   "scenario_id": "g-813546e1ab6b094f"
+  },
+  {
+   "core_hash": "sha256:6e988ca822ee4720ece33ca80469c69d86718781c9bb5e22e1dafecd17e4da28",
+   "family_id": "fam-872f364d45255ac3",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-4b58e4d3d0e6f460",
+   "max_steps": 135,
+   "people": 120,
+   "rank": "7d6b59ebe9441b910433f2ffa1e96a65c207a5bbcdffe3fe5089e4dbf5ecd2e7",
+   "scenario_hash": "sha256:8e25f9cf5fafd5614b5ca00345258d5e558825c694d4364e7f8b0372cf74d727",
+   "scenario_id": "g-4b58e4d3d0e6f460"
+  },
+  {
+   "core_hash": "sha256:2e349b0f3cecbb5f46872dbaf935bd77a93869c35a4a8244dd93e1db71d9bf97",
+   "family_id": "fam-a5a06cca73bcfb12",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-08f5fd629cca00ce",
+   "max_steps": 127,
+   "people": 120,
+   "rank": "35a922150e1b736b1831fb6ae1dbfaf9d5577ca00eacf1524dfb4dd8c5871015",
+   "scenario_hash": "sha256:4085ccce56643848ad9c2515723a560546b19a7a3d84e46a12520d78b2121e46",
+   "scenario_id": "g-08f5fd629cca00ce"
+  },
+  {
+   "core_hash": "sha256:066d5dfb07cdfdda6c628b34f90755493bfc2ec31c669d78b43065975bd33305",
+   "family_id": "fam-cf7548ce87fd7b61",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-9655b53de725243e",
+   "max_steps": 122,
+   "people": 120,
+   "rank": "043a24a71501f5f856f0f951fbb075f9a8a4f48904790aba9d14fecf55461e8b",
+   "scenario_hash": "sha256:1d568c861e1aadb4b437160e4e8ea054f5dff7c2fa5c3864156a9c3760b57667",
+   "scenario_id": "g-9655b53de725243e"
+  },
+  {
+   "core_hash": "sha256:3c6d8beba0569f4bfe74c8e08bd64a207c9a91883e5d1b8f62490ce5f7c5e2d5",
+   "family_id": "fam-76f7016179e556da",
+   "fire_model": "stochastic",
+   "label": "unreachable",
+   "lineage_id": "lin-3f02f29fe99ed001",
+   "max_steps": 122,
+   "people": 120,
+   "rank": "bac0ada21a8a5d12bc9540e1ae853714d112b8993bb454199dde2dd386683681",
+   "scenario_hash": "sha256:0f0166be00afa0841800515d9e2ffb68071c0840fd182440d8c438de7c302c08",
+   "scenario_id": "g-3f02f29fe99ed001"
+  },
+  {
+   "core_hash": "sha256:7de0abf728d3614d3cd7bc3b432e672b30c07f0789fe4e6e0c43b7bdc6805553",
+   "family_id": "fam-2582511797758c64",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-c48a81a54d6e5ab5",
+   "max_steps": 124,
+   "people": 118,
+   "rank": "a20701362aa767594ecbb1b6628ec1097ae09e5e94a8eced9ccc10bd62f31720",
+   "scenario_hash": "sha256:c1632af474b4c391b67c65138bf1a7068b8a0249e8bcfbd645515e0305156f94",
+   "scenario_id": "g-c48a81a54d6e5ab5"
+  },
+  {
+   "core_hash": "sha256:9593b90e33479d0b6b8dc48c6851765f6814e07eb199d682b912f5bfe2004f97",
+   "family_id": "fam-c027a695121f1d98",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-592c39d88a9160d5",
+   "max_steps": 109,
+   "people": 116,
+   "rank": "6880887cba59f45c3d40ce09cff4c69ef6dba1823869e51f84526969eccdf601",
+   "scenario_hash": "sha256:b7a73a91dec1173b4fff8d2e3994203f0aa814ea71d38ebd1c80739a6efb952c",
+   "scenario_id": "g-592c39d88a9160d5"
+  },
+  {
+   "core_hash": "sha256:bc4ef4ec8acd0811523cecc49ab44d07a7776d7af229ff4da64b828f6a32f45c",
+   "family_id": "fam-59e9dcf5b2a3a27a",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-5082bdcde677aea4",
+   "max_steps": 134,
+   "people": 115,
+   "rank": "a30a07c78bf15798f7a13f883dc5029c806ab27659e3c86dbfcf69d1895933d0",
+   "scenario_hash": "sha256:54f05807b587a5e7557f1e90b9b488f688d63c1c338def7cf8fd051ec1497c7f",
+   "scenario_id": "g-5082bdcde677aea4"
+  },
+  {
+   "core_hash": "sha256:8eacc637348a397e441fc9a9319e98d9f01323104efb39795c04aa1a95d16b49",
+   "family_id": "fam-349e5a71b9f50060",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-0ee55267388889cc",
+   "max_steps": 129,
+   "people": 114,
+   "rank": "ddca89dadc7903cd6e168d3e6a2df5cbc61192502ea60f009d84a287098a743f",
+   "scenario_hash": "sha256:45e5807ee9a0eaf9f5f38fbdc5e82b3463f35d65251fb953a05f618c34172294",
+   "scenario_id": "g-0ee55267388889cc"
+  },
+  {
+   "core_hash": "sha256:340525758ac6d65e44b455ff87148d68195ca7b785692bb476d2f3513780b3e7",
+   "family_id": "fam-2b163636edc667d7",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-645a06ba519b1527",
+   "max_steps": 156,
+   "people": 111,
+   "rank": "9177fa943779f46f098db2795adeff417f49007c3fd776734c756f2fd181031c",
+   "scenario_hash": "sha256:52d725e44c2b1b1124ccf9ba5d750cd140d7f7ab564522b75dddc655f001fda6",
+   "scenario_id": "g-645a06ba519b1527"
+  },
+  {
+   "core_hash": "sha256:eeb5c8b79d30af2f273cf3a38a43944e6340edfc8d128910acd9791fd4d52aea",
+   "family_id": "fam-8bb7eebd80558d4d",
+   "fire_model": "stochastic",
+   "label": "unreachable",
+   "lineage_id": "lin-b40b712b71ce7c2a",
+   "max_steps": 217,
+   "people": 107,
+   "rank": "4b8c232d9b30c7a9d96ad53923175f238e771b4e0f04d326fb0fe6c5fb647506",
+   "scenario_hash": "sha256:9dba1febcfc1bb6e3c18b47883ba61e17c4dc7de1ca7330a08ceb48387c55c2a",
+   "scenario_id": "g-b40b712b71ce7c2a"
+  },
+  {
+   "core_hash": "sha256:a73687686030294e22f4887bd6b355e7aae1145c5b067b5081f4b6039547d618",
+   "family_id": "fam-9bf8b4ab3eb6907d",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-9ca94babe1559237",
+   "max_steps": 169,
+   "people": 104,
+   "rank": "d47f8f92df9f10eccbfc44368dcc42b35ef652cdedec3118d5250d0c05ed2b69",
+   "scenario_hash": "sha256:f45f28a09298f76b3a52fbd34e627ea87b1399f1b2fa3d91a0ab848b1b1a0d88",
+   "scenario_id": "g-9ca94babe1559237"
+  },
+  {
+   "core_hash": "sha256:d42e33a6140b4912e3a4ecf533d5888b7f8a7972910d14ee51e9f83762fdd7ee",
+   "family_id": "fam-d3925ff6e7783a1b",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-8714431651ae3324",
+   "max_steps": 121,
+   "people": 104,
+   "rank": "16bd27598c03734c952166504acee2f2542c67354542a6581d3c75f7cf847ee5",
+   "scenario_hash": "sha256:c52a3045320f12433109fb51b7e2f154e55a78098eff58607e6ac2d1550737cd",
+   "scenario_id": "g-8714431651ae3324"
+  },
+  {
+   "core_hash": "sha256:1904fea23902fe9bd805ae2a5643208c7c9a91adedb028ceeb144b4345a86b90",
+   "family_id": "fam-2f08130e8cdefa2c",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-859498c686fa602b",
+   "max_steps": 189,
+   "people": 103,
+   "rank": "8cbef23b77d2ead2d4820ef0c7f64771190aadbff7fe05a503b00f10cfb7247d",
+   "scenario_hash": "sha256:12260fab068f9293a9c2fbfc8c433afe629ad5f0c7390dc72076aa46b9731235",
+   "scenario_id": "g-859498c686fa602b"
+  },
+  {
+   "core_hash": "sha256:7269b11d283f0d1283bc904b795b694e6a4247130216457143cd7e981b5a31da",
+   "family_id": "fam-68bb4e8a0e962c74",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-6bc0208509c807a6",
+   "max_steps": 283,
+   "people": 102,
+   "rank": "58f4189d3f9d0558c51f7a7010312f5fee97e66c9e9a0d4acf1340db16070ba3",
+   "scenario_hash": "sha256:0f7324aeff60f1fe6a44624eff80624404dda116fa103c2e5240eabc47e1b230",
+   "scenario_id": "g-6bc0208509c807a6"
+  },
+  {
+   "core_hash": "sha256:db8345ba245ba26f91f7d7b6520215dd63a1f0aaf2347f9fae3a79d4eff8d59c",
+   "family_id": "fam-59e9dcf5b2a3a27a",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-cc00b2c27a524170",
+   "max_steps": 130,
+   "people": 99,
+   "rank": "824fca898a42852b55a36658d72e7e22fd9b628068960e7b2f18804138b30946",
+   "scenario_hash": "sha256:bad50055a7bddc23f5c68854de582f7de385535b063d37dddef4b7ce8dd04edc",
+   "scenario_id": "g-cc00b2c27a524170"
+  },
+  {
+   "core_hash": "sha256:c351795f205be08d830bcccea63c1d174d8267f8f999b5f22261efb41e33e136",
+   "family_id": "fam-cb18a7ae2d90994a",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-ad0a0d951a8a3a48",
+   "max_steps": 162,
+   "people": 98,
+   "rank": "330a954ff9a15af218e7ff3375bdc2da0479165e08c82aa4864f9bb069d57787",
+   "scenario_hash": "sha256:a7d28c8c0e722805cc427aa5482b543e09c7d5106c5f7a0f06952e946cf39080",
+   "scenario_id": "g-ad0a0d951a8a3a48"
+  },
+  {
+   "core_hash": "sha256:c4f9c46535c2c1e3a7d4aff23b1e5dcf2a2f370b4879b7d4605848df517d2328",
+   "family_id": "fam-1cae1da017a53091",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-e30dac220967f0c0",
+   "max_steps": 104,
+   "people": 98,
+   "rank": "519b1cdd5d6bca5ca1ec21cf95d635851a05a6e426fe630dce6126a1ab093673",
+   "scenario_hash": "sha256:4f5756fa6333f16b19d5eee6e423db2b08473af52de5189dddfff7e57c6bffcf",
+   "scenario_id": "g-e30dac220967f0c0"
+  },
+  {
+   "core_hash": "sha256:909512b0530ae205908303f45f3b2ff1df480cc9ae1e23285b5e723eb7325b04",
+   "family_id": "fam-403e0fe807468a23",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-590903ab61b9ea10",
+   "max_steps": 166,
+   "people": 97,
+   "rank": "e7a0c80e6cfb754ce3e748a8b1f2bbff15ae9f8be3866565f211537e8becf835",
+   "scenario_hash": "sha256:c2a1d6260dcbbcf70685a867cab23644f9aa6204cfb3fa68b0b617cffc26972a",
+   "scenario_id": "g-590903ab61b9ea10"
+  },
+  {
+   "core_hash": "sha256:7f77d9540d37fca2060ae7ca6918cc3e827ef4ff014f3b25038144f21f75c733",
+   "family_id": "fam-a27d1fd56ab9a214",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-673c66e0077d2604",
+   "max_steps": 238,
+   "people": 94,
+   "rank": "770f8b403066b2ce2ae34c5694341ddf2ec24818fc70d910d6bf4281bdc474bd",
+   "scenario_hash": "sha256:1ba1690e2e664e74dffc5af56500596e622e5eae80c9aa6dff1fe86cc97d7352",
+   "scenario_id": "g-673c66e0077d2604"
+  },
+  {
+   "core_hash": "sha256:4c512abe8dc005294831d629914480ae57d7b9a8ea68104100d8ef3ba73f463f",
+   "family_id": "fam-9bf8b4ab3eb6907d",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-7281dc03640e5ef7",
+   "max_steps": 144,
+   "people": 94,
+   "rank": "814b253623ccad426d14307a4c14af827b1d1bb5ffac2730846395a4e718aac5",
+   "scenario_hash": "sha256:83d36c0cc457e28e6412251960d365922bb0f247f53cef697f9bb875c5df26d9",
+   "scenario_id": "g-7281dc03640e5ef7"
+  },
+  {
+   "core_hash": "sha256:2c6e1da5472a31914f1a100990b694df4ea98c69a394132f57a5b1925752279b",
+   "family_id": "fam-9ef84d1ec03b9e63",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-3725ccb1ca000e56",
+   "max_steps": 108,
+   "people": 90,
+   "rank": "788447b65f9426f7f74e15110e2cc4026cdf25357a9326723010098c806b58a7",
+   "scenario_hash": "sha256:7f3614c93f91abb6af0b0dd1c2bf4fed84a643403dcada303134496fc57567ba",
+   "scenario_id": "g-3725ccb1ca000e56"
+  },
+  {
+   "core_hash": "sha256:11a5c6472976d4b54f8be56e6ccd296a18c20f9fc3430f9889ea7c3bfa212bb2",
+   "family_id": "fam-0df4ac0270fcb851",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-fe862d8d20fc70ee",
+   "max_steps": 227,
+   "people": 88,
+   "rank": "ff4800cff9b40f71766ea9b40fc7a3c139be68430c8fb567f9f2f326360a3b4d",
+   "scenario_hash": "sha256:cad67834e7a04f923ea75577b5038574e60186dbb7a868f502d88ad43ccb6525",
+   "scenario_id": "g-fe862d8d20fc70ee"
+  },
+  {
+   "core_hash": "sha256:8fc1ad9a00aef33d0c8a215f8fcc4cb9adb4d7a799f8824daeecf55b5b62e95a",
+   "family_id": "fam-a5a06cca73bcfb12",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-1702706048b6449b",
+   "max_steps": 203,
+   "people": 86,
+   "rank": "5e5947128d09f8dd9e667d98abd9fff3820abf791b352befe59ffcbc78496317",
+   "scenario_hash": "sha256:9aeb68b9818749ea3ea5d6872d055979296d16649ccddbecdae5a0538dc20f8b",
+   "scenario_id": "g-1702706048b6449b"
+  },
+  {
+   "core_hash": "sha256:4e319db9cf131a6aa621a669f10bf7cfe6d07292809df5bf6afa9b6a39008bd8",
+   "family_id": "fam-0df4ac0270fcb851",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-134316d9ca753e27",
+   "max_steps": 191,
+   "people": 85,
+   "rank": "92aff0e3501052e6ca72bcd3be12166e048d8d2b0a0bb68a238e3000ea663802",
+   "scenario_hash": "sha256:338c18bc2b331a8a16a40e835c4d7eee8d2638767715214dd12f5c8d17b3a385",
+   "scenario_id": "g-134316d9ca753e27"
+  },
+  {
+   "core_hash": "sha256:d344a13273e64fbb78299adc16afd4a9f20ea1c9d5d2ca259999f14d7542d390",
+   "family_id": "fam-5330683102a7a685",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-5964484e59eba2f0",
+   "max_steps": 109,
+   "people": 79,
+   "rank": "a689f66e137e2c660e1799ed9f9133ffde8cf89381286b826758e0882d5753a8",
+   "scenario_hash": "sha256:791491ba60c4fb8eeed6c54df704c022bae8080c124be80e76caf23f2d8dff0f",
+   "scenario_id": "g-5964484e59eba2f0"
+  },
+  {
+   "core_hash": "sha256:b0a81997e6e4bc5ab142b9a0022a45fc60bf49b2d7737a00016aeea5a2572b7f",
+   "family_id": "fam-403e0fe807468a23",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-339da8ab3ba6ed80",
+   "max_steps": 143,
+   "people": 78,
+   "rank": "37e7d519b3686091c6e86c67e27293acd6527b4395614f78708564cd2a56694a",
+   "scenario_hash": "sha256:f5984bce6dcd9dbc17c5789d534dfe028391f353cc1722a0059bd2f516eeb8c1",
+   "scenario_id": "g-339da8ab3ba6ed80"
+  },
+  {
+   "core_hash": "sha256:060510a43060bcdf431598ed664171e8a510211ae84bf456363f9da1bb9be222",
+   "family_id": "fam-f714b007a753ec5d",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-37a04f89be3ab19a",
+   "max_steps": 138,
+   "people": 76,
+   "rank": "ed47e563ce0e6d293310169a7cef927e9a6e542ef628a0b4eac572799c8fc5de",
+   "scenario_hash": "sha256:4cd1265b87985b9d64ab1e2c2494999c395e69b37a176cd11b124449af9ef2ea",
+   "scenario_id": "g-37a04f89be3ab19a"
+  },
+  {
+   "core_hash": "sha256:781eafd97f17090a29ec1a1cd0e5926779d2079fde365a1043425069b76857a8",
+   "family_id": "fam-cda0e9782cd89ef4",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-5bf033109b31daf3",
+   "max_steps": 160,
+   "people": 75,
+   "rank": "d9298f9736fe9669ffbbf8ede24cbd4a68e7f258120d835543c689d4248452c4",
+   "scenario_hash": "sha256:4d33d10f5b9e6c920a78a4643290a7714d257360f77849d659357b952da49e0e",
+   "scenario_id": "g-5bf033109b31daf3"
+  },
+  {
+   "core_hash": "sha256:df6ad0e99f7f7f04864ec8c42c1a9966d428fe97eb93d6b0f091495f1edf18e8",
+   "family_id": "fam-872f364d45255ac3",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-27adeca7ae27899c",
+   "max_steps": 276,
+   "people": 73,
+   "rank": "693f12e089cbfff79f05725b04d5650dcf8c422ec0bd44e03ae46b6d57927da3",
+   "scenario_hash": "sha256:1c3cfe16478a403ea7c7c1a6484633d8dbe6c3c5a9015818f0dbda9eb46ea80c",
+   "scenario_id": "g-27adeca7ae27899c"
+  },
+  {
+   "core_hash": "sha256:320cf9ede6ad805c629b33e5ebfb347c98c5e3c3a7a8332ab16da9fc90a04fbe",
+   "family_id": "fam-9ef84d1ec03b9e63",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-a73f93f6af2ceb55",
+   "max_steps": 154,
+   "people": 73,
+   "rank": "6a6a36c62c74b222f31115ced8d18730ad9737b8ec5cfe459cec148b1cbf9c71",
+   "scenario_hash": "sha256:7dcd296ea574ba1c3c232076d6460f48dd03133f5be4b3d1b9214bfbc4360f08",
+   "scenario_id": "g-a73f93f6af2ceb55"
+  },
+  {
+   "core_hash": "sha256:5f5a8b0c0fdffa34df5c724f1715c07d1f5424140e84a481b8e35f649a1a81f6",
+   "family_id": "fam-e3d24d229094d193",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-981d266803f4c2aa",
+   "max_steps": 154,
+   "people": 73,
+   "rank": "9ed79bb5765120746c1d5487d68d4efb7a8828da42852bdb80cdc5e9b8efbd2c",
+   "scenario_hash": "sha256:92eb397a41fc78034568d67f21eb3c9aec1ab850e3d712a8c57ff6554346afd6",
+   "scenario_id": "g-981d266803f4c2aa"
+  },
+  {
+   "core_hash": "sha256:d483d38660f5f8d5672ae9fd10fb2c97ae3b6dcf46116a38a51746845e3d1ff6",
+   "family_id": "fam-a1914d1bc8b27d10",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-05a9b1a6fb96b680",
+   "max_steps": 220,
+   "people": 72,
+   "rank": "27d003c72fad1484575f0a89fabfa640dad35584bfd0ab0259cab60373338ddf",
+   "scenario_hash": "sha256:e6d8b6b7db2e5a3dff8841e430cc7b2fbe26ef87e1c33211fd156b86e1856b1b",
+   "scenario_id": "g-05a9b1a6fb96b680"
+  },
+  {
+   "core_hash": "sha256:1f2ce6a75b606475e2d3e2ad0913288bee4805ba0253981b15ef472b95166f63",
+   "family_id": "fam-2b163636edc667d7",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-a5506e24be223a28",
+   "max_steps": 196,
+   "people": 72,
+   "rank": "9467bebcfdfdbf7747c062a5f6d2c39bd3be16807005d2d35966d8aaa79b9c50",
+   "scenario_hash": "sha256:b57fc0fe6c52857f9feb87329532c67099e7d816cf2da3d517d2f919e25ba7d8",
+   "scenario_id": "g-a5506e24be223a28"
+  },
+  {
+   "core_hash": "sha256:7a1cb4be3c564c0506f89b233d1b98e0f98860c00171aa18309360eb8388feb7",
+   "family_id": "fam-e3d24d229094d193",
+   "fire_model": "deterministic",
+   "label": "unreachable",
+   "lineage_id": "lin-a60679a1297bcb2b",
+   "max_steps": 178,
+   "people": 72,
+   "rank": "ecf3fb2c25aae49d6734ae0d609bd3bdefde6c74c67173e79e4221099793e4b3",
+   "scenario_hash": "sha256:3e7e9196ee0767dade39b6044b4d540384cf29a31c8b5dc0a7fb056a00832553",
+   "scenario_id": "g-a60679a1297bcb2b"
+  },
+  {
+   "core_hash": "sha256:767f82d5782b6ed6993bd3ae5cb4be7bd04693441c31e3cdb3338dff83a1d131",
+   "family_id": "fam-1cae1da017a53091",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-b50514c9e5fd4ea0",
+   "max_steps": 104,
+   "people": 72,
+   "rank": "48e9ae96f1207cbddc82b1d0150f11f5935c4898276eb95f2d4e09b9318d85f0",
+   "scenario_hash": "sha256:d0f4825cbb5ec44900f93c0ab5ccc958fde14edb178ef18b4f4f6f668d5343fc",
+   "scenario_id": "g-b50514c9e5fd4ea0"
+  },
+  {
+   "core_hash": "sha256:0ced739d7dd313bb2d7f86ef7a48cf6f9ac23d3e9f50bc79a65a2b867a778aa9",
+   "family_id": "fam-022340cd9c66a942",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-843e5338913a61a6",
+   "max_steps": 172,
+   "people": 70,
+   "rank": "cad6bb57d612a42e4c50f13cf9cd7760102ee36ad16761b4a0fbb330c7b6103f",
+   "scenario_hash": "sha256:7b3d48df0d8c500358804611ed4dc416d3393fb5a1cb8790fd1a0c20adade142",
+   "scenario_id": "g-843e5338913a61a6"
+  },
+  {
+   "core_hash": "sha256:f3ef4c3934270a7a6de71a5ca693e3411176fc116f06a736294147a37da375e1",
+   "family_id": "fam-5330683102a7a685",
+   "fire_model": "deterministic",
+   "label": "unreachable",
+   "lineage_id": "lin-525081107b864f7d",
+   "max_steps": 232,
+   "people": 68,
+   "rank": "090cc5e405393f662ff0f8898a9e550e669fed00c13b19f28fe24953d383b886",
+   "scenario_hash": "sha256:e740f1a9e42bba0f2ef74ba4d56c9d883ab128b1062ac61e68e75155b5ea9c8f",
+   "scenario_id": "g-525081107b864f7d"
+  },
+  {
+   "core_hash": "sha256:696dd76f6e07df0c4e990948f17c0da6812697a08d4869aaf267608c5901f79f",
+   "family_id": "fam-1cae1da017a53091",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-1a9985e23275ac4e",
+   "max_steps": 148,
+   "people": 67,
+   "rank": "b22bc221a800144ef7dc226f3744cf0ac1115a77ed63f62c663421074edb0102",
+   "scenario_hash": "sha256:201b6019f87ae1a2aad106e850d29dff57673046c3e8854ab617bb93a0012361",
+   "scenario_id": "g-1a9985e23275ac4e"
+  },
+  {
+   "core_hash": "sha256:12426f9d9ac118fbae8f310990b0166c47d99a9e05e1576c1fadc356cea73f66",
+   "family_id": "fam-f388fe3b7e57ed9b",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-2248b8450630a6cc",
+   "max_steps": 143,
+   "people": 66,
+   "rank": "e1ef40d71123e502f4dfc6a3955e3d197bb7370b5db64e1980158d21c660d0bd",
+   "scenario_hash": "sha256:ed801737f50a6f2fec14c55b8b6c2cc5ea9e1d67709e50584efd386c6901d30f",
+   "scenario_id": "g-2248b8450630a6cc"
+  },
+  {
+   "core_hash": "sha256:e22796e12673d1d94900953cd9a1034ff527b8c0aa33701e53cd739aa1d81258",
+   "family_id": "fam-c027a695121f1d98",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-58a192b8045ed5b2",
+   "max_steps": 98,
+   "people": 66,
+   "rank": "bf5479b6f0a9c45933a90c8898e4b02d63a01f3ed69ffdea6157d07a274adbe6",
+   "scenario_hash": "sha256:7cbbf13afa25957af092adc47f57ad7a1d319f16a144f1afc42eb70ba93e24b0",
+   "scenario_id": "g-58a192b8045ed5b2"
+  },
+  {
+   "core_hash": "sha256:f458c1a70561919a3e0c4cc611b6b766d2059f50de6c63c4dd2cd9705411fc7d",
+   "family_id": "fam-5330683102a7a685",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-7aa74cd8ddab1897",
+   "max_steps": 165,
+   "people": 63,
+   "rank": "9c195d0512465adc7d2ff365f347296871ca744e51ea470450d52883dd82f25e",
+   "scenario_hash": "sha256:bf06b58e30eae7d65d7220a0542008124a42f4a31256f4e50a4671c90e76a82b",
+   "scenario_id": "g-7aa74cd8ddab1897"
+  },
+  {
+   "core_hash": "sha256:3b8a5ab45d794ba5e186d6dee2210143ec6148dddd8c13d372218484ac0751c1",
+   "family_id": "fam-349e5a71b9f50060",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-5213de4813e992bb",
+   "max_steps": 157,
+   "people": 63,
+   "rank": "63fe88ea5602d977b9ff53e750cabcc668b4f79a7accbab0dbed2c7547f36f77",
+   "scenario_hash": "sha256:3be397bb1397a08c4552719389ee93b75d3cf2a6cceea8f7dc8da65dff30f95f",
+   "scenario_id": "g-5213de4813e992bb"
+  },
+  {
+   "core_hash": "sha256:a114a810a2a484ee7e0599d17f3fbb510b9f52eccdd99762cb4549e2f75137c6",
+   "family_id": "fam-872f364d45255ac3",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-ce3a77b4f8fd4587",
+   "max_steps": 131,
+   "people": 62,
+   "rank": "1e7489e58def73a7e98b3201a8cc8e2289de36254689b70b0371fdfd6d5a18ba",
+   "scenario_hash": "sha256:41257238ed1b15622b3bedf37b5035daa2853a940259ab6c8c0bbaa4d58bc4a0",
+   "scenario_id": "g-ce3a77b4f8fd4587"
+  },
+  {
+   "core_hash": "sha256:4102a93c9dff4f02f6fa2173b25b554fe300b9e2594a75e87b02c8129b41edd9",
+   "family_id": "fam-7d523fa5a3462faa",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-feea9b484fe754d8",
+   "max_steps": 124,
+   "people": 61,
+   "rank": "fffdcb662a07fd089747ac3cc4c52ad6c01d92cc6143ac7319dbd5429070cbc3",
+   "scenario_hash": "sha256:4cec9ab05777093dfa299d3364f8b191414f2c743e7166f589a2d4e4fba78f8a",
+   "scenario_id": "g-feea9b484fe754d8"
+  },
+  {
+   "core_hash": "sha256:b4f405ce7178098693e02200274f60877c6cef611d5de38c92c6f4fdd9e5f17d",
+   "family_id": "fam-481f1ceceaf162b5",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-ef23bf878e504b03",
+   "max_steps": 230,
+   "people": 56,
+   "rank": "1aa812775867f4c5de8cbf8b219e4cd46acafb68f99eeee7c9b247313576b6ad",
+   "scenario_hash": "sha256:1667fd401808a168c51964ea67a8f1d60d199922e5e4b0b9c372048992133843",
+   "scenario_id": "g-ef23bf878e504b03"
+  },
+  {
+   "core_hash": "sha256:f00ce6727a1c8cc602aefc9401a9d085f43b756988865e8315f785c158773457",
+   "family_id": "fam-6e07786d558363b8",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-0967f7cf7737a582",
+   "max_steps": 224,
+   "people": 56,
+   "rank": "8a979ab1a9ecc74763b90a2c1d09808674b4771cb4a859d114986e32f26b9837",
+   "scenario_hash": "sha256:02fb05aa060cc7ac0db6c01bd0a12c822b9f3b9167bcef6c93957ac73d0156e7",
+   "scenario_id": "g-0967f7cf7737a582"
+  },
+  {
+   "core_hash": "sha256:f8f62a2250eb7955b29f38cf627e6da66a9205e4aeef543e7905a66e861ea7b9",
+   "family_id": "fam-022340cd9c66a942",
+   "fire_model": "stochastic",
+   "label": "unreachable",
+   "lineage_id": "lin-aa2357d50ff80652",
+   "max_steps": 183,
+   "people": 54,
+   "rank": "ede22f363f0d228597e9095b88868d67b6250316263c735e610f85f35e0fae2b",
+   "scenario_hash": "sha256:3397413db72f82246261e0998abf11cc25a26258fc1c52be1b13e62c7031e22e",
+   "scenario_id": "g-aa2357d50ff80652"
+  },
+  {
+   "core_hash": "sha256:8e5cbb01262c9a0094494299b651dc23fdd109f76629703892080ab07c68b597",
+   "family_id": "fam-3de0109c7324e29e",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-f0217bfad24caba2",
+   "max_steps": 212,
+   "people": 53,
+   "rank": "93f5ec85379019b2a0607718c0cdf3f23bb37689301e6199e1763a31f4471b00",
+   "scenario_hash": "sha256:558db8d8e32cdd5c6f29ae4ea76ed3c6ac9e7ccf057238acd5488799f399e9ca",
+   "scenario_id": "g-f0217bfad24caba2"
+  },
+  {
+   "core_hash": "sha256:531d02ff00e261539f9be569ef450dad0dddf42f37f348658a903ce737465178",
+   "family_id": "fam-e3c2c670abefae2b",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-a7508ce67aae33c0",
+   "max_steps": 126,
+   "people": 53,
+   "rank": "4d344af3b498a6d94ec19cad07488a7007f67f2ea7475facf68507e96fcaee84",
+   "scenario_hash": "sha256:9efae56ce8fda40c8c67d3ef135fc66c97ef7f1c9b4556a56e3f259b6d534126",
+   "scenario_id": "g-a7508ce67aae33c0"
+  },
+  {
+   "core_hash": "sha256:1c5ce024b694e19c13683d82b44d900bdba9ebdbbf9808827851d33f72d579fb",
+   "family_id": "fam-069a0c434d9d0e33",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-44f1e96b951b895a",
+   "max_steps": 83,
+   "people": 53,
+   "rank": "8eb1e213dba14e594d86d919b422d7830cbfe2d82351b24f8f7bcda19c4ccb30",
+   "scenario_hash": "sha256:b31ad1f9fa2297ffa9ce5255edf4036018f8cd2bcbcbc1f58527611ec86eee5d",
+   "scenario_id": "g-44f1e96b951b895a"
+  },
+  {
+   "core_hash": "sha256:74f6588a8239a1200bff8a7ae0db7b7da42a3d32edc20cee8b7bd16fea171236",
+   "family_id": "fam-ba1e3ef1b4331337",
+   "fire_model": "deterministic",
+   "label": "unreachable",
+   "lineage_id": "lin-868762f567665bf4",
+   "max_steps": 106,
+   "people": 52,
+   "rank": "a0401ab53aa5113483d3440c3fb5da44f9474b160c0e6f647b2426d1d5f61de4",
+   "scenario_hash": "sha256:6e6dab37377ca76f5574139c550354b50e8617519d4f6b0db24c98739fb91313",
+   "scenario_id": "g-868762f567665bf4"
+  },
+  {
+   "core_hash": "sha256:1f29766013c58bf24ca7dfebece7c8a161599d5ed645199941784b7b1e4c8a2c",
+   "family_id": "fam-cb18a7ae2d90994a",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-9ffd354f21e820c2",
+   "max_steps": 144,
+   "people": 51,
+   "rank": "364221fd71d99844c06298105b20a8151fc5f9096f572a6350bd4e400ede33aa",
+   "scenario_hash": "sha256:c2afb64d9972253529b89f1992abc0d6f1df16e38383ff876735af01751a02f9",
+   "scenario_id": "g-9ffd354f21e820c2"
+  },
+  {
+   "core_hash": "sha256:f6fbc7316e8c48c9652a3fabd537866158937ca9729a393d72ff201ee4877feb",
+   "family_id": "fam-ba1e3ef1b4331337",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-55c425da64ec8387",
+   "max_steps": 74,
+   "people": 51,
+   "rank": "88c9b7bc6d36cc3c94cc640c67b42ba6d2b6ef34f0fed36cfed749943249d6f0",
+   "scenario_hash": "sha256:c50239361db30e50270daffa043b7daf5dc251237cf77ed54e7025d808aa9e8a",
+   "scenario_id": "g-55c425da64ec8387"
+  },
+  {
+   "core_hash": "sha256:707277aa0dd4bbb14b2f4a3ab50aea355fb92294374cfbfda90a51d84bb49979",
+   "family_id": "fam-a27d1fd56ab9a214",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-1f4c91385316cc71",
+   "max_steps": 178,
+   "people": 50,
+   "rank": "a4b8bd76b8aa06f8fe9db8449a201fa8299616f592be70101bab711d5cb9c3cd",
+   "scenario_hash": "sha256:7bbb7f5f692e3bc09a42258b15809a79512372515ba458762f87830c74a122b5",
+   "scenario_id": "g-1f4c91385316cc71"
+  },
+  {
+   "core_hash": "sha256:4fc8a0acc4f93552fa867a696c0c4a42ad7519659defd9f273769b6a72bf6d78",
+   "family_id": "fam-68bb4e8a0e962c74",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-e5bdfae1ec8e1b79",
+   "max_steps": 143,
+   "people": 50,
+   "rank": "1335569081d86b97e5a5d0a4a9fcf5a3a5af94d3b5f8a866a6fd826220c0b1e6",
+   "scenario_hash": "sha256:59f7b4c9e8becce6c7e4dfad9352db050d1954c813307558466d220959f1c46e",
+   "scenario_id": "g-e5bdfae1ec8e1b79"
+  },
+  {
+   "core_hash": "sha256:f1d87ea8f12e30a68c5b283fc292197cc62d51bf6d75664aef70b6c5da5e56b8",
+   "family_id": "fam-9c0416f104b726f7",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-ce2bd1395b8f8004",
+   "max_steps": 260,
+   "people": 49,
+   "rank": "63731a31992991d6316f9ecc701256e3aedb8511befea237ea41804aca0ca13e",
+   "scenario_hash": "sha256:6b85570a6ecff298ff18bc21f74c9b32e74436d8b082c4e7252eaa397d0a3ffb",
+   "scenario_id": "g-ce2bd1395b8f8004"
+  },
+  {
+   "core_hash": "sha256:b8bf39e9ad590a44c9b35cde2f033d898f6b36e7d4d1294d0c445e5cebd5a63f",
+   "family_id": "fam-8bb7eebd80558d4d",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-0672d27f74bdc0f5",
+   "max_steps": 242,
+   "people": 49,
+   "rank": "4f5a0677d859bcd4e5c3e650eae2e87d15eccc63006a5e4a7e6f3247fd771041",
+   "scenario_hash": "sha256:98a4442e66987eacace079cf8c097f7871b508e7cee7667884e70961fe556ee9",
+   "scenario_id": "g-0672d27f74bdc0f5"
+  },
+  {
+   "core_hash": "sha256:3e506380c84a5b45cefc4e7896cfb1e20a5246869c8e4a5f03d635d74de31403",
+   "family_id": "fam-481f1ceceaf162b5",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-8bae8d2865f0cc9d",
+   "max_steps": 195,
+   "people": 49,
+   "rank": "35443386c5ba9ba9c61f6eb1786ac61a7683adcd072383c9d718d4a807909cc6",
+   "scenario_hash": "sha256:ecd57785ce4fb170b23fd2a0ec7403d10ad23be1c6b6d0f9d2fe3da3dfe5e307",
+   "scenario_id": "g-8bae8d2865f0cc9d"
+  },
+  {
+   "core_hash": "sha256:5f9dcda5c39ad1c0bc543a109986e93db9e3b0cf25bcc29cceda3828dcde63dd",
+   "family_id": "fam-6e07786d558363b8",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-3ee0d2dfedfc65ed",
+   "max_steps": 122,
+   "people": 49,
+   "rank": "59b239d45cfdd3c477d40096b315a4c02b193da704889920d3b74decc6ca88a9",
+   "scenario_hash": "sha256:ec99be3c5640fd17ae25f97c7d4ebb69a02a64e8778bdc83dbe21958cf7410d4",
+   "scenario_id": "g-3ee0d2dfedfc65ed"
+  },
+  {
+   "core_hash": "sha256:e7328e09f8f4d669e68c4a6da62e30886fc39996e75768d6a67ae2b057ac897c",
+   "family_id": "fam-66236c529172ba49",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-40d389e5ba4383ca",
+   "max_steps": 254,
+   "people": 48,
+   "rank": "9574496e5957729773800500fc4a6d58cc3807bf3799bf65250e1f3e8dfc2fea",
+   "scenario_hash": "sha256:282f1626cddf3a74e4e9c95516348975ad376917eb0831af6a3b88e4280b23cb",
+   "scenario_id": "g-40d389e5ba4383ca"
+  },
+  {
+   "core_hash": "sha256:96bfb1631255e611d64ca0461f88a6dd5d6a1354514297aa62005197d68e7a50",
+   "family_id": "fam-b31994dc6f5d7f16",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-cb03f8885edadc9f",
+   "max_steps": 82,
+   "people": 47,
+   "rank": "d0891989dbfb8582ad785b9c9e0e8fbd2724f279c860dc9c6d1f1703bcf37c89",
+   "scenario_hash": "sha256:34780e36b0dfa4ede504e983b9d13d1712d00685fba88d5c511ab01ff77bcdfd",
+   "scenario_id": "g-cb03f8885edadc9f"
+  },
+  {
+   "core_hash": "sha256:29db4be7950490236bdb43ef5d85a6ed43f2245aa26b2b3450217776f9ef4c33",
+   "family_id": "fam-514ba4d9f9c920d9",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-1a8b6230b6107b0e",
+   "max_steps": 109,
+   "people": 46,
+   "rank": "b14340a9e8d912810a0e993463466797e75c005b4cb55973aba510846b3690c1",
+   "scenario_hash": "sha256:07635cf78bd747464e6e97be8b6260240bb051ea05625df084c9044c44eabf75",
+   "scenario_id": "g-1a8b6230b6107b0e"
+  },
+  {
+   "core_hash": "sha256:f5a85d0747dcb41d1ff30326b203dda4bba963ca96bf97192753420982b05db0",
+   "family_id": "fam-9c0416f104b726f7",
+   "fire_model": "stochastic",
+   "label": "unreachable",
+   "lineage_id": "lin-836260a0086ea586",
+   "max_steps": 122,
+   "people": 45,
+   "rank": "5bb0b2ae732cbbe381a74aa648269ebad367d43ac7714db90de715bc7bf31787",
+   "scenario_hash": "sha256:318e2536fdfdd4aecbd36881f4f44a1c82596c90b13371d216c52d8c87375046",
+   "scenario_id": "g-836260a0086ea586"
+  },
+  {
+   "core_hash": "sha256:92b8f6e2aeeb7764961c91660be5b790d9529fbde0624329cf1bbbb87692e2f4",
+   "family_id": "fam-68bb4e8a0e962c74",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-750bb4b60fc963d4",
+   "max_steps": 256,
+   "people": 44,
+   "rank": "1c4bcae8e931b84ed343856d745f6580c087866224d23bbf2bb3230346d12577",
+   "scenario_hash": "sha256:ad0da8473558233b5f3b4fcc06e71aa88bdd3275b22f73a08a656ae25a46cd5f",
+   "scenario_id": "g-750bb4b60fc963d4"
+  },
+  {
+   "core_hash": "sha256:bbbb5657c9310721de741e2494bfe68c00c670281dd3af4b2d3f0ceab4a0a178",
+   "family_id": "fam-9e657c609d28b8e6",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-7227ba65d0a2146e",
+   "max_steps": 159,
+   "people": 42,
+   "rank": "b411730c3b5e759a085373bd8580c7e13532f8f6abc160f10025476274301413",
+   "scenario_hash": "sha256:d8ecfe35a066de05ac458aceb4105ae728849a282b8bd36c5cd21f6b522a9857",
+   "scenario_id": "g-7227ba65d0a2146e"
+  },
+  {
+   "core_hash": "sha256:e4c11294dfbbb2b4b5749e20276597d49a3033df4cac4e6908af77da23fbbd17",
+   "family_id": "fam-e16c7e74c7c5365c",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-0995ac00857eebde",
+   "max_steps": 126,
+   "people": 42,
+   "rank": "bd7050e33a210abf75e18a35aa1ccd0f8748b859fad2254e14e3c8f2d2ef7359",
+   "scenario_hash": "sha256:9fe29fa6d2bdd2242c863e1b7e87808fe288e0fad4237b205ae9d300c0e048a1",
+   "scenario_id": "g-0995ac00857eebde"
+  },
+  {
+   "core_hash": "sha256:edff5410183d237f833495c2f43959610b6b48ca1c8f6ca6bda4fb1bfdaf1d34",
+   "family_id": "fam-e3c2c670abefae2b",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-05d40c6ee791d30a",
+   "max_steps": 108,
+   "people": 42,
+   "rank": "36ccae5e15a5151f2794b1ca6c311582e9bb385a6c2c897cafd5789a2f829a04",
+   "scenario_hash": "sha256:61a66d3bda7b0efedad27a15833c2ad425e2b3998df240669e1bb6fb93d81969",
+   "scenario_id": "g-05d40c6ee791d30a"
+  },
+  {
+   "core_hash": "sha256:c8b3b3e22d706bf6eb0efc70c8e4da2a378a120b4efe3841346d21fcba96c221",
+   "family_id": "fam-0df4ac0270fcb851",
+   "fire_model": "stochastic",
+   "label": "unreachable",
+   "lineage_id": "lin-ce63413098d90e82",
+   "max_steps": 222,
+   "people": 40,
+   "rank": "aab4aa6fc5f575457b3e850da9fbfeb938cf680b14fd5e391913d3bbd28f011c",
+   "scenario_hash": "sha256:793b031a86a590dfd1b4e0b438629ab8ad1821149d24a364f855a73377f82820",
+   "scenario_id": "g-ce63413098d90e82"
+  },
+  {
+   "core_hash": "sha256:70720ed3d74b2e389546b6f1ff627bc6cbabf4bc1bf9d04971ad6109e110e24f",
+   "family_id": "fam-b9783af11e19d16a",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-9b4e93644dc90d58",
+   "max_steps": 148,
+   "people": 39,
+   "rank": "1312e294b67493dbcbf0bc5a8cb5a51c569afb1ebe684f373a3fea292fd01a27",
+   "scenario_hash": "sha256:e27e108ac6f604670c2ad9d99e4fbd32e96c5df8a23c8c92353cb71dcb3c7843",
+   "scenario_id": "g-9b4e93644dc90d58"
+  },
+  {
+   "core_hash": "sha256:3455b10fc738084f637e1aa7d89eae71ebe05d4bd5217c4f972259a301810fdd",
+   "family_id": "fam-e16c7e74c7c5365c",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-fa22d4ca2cf0fdfc",
+   "max_steps": 157,
+   "people": 38,
+   "rank": "7abefbee57a38bc50b96b8780348cea4b548d13f553da3a2c9c6355db4a916a8",
+   "scenario_hash": "sha256:a06516651478be0c98ec226cfd7e0b5fc9087317eb0a63ebc1abe94e14a6195c",
+   "scenario_id": "g-fa22d4ca2cf0fdfc"
+  },
+  {
+   "core_hash": "sha256:2f7038ca336e769bf67dab0fc36908b24c5362b3122bec3b7eda5797b5f28ce2",
+   "family_id": "fam-e16c7e74c7c5365c",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-2e3ac555e9850688",
+   "max_steps": 86,
+   "people": 38,
+   "rank": "6ff9ed4ac577966b38cbfd10678b95d3815b9e77e435186e99b3254f58a95e93",
+   "scenario_hash": "sha256:bb2dc879df664e747892a620e86d3d2d6277917f2fae3c3ffe685dd7c023f558",
+   "scenario_id": "g-2e3ac555e9850688"
+  },
+  {
+   "core_hash": "sha256:f6a49399122585fa1c31317876b1451b6666f77c5e9cd76dff880c2950ae6acf",
+   "family_id": "fam-514ba4d9f9c920d9",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-837b2aace4f90bfd",
+   "max_steps": 82,
+   "people": 37,
+   "rank": "d4e56fe18f8b30bcf706d8b0d8b5db65feff59963fb7492cf1bb51a9a805689b",
+   "scenario_hash": "sha256:d03ad4ca265b057f7945e94c548d01d3adb6797770c766d9497debeeca8abad8",
+   "scenario_id": "g-837b2aace4f90bfd"
+  },
+  {
+   "core_hash": "sha256:cc32b50604f4997be43ea1c7bcda34944b7ef1e17f95bce73bc5e69bafe4ac38",
+   "family_id": "fam-ecced7361f01e820",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-5c4a95d0cc57468e",
+   "max_steps": 110,
+   "people": 35,
+   "rank": "c2a8a822c1ac950b4c154da064e0bc8376efc4681e4d4e31036314f193e3b701",
+   "scenario_hash": "sha256:3c36122cf041595e1dbb203596a030a753143aa285e34f7af849e1df6913f285",
+   "scenario_id": "g-5c4a95d0cc57468e"
+  },
+  {
+   "core_hash": "sha256:90d521ee1486cbf65b3199bfc13d612a1faab12839f09ec06db4009bf98ce93c",
+   "family_id": "fam-a0a3780b6d702f75",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-6549b92f69b34295",
+   "max_steps": 86,
+   "people": 35,
+   "rank": "56da534a23e7496644d41d2faeddaa6cedb0fad2687cf7f60622ee7a62f31cd0",
+   "scenario_hash": "sha256:631b8984f287c8598dec3c84e296ee16a3b3cfa386f2130612410ab7e4f27b72",
+   "scenario_id": "g-6549b92f69b34295"
+  },
+  {
+   "core_hash": "sha256:8854ea78c48cd06fdb8c4830ec1df62524dd7b2a70f7138dc12a5a92034ed51c",
+   "family_id": "fam-a1914d1bc8b27d10",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-c636d9db3319bd40",
+   "max_steps": 183,
+   "people": 34,
+   "rank": "6dab0c256c45c08ba4905eed51d1632700a84cb5f595761427946756b2cc8c9a",
+   "scenario_hash": "sha256:5ef1eb411e2e36bf9ac8e57c0a97766b73ddca8df23635764d43b16618ed5ada",
+   "scenario_id": "g-c636d9db3319bd40"
+  },
+  {
+   "core_hash": "sha256:ffdb7c2532c38aad5f002afb39aa84d188f1e0fbb20fddf069169d3e12a672e1",
+   "family_id": "fam-9e657c609d28b8e6",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-c7d1e9d09ba98776",
+   "max_steps": 134,
+   "people": 34,
+   "rank": "cf8e72905648272d64d689b32be6c48f6b79a3c1224abf87a0dcd65dccb7f421",
+   "scenario_hash": "sha256:03c151ef5cc4696f49c02d3248d838fad144f4e1e95ad345bb1bfa18642f52e8",
+   "scenario_id": "g-c7d1e9d09ba98776"
+  },
+  {
+   "core_hash": "sha256:4afa4272e02f9e9723f52a49266ba07e81a9431cca4afe21476886a19707b47f",
+   "family_id": "fam-76f7016179e556da",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-7b84169d2fea5737",
+   "max_steps": 207,
+   "people": 33,
+   "rank": "80f50d4289a0a2c2cdbf6adac7d30fb8e059b8abbf19a6f44e4bade2c18258fb",
+   "scenario_hash": "sha256:509a62dacd51921b348f31f26e518ee3b822cd03495a4be8770466bef5fc1286",
+   "scenario_id": "g-7b84169d2fea5737"
+  },
+  {
+   "core_hash": "sha256:e920abc1f0642dfd94bf39d376aaa9ce0e9323d4b0e3366e31330beb51077d34",
+   "family_id": "fam-b31994dc6f5d7f16",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-6dfef26f38a144d0",
+   "max_steps": 141,
+   "people": 33,
+   "rank": "b25100148ccc16b093908e0ee86e44ed47181d8b0cb4dc2bc6228399551c3bd4",
+   "scenario_hash": "sha256:99fa0d0409db18edb77b86fe6c0a31bea365380169be04b933d9ca316f3fc8ff",
+   "scenario_id": "g-6dfef26f38a144d0"
+  },
+  {
+   "core_hash": "sha256:3cb1eaaafabd0918e2c5bc3a27c97095c158db839eb1b076e109828e2cb1a144",
+   "family_id": "fam-59e9dcf5b2a3a27a",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-5c0ccafad5aef14a",
+   "max_steps": 100,
+   "people": 33,
+   "rank": "b6e457a85be6a6bbb949c2d20981c1d10ed5dc49db2b127f52c66ff9eb6aced3",
+   "scenario_hash": "sha256:8b239be17c4a4b229c1c53110ce76104c25ec31e421ebc8f84d5017e408e3ec3",
+   "scenario_id": "g-5c0ccafad5aef14a"
+  },
+  {
+   "core_hash": "sha256:1eca66a153c4d2c782fb73f3da7b1aa2c8a62d2f16ccb97d31fd2ea8419c7ee0",
+   "family_id": "fam-b9783af11e19d16a",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-7490c1432df58c70",
+   "max_steps": 218,
+   "people": 32,
+   "rank": "04ed40c3839a51ae9a1ac4aa6a649768ecbe1c0003e5c4a9d2c87f39716a17f7",
+   "scenario_hash": "sha256:d860f6f5b491ba601be567a0a415337129348cc525610a93275de592ab14afa0",
+   "scenario_id": "g-7490c1432df58c70"
+  },
+  {
+   "core_hash": "sha256:0bf7e57869184f1e7facc15e55d4400f79f3b316455609357865e3dc2b4426cf",
+   "family_id": "fam-a30f0e46d2991ba4",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-414b0f658f7c4580",
+   "max_steps": 209,
+   "people": 32,
+   "rank": "a72ea06a53a0dc9e8973dd550e57b58f62956c4d6c20fe55fc8978b016cc6350",
+   "scenario_hash": "sha256:098f7cfcc3a34ed6d8fb70d2beb4ba30236a5d7ddbec47ffb1ddddc55dc101b9",
+   "scenario_id": "g-414b0f658f7c4580"
+  },
+  {
+   "core_hash": "sha256:399aac025d9b9fe3c92428380995f5e873ead593697f5d07d130b0c87355dcff",
+   "family_id": "fam-ecced7361f01e820",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-f6417ba52a360767",
+   "max_steps": 100,
+   "people": 32,
+   "rank": "d13484620284ab37ad0d18ca5251a44a05397575d35a8c42b009996e2eb11195",
+   "scenario_hash": "sha256:ef19901319861f2edb215dc741a54e949c79d7af5565e5a487b76e0bb1304678",
+   "scenario_id": "g-f6417ba52a360767"
+  },
+  {
+   "core_hash": "sha256:d775a157320f938f2d919eba9b912c097765656bba987ca821f18ce48808fafc",
+   "family_id": "fam-6e07786d558363b8",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-a5df6180cbf52469",
+   "max_steps": 248,
+   "people": 29,
+   "rank": "e77255d1d1c2fc393e37b0a7ea926804e8cc683418ceecaf485847d2dd7f41bf",
+   "scenario_hash": "sha256:02decd7f8880d6d7c8eb0f296a15d2b9fc95a27a973fffdbd3a7d8a3278efbbd",
+   "scenario_id": "g-a5df6180cbf52469"
+  },
+  {
+   "core_hash": "sha256:7ba0c1a026600bd8381d58b7fefb6f1ba87e390391f01c3a0323ef8fd76e006a",
+   "family_id": "fam-85a0938de185065d",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-0dc24a37855b9f29",
+   "max_steps": 160,
+   "people": 29,
+   "rank": "2ed463279079343cbbf2b85c19c3e57dff4e9fbf6e684a52c561c0981515bbd1",
+   "scenario_hash": "sha256:eaa73549920b1c5f87ebc14a1e50f1932e7253958635423725dd5cc4ea6da04a",
+   "scenario_id": "g-0dc24a37855b9f29"
+  },
+  {
+   "core_hash": "sha256:2576bc44cdcc252f78c6f1917f29a267c7c58ef07c29ba23ca68af5b8bb16bd0",
+   "family_id": "fam-ba1e3ef1b4331337",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-21707803b954ae94",
+   "max_steps": 125,
+   "people": 29,
+   "rank": "169364e728e77b0f1ce2da5b947082ecc93ed6bc6cf12a6ed315ebb9bae3ffd2",
+   "scenario_hash": "sha256:4a24d376f44fda2b3e1335bfb51104173a28659a0440bc9adb5ce76e861c1528",
+   "scenario_id": "g-21707803b954ae94"
+  },
+  {
+   "core_hash": "sha256:4be9c0de1f38a0425da3c0d05367cb65f32bb5528e096cb9a41492cc6fce5dbc",
+   "family_id": "fam-ace58bfa33b4b50c",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-f7e66cb2cc799554",
+   "max_steps": 102,
+   "people": 29,
+   "rank": "47f548954e323834f9e1c507763b14b22572d858ff1b9c5cf11ecc86ee39d3c7",
+   "scenario_hash": "sha256:6ad63260bfb653c78d01ff8f78ef677f9abbf94dc4495f83bbc4ba2417633d6d",
+   "scenario_id": "g-f7e66cb2cc799554"
+  },
+  {
+   "core_hash": "sha256:5b98bd52560f02e3508314ee78516d06412b77f36b22b6b7e32c0159d84620b9",
+   "family_id": "fam-9bf8b4ab3eb6907d",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-c5b36f1e60a13258",
+   "max_steps": 133,
+   "people": 28,
+   "rank": "4469ea5781d7c4722c286c02bcac17d873534e62750e22e397bc15626a66c485",
+   "scenario_hash": "sha256:478f5cc6a64fcecc24c4400970d55d33cc537c3b072002af474d8ff5c42397b6",
+   "scenario_id": "g-c5b36f1e60a13258"
+  },
+  {
+   "core_hash": "sha256:cd0924efc4d8418fb72d02f9d43c3027cf8f8f7a26d9b886c237bd0dcef98e44",
+   "family_id": "fam-7d523fa5a3462faa",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-10b5eb3b91790c4d",
+   "max_steps": 94,
+   "people": 28,
+   "rank": "c6dc02eb91e4f0ee4c86e56ca8027aacbd207395d01b8d1cf45d2dac0d6e52f5",
+   "scenario_hash": "sha256:3fcfcb59438d481c47360f4f6b20ab2329574d502fecabb96d25755e7c7ef077",
+   "scenario_id": "g-10b5eb3b91790c4d"
+  },
+  {
+   "core_hash": "sha256:954343933d10326a8e127fc5d066b4cdf416f37f288399b526b8abd57e3e210e",
+   "family_id": "fam-514ba4d9f9c920d9",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-f5e8eb41d67c0d02",
+   "max_steps": 63,
+   "people": 28,
+   "rank": "6f9d4b9380bfeddaba89b0342fc665da7c35fc7acea4e7af2ad07d4375f4cba9",
+   "scenario_hash": "sha256:b87794cb6b2ab938e6aa4687b79420303532d7e81da01c65d5206bc8697bb8d5",
+   "scenario_id": "g-f5e8eb41d67c0d02"
+  },
+  {
+   "core_hash": "sha256:89951fc188b86b28c29831ae14966eaeb78d66df3ea00270208219e3198ae5c8",
+   "family_id": "fam-022340cd9c66a942",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-1cc63b508fc405e9",
+   "max_steps": 87,
+   "people": 27,
+   "rank": "a6f860d5e2e7d8d485e144cb6aacc99a6a422220c81f0a5bc1713956d83c2b04",
+   "scenario_hash": "sha256:ca2da6b2c0f79deed96d8c3e78c577b4aa5882ba09b9dea1cc42ee6d2ec42b35",
+   "scenario_id": "g-1cc63b508fc405e9"
+  },
+  {
+   "core_hash": "sha256:08833c69c30667d523414a49bd89195f9faea02ecaadc98af20574626ba998ae",
+   "family_id": "fam-8bb7eebd80558d4d",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-f0d6ae35a19c98a0",
+   "max_steps": 300,
+   "people": 26,
+   "rank": "839e260d028c99d3224e792c8d83308a48dfd73c3d5b1db7f51be840f3187036",
+   "scenario_hash": "sha256:d6eec0a4468e4faf8d39b848275a4cc8b3704fc5bde7ed88dc79d5d5632b79c3",
+   "scenario_id": "g-f0d6ae35a19c98a0"
+  },
+  {
+   "core_hash": "sha256:edbe59bdf53c0b5971f9b7b6e7eb80da0904d796cdcfeafe7266071f541083fb",
+   "family_id": "fam-d3925ff6e7783a1b",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-b849bf0fe55355ab",
+   "max_steps": 128,
+   "people": 26,
+   "rank": "8222e5916c61a501b395424b4dda0f591f639c1692268f7f64765ae35670f798",
+   "scenario_hash": "sha256:97f6559538842b2c9ace9167c2fcd53b31bb6a7621ad9fedc5b81285eece6ff3",
+   "scenario_id": "g-b849bf0fe55355ab"
+  },
+  {
+   "core_hash": "sha256:f875dbb14eaff29ff57cd5cb94754cc778a6e52fe60fe555fb5f74ac9afde6d0",
+   "family_id": "fam-3de0109c7324e29e",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-7341268c7a056017",
+   "max_steps": 214,
+   "people": 24,
+   "rank": "3661f89c11ef421611d1518e08f7b2f52f00273c366cba26dbd64383a73fb8d2",
+   "scenario_hash": "sha256:ea04da443819371cc68370448f869b38fd636e54b2948de933113df7e575fbee",
+   "scenario_id": "g-7341268c7a056017"
+  },
+  {
+   "core_hash": "sha256:89fef5cb263dca7eaeb272290121c9cfe68a3fc68fd9cf510b9d172b90f3fa33",
+   "family_id": "fam-403e0fe807468a23",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-09dec40f5e22fb2f",
+   "max_steps": 179,
+   "people": 24,
+   "rank": "3174e48020133068e0f02ec3763689c7aba8ca3ff98c9d0fd85325fa59c4b38e",
+   "scenario_hash": "sha256:40bd4301eeacb6a408ebcdbe7ad08bbc08482df5efb95efd63aa2b5985a10614",
+   "scenario_id": "g-09dec40f5e22fb2f"
+  },
+  {
+   "core_hash": "sha256:7e7b5db11e04111afc4a16c0fe4f4ffa0cadb234a6b33f75d33f3d31243b078a",
+   "family_id": "fam-f388fe3b7e57ed9b",
+   "fire_model": "deterministic",
+   "label": "unreachable",
+   "lineage_id": "lin-35cca9f1d42320be",
+   "max_steps": 169,
+   "people": 24,
+   "rank": "08e86fdc89e57be84c6fc511ef9549caecf3208f113a3d647871b5b4eba941d5",
+   "scenario_hash": "sha256:6333c75294fbaa6c19e904ae1feb8c1cc64c177f8cd4e344206a63d7ef0d8f6d",
+   "scenario_id": "g-35cca9f1d42320be"
+  },
+  {
+   "core_hash": "sha256:984c21a90d5fc1e735a6101310e4da1016f23b9bc9a249a12e8dbdd0861b8d97",
+   "family_id": "fam-93d0127086f97018",
+   "fire_model": "stochastic",
+   "label": "unreachable",
+   "lineage_id": "lin-2cd0be8e5ae13d2a",
+   "max_steps": 81,
+   "people": 24,
+   "rank": "2465b65cbd510bfbb4d93afe0b4c57b889ce3082123138128a958f2880ef49ea",
+   "scenario_hash": "sha256:ad1faf8daf7a70bfb2a8c4a7c1998662ba78089296fa150f07e196c5fb9191e9",
+   "scenario_id": "g-2cd0be8e5ae13d2a"
+  },
+  {
+   "core_hash": "sha256:52a11860a32a54223103b53dad11a4825c6dd01cecafb286d512f2f7665d7399",
+   "family_id": "fam-e3c2c670abefae2b",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-3c43e12ffff3a96d",
+   "max_steps": 114,
+   "people": 23,
+   "rank": "abd5aa9cd401a07ff9ef0bf0b49b7102da260f7ae720566cdbf25712285699e5",
+   "scenario_hash": "sha256:6fc7f5d621918335e63bb44d303a08d30465c3c6debef8fd5c80a9168b991eb2",
+   "scenario_id": "g-3c43e12ffff3a96d"
+  },
+  {
+   "core_hash": "sha256:0b64be28b55ef306857c95401ab5ee3e7b7cfc6cf9efd7ed69a5166edc1f55e3",
+   "family_id": "fam-3f81af2f2cb746c1",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-5790da976e885781",
+   "max_steps": 113,
+   "people": 23,
+   "rank": "40ef9a094b6a051e20f281a40aa3aebfbd830bcd5633ec4c13d8c54383e34721",
+   "scenario_hash": "sha256:9ec214d7b16bc229c9fdcba864239c3c6340b7c3d5edb29cea6343727c47cf17",
+   "scenario_id": "g-5790da976e885781"
+  },
+  {
+   "core_hash": "sha256:1b630e753b9c4833f80b9796b4c5ea4bd7396b1d28338e4907fbb722cd01b0a3",
+   "family_id": "fam-85a0938de185065d",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-078eea823f0d59c7",
+   "max_steps": 274,
+   "people": 22,
+   "rank": "7213dc482b45f11c0390630a50a0ad1ed86fa04c72f191f12376b295a74f1a45",
+   "scenario_hash": "sha256:dc0f36a834031ba8ca26689c227cce5da84135bd42cebb14e47028b37dd9853b",
+   "scenario_id": "g-078eea823f0d59c7"
+  },
+  {
+   "core_hash": "sha256:c4c514b39f4ddc09801b7c7d11aaf4cb51f1fd3ccbca7b2c144a2a37bc493a1c",
+   "family_id": "fam-93d0127086f97018",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-0b4dad0431ae2bfc",
+   "max_steps": 74,
+   "people": 22,
+   "rank": "fa46a8a9feb110b847298e484ffedac45f7b2a7e8832c885a8dfed64016c6282",
+   "scenario_hash": "sha256:23f462dd71fae82f464d040dc0d7d1bae04f426d3eb65937e244ea6aa84b14a0",
+   "scenario_id": "g-0b4dad0431ae2bfc"
+  },
+  {
+   "core_hash": "sha256:46dc829e7f753f4cf4436f2f3c94f83ad27c49cf87b222c9ddab695f9a76fa4d",
+   "family_id": "fam-069a0c434d9d0e33",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-01ba25dcb7f70b19",
+   "max_steps": 149,
+   "people": 21,
+   "rank": "bd9d501da7cd992ca8b5f8571ede14df2586f316c21492d2196d75571a298a54",
+   "scenario_hash": "sha256:c759193b971c487ab6fdff54e3a3b413e02ce4a547fa8b0c4b4bcc05005de7f3",
+   "scenario_id": "g-01ba25dcb7f70b19"
+  },
+  {
+   "core_hash": "sha256:2451075e1767bdb783a3fb60fbee47980ec6da6a69848570aa3b301c08634d69",
+   "family_id": "fam-d86953c763228344",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-e5c6ab6acf9465a9",
+   "max_steps": 96,
+   "people": 21,
+   "rank": "a875b921d6f19d7aeb561883e8dcfad46eb4a19c5b32e05221323d5132d18e5f",
+   "scenario_hash": "sha256:09a6ac8da801eac6cb7c18fa03a0792c33ab0a6644d42f34c3935e514805e303",
+   "scenario_id": "g-e5c6ab6acf9465a9"
+  },
+  {
+   "core_hash": "sha256:1d12553e4fc2b7f6e01d920d33dd320fea7915c338754297946315389aa242e8",
+   "family_id": "fam-3f81af2f2cb746c1",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-c92b6cdf6d8ae760",
+   "max_steps": 77,
+   "people": 21,
+   "rank": "0267c8723ee50f7da991af1e6d0f619d7305a1cc79df5d5c74f45f9278742c8f",
+   "scenario_hash": "sha256:f3e00d87bb54b194c17b5b47707ad47d24b4f4806473f3fed37be13d7db5f6d5",
+   "scenario_id": "g-c92b6cdf6d8ae760"
+  },
+  {
+   "core_hash": "sha256:e130c6a29b3a79a0851240730b2ed874e2e8af1492e2a1f5dd8ff406f236719a",
+   "family_id": "fam-c027a695121f1d98",
+   "fire_model": "stochastic",
+   "label": "unreachable",
+   "lineage_id": "lin-1310670dc1523ece",
+   "max_steps": 123,
+   "people": 20,
+   "rank": "144fd9ba7748afd1b7c13244793026ac792088a5bfea3a26761be11e85cd16f2",
+   "scenario_hash": "sha256:c512be550e5c047f25f1c98ae9db4b8840ed3086452ab8dce42334153c63088a",
+   "scenario_id": "g-1310670dc1523ece"
+  },
+  {
+   "core_hash": "sha256:28bca58336928ea1811ad08624a2a0a5b6272ae0feb268d4fe3e35f02e45967b",
+   "family_id": "fam-f714b007a753ec5d",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-6b0cc1cd8e8db3fb",
+   "max_steps": 259,
+   "people": 19,
+   "rank": "fc508d8f9e2434c9388fbad4788ba3d58ba68489a1455400a72a24b2b962897b",
+   "scenario_hash": "sha256:3670ce1f2797093756327ea74e4f34da91a1d83f38ef1e6634e3490864d2f595",
+   "scenario_id": "g-6b0cc1cd8e8db3fb"
+  },
+  {
+   "core_hash": "sha256:d3ab6dac6eb29ca85e9c39901f3748cabb6a9195b362b921d7a8cdb8f93ee309",
+   "family_id": "fam-d3925ff6e7783a1b",
+   "fire_model": "deterministic",
+   "label": "unreachable",
+   "lineage_id": "lin-6296999d9a448789",
+   "max_steps": 218,
+   "people": 19,
+   "rank": "a8e42cda690cc5d43442c5a0227eaf0e77eb9a86e6a9a8ee87ebbbf7fade540e",
+   "scenario_hash": "sha256:e1a11746ce131fce52c0f6f0d0f4be2235c59a942fbd165e38513b9d454b6eca",
+   "scenario_id": "g-6296999d9a448789"
+  },
+  {
+   "core_hash": "sha256:b856f20aecabbf2cb5f29d0d53b5fbab22928a2a3a513a3bfd6a020f4cc7e9e4",
+   "family_id": "fam-b9783af11e19d16a",
+   "fire_model": "stochastic",
+   "label": "unreachable",
+   "lineage_id": "lin-438849247e97074c",
+   "max_steps": 122,
+   "people": 19,
+   "rank": "10cbff679b08f2ba6f8d30e953aa5e9c1d670f95539259451589fffb506cac06",
+   "scenario_hash": "sha256:f1b58e367fde8a5032dade15a40239d00c3f87c51c98c0b107c505e5f00faacf",
+   "scenario_id": "g-438849247e97074c"
+  },
+  {
+   "core_hash": "sha256:48746fafc9c373e7334e111d9eddc573c38ece439cae674f6302691f576ee91c",
+   "family_id": "fam-ff883a95c566ec4c",
+   "fire_model": "deterministic",
+   "label": "unreachable",
+   "lineage_id": "lin-d583f7975d54c2f6",
+   "max_steps": 66,
+   "people": 19,
+   "rank": "849b5e1b8160b4fff90cf80afc3f60c477fd4a065fb5bd411640f5e0ba1c0fe5",
+   "scenario_hash": "sha256:f473012862359b40d7c1b13f97863d64fcee32ef13f4f2c9760f2671d6eb8571",
+   "scenario_id": "g-d583f7975d54c2f6"
+  },
+  {
+   "core_hash": "sha256:6917413b952806a21841fba2873e7f8a4b9d4e5da64f962a866123483b8d27cc",
+   "family_id": "fam-cf7548ce87fd7b61",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-045f6e95eec0cad6",
+   "max_steps": 145,
+   "people": 18,
+   "rank": "74e53bce308b53be6db15961dc4ae52b721082faf3d5a69dd296928253ff6595",
+   "scenario_hash": "sha256:dca17b521f4bc1bc2f047d3d52cb4e1b4e49fce8f052aaf299ace90e2f2b7229",
+   "scenario_id": "g-045f6e95eec0cad6"
+  },
+  {
+   "core_hash": "sha256:ab7d3453d7f54fc46734a8e01f18f8ed9be888c3c213cdee8b12d583fd028a0c",
+   "family_id": "fam-e6eb8b96c4217701",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-50bd409f985ae422",
+   "max_steps": 127,
+   "people": 18,
+   "rank": "7ba268657f819bdd921310050dbca17afece1d4ba13279d4553ee97e723b8e45",
+   "scenario_hash": "sha256:054b1fd180cf6c2baddd711fe9d8056bdf400b0e59351100923aebf5884b2ce6",
+   "scenario_id": "g-50bd409f985ae422"
+  },
+  {
+   "core_hash": "sha256:1e0cbe6c60637abf10bd3d8123b8d4a125b7ebb9544848538b241d5be6d30461",
+   "family_id": "fam-6894480b0993d0af",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-3fb3d21bf73f2014",
+   "max_steps": 75,
+   "people": 18,
+   "rank": "e570ab48cde2ad2076541ef6e90b7fc8f2723764ae931beb0c62ccb8fea37ec1",
+   "scenario_hash": "sha256:ec008ea40ff601c8fd2669e4feb4ad6e55aa6de0b111dfe1f047efeda194b938",
+   "scenario_id": "g-3fb3d21bf73f2014"
+  },
+  {
+   "core_hash": "sha256:b31435eb2955ce1c6a6671146bfe96b6869c582e7dffd9c8b7d1d902cf9081bd",
+   "family_id": "fam-1a2a9a4ea7c99a65",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-8e2cda0dbd55ab2e",
+   "max_steps": 136,
+   "people": 17,
+   "rank": "8380dcffc4d381f79e0e06d276c3c1ea482ffb2ebbf55f4474845ba2e7946c46",
+   "scenario_hash": "sha256:03a65669bb0022aab855644c4219b77fde5e2f867585110971441e6aa704a07a",
+   "scenario_id": "g-8e2cda0dbd55ab2e"
+  },
+  {
+   "core_hash": "sha256:786867e0d89e5eb3e21a72bf4e1f8c1113a1a56aebfc3b5383ceb94faea08077",
+   "family_id": "fam-7d523fa5a3462faa",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-29054703d8890510",
+   "max_steps": 159,
+   "people": 16,
+   "rank": "7b0456e97e5b21ccdd18ee6d2e007d9a6015e1b331c19a4bcd01f69a903050be",
+   "scenario_hash": "sha256:b85b08330589644646da3c05d97c138b567f4517c82c29d7456656f9e8cfc63a",
+   "scenario_id": "g-29054703d8890510"
+  },
+  {
+   "core_hash": "sha256:c8dc675955b49298648e79385de5caabf18c96963885faefd9875a08a652a0f3",
+   "family_id": "fam-6a2f862c17c6dedd",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-bd54759879d1e380",
+   "max_steps": 122,
+   "people": 16,
+   "rank": "2e1467356e5bfa7e259cd364d162e936415b18a0e53aafd97d1ac664b9ea2597",
+   "scenario_hash": "sha256:74897120300591bf9560349ccf4b6fc8996a35278bf936d3a4199e36bb8712c1",
+   "scenario_id": "g-bd54759879d1e380"
+  },
+  {
+   "core_hash": "sha256:8166c944f467c94d0070bf43f789dbb747d0a7a90319aab73535a7f83e07ab96",
+   "family_id": "fam-b31994dc6f5d7f16",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-160353455784c59c",
+   "max_steps": 118,
+   "people": 16,
+   "rank": "de0d7a6c392bc5f19967199d6dcf7f71fce42d6a0c3ef7e49cd99a8a30a3dbfe",
+   "scenario_hash": "sha256:d6809a02f158c41f0336ee4bb13aa7c5c2ed2347eb67f8266e740a3c4879e125",
+   "scenario_id": "g-160353455784c59c"
+  },
+  {
+   "core_hash": "sha256:f6b624d5fde21aed3aff6b84e6ea0ece3f2ebb6a18ab4c2d4416e5a228b1c3bd",
+   "family_id": "fam-ff883a95c566ec4c",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-8eacb003bae2fa56",
+   "max_steps": 91,
+   "people": 16,
+   "rank": "4b2f366afbb883eac908169d669942480cc4fcd4d96b1a5d48564f0bd70d7e7f",
+   "scenario_hash": "sha256:4cea151987f02650466b94df29dc2aa6f3b925af5cec24eb7882e27f12562e59",
+   "scenario_id": "g-8eacb003bae2fa56"
+  },
+  {
+   "core_hash": "sha256:ba38033a80f0e76241f630d267b4b0fccab5328afa82368729dfa35fecacb58e",
+   "family_id": "fam-8280f8fcac9878ea",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-4c818b50e202f668",
+   "max_steps": 74,
+   "people": 16,
+   "rank": "ca136dd2d15d797faeac1d9257673b86e17908d0a35e632f4b0599e61b43e27d",
+   "scenario_hash": "sha256:3ccf6b763d2af116a2d87356a49e32a6d4b1f85fec489debe44ca922944287b3",
+   "scenario_id": "g-4c818b50e202f668"
+  },
+  {
+   "core_hash": "sha256:cbe51ff3cbf1c1c8e12d4cd72fadd99f6901d594363d81dcfffe92cbed172b49",
+   "family_id": "fam-8280f8fcac9878ea",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-0718767cc7988413",
+   "max_steps": 52,
+   "people": 16,
+   "rank": "f65eeed9eedb16ad521bb97e4ed31bcdf8cad45c6725c3324efdcb41bd76c7d4",
+   "scenario_hash": "sha256:f6a02a0b17eee8385440393f5b402fd0a0a2519643c55678b656c4340457efb6",
+   "scenario_id": "g-0718767cc7988413"
+  },
+  {
+   "core_hash": "sha256:4db3338255dab6a964a0ee6ce73e61ed438c323170b5c9c3dfe06033bb1df3c1",
+   "family_id": "fam-a1914d1bc8b27d10",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-5ea99e40847e9d1b",
+   "max_steps": 190,
+   "people": 15,
+   "rank": "f2aaf5cc8b592dc28bc120e7afd7e355a0012a0c1342f5310be6e9f84c425f24",
+   "scenario_hash": "sha256:252eaec862482bd190a9e78bd7327454fbfe843c77435ac289713d2e6b95ce46",
+   "scenario_id": "g-5ea99e40847e9d1b"
+  },
+  {
+   "core_hash": "sha256:a74fd569a7764e1ca74532be3174fe645f5ee232df397c72cc72866e48159be1",
+   "family_id": "fam-2582511797758c64",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-3a2e31927736945c",
+   "max_steps": 162,
+   "people": 15,
+   "rank": "ad421de27fe32166477353a6d5fe7b862b2490e96856926b91eeeb79ffe39071",
+   "scenario_hash": "sha256:92a27f44247f865c9095a62b287d9165da76a682feed36e9121f4dc2e95c3e90",
+   "scenario_id": "g-3a2e31927736945c"
+  },
+  {
+   "core_hash": "sha256:588389c11fdeb5ddcb76eb894d6aee76c2d8546cf416801b6bbaa226c34f67aa",
+   "family_id": "fam-1a2a9a4ea7c99a65",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-f5e5962b84ddab75",
+   "max_steps": 142,
+   "people": 15,
+   "rank": "70b7339f3f7ac4b98aa852f2bb8fd169337a86aa4cf17f80e9a4b22fb22f0e60",
+   "scenario_hash": "sha256:8a2ccf31d0f3e3eba781626b26858a8d04709f59a16ce093a193e142158cb7f3",
+   "scenario_id": "g-f5e5962b84ddab75"
+  },
+  {
+   "core_hash": "sha256:51125e37ae68d8fae3c54e1bd5495d80ab84f41db688676c9cc22ade2d3beaa6",
+   "family_id": "fam-d86953c763228344",
+   "fire_model": "stochastic",
+   "label": "unreachable",
+   "lineage_id": "lin-d6f92e9291dbfda7",
+   "max_steps": 107,
+   "people": 15,
+   "rank": "f7d250ba874205185164c7cd49855876bb78f223d2e341cad2b57ba7319c3276",
+   "scenario_hash": "sha256:c994ed4ad6a90416d693b77fc15e659ac852a906b8b9f5616ddedfafccb68313",
+   "scenario_id": "g-d6f92e9291dbfda7"
+  },
+  {
+   "core_hash": "sha256:ba9bef0cc08acdd3ecee89988c0ff44f2b14000bf9d32c439e86ca760cb9bbdd",
+   "family_id": "fam-ff883a95c566ec4c",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-750880448f7524f0",
+   "max_steps": 62,
+   "people": 15,
+   "rank": "e4a4e5980d44e0687177ca4f135ee09495b695e6729604706820ee09d681c759",
+   "scenario_hash": "sha256:769a25444224a65165181c31fd1f396201185a2d707bd3413c322f9f9a8d802e",
+   "scenario_id": "g-750880448f7524f0"
+  },
+  {
+   "core_hash": "sha256:31e69f80a93b3bcb1ff2bffe46c21d449958b451c2b9438c2fe32929a44451e0",
+   "family_id": "fam-66236c529172ba49",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-b97f6d685a13c6fe",
+   "max_steps": 270,
+   "people": 14,
+   "rank": "4ba589497c1affc3ac34b589cbef075172cb3ab19a87dca6db6e89e08a89dfd7",
+   "scenario_hash": "sha256:1b9efcb12f1d14f4e78d3c87af641e58fd065f4cef4cc91be0cded5f523b6431",
+   "scenario_id": "g-b97f6d685a13c6fe"
+  },
+  {
+   "core_hash": "sha256:98d0d41e8bf28158a26c3f02d33b9fdfb9684f3d1286750017adb9a3a3584b99",
+   "family_id": "fam-f388fe3b7e57ed9b",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-4f31dde2ac967ce4",
+   "max_steps": 256,
+   "people": 14,
+   "rank": "bd8bc584ba5e64ad01c011c21351d8340ffa3569de7d75f415fd0a4bccbfd3c5",
+   "scenario_hash": "sha256:e8880ecd70b6375ef1b07a4835d53280bce4c2a4bd9b67cb3237c00c6e87f7b5",
+   "scenario_id": "g-4f31dde2ac967ce4"
+  },
+  {
+   "core_hash": "sha256:e9ad68d2eb88cef9e0a4411704bb36b5375fc4d6508e3fa42637e4afd0a6e0aa",
+   "family_id": "fam-e3d24d229094d193",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-9c0009b1aacfdda4",
+   "max_steps": 101,
+   "people": 14,
+   "rank": "a8ec6abcf71e56283fedd4f0f43e3df1d3a066187d281c688880e531f26cfb08",
+   "scenario_hash": "sha256:52877b2f391af4ef797c8f01a507fd04791719f5e73b5831c3b066071982de07",
+   "scenario_id": "g-9c0009b1aacfdda4"
+  },
+  {
+   "core_hash": "sha256:ba623abf3f0ffa559c2dd8ee64134180c64e9194439a68d8d5730f9733493d43",
+   "family_id": "fam-2b163636edc667d7",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-077d462265ad3f6a",
+   "max_steps": 160,
+   "people": 13,
+   "rank": "5089ff64f6fb079aac4b7305cd4d21f44ae8574291fbd850f86ad075b34fb6d9",
+   "scenario_hash": "sha256:08f257204413187f060dcbf411cb2ddcddf2b85f425d956729e7938caa5825e6",
+   "scenario_id": "g-077d462265ad3f6a"
+  },
+  {
+   "core_hash": "sha256:c0307e8aa13c90f3ecc862f92b54eda293699abdbc31eb04d3cda59ac506e885",
+   "family_id": "fam-85a0938de185065d",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-bba6c2e43b07648e",
+   "max_steps": 151,
+   "people": 13,
+   "rank": "5723834a9f4361b541c2a7a41e17e973f96f36966ad6d68cdf664826ebd54c22",
+   "scenario_hash": "sha256:d7d40e342b6ff0a0393e1960d9d7a878e786807796fa1239c4ad406870c8e341",
+   "scenario_id": "g-bba6c2e43b07648e"
+  },
+  {
+   "core_hash": "sha256:fc4e183643fc908d8b4861f370409778ef3d65f4db2a409dac20fb7a7675e5ed",
+   "family_id": "fam-1a2a9a4ea7c99a65",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-bcbfd684f9a93d82",
+   "max_steps": 136,
+   "people": 13,
+   "rank": "3eb699968511337fb773d38e453d9e8412c1354c759f31fb042dc879dbcf3794",
+   "scenario_hash": "sha256:003e7b28fa92fa084298a0140a8d818c03f67c697cbe867f4552c1aedde4bd41",
+   "scenario_id": "g-bcbfd684f9a93d82"
+  },
+  {
+   "core_hash": "sha256:f3c7d74ffb515da227edb8a80e379e7d6dd0e47b7d0f50e67f8044e74e3cbd0e",
+   "family_id": "fam-6894480b0993d0af",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-5f1e888556dbf2a0",
+   "max_steps": 122,
+   "people": 12,
+   "rank": "b4a84f25d8b3c068cc0de0fb963ae8c6fdcb927d9ff595cdc174ed190fb2f1da",
+   "scenario_hash": "sha256:9a8d1bfc0056eaa01b8e2e18b17578e977ab706b536e4308410a9f0106e7cc4f",
+   "scenario_id": "g-5f1e888556dbf2a0"
+  },
+  {
+   "core_hash": "sha256:567930c4ef7dba70f0022b5a4cdee088d579fd73b7b38c20c3af6e1518579cf4",
+   "family_id": "fam-ace58bfa33b4b50c",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-864b4eddb21c9eed",
+   "max_steps": 175,
+   "people": 11,
+   "rank": "79a0366aeb2fd877dc0f27507662e023fb3d3f7331ebc17a9f66bd71d91584ca",
+   "scenario_hash": "sha256:d3a32739f1dcb28ef8c590e79393b1afc098fc76f3b7563e1fb57af6fc3b243d",
+   "scenario_id": "g-864b4eddb21c9eed"
+  },
+  {
+   "core_hash": "sha256:69e72620810a5be62b0d82fc0fbcac13304c57e0bcd9b7a99048932b6b2e5a16",
+   "family_id": "fam-9ef84d1ec03b9e63",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-c6fc5ee6acff9bac",
+   "max_steps": 163,
+   "people": 11,
+   "rank": "40ed90b5ef91a95e6472825bc6d32ba35deb9dbb3a37a3ed40dccbe0c4a1c976",
+   "scenario_hash": "sha256:5b8632e603d714b102ad10172922a3c93aa928028db57915efa3bdb149550733",
+   "scenario_id": "g-c6fc5ee6acff9bac"
+  },
+  {
+   "core_hash": "sha256:acb29fb0ace8fe3a62451eb2f95f2f8898bdbd3f2fb52f63dd8d7da5e40d5612",
+   "family_id": "fam-f714b007a753ec5d",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-8d3842d548773aa2",
+   "max_steps": 151,
+   "people": 11,
+   "rank": "b5463e176331008ff23c96d158c4b9fd0a4cbd70747caf006e2bcf286bfbdc62",
+   "scenario_hash": "sha256:d8dfeb4abc7dfc7a523007db155fed2414e1541006c215c3975bceb5d296865e",
+   "scenario_id": "g-8d3842d548773aa2"
+  },
+  {
+   "core_hash": "sha256:67347b363a01228a22940e99508ad5d9bab5c72050c1b53eb5e4bd3138717dfa",
+   "family_id": "fam-069a0c434d9d0e33",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-25b27c9194d02b76",
+   "max_steps": 146,
+   "people": 11,
+   "rank": "42c1ef20e6293453d51a7bbc68dfb1d861ca6336de23dd869a706ba80bdb9a61",
+   "scenario_hash": "sha256:4d4be4830446bcd027089100bac75765874c176e9a994661a664a18f4ad4a251",
+   "scenario_id": "g-25b27c9194d02b76"
+  },
+  {
+   "core_hash": "sha256:1240c2543c4262916cc4ee7194769d2f31662a5c44944d36008d37ff0bbf30f0",
+   "family_id": "fam-8b07a1025ed9f336",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-80dc8935243a3be5",
+   "max_steps": 134,
+   "people": 11,
+   "rank": "7dd8808529da68a86a8404599ce6ecdb222862fafe180f2c63449f05ab3ce746",
+   "scenario_hash": "sha256:3ef08818704ea19bb341d273917968579daa0aac82d5c9deb7e60b186e5e8e7b",
+   "scenario_id": "g-80dc8935243a3be5"
+  },
+  {
+   "core_hash": "sha256:732cc0fa426d6d219663eeb85a14d03fbdefb9a70f7e9e712e4a218fc6fe7dc5",
+   "family_id": "fam-ef270ae8af390ee9",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-697cf8932159366f",
+   "max_steps": 94,
+   "people": 11,
+   "rank": "88ced5e08fbd0ac135827f78bbb22155c275b9a83e690c113953f36f24c4168e",
+   "scenario_hash": "sha256:2de3cb3ca2e7b53736c1020fd77acb50ef6ce1b4bd836c1ac0805556b66c802a",
+   "scenario_id": "g-697cf8932159366f"
+  },
+  {
+   "core_hash": "sha256:1b40c8c14840817dd47bc5c887cb26b5abf4aefce9e537211e77d7bf2f0f7fc9",
+   "family_id": "fam-2993f502e99b2c40",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-705345c9205c7e9e",
+   "max_steps": 148,
+   "people": 10,
+   "rank": "c7a906a374e2fd005575caaed9de9f056b11fa2bb543277f03ee16bf9f768b27",
+   "scenario_hash": "sha256:83f64e78ea467516bbb47cdafa251b5faa6159df535d5ea2d938694833bb29fd",
+   "scenario_id": "g-705345c9205c7e9e"
+  },
+  {
+   "core_hash": "sha256:26cf3d731880744af156f7dcf2cabe0918e323bbcd6077ecd37c5091f0d6a77a",
+   "family_id": "fam-bf7d52a86541e7be",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-4e939a62ffabcf01",
+   "max_steps": 124,
+   "people": 10,
+   "rank": "2e33f902c185771aa0b0d40589b1ed82fd2d538b228066b6465b4f343d02c6b3",
+   "scenario_hash": "sha256:6d04453f4094e9d9f635450436a9fb69d0c44541488565ec1d70db0fdb989452",
+   "scenario_id": "g-4e939a62ffabcf01"
+  },
+  {
+   "core_hash": "sha256:2f21382a0efcb24a603aeb74cc5e29a3ed2d895cae9068de1cc303f5db265381",
+   "family_id": "fam-ef270ae8af390ee9",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-a7c38a7496c6dec3",
+   "max_steps": 82,
+   "people": 10,
+   "rank": "65d1fb8fa7a4139c78e98c80989c1e63aadda7ea028b0cde05c107af6ebff1aa",
+   "scenario_hash": "sha256:a73593646dae1fb699e84fbc46ae806a7ed1139560e0b7d7d2e227e7c933ff14",
+   "scenario_id": "g-a7c38a7496c6dec3"
+  },
+  {
+   "core_hash": "sha256:32bb1363647cb3469a89970801aad816aab63f838bc7a10c07e507d3c2cc0c98",
+   "family_id": "fam-fbe116fb476670ff",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-b89bfadf70137365",
+   "max_steps": 44,
+   "people": 10,
+   "rank": "34106db131b815650d7cbd7895b037f7dbd4be70c5cfaf84c3811df69dffe47c",
+   "scenario_hash": "sha256:857bda257a5d1a50e7ef8bcdf6cd981519a9cb6a2d7242c6e96a0966331087df",
+   "scenario_id": "g-b89bfadf70137365"
+  },
+  {
+   "core_hash": "sha256:39440340b80114d32dacdcf0011afd8d61a99d5caf828d2f07ab30f67a2ddb95",
+   "family_id": "fam-fbe116fb476670ff",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-b040648beae04575",
+   "max_steps": 39,
+   "people": 9,
+   "rank": "3ed089b3299aa1da46e2ff5d0a8c465437066fca776a193efafe67f02535dccb",
+   "scenario_hash": "sha256:dda50d6ed3c4b43824d7356df378c38464a674b1d1de09d947512c2b41eb5a69",
+   "scenario_id": "g-b040648beae04575"
+  },
+  {
+   "core_hash": "sha256:3a646b09ce604adf03c98421d4acefcc39f410a7950e696916d401ddb8308a6d",
+   "family_id": "fam-9e657c609d28b8e6",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-7417569b20afbca5",
+   "max_steps": 257,
+   "people": 8,
+   "rank": "d110a455ba6c28c43bcface9c64a30e691b320d18b96e92399b9d7208201aac8",
+   "scenario_hash": "sha256:62ec27cc40cb1fab984c307dda3aadd9c4370c8bed9921bfd4fef40cd8f2f584",
+   "scenario_id": "g-7417569b20afbca5"
+  },
+  {
+   "core_hash": "sha256:243027b6d7691b6c3e40d2aa780e0f496044802978a7f9756d449b1ac947f04d",
+   "family_id": "fam-66236c529172ba49",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-8f02b88396e08267",
+   "max_steps": 227,
+   "people": 8,
+   "rank": "095980bb44a57e27f431042a61c8e4e3692e51feffecb0a6cd4c2ec64099a89d",
+   "scenario_hash": "sha256:fff180ebc610fc80024ea6d2c668ac5c26b5c5b7b1bfb8387277453b9b0649c9",
+   "scenario_id": "g-8f02b88396e08267"
+  },
+  {
+   "core_hash": "sha256:0aa69a4f4e7b1cf1cc2a18cc438d0cda0b2d5cd05cc51f189ca6114a51b8ffba",
+   "family_id": "fam-ace58bfa33b4b50c",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-b9f6d81f3b5bfce7",
+   "max_steps": 186,
+   "people": 8,
+   "rank": "c26667372630b28e1e9c6080038b3472c9000e7c177bc335b396cb294efbe84f",
+   "scenario_hash": "sha256:8f871dec96187985b941894b131f23281edaf0f755c3fc352e89ca32ee8918c3",
+   "scenario_id": "g-b9f6d81f3b5bfce7"
+  },
+  {
+   "core_hash": "sha256:1b9f83c9242d6773da57108851f3916610bbb88272e7b867c6b9933fe0797487",
+   "family_id": "fam-d86953c763228344",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-f3ed186eb2bd001d",
+   "max_steps": 102,
+   "people": 8,
+   "rank": "077cf00697c1e2643d8600559ec743a176c574dbf9a38b32ff090dc604f12a15",
+   "scenario_hash": "sha256:1a0c252514c68c172e61e8d27e605a91d0428e9ad5c444d9afeac2a31fba98a3",
+   "scenario_id": "g-f3ed186eb2bd001d"
+  },
+  {
+   "core_hash": "sha256:c66254b8dce21dab503d802875422c17bd4a6bbb577180e56cf2c49ed44591fa",
+   "family_id": "fam-9c0416f104b726f7",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-aa9cafe4b3073ab9",
+   "max_steps": 193,
+   "people": 7,
+   "rank": "74040d0fb3ec30e4321a479ca4eda894100cbf85e8109faa818be7797c256592",
+   "scenario_hash": "sha256:797925ee747f2e6c30a8e6149a03d7da89afd2644ea9300e89e1579b77b14967",
+   "scenario_id": "g-aa9cafe4b3073ab9"
+  },
+  {
+   "core_hash": "sha256:c60ea64a5ff49a18e6cb240efb99b8b64289bc7c89b051dcef74a0f49e7fc96b",
+   "family_id": "fam-ef2b2f78a2fce0d2",
+   "fire_model": "stochastic",
+   "label": "unreachable",
+   "lineage_id": "lin-7959b0e11c6ec38e",
+   "max_steps": 105,
+   "people": 7,
+   "rank": "ee536f31def5edf5a1ce02fc53416ae6b935fc4fb607cd379fbc8f8bf9b24027",
+   "scenario_hash": "sha256:6928066cd0f30484256ccec6067be8ec0e6077b14cbd147e5194a83828206e54",
+   "scenario_id": "g-7959b0e11c6ec38e"
+  },
+  {
+   "core_hash": "sha256:2d365ca4b2686ddf072a82abaaeaac263821abc1cd1e947ccab2c9589dd8b35d",
+   "family_id": "fam-ef2b2f78a2fce0d2",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-ac31d114336ae217",
+   "max_steps": 73,
+   "people": 7,
+   "rank": "1641fe85d35baef2ec13d6c0e83c6dd5ca1cc86010fc9d6ad93950f65e153377",
+   "scenario_hash": "sha256:8ca4d4f308b62cd7a667db13adc9342897027c1fb6ca25d730b6bbc3f664d1e2",
+   "scenario_id": "g-ac31d114336ae217"
+  },
+  {
+   "core_hash": "sha256:983fafe49043352d62d10b4412fd861df6dfd8813173c7dd1c85be5eb4feb4a9",
+   "family_id": "fam-a0a3780b6d702f75",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-bccd59e80e25fbd5",
+   "max_steps": 125,
+   "people": 6,
+   "rank": "970c276ad098d1258193a923fc246f412226e2ee359f2647379176ddd5be1ac6",
+   "scenario_hash": "sha256:aa8ddd56b5af09f4d5539d2b4db687538d8cc75925ed3de0c45fc0e4a1cfebf4",
+   "scenario_id": "g-bccd59e80e25fbd5"
+  },
+  {
+   "core_hash": "sha256:a20de0e98cfd2d66a48fa1657acd56f48477fa4bb2670b4347a1782c1d568639",
+   "family_id": "fam-481f1ceceaf162b5",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-ec207981b011ab0d",
+   "max_steps": 111,
+   "people": 6,
+   "rank": "b645381ad8635603123fab2fa005c45c05c50d0ebb2788eaaa8005392ea4310f",
+   "scenario_hash": "sha256:4526d1f5706527d92a9573985f276cc91abcd624fcda181e5cb2bb86cd81ab70",
+   "scenario_id": "g-ec207981b011ab0d"
+  },
+  {
+   "core_hash": "sha256:8451db9fa1db8d223512978b0079c3e77ec3f349fd682e669d6b722c900acfac",
+   "family_id": "fam-6a2f862c17c6dedd",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-4e5b681e45d52a55",
+   "max_steps": 89,
+   "people": 6,
+   "rank": "72878a0b607fac342381556e01ce4d4d4bb845fedcd8432f7681ddbccec20349",
+   "scenario_hash": "sha256:cd09c48f4144b8ef184e2b0a007df78e3f383ff6e011e15c274ed213eea450f9",
+   "scenario_id": "g-4e5b681e45d52a55"
+  },
+  {
+   "core_hash": "sha256:357c98f8dc8a48eb35e63c1ba66ebe0574081fca1e71d0ebf6beeeb255c281a3",
+   "family_id": "fam-bf7d52a86541e7be",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-0821b9cfcfbdc9a9",
+   "max_steps": 57,
+   "people": 6,
+   "rank": "069674684b0c10ecb5ce8587e5aca9afc038f1f11e1360dcd8928aacb0a7bd3b",
+   "scenario_hash": "sha256:c43b142da86e55a9cd8d9e120ba885ed3044a6b7eb0af6a1f7b712b947e5bb84",
+   "scenario_id": "g-0821b9cfcfbdc9a9"
+  },
+  {
+   "core_hash": "sha256:0251462b8c5f969a1286f3035ecc9adce66ac69665eada5f61bbee56530fb7ae",
+   "family_id": "fam-e218e81754c82240",
+   "fire_model": "stochastic",
+   "label": "unreachable",
+   "lineage_id": "lin-ef391af30299b866",
+   "max_steps": 189,
+   "people": 5,
+   "rank": "b1f07b5c6694b74a18476173d410db63f231ede87b59803fe70519ed4b20ebfe",
+   "scenario_hash": "sha256:9caa40a51eeb04555358a49861092e76be2bd50d0ef246cfdc8d17836895fa31",
+   "scenario_id": "g-ef391af30299b866"
+  },
+  {
+   "core_hash": "sha256:47c83caddd3e1d16cfd739be0ce9655f17fa07d645d6fecaecd43f5cc4df3c83",
+   "family_id": "fam-6a2f862c17c6dedd",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-70eaf86834cb32f2",
+   "max_steps": 112,
+   "people": 5,
+   "rank": "a670b81de61d91be49ffaab742dc9c93879a944dbb12fde5c17ea3814bca018b",
+   "scenario_hash": "sha256:7f41112e8fab93f64ee5e913551ae1f26582bb4634b0f98da5d5698ca3b66df9",
+   "scenario_id": "g-70eaf86834cb32f2"
+  },
+  {
+   "core_hash": "sha256:dbddd9b857ddc2bbb42bf05099d0ea76f0a1aef301b4a8c10d3beddae9be7567",
+   "family_id": "fam-ecced7361f01e820",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-9b2dab4932f6a63d",
+   "max_steps": 110,
+   "people": 5,
+   "rank": "be880a1347aaf15d4875f8a180e3dec72a9c82eab25a17d47dd7b3061b233f98",
+   "scenario_hash": "sha256:44234a669ca88b8697af68c035823dc1cb8ff8ab7e068cf0c45d7ff01412d9d8",
+   "scenario_id": "g-9b2dab4932f6a63d"
+  },
+  {
+   "core_hash": "sha256:b3cd5b6756587506ed866b62f0f886426da9803341ff301281d799612ead5cd2",
+   "family_id": "fam-2993f502e99b2c40",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-930272844504b352",
+   "max_steps": 93,
+   "people": 5,
+   "rank": "fe8e5ad247cad7615aed6d1520f309455bdaeb0f5d0ec8a4eda3fffbea854c81",
+   "scenario_hash": "sha256:e36083364c64ec051845f4e7347da05f2df4b4dfd7d176e7e157bb3a61281b21",
+   "scenario_id": "g-930272844504b352"
+  },
+  {
+   "core_hash": "sha256:daeedd411d66bff4ffa2f5de3c21b526c4d8d48a87a6380b1d58f7dd2d25886a",
+   "family_id": "fam-39706e399cbdb9a5",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-5f9ba32fa9cd4367",
+   "max_steps": 179,
+   "people": 4,
+   "rank": "f3e5efa14543d21a1ec7c240910128f4485af58b7040992d57d791e8058745b0",
+   "scenario_hash": "sha256:26e2265a1148f923ef90407bd152f88c8ffa90254b9bb04d1efe10f43d354795",
+   "scenario_id": "g-5f9ba32fa9cd4367"
+  },
+  {
+   "core_hash": "sha256:d27496ae4e5b2ebf5f04b9408614490b053770f3ab70b899d292b2e5905b8e14",
+   "family_id": "fam-e6eb8b96c4217701",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-42c18dc58bd8e216",
+   "max_steps": 122,
+   "people": 4,
+   "rank": "d9a26c51da0b490006f6e319fc3036a8ab004c7b09b55ed6741e3c844b8168f4",
+   "scenario_hash": "sha256:949d248c2c244748577d935320166991278781eb0d27d87cabf066af5ad90abb",
+   "scenario_id": "g-42c18dc58bd8e216"
+  },
+  {
+   "core_hash": "sha256:3ba757d56212b80e6250bc4336e49333bf6c4210c39ad521876f5f27a5bd800f",
+   "family_id": "fam-ef2b2f78a2fce0d2",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-10d70d91ec798044",
+   "max_steps": 93,
+   "people": 4,
+   "rank": "7b6ee27999fa06aa8d50c3e9502949104bbfc7cc2161b5795b363347a68c53b6",
+   "scenario_hash": "sha256:aeeebb67e115b4d7c90091890a323c82f96f0991882bc1b6c0979485926e871e",
+   "scenario_id": "g-10d70d91ec798044"
+  },
+  {
+   "core_hash": "sha256:af54e884bd375904a8847eb72f67a95172fa9a4373ff9386f378eb85f4abe627",
+   "family_id": "fam-3f81af2f2cb746c1",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-0f5c45250316491b",
+   "max_steps": 68,
+   "people": 4,
+   "rank": "b2b20f230b00161b971c001d4dac6ce91590937fb17c8fc2209e68b8f80a9006",
+   "scenario_hash": "sha256:28095dee6e80eb5e3bcb5a4d36cb01c8e3b7b4da9cc9718a309eb5bb54d6a9ac",
+   "scenario_id": "g-0f5c45250316491b"
+  },
+  {
+   "core_hash": "sha256:d53f37cf9ba079fed18fd4e7c97cd804f031108d02310b6672993658761ef376",
+   "family_id": "fam-fbe116fb476670ff",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-bc9d78ab06685110",
+   "max_steps": 48,
+   "people": 4,
+   "rank": "b4c160a0ee63f7b510e93b820c6f0872ff91475dba0d03c0826a9905d32590dc",
+   "scenario_hash": "sha256:06fde6854249c033d1a281a2e318130563ee5959900c0c39debbe74b0aaa0afa",
+   "scenario_id": "g-bc9d78ab06685110"
+  },
+  {
+   "core_hash": "sha256:ac263bdda05ddfbdfa23c85d1638421e4eeb4ae264399f65eee5634afb2dbb17",
+   "family_id": "fam-93d0127086f97018",
+   "fire_model": "stochastic",
+   "label": "difficult",
+   "lineage_id": "lin-cfb6909ae1c502a3",
+   "max_steps": 162,
+   "people": 3,
+   "rank": "57122f6e9f1210633c1464395e4bc22d1436e5e53b3136685944c7e784cf8adc",
+   "scenario_hash": "sha256:17b18c12914031ed94dd57a7836bef23037a8dbe0fec2bea2e3f2c4a3b5f12d7",
+   "scenario_id": "g-cfb6909ae1c502a3"
+  },
+  {
+   "core_hash": "sha256:ec65186dfc26590c2f040cfc0abbe348e1ff68c2edfadeda0f876648a4039c34",
+   "family_id": "fam-39706e399cbdb9a5",
+   "fire_model": "deterministic",
+   "label": "unreachable",
+   "lineage_id": "lin-7e91df6a61520241",
+   "max_steps": 124,
+   "people": 3,
+   "rank": "6f68fb1a7797359e7876b54eb2626e861b1b8d8b890efef0ca91153be2b810f3",
+   "scenario_hash": "sha256:0583ed6f4872126f1b13ef685dfdbb1df1b77daad42324b1fa5d3e57bd7a4abf",
+   "scenario_id": "g-7e91df6a61520241"
+  },
+  {
+   "core_hash": "sha256:72f659fa1ce66253f79048915b3134e72beb7fcc97bb943888b7fc0f7591470a",
+   "family_id": "fam-109bfb83062b7528",
+   "fire_model": "deterministic",
+   "label": "unreachable",
+   "lineage_id": "lin-f0c007209dcfcd24",
+   "max_steps": 120,
+   "people": 2,
+   "rank": "24926ed71b8070dfe9d48c0f549f85a23be570dd8a6b200b0945fdcb3ffeda6f",
+   "scenario_hash": "sha256:8ebc28861fc4870c9e12b79c91a30f8bfb9f5ef1c255aec27f8755a65b80a3db",
+   "scenario_id": "g-f0c007209dcfcd24"
+  },
+  {
+   "core_hash": "sha256:6c5923cb3ddc630eaf4551464c2b12282aee998f5ba938af4527d39880bdf9e4",
+   "family_id": "fam-2993f502e99b2c40",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-e9a7dab72dca367f",
+   "max_steps": 80,
+   "people": 2,
+   "rank": "c581006fcac812dd8033ddd5fb178babea97cd24e5d16481372edb84c09790da",
+   "scenario_hash": "sha256:61f7ffafb6165bff04a26ccd25a8e3769198e4d307216f16e948fb29841e01ff",
+   "scenario_id": "g-e9a7dab72dca367f"
+  },
+  {
+   "core_hash": "sha256:9e6b0b75100f22e5a653c2dfadbdc0746f23d2ff8c2e9c4279b5e21cb46cde6c",
+   "family_id": "fam-e218e81754c82240",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-b2d7abd72ac48121",
+   "max_steps": 76,
+   "people": 2,
+   "rank": "0e45169ba71bdda09e95585eaba1f1cbf303439b571c0fa05b4674f6049a666f",
+   "scenario_hash": "sha256:e5df5564508e5c9cf536ce60b4bdc71c613105cdd585ef3ea58a6ef9514ceb16",
+   "scenario_id": "g-b2d7abd72ac48121"
+  },
+  {
+   "core_hash": "sha256:227a11e8e2990e3cc653b2747d0c8a98fb6314ea05b32be26444307ca0ab2f14",
+   "family_id": "fam-39706e399cbdb9a5",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-d9fcc5087ca96388",
+   "max_steps": 239,
+   "people": 1,
+   "rank": "e2de36826304921721e10dccbd0b621c788cb9ddf4898dd7ab42cf2d205ceb7e",
+   "scenario_hash": "sha256:80b506103537be8aeeb5e6ecf9b6103db5b7559b7e5337e0a52c76a5c767535b",
+   "scenario_id": "g-d9fcc5087ca96388"
+  },
+  {
+   "core_hash": "sha256:7ad3472adc4ef482e6f284ac1b378781ed8b5d525e61a39c4a0589ed517c9cd5",
+   "family_id": "fam-e218e81754c82240",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-9ce175f8e7926df6",
+   "max_steps": 137,
+   "people": 1,
+   "rank": "dd92fdf26dd535b75278a8bc323c01b16e61a3fb281b8f1f839db085b00c941e",
+   "scenario_hash": "sha256:01a50fd48754bb4506630caa9a9fb305f0ee9a609ef9790e28269a2199b51bac",
+   "scenario_id": "g-9ce175f8e7926df6"
+  },
+  {
+   "core_hash": "sha256:5e80c828860e6ef534c6fd3de5b7cecb46d5e0a08b41b7ee9abdc948e971859c",
+   "family_id": "fam-bf7d52a86541e7be",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-a2108dc770cfe0dd",
+   "max_steps": 121,
+   "people": 1,
+   "rank": "dad898f91b9cf7711efb8a4a0b70246a6ac660881ba593fc27dbd9d301289e4d",
+   "scenario_hash": "sha256:145f422ed768342ce50d717fb290333c0c526806946c2ff9f520d50a3caf5e56",
+   "scenario_id": "g-a2108dc770cfe0dd"
+  },
+  {
+   "core_hash": "sha256:6d228cf55d767fa6241c4a582103e430c31982c9da414c5b1e35d0ba3e6a6741",
+   "family_id": "fam-6894480b0993d0af",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-89b59c902fdfac5b",
+   "max_steps": 115,
+   "people": 1,
+   "rank": "304ddb27b45d9308493b66205a931489bce962c32f72486def057be2177176a4",
+   "scenario_hash": "sha256:3545854b9c8bedbd0bb6553daf883f3ef02db5e6cd50b2bfa587cd30d3ee5537",
+   "scenario_id": "g-89b59c902fdfac5b"
+  },
+  {
+   "core_hash": "sha256:449f61c21450a5f56551a432476d460fa5079aefd7d31c591affcb1f0ccd76f9",
+   "family_id": "fam-109bfb83062b7528",
+   "fire_model": "deterministic",
+   "label": "feasible",
+   "lineage_id": "lin-aa31d4cd7d8e5c74",
+   "max_steps": 103,
+   "people": 1,
+   "rank": "20dba5d161d7d018508e371066005dfa04f979a86b5c128c7144c30495df7e58",
+   "scenario_hash": "sha256:256777eaa2db69840eea5e1a9c2fc475edcc3d511d29e6feb4aa0ddd827ba7cd",
+   "scenario_id": "g-aa31d4cd7d8e5c74"
+  },
+  {
+   "core_hash": "sha256:0dec93c90c41f8f12fd8e3f9b088f6523ae53ad5ac47a3916be0c7fed7fa4343",
+   "family_id": "fam-109bfb83062b7528",
+   "fire_model": "deterministic",
+   "label": "unreachable",
+   "lineage_id": "lin-f9ef2085290bb225",
+   "max_steps": 98,
+   "people": 1,
+   "rank": "e9fd29e8766c2f8741f65ad4a55635afd20e19286bf69ecf87ebdc432b29a43e",
+   "scenario_hash": "sha256:db3376c24128054196ad7f64fd064b261e7f553add9904820bf86891df907d05",
+   "scenario_id": "g-f9ef2085290bb225"
+  },
+  {
+   "core_hash": "sha256:5759ab3c29d0b7e397128902d0e576a6cfa918454bc819dbb1ddb46aa9b4f7be",
+   "family_id": "fam-e6eb8b96c4217701",
+   "fire_model": "deterministic",
+   "label": "difficult",
+   "lineage_id": "lin-b150f801c6c86b21",
+   "max_steps": 95,
+   "people": 1,
+   "rank": "6c85b65107be4f12a0619e502d570b2cd6d2a993a7cf982a3ac769e673b7352e",
+   "scenario_hash": "sha256:bab0752f04a41fa97516a3b80cf0b8277c22f1addb88d411f038a6f1eb581987",
+   "scenario_id": "g-b150f801c6c86b21"
+  },
+  {
+   "core_hash": "sha256:3bc7ba6b7a37808c726265bb0092a5ca2085acc0aa1153e3b1f70101eeef47a0",
+   "family_id": "fam-ef270ae8af390ee9",
+   "fire_model": "stochastic",
+   "label": "feasible",
+   "lineage_id": "lin-abe436d168a92ecf",
+   "max_steps": 80,
+   "people": 1,
+   "rank": "9e81ff2bcd0401af60fc286a7b7a0f4ba431c836d343702e3906e4b56f9da2e7",
+   "scenario_hash": "sha256:fe17414de4137ed9b583b328c7063cabbe9fbbe85fbeef5ee4e9b49c4d2d1c56",
+   "scenario_id": "g-abe436d168a92ecf"
+  }
+ ],
+ "selection_rule": {
+  "order": "people desc, max_steps desc, sha256(salt|scenario_hash) (longest expected first)",
+  "rule": "every TRAIN scenario; no selection",
+  "teacher_outcomes_consulted": false
+ },
+ "sessions": {
+  "first": "the evidence root must not exist or be empty",
+  "max_sessions": 4,
+  "resume": "--resume; re-runs every gate; re-verifies finished groups; interrupted groups recorded, never rerun"
+ },
+ "source": {
+  "generator_revision": "gen-1.0.0",
+  "manifest_hash": "sha256:96a564819bdc6910708cb2891b043ae3fa6a3d9066d5927ba721aa61d44b442d",
+  "plan_hash": "sha256:94ef33df208ae247757baeb91e6921690991ecd940f7d718882f34e9b55fafaa",
+  "spec_hash": "sha256:992f8be306d7f23f6c1b35defba26f92fb471aa8d01afb1966174714e7633644",
+  "split": "train"
+ },
+ "status": "PROPOSED_NOT_FROZEN",
+ "storage": {
+  "expected_gib": 3.0,
+  "in_git": false,
+  "integrity": "SHA256SUMS over every file after verification; group files hold content_hash",
+  "layout": {
+   "evidence": "evidence.json",
+   "groups": "groups",
+   "interrupted": "interrupted",
+   "log": "log.jsonl",
+   "logs": "logs",
+   "progress": "progress.json",
+   "regen": "regen",
+   "regen_rows": "regen_rows",
+   "regen_started": "regen_started",
+   "rows": "rows",
+   "started": "started",
+   "stop": "STOP"
+  },
+  "root": "D:/Coding/ember-evidence/p1-17-train-full@1"
+ },
+ "teacher_pins": {
+  "pin_problems": [],
+  "teachers": {
+   "T0": {
+    "code_fingerprint": "sha256:8ddf9370263284107ae5249c9adafe7323ed8deab2d45077fe9894979e6c84aa",
+    "config_hash": "sha256:bdc4d3580bcf3889348c563aaf622334d135a535d9cb2aaeedc3c0528f10208a",
+    "seed": null,
+    "version": "1.0.0"
+   },
+   "T1": {
+    "code_fingerprint": "sha256:52dc61f4ff9599e55bfd29f47068bf301895321ce85f6c9aaa9feec1dc568eac",
+    "config_hash": "sha256:5047e942db3326706b6184c9f29e0b992078920f03c8a53adc8cc24258345361",
+    "seed": null,
+    "version": "1.0.0"
+   },
+   "T2": {
+    "code_fingerprint": "sha256:afe987d862caaa32701777050f19fb3126c03f9edd6ab8ac6ed375a95504db74",
+    "config_hash": "sha256:302139e18ba05fdcdc5561b7390b95f725600ec8791e336d065f77cea0c507e5",
+    "seed": 20261107,
+    "version": "1.0.0"
+   },
+   "T3": {
+    "code_fingerprint": "sha256:82294a3f0d7aa3caf38598505dbffd367c5cb14ade1f725fd9ee23e73c2c14f1",
+    "config_hash": "sha256:5a8d4985b1f65d5de18a06c86d8dd522e2ca95e2accd583165b7e7d7ea1d02e0",
+    "seed": 20261123,
+    "version": "1.0.0"
+   },
+   "T4": {
+    "code_fingerprint": "sha256:fa66a0f354dc82f992d1f0a1896851fc90dc9e19dea244f815a76857361ce75e",
+    "config_hash": "sha256:79bd3322b9cf7ccd25928f3a70502089732496af5427f88f00ecd2ff6ba12504",
+    "seed": null,
+    "version": "1.2.0"
+   }
+  }
+ }
+}
