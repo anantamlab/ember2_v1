@@ -32,7 +32,8 @@ def world(tmp_path):
         row = {"file_sha256": "sha256:" + hashlib.sha256(gp.read_bytes()).hexdigest()}
         (root / "rows").mkdir(exist_ok=True)
         (root / "rows" / f"{sid}.json").write_text(json.dumps(row), encoding="utf-8")
-        specs.append({"scenario_id": sid, "scenario_hash": s.content_hash(), "family_id": fam})
+        specs.append({"scenario_id": sid, "scenario_hash": s.content_hash(), "family_id": fam,
+                      "core_hash": f"sha256:core-{i}"})
         scen.append(({"scenario_id": sid}, s))
     plan = {"plan_hash": "sha256:" + "1" * 64, "namespace": td.SCOPE, "scenarios": specs,
             "geometry_audit": {"teacher_dev_similar_families": ["fam-b"]}}
