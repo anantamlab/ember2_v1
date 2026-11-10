@@ -316,7 +316,7 @@ def test_t1_only_protocol_cannot_reach_gpu_even_if_check_is_bypassed(proto, monk
 
 
 def test_runtime_pins(cfg):
-    meta = {"model_name": cfg["model"], "model_revision": cfg["model_commit"],
+    meta = {"model_name": cfg["model"], "model_revision": f"{cfg['model']}@{cfg['model_commit']}",
             "tokenizer_sha256": cfg["tokenizer_state_sha256"], "encoder_config_sha256": cfg["encoder_config_sha256"],
             "head_sha256": cfg["head_init_sha256"], "precision": "bf16", "token_limit": 16384,
             "upstream_contract": {"clef_matches_audited": True}}

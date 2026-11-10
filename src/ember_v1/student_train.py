@@ -510,7 +510,8 @@ def gpu_train_plan(phase: str, protocol: Mapping[str, Any], *, authorize: str, c
 
 def verify_runtime_pins(meta: Mapping[str, Any], cfg: Mapping[str, Any], *, image_lock_sha256: str | None) -> None:
     """Container identities (`p0b.runtime_metadata`) before the first step. Any difference stops the run."""
-    want = {"model_name": cfg["model"], "model_revision": cfg["model_commit"],
+    # p0b.runtime_metadata reports `model_revision` as "<name>@<40-hex commit>" (p0b.model_revision).
+    want = {"model_name": cfg["model"], "model_revision": f"{cfg['model']}@{cfg['model_commit']}",
             "tokenizer_sha256": cfg["tokenizer_state_sha256"], "encoder_config_sha256": cfg["encoder_config_sha256"],
             "head_sha256": cfg["head_init_sha256"], "precision": cfg["precision"]}
     bad = {k: meta.get(k) for k, v in want.items() if meta.get(k) != v}
