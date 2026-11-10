@@ -1,0 +1,187 @@
+{
+ "protocol_id": "p1-18-multiteacher-dataset",
+ "version": "1.1.0",
+ "status": "FROZEN",
+ "issue": 47,
+ "authorizes": "CPU building of class A-E records from the verified collection p1-17-train-full@1, stored outside git; no training, no GPU, no preference approval, no DEV/EMBERBench/locked-test data",
+ "freeze": {
+  "run": 17,
+  "owner_instruction": "run 17 prompt, Phase 6: build the multi-teacher dataset with PR #53 code; outcome-based rules; T0 diagnostic/contrastive; flag T2 fire-entry moves; family-aware weights; export blocked until the protocol checks pass",
+  "frozen_before": "the dataset builder read no per-group outcome of p1-17-train-full@1 before this commit; only the verifier's aggregate totals (per-teacher sums, family best counts, T2 fire-entry and budget-limited counts) were seen",
+  "changes_from_0.3.0-draft": [
+   "status FROZEN",
+   "scope p1-17-train-full@1 allowed with the collection gate",
+   "T0 diagnostic (never class A)",
+   "unsafe fire-entry maps never class A",
+   "family weighting unit",
+   "teacher-development-similar families flagged",
+   "record version 1.0.0"
+  ],
+  "p1_18": "frozen 2026-11-10 before any p1-18-expand@1 record was built"
+ },
+ "depends_on": {
+  "p1-12": "matched-multi-teacher@0.2.0",
+  "p1-13": "joint-counterfactual-fixture@0.2.0",
+  "p1-17": "p1-17-train-full@1"
+ },
+ "record_version": "mt-dataset-record@1.0.0",
+ "classes": {
+  "A": {
+   "name": "successful_demonstration",
+   "use": "sft_positive"
+  },
+  "B": {
+   "name": "unsuccessful_demonstration",
+   "use": "contrastive_only"
+  },
+  "C": {
+   "name": "counterfactual_preference_candidate",
+   "use": "preference_candidate"
+  },
+  "D": {
+   "name": "inconclusive_intervention",
+   "use": "excluded_inconclusive"
+  },
+  "E": {
+   "name": "student_visited_state",
+   "use": "reserved_blocked_until_p1-16"
+  }
+ },
+ "demonstration_rule": {
+  "group": "complete five-teacher matched group, verify_fixture passed",
+  "primary": "casualties_plus_unresolved",
+  "class_A": "teacher primary equals the group minimum over all five teachers (ties allowed) AND teacher casualties equal the group minimum casualties AND the teacher is not diagnostic AND the decision's map has no fire-entry move",
+  "class_B": "every other complete trajectory decision; kept as evidence, never a positive SFT target",
+  "failed_trajectory": "excluded from A and B; reported",
+  "diagnostic_teachers": [
+   "T0"
+  ],
+  "diagnostic_rule": "T0 is a diagnostic/contrastive reference: its decisions are always class B. The group minimum still includes T0, so a scenario where only T0 attains it has no class A (reported, never filled from a worse teacher)",
+  "unsafe_fire_entry": "a decision whose whole map moves any active person into a cell burning in that decision's own observation is class B for every teacher, flagged with the person ids (train_collect.fire_entry_moves); the teacher's other decisions keep their class",
+  "class_reasons": [
+   "best_outcome",
+   "outcome_not_best",
+   "diagnostic_teacher",
+   "unsafe_fire_entry"
+  ],
+  "teacher_dev_similar_families": "families listed in the collection plan geometry audit (scale-free near-duplicates of teacher development maps) are kept and flagged in each record; a teacher-comparison caveat, not student leakage"
+ },
+ "joint_target_rule": {
+  "id": "p1-14-whole-joint-target@0.2.0",
+  "option": "A: whole-joint demonstration selection",
+  "unit": "one (scenario, observation_digest) state",
+  "mode": "select_one",
+  "modes": {
+   "select_one": {
+    "status": "Stage A initial approach (active)",
+    "rule": "exactly one complete class-A joint map is the SFT target; competing class-A maps at the same state are kept with weight 0 and full provenance; no per-person mixing"
+   },
+   "sample_whole_maps": {
+    "status": "preregistered, NOT active for Stage A; enabling it is a protocol change in a reviewed commit before any TRAIN data exists",
+    "rule": "every distinct complete class-A map at a state is a demonstration, scored as a whole map with its own row/reservation chain; the state's mass is split EQUALLY over the distinct maps, not by the number of proposing teachers; never mixed per person",
+    "admissible_only_if": [
+     "the student scores each person conditioned on the actions already chosen for that state (reservation chunks of one person, or another whole-map mechanism); with conditionally independent person heads, weighted SFT on two different maps learns per-person marginals and greedy or sampled decoding can return a per-person MIXTURE that no teacher proposed",
+     "the mixture decode rate is measured on held-out conflicting states before training data is weighted this way"
+    ]
+   }
+  },
+  "order": [
+   "most approved same-state class C wins among the competing maps",
+   "fewest blocked moves of the map at this state",
+   "fewest MEAN trajectory blocked moves over the proposing teachers",
+   "fewest MEAN trajectory steps over the proposing teachers",
+   "lowest action-map digest (teacher-name-free tie-break)"
+  ],
+  "count_and_cost_neutrality": "the number of teachers that proposed a map and the teachers' CPU cost are never selection criteria; criteria 3 and 4 use the mean, because a minimum over more proposers favours common (T0/T1) maps by count alone",
+  "teacher_identity": "provenance only; never a model input and never a selection criterion",
+  "model_input": "multiteacher_dataset.model_example: observation (input), actions (whole target map), weight; nothing else"
+ },
+ "preference_rule": {
+  "source": "verify_counterfactual passed",
+  "class_C": "contrast preference_candidate AND replicates >= 3 (stochastic fire) or 1 (deterministic) AND strict improvements >= 2 (stochastic) or 1 (deterministic) AND not censored",
+  "min_replicates_stochastic": 3,
+  "min_strict_improvements_stochastic": 2,
+  "class_D": "every other contrast (inconclusive, no_difference, weak a/b verdict below thresholds)"
+ },
+ "preference_approval": {
+  "approval_enabled": false,
+  "requires": [
+   "shared_initial_state",
+   "controlled_continuation",
+   "matched_exogenous_fire",
+   "uncensored",
+   "sufficient_replicates",
+   "sufficient_strict_improvements",
+   "no_replicate_worse",
+   "no_unresolved_increase"
+  ],
+  "status_now": "every class C record is candidate_not_approved with weight 0 until this protocol is FROZEN and approval is enabled in a reviewed commit",
+  "causality_limit": "a verdict compares two complete joint maps at one state under one continuation; it never assigns blame to one person's action"
+ },
+ "weighting": {
+  "unit": "family",
+  "unit_rule": "family: each family has budget scenario_budget, split equally over its scenarios that have selected class-A records; then the scenario rules below apply inside the scenario's share. A family with many scenarios therefore does not dominate",
+  "scenario_budget": 1.0,
+  "uninformative_scenario_factor": 0.25,
+  "uninformative_definition": "all five teachers have the same primary and the same casualties",
+  "within_scenario_A": "equal split over tied-best class-A trajectories (a rare teacher's trajectory gets the same total as a common one); select_one: then equal over each trajectory's selected records, a merged record receives the share of every proposing teacher, and a teacher whose map lost at a shared state keeps its share on its own other selected records; sample_whole_maps: then equal over the states each trajectory visited, and each state's mass equal over its distinct maps",
+  "rare_strategy_audit": "audit.unselected_A_maps_by_teacher and teacher_share_A are reported for review; a teacher's class-A budget is never moved to another teacher",
+  "within_scenario_C": "equal split over approved class C records only",
+  "zero_weight_classes": "B, D, unapproved C and non-selected A; each carries its exclusion reason",
+  "teacher_share_A_review": 0.5,
+  "teacher_share_policy": "report and review only; never reweighted automatically, because a cap would move weight from a strictly better teacher to a worse one",
+  "max_family_share": {
+   "absolute": 0.05,
+   "relative_to_uniform": 2.0,
+   "rule": "share <= max(absolute, relative_to_uniform / number_of_families)"
+  },
+  "min_scenarios_for_share_caps": 20,
+  "strata_report": "class-A weight share by active-people band and fire model; reviewed against the TRAIN generator strata before freeze"
+ },
+ "exclusion_reasons": {
+  "A": "competing_class_A_joint_map_at_same_state",
+  "B": "contrast_only_not_a_positive_target",
+  "C": "preference_candidate_not_approved",
+  "D": "inconclusive_comparison"
+ },
+ "forbidden_fields": [
+  "probability",
+  "probabilities",
+  "logprob",
+  "confidence",
+  "value_estimate",
+  "causal_label",
+  "blame"
+ ],
+ "teacher_values": "only T2 proposal values that T2 actually computed; never filled for other teachers or unscored people",
+ "scope": {
+  "allowed_now": [
+   "synthetic_fixture",
+   "p1-17-train-full@1",
+   "p1-18-expand@1"
+  ],
+  "real_split": "p1-17-train-full@1 and the TRAIN partition of p1-18-expand@1 (families fixed before any teacher run); expansion val/diagnostic partitions, DEV, calibration, EMBERBench and the locked test set are never a dataset scope"
+ },
+ "collection_gate": {
+  "scope": "p1-17-train-full@1",
+  "plan_hash": "sha256:bff49b473c82d89c041a1aa5e279bff612aec80148f088228cad644bfe07c341",
+  "verification_version": "p1-17-train-full-verify@1.0.0",
+  "verification_hash": "sha256:4aeb92936e87fd9dbf8f5c4c0d304e8db09a0cb5e53c526066a1dad33fa776f1",
+  "groups": 189,
+  "require": [
+   "verification body hash recomputes",
+   "full_train_verified true",
+   "status_counts all verified_complete",
+   "every group file sha256 equals its row",
+   "every group replays (verify_fixture) during the build",
+   "validate_dataset ok over the whole dataset"
+  ],
+  "authorization": "owner run-17 instruction (Phase 6) recorded in this freeze; preference approval stays disabled"
+ },
+ "based_on": {
+  "protocol": "data/protocols/p1-14-multiteacher-dataset.json",
+  "version": "1.0.0",
+  "lf_sha256": "sha256:e99779820f65b50945ef5bd15e8391c71376847449363241be81365379cccae4",
+  "change": "scope.allowed_now adds p1-18-expand@1 (TRAIN partition only); every rule, class, weight and exclusion is unchanged"
+ }
+}
