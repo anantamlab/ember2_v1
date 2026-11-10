@@ -15,6 +15,8 @@ Later tasks need their own written authorization (docs/P0B_GPU_INSPECT.md):
   modal run infra/modal_app.py --task smoke --gpu L4 --authorize smoke
   modal run infra/modal_app.py --task padding --gpu L4 --ns 1,10,50,200 --authorize padding
   modal run infra/modal_app.py --task throughput --gpu L40S --batch-sizes 1,4,8,16,32,64 --authorize throughput
+P1-11 chunk smoke (NOT RUN; needs its own written authorization, docs/P1_CHUNK_SMOKE.md):
+  modal run infra/modal_app.py --task chunk_smoke --gpu A10 --repeats 5 --authorize chunk_smoke
 
 Serving (CPU simulator/agent locally or in CPU containers, GPU inference here):
   modal deploy infra/modal_app.py
@@ -128,6 +130,22 @@ class P0BHarness:
         return {"metadata": self.metadata,
                 **p0b.task_throughput(self.model, self.tokenizer, batch_sizes, ns, repeats, question_style)}
 
+    @modal.method()
+    def chunk_smoke(self, repeats: int) -> dict:
+        """P1-11 R3/R4/R7: kernel provenance, compact+verbose N=1/10/50/100, N=200 refusal, chunked N=200.
+        Inference only, batch 1 (docs/P1_CHUNK_SMOKE.md)."""
+        import torch
+
+        from ember_v1 import p0b
+        from ember_v1.p0b_chunk_smoke import chunk_smoke
+
+        torch.cuda.reset_peak_memory_stats()
+        return {"metadata": self.metadata,
+                **chunk_smoke(self.model, self.tokenizer, encode_one=p0b.encode_one,
+                              predict_answers=p0b.predict_answers, synthetic_row=p0b.synthetic_row,
+                              timed=p0b._timed, repeats=repeats,
+                              peak_memory_gb=lambda: round(torch.cuda.max_memory_allocated() / 2**30, 3))}
+
 
 @app.cls(image=image, gpu="L4", volumes=VOLUMES, timeout=3600, scaledown_window=300)
 class DecisionPolicy:
@@ -211,7 +229,8 @@ def main(task: str = "inspect", gpu: str = "L4", model: str = DEFAULT_MODEL, pre
     submits = {"inspect": lambda: harness.inspect.spawn(question_style),
                "smoke": lambda: harness.smoke.spawn(_ints(ns), repeats, question_style),
                "throughput": lambda: harness.throughput.spawn(_ints(batch_sizes), _ints(ns), repeats, question_style),
-               "padding": lambda: harness.padding.spawn(_ints(ns), question_style)}
+               "padding": lambda: harness.padding.spawn(_ints(ns), question_style),
+               "chunk_smoke": lambda: harness.chunk_smoke.spawn(repeats)}
     # One spawn(), then bounded get(timeout=) polls with get_current_stats() snapshots of this
     # variant (public Modal 1.6.3 APIs). A confirmed queue wait over 300 s, or the overall client
     # deadline, cancels the call explicitly (terminate_containers=True). Load errors, remote
