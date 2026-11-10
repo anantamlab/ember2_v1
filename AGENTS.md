@@ -10,11 +10,12 @@ Permanent rule: **Implement → full local test → verify PASS → push. Never 
 
 1. Read this file, the PR you continue and its latest resume notes before you change anything. Check the
    actual branch heads (`git fetch`, `gh pr list`) before you edit a stacked branch.
-2. Work in a supported Python (3.11 or 3.12) environment with the test dependencies installed:
+2. Work in Python 3.11 (owner decision, runs 13-17: 3.11 only) with the test dependencies installed with the test dependencies installed:
    `python -m pip install -e ".[test]"`.
 3. Run focused tests during development (one file, `-k`, one test).
 4. Before EVERY push, execute the COMPLETE CPU test suite locally (`python -m pytest -q`), through
-   `scripts/verify_local.py run`, on Python 3.11 **and** 3.12.
+   `scripts/verify_local.py run`, on Python 3.11 (push with `EMBER_VERIFY_REQUIRE=3.11`). 3.12 runs only if the
+   owner asks.
 5. Never skip, deselect, weaken or silently mark failing tests as expected failures. Do not edit a test only to
    get a green result. A test may change only when the behaviour it pins changes on purpose; say why in the
    commit message.
@@ -87,3 +88,20 @@ is refused until it contains this policy. **This file and the hook do not enforc
   independent human review. Authorization records stay `PENDING` until the owners act on GitHub.
 - Do not merge research PRs, run TRAIN collection, GPU training or Modal jobs unless the owner explicitly
   authorizes that exact step.
+
+## Research process rules (owner, run 17)
+
+- One-owner authorization is sufficient for bounded CPU research experiments (`single_owner_merged_pr`).
+- GitHub Actions CI/CD stays disabled. Do not add workflows.
+- Prefer one integrated research PR (#53). A small immutable results/evidence or authorization PR is acceptable.
+  Do not open stacked PRs per phase.
+- Do not ask for confirmation between ordinary implementation stages. Ask once at a real authorization point.
+- Run long experiments as persistent background processes (WMI-launched, hidden window) with a supervisor and a
+  completion-triggered verifier. Do not send repeated progress messages.
+- Preserve negative results, interruptions and failures. Never rerun a started group or attempt without a new
+  authorization that names it.
+- **Never bypass an attempt guard with a fresh clone.** Collection markers live in an evidence root outside every
+  checkout, bound by the plan (P1-17 onward).
+- No EMBERBench evaluation, no hidden benchmark access; the final evaluation set stays sealed.
+- Large evidence stays out of Git: store it under `D:/Coding/ember-evidence/` with SHA256 manifests and commit
+  only compact summaries.

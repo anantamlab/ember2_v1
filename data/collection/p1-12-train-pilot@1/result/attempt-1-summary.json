@@ -1,0 +1,548 @@
+{
+ "accepted": true,
+ "evidence_hash": "sha256:6319ff6129ffab136a6354dc7ce46b696d72af94da6596c1be9fa86ef03bd758",
+ "groups": [
+  {
+   "budget_limited_decisions": {
+    "T0": 0,
+    "T1": 0,
+    "T2": 0,
+    "T3": 0,
+    "T4": 0
+   },
+   "content_hash": "sha256:c9c72ea57d2d5b9d82992fef7e41f240db2e70a2fc4cb41ddc691a901ee099b3",
+   "file_sha256": "sha256:dc5f7c5eb9d095e272f3734d50cdf27aeb080f95efa3ad4ff15dde41cdaedee3",
+   "group_complete": true,
+   "max_steps": 57,
+   "people": 6,
+   "process_cpu_s": {
+    "T0": 0.328,
+    "T1": 0.359,
+    "T2": 2.203,
+    "T3": 0.469,
+    "T4": 0.438
+   },
+   "scenario_id": "g-0821b9cfcfbdc9a9",
+   "teachers": {
+    "T0": {
+     "casualties": 5,
+     "evacuated": 1,
+     "final_transition_hash": "sha256:ac8a64839ea61655c76dd02a5fc0d837e31fefe8f1b4e8560b310d016e61eff3",
+     "steps": 6,
+     "unresolved": 0
+    },
+    "T1": {
+     "casualties": 3,
+     "evacuated": 3,
+     "final_transition_hash": "sha256:5be0b192eb66ee2632d7b7142d05a05b0713c08e6da25ae9b8a0fa69e1747b3c",
+     "steps": 13,
+     "unresolved": 0
+    },
+    "T2": {
+     "casualties": 3,
+     "evacuated": 3,
+     "final_transition_hash": "sha256:5be0b192eb66ee2632d7b7142d05a05b0713c08e6da25ae9b8a0fa69e1747b3c",
+     "steps": 13,
+     "unresolved": 0
+    },
+    "T3": {
+     "casualties": 3,
+     "evacuated": 3,
+     "final_transition_hash": "sha256:e28e33cd29464df2133f6e7074833f9947ef689cac7991ff03089fe6d7196713",
+     "steps": 13,
+     "unresolved": 0
+    },
+    "T4": {
+     "casualties": 3,
+     "evacuated": 3,
+     "final_transition_hash": "sha256:df4a703c56c75f5e6d2c2bb4532176fa2d6dda4071ee56bc6270cd0c8c992b7a",
+     "steps": 13,
+     "unresolved": 0
+    }
+   },
+   "wall_s": 2.672
+  },
+  {
+   "budget_limited_decisions": {
+    "T0": 0,
+    "T1": 0,
+    "T2": 0,
+    "T3": 0,
+    "T4": 0
+   },
+   "content_hash": "sha256:7012182717798d776f35fc18969e39cec0db0d5fa084b87b55677cd60800ba36",
+   "file_sha256": "sha256:745635fc18ce83c45fbf0999a9eed300030c1f70ed31cf2d95b5b3a11f6e188d",
+   "group_complete": true,
+   "max_steps": 129,
+   "people": 114,
+   "process_cpu_s": {
+    "T0": 0.984,
+    "T1": 3.094,
+    "T2": 141.672,
+    "T3": 9.922,
+    "T4": 3.516
+   },
+   "scenario_id": "g-0ee55267388889cc",
+   "teachers": {
+    "T0": {
+     "casualties": 34,
+     "evacuated": 80,
+     "final_transition_hash": "sha256:76e231b8618aae41aeef9c686b95e004dd5259a60425197d4bf964eb8f5c4b3c",
+     "steps": 72,
+     "unresolved": 0
+    },
+    "T1": {
+     "casualties": 17,
+     "evacuated": 97,
+     "final_transition_hash": "sha256:49bcd1b4a5a9e863420177671f8efdef5f09055478b2fc508ca39e0f49af2934",
+     "steps": 94,
+     "unresolved": 0
+    },
+    "T2": {
+     "casualties": 17,
+     "evacuated": 97,
+     "final_transition_hash": "sha256:00e2cb88d370683ff387f5d16058cd2a5159f9ec8300d63079148835129faea6",
+     "steps": 94,
+     "unresolved": 0
+    },
+    "T3": {
+     "casualties": 17,
+     "evacuated": 97,
+     "final_transition_hash": "sha256:757677dccbf03f1aeefcd9b850a5bc047d5b1a692d4bbe4f38202712a4503c20",
+     "steps": 94,
+     "unresolved": 0
+    },
+    "T4": {
+     "casualties": 17,
+     "evacuated": 97,
+     "final_transition_hash": "sha256:ca9c7ef93f2ac73020d89615bab3ed03755955b5acdbfff4a7cd2c591c1939e6",
+     "steps": 94,
+     "unresolved": 0
+    }
+   },
+   "wall_s": 146.532
+  },
+  {
+   "budget_limited_decisions": {
+    "T0": 0,
+    "T1": 0,
+    "T2": 0,
+    "T3": 0,
+    "T4": 0
+   },
+   "content_hash": "sha256:1304d8e0ac7bd1173fa3af3be6fac201de24b22f43ff0fab7d27d28e389ff83c",
+   "file_sha256": "sha256:a05878e28d03c8ab43e169d4cccc6def4613b0bcdd46355d64a68f031134c52a",
+   "group_complete": true,
+   "max_steps": 109,
+   "people": 46,
+   "process_cpu_s": {
+    "T0": 0.438,
+    "T1": 0.562,
+    "T2": 3.625,
+    "T3": 0.859,
+    "T4": 0.484
+   },
+   "scenario_id": "g-1a8b6230b6107b0e",
+   "teachers": {
+    "T0": {
+     "casualties": 0,
+     "evacuated": 46,
+     "final_transition_hash": "sha256:7ec172cd240503e71642514d2cc77a73c194aed9488cd3647173c6ed67dc4c78",
+     "steps": 18,
+     "unresolved": 0
+    },
+    "T1": {
+     "casualties": 0,
+     "evacuated": 46,
+     "final_transition_hash": "sha256:904d3b6c50334ab1a83db6ce48cb6e7e90eef0bf2782b6d151fa2a5f7e55b32f",
+     "steps": 17,
+     "unresolved": 0
+    },
+    "T2": {
+     "casualties": 0,
+     "evacuated": 46,
+     "final_transition_hash": "sha256:2caedd118f41085d8a911596e0fdca5c8678c502e4bdea1fd3968b4545541b76",
+     "steps": 17,
+     "unresolved": 0
+    },
+    "T3": {
+     "casualties": 0,
+     "evacuated": 46,
+     "final_transition_hash": "sha256:c3bd0976afa88709d4e079d8f006c8ef518b4ca5e8f04e341af7831957c2cfd7",
+     "steps": 18,
+     "unresolved": 0
+    },
+    "T4": {
+     "casualties": 0,
+     "evacuated": 46,
+     "final_transition_hash": "sha256:06e3d53ec807a68635604adf2aed22c437ba5309e41041af2abb33d699a7d977",
+     "steps": 17,
+     "unresolved": 0
+    }
+   },
+   "wall_s": 3.906
+  },
+  {
+   "budget_limited_decisions": {
+    "T0": 0,
+    "T1": 0,
+    "T2": 0,
+    "T3": 0,
+    "T4": 0
+   },
+   "content_hash": "sha256:934539a841d375c9b00b87eef3df834bd9845874d0528546699c51b8c2fd7014",
+   "file_sha256": "sha256:1fb9662659151dc88de27af70ce746f374f8317891658b6bbe2faada41223fdd",
+   "group_complete": true,
+   "max_steps": 169,
+   "people": 24,
+   "process_cpu_s": {
+    "T0": 1.75,
+    "T1": 2.656,
+    "T2": 45.641,
+    "T3": 5.406,
+    "T4": 2.953
+   },
+   "scenario_id": "g-35cca9f1d42320be",
+   "teachers": {
+    "T0": {
+     "casualties": 0,
+     "evacuated": 22,
+     "final_transition_hash": "sha256:ae28c6e51dca856e6de6ea00e9a04a4bd820235e1ae39aa46ee1a9d237646a50",
+     "steps": 169,
+     "unresolved": 2
+    },
+    "T1": {
+     "casualties": 0,
+     "evacuated": 22,
+     "final_transition_hash": "sha256:36e065bb1bacb40b17c71d4ee979214fede707b9da7f5dfad66d5102870d3691",
+     "steps": 169,
+     "unresolved": 2
+    },
+    "T2": {
+     "casualties": 0,
+     "evacuated": 22,
+     "final_transition_hash": "sha256:dc0d20523da32e3fb27bc1b1197fd08938cd7f52dbc38e8afc707846f3da2c83",
+     "steps": 169,
+     "unresolved": 2
+    },
+    "T3": {
+     "casualties": 0,
+     "evacuated": 22,
+     "final_transition_hash": "sha256:724bc3479a856dbe9de27081cd5b56d94cb02f71dda77f64dadcaa9b8c2eb09c",
+     "steps": 169,
+     "unresolved": 2
+    },
+    "T4": {
+     "casualties": 0,
+     "evacuated": 22,
+     "final_transition_hash": "sha256:0e1c582307543b6c11f0f7b0129d70fb6910748a8ea41bf6769a646176bbd1bb",
+     "steps": 169,
+     "unresolved": 2
+    }
+   },
+   "wall_s": 47.782
+  },
+  {
+   "budget_limited_decisions": {
+    "T0": 0,
+    "T1": 0,
+    "T2": 0,
+    "T3": 0,
+    "T4": 2
+   },
+   "content_hash": "sha256:80691341448059375e204591df6be2e8e86575ecd6a09dd6a38f1d1f2ae3123f",
+   "file_sha256": "sha256:3f596a9b0c0cd861ce10b4d1a3db9c9f6f6e1b7b61a8c6cee162bc0bbe44a50f",
+   "group_complete": true,
+   "max_steps": 134,
+   "people": 115,
+   "process_cpu_s": {
+    "T0": 0.75,
+    "T1": 2.125,
+    "T2": 485.547,
+    "T3": 6.922,
+    "T4": 2.766
+   },
+   "scenario_id": "g-5082bdcde677aea4",
+   "teachers": {
+    "T0": {
+     "casualties": 72,
+     "evacuated": 43,
+     "final_transition_hash": "sha256:c76a898037fff106ccec43fa54d4d796c916a794f4fb8be2524ddd4b9f163cfe",
+     "steps": 60,
+     "unresolved": 0
+    },
+    "T1": {
+     "casualties": 69,
+     "evacuated": 46,
+     "final_transition_hash": "sha256:f285fb0184e17b87e59ef4d824271ebb9c56bb6886e0ed815c48fa2d605bdf05",
+     "steps": 81,
+     "unresolved": 0
+    },
+    "T2": {
+     "casualties": 70,
+     "evacuated": 45,
+     "final_transition_hash": "sha256:dcd697d0953d95685113ae621e4d565f2858dad42501b17f3d74193d9b06876c",
+     "steps": 81,
+     "unresolved": 0
+    },
+    "T3": {
+     "casualties": 68,
+     "evacuated": 47,
+     "final_transition_hash": "sha256:7f9ae8430d57fd98284b3d8d29c38116fd073aaad3de4c29864b11b0b00a82c0",
+     "steps": 78,
+     "unresolved": 0
+    },
+    "T4": {
+     "casualties": 66,
+     "evacuated": 49,
+     "final_transition_hash": "sha256:6902b153095e3f1747a80d739b38174f08f788b686e9366562b6e9126288b8cc",
+     "steps": 81,
+     "unresolved": 0
+    }
+   },
+   "wall_s": 497.516
+  },
+  {
+   "budget_limited_decisions": {
+    "T0": 0,
+    "T1": 0,
+    "T2": 0,
+    "T3": 0,
+    "T4": 0
+   },
+   "content_hash": "sha256:317b79350580df571af1c39e8a8cb18dea70ec939188bb41726427865317c02f",
+   "file_sha256": "sha256:66d48cabe23b4ddb81d486f2b780043567ef91bfa143fe42ad1cc2786eac0b9f",
+   "group_complete": true,
+   "max_steps": 141,
+   "people": 33,
+   "process_cpu_s": {
+    "T0": 0.641,
+    "T1": 0.703,
+    "T2": 10.625,
+    "T3": 1.312,
+    "T4": 0.828
+   },
+   "scenario_id": "g-6dfef26f38a144d0",
+   "teachers": {
+    "T0": {
+     "casualties": 13,
+     "evacuated": 20,
+     "final_transition_hash": "sha256:0b91869fde8f97dc6e26a005faff7c3737c268975ad232da72b205ccf69bdffd",
+     "steps": 30,
+     "unresolved": 0
+    },
+    "T1": {
+     "casualties": 5,
+     "evacuated": 28,
+     "final_transition_hash": "sha256:6ed655435ba90696ac3f916d0d4fa5c1dbfa65a87c014948c874322b878ad77f",
+     "steps": 40,
+     "unresolved": 0
+    },
+    "T2": {
+     "casualties": 5,
+     "evacuated": 28,
+     "final_transition_hash": "sha256:b48f6e50f0c78b3c6782e9a899545a974c80a6b370a273c2cf76d539b4b1e829",
+     "steps": 40,
+     "unresolved": 0
+    },
+    "T3": {
+     "casualties": 5,
+     "evacuated": 28,
+     "final_transition_hash": "sha256:1f3a4cc6e36addf17095d27587300a41a45d20e5fc4f1c5a52e13da27d82ddd9",
+     "steps": 40,
+     "unresolved": 0
+    },
+    "T4": {
+     "casualties": 4,
+     "evacuated": 29,
+     "final_transition_hash": "sha256:e605e16755a8730c647282686937253c72a38fcfef3b16a6c1fbd93f40895742",
+     "steps": 40,
+     "unresolved": 0
+    }
+   },
+   "wall_s": 11.281
+  },
+  {
+   "budget_limited_decisions": {
+    "T0": 0,
+    "T1": 0,
+    "T2": 60,
+    "T3": 0,
+    "T4": 0
+   },
+   "content_hash": "sha256:00a8078192030c6ee5161c6b28810ce1b287fdf912075b526fcba7c83c290ff7",
+   "file_sha256": "sha256:8088a85732a82aa325600b7ac1fcc046b4c6766fe12ae5236f1f079fc72a9d94",
+   "group_complete": true,
+   "max_steps": 300,
+   "people": 120,
+   "process_cpu_s": {
+    "T0": 3.344,
+    "T1": 14.375,
+    "T2": 2660.922,
+    "T3": 52.5,
+    "T4": 13.656
+   },
+   "scenario_id": "g-a2993d188ad45093",
+   "teachers": {
+    "T0": {
+     "casualties": 47,
+     "evacuated": 73,
+     "final_transition_hash": "sha256:00e55b66a93e769548f1f5015e7ce2a03727ff9c8aaa578ee3d3acc569f18adf",
+     "steps": 182,
+     "unresolved": 0
+    },
+    "T1": {
+     "casualties": 30,
+     "evacuated": 90,
+     "final_transition_hash": "sha256:7b3684462f03548890a1ef532f1f98820765553388d30a9d13b2dfe4b5bd3192",
+     "steps": 298,
+     "unresolved": 0
+    },
+    "T2": {
+     "casualties": 27,
+     "evacuated": 93,
+     "final_transition_hash": "sha256:a766344d967120a2981734fc56996c820625f779f327940911f24cbc66d463b7",
+     "steps": 286,
+     "unresolved": 0
+    },
+    "T3": {
+     "casualties": 16,
+     "evacuated": 104,
+     "final_transition_hash": "sha256:f1a53d2982c25a4523d80578033862ef5912ea3a3a1fb25345ff48803a481807",
+     "steps": 174,
+     "unresolved": 0
+    },
+    "T4": {
+     "casualties": 31,
+     "evacuated": 89,
+     "final_transition_hash": "sha256:f8062583cc010cc466b31171759a5c2d97de22c02794f65c15b36c9a92c2cb62",
+     "steps": 174,
+     "unresolved": 0
+    }
+   },
+   "wall_s": 2746.875
+  },
+  {
+   "budget_limited_decisions": {
+    "T0": 0,
+    "T1": 0,
+    "T2": 0,
+    "T3": 0,
+    "T4": 0
+   },
+   "content_hash": "sha256:bbc2a1403f054f9c286b7d123f47438f16c60af93b1845401f0e67d4f08f8f80",
+   "file_sha256": "sha256:00b4a24f9139b429943df673f16b8594404b27a9bd9cd26ac0972ba497acf9f8",
+   "group_complete": true,
+   "max_steps": 186,
+   "people": 8,
+   "process_cpu_s": {
+    "T0": 0.297,
+    "T1": 0.344,
+    "T2": 1.391,
+    "T3": 0.391,
+    "T4": 0.469
+   },
+   "scenario_id": "g-b9f6d81f3b5bfce7",
+   "teachers": {
+    "T0": {
+     "casualties": 0,
+     "evacuated": 8,
+     "final_transition_hash": "sha256:a8754ba842cd60e8979cfabe0d7b74d1313021c25669008b93f64fbf14bc1f62",
+     "steps": 9,
+     "unresolved": 0
+    },
+    "T1": {
+     "casualties": 0,
+     "evacuated": 8,
+     "final_transition_hash": "sha256:2b375d822809a9febfeb0a8f737a26303514dafbcfb579566d7bc7fbf0f14df3",
+     "steps": 9,
+     "unresolved": 0
+    },
+    "T2": {
+     "casualties": 0,
+     "evacuated": 8,
+     "final_transition_hash": "sha256:2b375d822809a9febfeb0a8f737a26303514dafbcfb579566d7bc7fbf0f14df3",
+     "steps": 9,
+     "unresolved": 0
+    },
+    "T3": {
+     "casualties": 0,
+     "evacuated": 8,
+     "final_transition_hash": "sha256:8f66da5c90733ae3e85407aa757e5f8d265aa8bd6dfb57abf9ddddb45646ccce",
+     "steps": 9,
+     "unresolved": 0
+    },
+    "T4": {
+     "casualties": 0,
+     "evacuated": 8,
+     "final_transition_hash": "sha256:e2d89f34a8af2ac96e1b022754191db41e1d293d608a738a19b208d163de8dca",
+     "steps": 9,
+     "unresolved": 0
+    }
+   },
+   "wall_s": 1.86
+  }
+ ],
+ "note": "Eight cases support no population-level teacher claim.",
+ "people_total": 466,
+ "plan_hash": "sha256:cb93c6d17e5b6c74755ca3a569b43955916302805983e39b562e834f6a9a605a",
+ "provenance": {
+  "consequence": "pilot evidence is feasibility and diagnostic evidence only; never promoted to training data; P1-17 stores its markers outside every checkout so this bypass cannot recur",
+  "executions": [
+   {
+    "archive": "D:/Coding/pilot-evidence-run16/attempt-1-killed/ (SHA256SUMS)",
+    "attempt_marker": "attempt-1.json written (attempt 1 consumed)",
+    "checkout": "D:/Coding/ember_v1-pilot3",
+    "execution": 1,
+    "launched_local": "2026-11-10T12:22:32+05:30",
+    "result": "interrupted: the operator closed the visible wrapper console at 12:42 IST during group 1 (T2 running); 0 of 8 groups finished; postrun: incomplete"
+   },
+   {
+    "archive": "D:/Coding/pilot-evidence-run16b/ (ATTEMPT_SHA256SUMS)",
+    "checkout": "D:/Coding/ember_v1-pilot4 (fresh clone, same commit ee5455f)",
+    "ended_local": "2026-11-10T13:47:10+05:30",
+    "execution": 2,
+    "launched_local": "2026-11-10T12:46:20+05:30",
+    "result": "8/8 groups complete and verified, 2/2 preregistered regenerations identical, accepted"
+   }
+  ],
+  "protocol_compliance": "DEVIATION: execution 2 ran attempt 1 again in a fresh clone, which the no-retry rule (one attempt; attempt 2 needs a new authorization) did not allow. The owner chose it after a warning (run 16). The fresh clone had no attempt marker, so the guard did not fire: the guard was bypassed, not satisfied.",
+  "technical_integrity": "PASS for execution 2: every group replays (verify_fixture), leakage gate passed, regenerations identical, caps held"
+ },
+ "summary_hash": "sha256:43c37478b650ade92579d9ebb8a75da3377742df54980a1d9b4b33688cd05b90",
+ "summary_version": "p1-12-train-pilot-summary@1.0.0",
+ "t2_cpu_s_total": 3351.626,
+ "totals": {
+  "T0": {
+   "casualties": 171,
+   "casualties_plus_unresolved": 173,
+   "evacuated": 293,
+   "unresolved": 2
+  },
+  "T1": {
+   "casualties": 124,
+   "casualties_plus_unresolved": 126,
+   "evacuated": 340,
+   "unresolved": 2
+  },
+  "T2": {
+   "casualties": 122,
+   "casualties_plus_unresolved": 124,
+   "evacuated": 342,
+   "unresolved": 2
+  },
+  "T3": {
+   "casualties": 109,
+   "casualties_plus_unresolved": 111,
+   "evacuated": 355,
+   "unresolved": 2
+  },
+  "T4": {
+   "casualties": 121,
+   "casualties_plus_unresolved": 123,
+   "evacuated": 343,
+   "unresolved": 2
+  }
+ },
+ "training_eligible": false
+}

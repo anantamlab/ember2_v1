@@ -1,0 +1,373 @@
+{
+ "calibration_version": "p1-17-calibration@1.0.0",
+ "chosen_concurrency": 8,
+ "code": {
+  "base_commit": "43abb33651593cbc9de46b2d85c9422d145c9b71",
+  "note": "working tree of the P1-17 branch before the plan commit"
+ },
+ "expected_storage_gib": 3.0,
+ "host": {
+  "disk_free_gib_D": 55.3,
+  "logical_cpus": 24,
+  "physical_cores": 12,
+  "ram_total_gib": 23.1
+ },
+ "max_group_peak_rss_mb": 327.9,
+ "raw_root": "D:/Coding/ember-evidence/p1-17-calibration",
+ "reasons": "Measured on this host (12 physical cores, 24 logical, 23 GiB RAM). Peak RSS per group <= 330 MB (runner ~140 MB + five workers ~30 MB); 8 concurrent groups use ~2.3 GiB and host free RAM stayed >= 6.98 GiB. Eight simultaneous copies of a heavy N=114 group (c8x) all reproduced every pilot teacher trajectory exactly; T2 CPU per group 141-143 s vs 113 s alone (+26% from shared cores) and equal to the pilot's own 141.7 s, so contention at 8 matches the pilot's host conditions. Throughput 5.4x sequential. 8 leaves 4 physical cores for the OS and the owner. Admission needs >= 2 GiB free RAM. T2 algorithm, budget and caps are unchanged; a budget-limited T2 decision stays host- and load-dependent and is reported, never called deterministic.",
+ "runs": {
+  "c1": {
+   "all_complete_verified": true,
+   "all_teachers_match_pilot": true,
+   "concurrency": 1,
+   "groups": 1,
+   "host_free_gib_before": 7.478,
+   "host_min_free_gib": 7.478,
+   "per_group": {
+    "g-0ee55267388889cc": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 282.7,
+     "peak_rss_mb": {
+      "T0": 26.5,
+      "T1": 28.4,
+      "T2": 29.6,
+      "T3": 29.4,
+      "T4": 29.6,
+      "runner": 139.2
+     },
+     "people": 114,
+     "pilot_t2_cpu_s": 141.672,
+     "t2_cpu_ratio_vs_pilot": 0.796,
+     "t2_cpu_s": 112.766,
+     "wall_s": 115.141
+    }
+   },
+   "wall_s": 129.172
+  },
+  "c2": {
+   "all_complete_verified": true,
+   "all_teachers_match_pilot": true,
+   "concurrency": 2,
+   "groups": 2,
+   "host_free_gib_before": 7.536,
+   "host_min_free_gib": 7.47,
+   "per_group": {
+    "g-0ee55267388889cc": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 283.1,
+     "peak_rss_mb": {
+      "T0": 26.6,
+      "T1": 28.5,
+      "T2": 29.8,
+      "T3": 29.4,
+      "T4": 29.6,
+      "runner": 139.2
+     },
+     "people": 114,
+     "pilot_t2_cpu_s": 141.672,
+     "t2_cpu_ratio_vs_pilot": 0.867,
+     "t2_cpu_s": 122.781,
+     "wall_s": 124.5
+    },
+    "g-5082bdcde677aea4": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 279.4,
+     "peak_rss_mb": {
+      "T0": 26.6,
+      "T1": 28.4,
+      "T2": 37.8,
+      "T3": 29.5,
+      "T4": 29.7,
+      "runner": 127.4
+     },
+     "people": 115,
+     "pilot_t2_cpu_s": 485.547,
+     "t2_cpu_ratio_vs_pilot": 0.812,
+     "t2_cpu_s": 394.375,
+     "wall_s": 398.813
+    }
+   },
+   "wall_s": 414.375
+  },
+  "c6": {
+   "all_complete_verified": true,
+   "all_teachers_match_pilot": true,
+   "concurrency": 6,
+   "groups": 7,
+   "host_free_gib_before": 7.566,
+   "host_min_free_gib": 7.287,
+   "per_group": {
+    "g-0821b9cfcfbdc9a9": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 176.1,
+     "peak_rss_mb": {
+      "T0": 26.0,
+      "T1": 28.3,
+      "T2": 28.9,
+      "T3": 29.3,
+      "T4": 29.4,
+      "runner": 34.2
+     },
+     "people": 6,
+     "pilot_t2_cpu_s": 2.203,
+     "t2_cpu_ratio_vs_pilot": 1.064,
+     "t2_cpu_s": 2.344,
+     "wall_s": 2.828
+    },
+    "g-0ee55267388889cc": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 284.5,
+     "peak_rss_mb": {
+      "T0": 26.7,
+      "T1": 28.5,
+      "T2": 30.0,
+      "T3": 29.5,
+      "T4": 29.6,
+      "runner": 140.2
+     },
+     "people": 114,
+     "pilot_t2_cpu_s": 141.672,
+     "t2_cpu_ratio_vs_pilot": 0.859,
+     "t2_cpu_s": 121.75,
+     "wall_s": 123.781
+    },
+    "g-1a8b6230b6107b0e": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 179.5,
+     "peak_rss_mb": {
+      "T0": 26.0,
+      "T1": 28.4,
+      "T2": 28.7,
+      "T3": 29.3,
+      "T4": 29.5,
+      "runner": 37.6
+     },
+     "people": 46,
+     "pilot_t2_cpu_s": 3.625,
+     "t2_cpu_ratio_vs_pilot": 1.159,
+     "t2_cpu_s": 4.203,
+     "wall_s": 4.454
+    },
+    "g-35cca9f1d42320be": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 327.9,
+     "peak_rss_mb": {
+      "T0": 26.8,
+      "T1": 28.6,
+      "T2": 28.8,
+      "T3": 29.3,
+      "T4": 29.5,
+      "runner": 184.9
+     },
+     "people": 24,
+     "pilot_t2_cpu_s": 45.641,
+     "t2_cpu_ratio_vs_pilot": 0.892,
+     "t2_cpu_s": 40.703,
+     "wall_s": 41.5
+    },
+    "g-5082bdcde677aea4": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 279.8,
+     "peak_rss_mb": {
+      "T0": 26.5,
+      "T1": 28.4,
+      "T2": 38.1,
+      "T3": 29.4,
+      "T4": 29.5,
+      "runner": 127.9
+     },
+     "people": 115,
+     "pilot_t2_cpu_s": 485.547,
+     "t2_cpu_ratio_vs_pilot": 0.791,
+     "t2_cpu_s": 384.234,
+     "wall_s": 388.516
+    },
+    "g-6dfef26f38a144d0": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 193.0,
+     "peak_rss_mb": {
+      "T0": 25.9,
+      "T1": 28.6,
+      "T2": 28.6,
+      "T3": 29.4,
+      "T4": 29.7,
+      "runner": 50.8
+     },
+     "people": 33,
+     "pilot_t2_cpu_s": 10.625,
+     "t2_cpu_ratio_vs_pilot": 1.044,
+     "t2_cpu_s": 11.094,
+     "wall_s": 11.641
+    },
+    "g-b9f6d81f3b5bfce7": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 177.9,
+     "peak_rss_mb": {
+      "T0": 26.3,
+      "T1": 28.5,
+      "T2": 28.7,
+      "T3": 29.3,
+      "T4": 29.6,
+      "runner": 35.5
+     },
+     "people": 8,
+     "pilot_t2_cpu_s": 1.391,
+     "t2_cpu_ratio_vs_pilot": 1.011,
+     "t2_cpu_s": 1.406,
+     "wall_s": 1.875
+    }
+   },
+   "wall_s": 400.203
+  },
+  "c8x": {
+   "all_complete_verified": true,
+   "all_teachers_match_pilot": true,
+   "concurrency": 8,
+   "groups": 8,
+   "host_free_gib_before": 7.573,
+   "host_min_free_gib": 7.091,
+   "per_group": {
+    "g-0ee55267388889cc~r0": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 284.6,
+     "peak_rss_mb": {
+      "T0": 26.7,
+      "T1": 28.6,
+      "T2": 29.9,
+      "T3": 29.2,
+      "T4": 29.3,
+      "runner": 140.9
+     },
+     "people": 114,
+     "pilot_t2_cpu_s": 141.672,
+     "t2_cpu_ratio_vs_pilot": 0.998,
+     "t2_cpu_s": 141.344,
+     "wall_s": 143.687
+    },
+    "g-0ee55267388889cc~r1": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 285.1,
+     "peak_rss_mb": {
+      "T0": 26.7,
+      "T1": 28.7,
+      "T2": 29.9,
+      "T3": 29.6,
+      "T4": 29.5,
+      "runner": 140.7
+     },
+     "people": 114,
+     "pilot_t2_cpu_s": 141.672,
+     "t2_cpu_ratio_vs_pilot": 1.002,
+     "t2_cpu_s": 141.906,
+     "wall_s": 144.0
+    },
+    "g-0ee55267388889cc~r2": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 284.4,
+     "peak_rss_mb": {
+      "T0": 26.5,
+      "T1": 28.5,
+      "T2": 29.7,
+      "T3": 29.5,
+      "T4": 29.2,
+      "runner": 141.0
+     },
+     "people": 114,
+     "pilot_t2_cpu_s": 141.672,
+     "t2_cpu_ratio_vs_pilot": 1.01,
+     "t2_cpu_s": 143.062,
+     "wall_s": 145.406
+    },
+    "g-0ee55267388889cc~r3": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 285.0,
+     "peak_rss_mb": {
+      "T0": 26.6,
+      "T1": 28.3,
+      "T2": 29.6,
+      "T3": 29.4,
+      "T4": 29.7,
+      "runner": 141.4
+     },
+     "people": 114,
+     "pilot_t2_cpu_s": 141.672,
+     "t2_cpu_ratio_vs_pilot": 1.006,
+     "t2_cpu_s": 142.516,
+     "wall_s": 145.016
+    },
+    "g-0ee55267388889cc~r4": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 285.5,
+     "peak_rss_mb": {
+      "T0": 26.7,
+      "T1": 28.3,
+      "T2": 30.1,
+      "T3": 29.4,
+      "T4": 29.4,
+      "runner": 141.6
+     },
+     "people": 114,
+     "pilot_t2_cpu_s": 141.672,
+     "t2_cpu_ratio_vs_pilot": 0.996,
+     "t2_cpu_s": 141.094,
+     "wall_s": 143.203
+    },
+    "g-0ee55267388889cc~r5": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 284.9,
+     "peak_rss_mb": {
+      "T0": 26.9,
+      "T1": 28.5,
+      "T2": 29.9,
+      "T3": 29.2,
+      "T4": 29.3,
+      "runner": 141.1
+     },
+     "people": 114,
+     "pilot_t2_cpu_s": 141.672,
+     "t2_cpu_ratio_vs_pilot": 0.998,
+     "t2_cpu_s": 141.359,
+     "wall_s": 143.453
+    },
+    "g-0ee55267388889cc~r6": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 284.3,
+     "peak_rss_mb": {
+      "T0": 26.6,
+      "T1": 28.3,
+      "T2": 29.8,
+      "T3": 29.4,
+      "T4": 29.6,
+      "runner": 140.6
+     },
+     "people": 114,
+     "pilot_t2_cpu_s": 141.672,
+     "t2_cpu_ratio_vs_pilot": 0.996,
+     "t2_cpu_s": 141.125,
+     "wall_s": 143.015
+    },
+    "g-0ee55267388889cc~r7": {
+     "budget_limited_t2": 0,
+     "group_peak_rss_mb_sum": 284.6,
+     "peak_rss_mb": {
+      "T0": 26.8,
+      "T1": 28.5,
+      "T2": 29.6,
+      "T3": 29.4,
+      "T4": 29.6,
+      "runner": 140.7
+     },
+     "people": 114,
+     "pilot_t2_cpu_s": 141.672,
+     "t2_cpu_ratio_vs_pilot": 1.003,
+     "t2_cpu_s": 142.125,
+     "wall_s": 144.5
+    }
+   },
+   "wall_s": 169.39
+  }
+ },
+ "scenarios": "already-collected P1-12 pilot scenarios only (outcomes known; resource measurement, not evidence)",
+ "storage_basis": "pilot group files: 385 bytes per person x max_step x teacher (2.6 GiB for TRAIN) plus regeneration and logs; upper 605 bytes per person-step at max_steps",
+ "storage_upper_gib": 5.0
+}

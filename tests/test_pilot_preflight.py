@@ -115,7 +115,13 @@ def test_end_to_end_on_this_checkout_is_read_only_and_blocked(tmp_path):
     assert before == after
     rep = json.loads(out.read_text(encoding="utf-8"))
     assert r.returncode == 1 and rep["status"] == pf.BLOCKED and rep["teacher_calls"] == 0
-    assert rep["checks"]["plan_hash"]["pass"] and rep["checks"]["live_rebuild"]["pass"]
+    # The pilot ran (attempt 1 consumed). P1-17 then changed only collector code (pilot_supervisor 1.1.0, the
+    # multiteacher scope list), so the historical pilot plan's live rebuild differs in `identities` alone; the
+    # scenarios and every teacher identity must still match.
+    assert rep["checks"]["plan_hash"]["pass"]
+    lr = rep["checks"]["live_rebuild"]
+    assert lr["pass"] or lr["differs"] == ["identities"], lr["differs"]
+    assert rep["checks"]["scenario_fingerprints"]["pass"] and rep["checks"]["teacher_fingerprints"]["pass"]
     assert rep["checks"]["scenarios_regenerate"]["pass"] and rep["checks"]["teacher_fingerprints"]["pass"]
     gi = rep["checks"]["git_identity"]
     assert gi["pass"] == (gi["head"] == pf.EXECUTION_COMMIT) and rep["failed_checks"]

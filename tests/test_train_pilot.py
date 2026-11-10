@@ -113,7 +113,19 @@ def test_committed_proposed_plan_matches_a_fresh_rebuild():
     committed = json.loads((REPO / tp.PLAN_FILE).read_text(encoding="utf-8"))
     fresh = json.loads(json.dumps(tp.live_plan(REPO), sort_keys=True, default=sorted))
     assert committed["status"] == tp.PLAN_STATUS and tp.check_plan(committed, frozen=False) == []
-    assert committed == fresh, sorted(k for k in fresh if committed.get(k) != fresh[k])
+    # The pilot ran (attempt 1 consumed, evidence archived). P1-17 changed only the collector side after it:
+    # pilot_supervisor 1.1.0 (stop hook, scope argument) and the multiteacher scope list. Everything else, and
+    # every teacher, simulator and generator identity, must still equal the frozen pilot plan.
+    changed = {"supervisor_version", "supervisor_fingerprint", "module_fingerprint", "runner_fingerprint"}
+    for k in fresh:
+        if k in ("identities", "plan_hash"):
+            continue
+        assert committed.get(k) == fresh[k], k
+    ci, fi = committed["identities"], fresh["identities"]
+    assert ci["simulator"] == fi["simulator"] and ci["generator"] == fi["generator"]
+    assert {k: v for k, v in ci["collector"].items() if k not in changed} == \
+        {k: v for k, v in fi["collector"].items() if k not in changed}
+    assert fi["collector"]["supervisor_version"] == "p1-12-pilot-supervisor@1.1.0"
     assert committed["geometry_audit"]["pass"] and committed["disjointness_audit"]["pass"]
 
 
