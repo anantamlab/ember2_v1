@@ -34,14 +34,38 @@ def _problems(rec):
     return ds.record_problems(rec, ds.load_protocol())
 
 
-def test_protocol_is_a_draft_and_export_is_always_blocked():
+def _verification(**over):
     p = ds.load_protocol()
-    assert p["status"] == "DRAFT_NOT_FROZEN" and p["authorizes"].startswith("nothing")
+    g = p["collection_gate"]
+    body = {"plan_hash": g["plan_hash"], "verification_version": g["verification_version"],
+            "full_train_verified": True, "status_counts": {"verified_complete": g["groups"]}, **over}
+    return {**body, "verification_hash": digest(body)}
+
+
+def test_protocol_is_frozen_and_export_needs_every_gate():
+    p = ds.load_protocol()
+    assert p["status"] == "FROZEN" and p["version"] == "1.0.0" and p["record_version"] == ds.RECORD_VERSION
+    assert p["scope"]["allowed_now"] == ["synthetic_fixture", "p1-17-train-full@1"]
+    assert p["demonstration_rule"]["diagnostic_teachers"] == ["T0"] and p["weighting"]["unit"] == "family"
+    assert p["preference_approval"]["approval_enabled"] is False
+    draft = {**p, "status": "DRAFT_NOT_FROZEN"}
     with pytest.raises(ds.DatasetError, match="DATASET_GENERATION_BLOCKED.*not FROZEN.*no owner authorization"):
-        ds.export()
-    frozen = {**p, "status": "FROZEN"}
-    with pytest.raises(ds.DatasetError, match="TRAIN collection gate"):
-        ds.export(protocol=frozen, authorization="owner-says-yes")
+        ds.export(protocol=draft)
+    with pytest.raises(ds.DatasetError, match="TRAIN collection gate: no verification report"):
+        ds.export(authorization="owner-says-yes")
+    # a self-consistent report that is not the gate's collection is refused (hash pinned in the protocol)
+    with pytest.raises(ds.DatasetError, match="verification_hash"):
+        ds.export(authorization="owner-says-yes", verification=_verification())
+    good = _verification()
+    gate = {**p, "collection_gate": {**p["collection_gate"], "verification_hash": good["verification_hash"]}}
+    assert ds.export(protocol=gate, authorization="owner", verification=good)["status"] == "GATE_PASS"
+    tampered = {**good, "full_train_verified": False}
+    with pytest.raises(ds.DatasetError, match="does not recompute.*not full_train_verified"):
+        ds.export(protocol=gate, authorization="owner", verification=tampered)
+    partial = _verification(status_counts={"verified_complete": 188, "invalid": 1})
+    gate2 = {**p, "collection_gate": {**p["collection_gate"], "verification_hash": partial["verification_hash"]}}
+    with pytest.raises(ds.DatasetError, match="status counts"):
+        ds.export(protocol=gate2, authorization="owner", verification=partial)
 
 
 def test_fixture_dataset_has_all_four_classes_and_validates(built):
@@ -146,10 +170,71 @@ def test_incomplete_group_gives_no_demonstrations():
 def test_uninformative_scenario_is_down_weighted():
     r = mt.collect_fixture(room(), factories())           # five identical policies: no discrimination
     recs = ds.assign_weights(ds.select_joint_targets(ds.demonstrations(r, room())))
-    assert {x["class"] for x in recs} == {"A"}
+    # all five tie; T0 is diagnostic, so its identical maps are class B records, never class A
+    assert {x["class"] for x in recs} == {"A", "B"}
+    assert {t for x in recs if x["class"] == "B" for t in x["teachers"]} == {"T0"}
+    assert all(set(x["evidence"]["class_reasons"].values()) == {"diagnostic_teacher"}
+               for x in recs if x["class"] == "B")
     assert all(x["evidence"]["uninformative_scenario"] for x in recs)
     assert sum(x["weight"] for x in recs) == pytest.approx(0.25)
     assert ds.validate_dataset(recs)["ok"]
+
+
+def test_class_reason_rule_order():
+    out = {"casualties_plus_unresolved": 2, "casualties": 1}
+    diag = frozenset({"T0"})
+    assert ds.class_reason(out, "T1", [], 2, 1, diag) == "best_outcome"
+    assert ds.class_reason(out, "T1", [], 1, 1, diag) == "outcome_not_best"
+    assert ds.class_reason(out, "T0", [], 2, 1, diag) == "diagnostic_teacher"
+    assert ds.class_reason(out, "T2", ["p3"], 2, 1, diag) == "unsafe_fire_entry"
+    assert ds.class_reason(out, "T0", ["p3"], 1, 0, diag) == "outcome_not_best"
+
+
+def test_tampered_class_evidence_is_caught(built):
+    _, _, recs = built
+    a = next(x for x in recs if x["class"] == "A" and x["weight"] > 0)
+    unsafe = _reseal({**a, "evidence": {**a["evidence"], "fire_entry_moves": [next(iter(a["actions"]))]}})
+    assert any("outcome rule" in e for e in _problems(unsafe))
+    as_t0 = _reseal({**a, "evidence": {**a["evidence"], "class_reasons": {t: "diagnostic_teacher" for t in a["teachers"]}}})
+    assert any("outcome rule" in e for e in _problems(as_t0))
+    no_fire = _reseal({**a, "evidence": {k: v for k, v in a["evidence"].items() if k != "fire_entry_moves"}})
+    assert "fire_entry_moves evidence is missing" in _problems(no_fire)
+    t0 = next(x for x in recs if x["class"] == "B" and "T0" in x["teachers"])
+    assert t0["evidence"]["class_reasons"]["T0"] in ("diagnostic_teacher", "outcome_not_best")
+    promoted = _reseal({**t0, "class": "A", "use": "sft_positive"})
+    assert any("outcome rule" in e for e in _problems(promoted))
+
+
+def test_real_scope_needs_the_frozen_protocol(built):
+    _, _, recs = built
+    a = next(x for x in recs if x["class"] == "A")
+    real = _reseal({**a, "scope": "p1-17-train-full@1"})
+    assert ds.record_problems(real, ds.load_protocol()) == []
+    draft = {**ds.load_protocol(), "status": "DRAFT_NOT_FROZEN"}
+    assert any("needs a FROZEN protocol" in e for e in ds.record_problems(real, draft))
+    for bad in ("p1-12-train-pilot@1", "dev", "emberbench"):
+        assert any("not allowed" in e for e in _problems(_reseal({**a, "scope": bad})))
+
+
+def test_family_unit_splits_the_family_budget_over_its_scenarios(built):
+    _, _, recs = built
+    one = [x for x in recs if x["class"] == "A"]
+    twin = [ds._seal({**{k: v for k, v in x.items() if k != "record_hash"}, "scenario_hash": "sha256:" + "0" * 64})
+            for x in one]
+    both = ds.assign_weights(one + twin)
+    per = {}
+    for x in both:
+        per[x["scenario_hash"]] = per.get(x["scenario_hash"], 0) + x["weight"]
+    assert sorted(round(v, 9) for v in per.values()) == [0.5, 0.5]
+    assert ds.family_scenario_counts(both) == {one[0]["family_id"]: 2}
+    # streamed weighting with the global counts gives the same weights as the whole-dataset call
+    streamed = ds.assign_weights(one, family_scenarios={one[0]["family_id"]: 2})
+    assert sorted(x["weight"] for x in streamed) == sorted(x["weight"] for x in both if x["scenario_hash"] == one[0]["scenario_hash"])
+    alone = [ds._seal({**{k: v for k, v in x.items() if k != "record_hash"}, "family_id": "fam-other"}) for x in twin]
+    sep = ds.assign_weights(one + alone)
+    assert sorted({round(sum(x["weight"] for x in sep if x["family_id"] == f), 9) for f in ("fam-other", one[0]["family_id"])}) == [1.0]
+    with pytest.raises(ds.DatasetError, match="no class-A scenario count"):
+        ds.assign_weights(one, family_scenarios={})
 
 
 def test_no_disagreement_study_gives_no_preference(built):

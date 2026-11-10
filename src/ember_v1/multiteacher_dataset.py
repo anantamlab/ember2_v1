@@ -1,7 +1,10 @@
 """Multi-teacher outcome-aware dataset records and CPU validators (P1-14, issue #47).
 
-DRAFT PROTOCOL, FIXTURE SCOPE ONLY. `export` always refuses: real dataset
-generation needs a FROZEN protocol, owner authorization and the P1-12 TRAIN gate.
+Protocol 1.0.0 (FROZEN, run 17): scopes `synthetic_fixture` and `p1-17-train-full@1`. `export` is the gate
+for real records: FROZEN protocol, owner authorization and the collection gate (verified 189/189 collection).
+`train_dataset` builds the real records outside git and writes them only if `validate_dataset` passes.
+T0 is diagnostic (never class A); maps with a move into a burning cell are never class A; weights are per
+family; preference approval stays disabled (every class C is weight 0).
 
 Evidence classes (`data/protocols/p1-14-multiteacher-dataset.json`):
   A successful demonstration   - teacher trajectory tied best in a complete matched group
@@ -32,7 +35,7 @@ from .sim import Scenario
 from .sim.canonical import digest
 from .teacher.registry import VALUE_TEACHERS
 
-RECORD_VERSION = "mt-dataset-record@0.3.0"
+RECORD_VERSION = "mt-dataset-record@1.0.0"
 REPO = Path(__file__).resolve().parents[2]
 PROTOCOL_PATH = REPO / "data" / "protocols" / "p1-14-multiteacher-dataset.json"
 CLASSES = ("A", "B", "C", "D", "E")
@@ -103,44 +106,69 @@ _TRAJECTORY_KEYS = ("casualties", "unresolved", "evacuated", "casualties_plus_un
                     "contested_targets", "peak_target_contention", "steps", "termination_reason")
 
 
+def diagnostic_teachers(protocol: Mapping[str, Any]) -> frozenset[str]:
+    return frozenset((protocol.get("demonstration_rule") or {}).get("diagnostic_teachers") or ())
+
+
+def class_reason(outcome: Mapping[str, Any], teacher: str, fire_entries: Sequence[str], best_primary: int,
+                 best_casualties: int, diagnostic: frozenset[str]) -> str:
+    """Preregistered class rule for one teacher decision (protocol demonstration_rule.class_reasons)."""
+    if not (outcome["casualties_plus_unresolved"] == best_primary and outcome["casualties"] == best_casualties):
+        return "outcome_not_best"
+    if teacher in diagnostic:
+        return "diagnostic_teacher"
+    if fire_entries:
+        return "unsafe_fire_entry"
+    return "best_outcome"
+
+
 def demonstrations(report: Mapping[str, Any], scenario: Scenario,
-                   protocol: Mapping[str, Any] | None = None) -> list[dict[str, Any]]:
+                   protocol: Mapping[str, Any] | None = None, *, family_id: str | None = None,
+                   teacher_dev_similar: bool = False) -> list[dict[str, Any]]:
     """Class A/B records from one verified, complete five-teacher group. Unweighted (weight None).
 
     Every record holds one COMPLETE joint map that a teacher proposed at that exact state (merged when several
-    teachers proposed the identical map). Class A records still need `select_joint_targets`."""
+    teachers proposed the identical map). Class A records still need `select_joint_targets`.
+    Class A needs the group-best outcome (over all five teachers), a non-diagnostic teacher (T0 is diagnostic)
+    and a map with no move into a burning cell. `family_id` overrides the scenario source (real TRAIN groups
+    carry the family in the collection plan, not in the scenario source)."""
+    from .train_collect import fire_entry_moves
     protocol = protocol or load_protocol()
     mt.verify_fixture(report, scenario)
     if not report["group_complete"]:
         raise DatasetError("incomplete five-teacher group: no demonstration records (reported, not used)")
+    diag = diagnostic_teachers(protocol)
     outs = {n: r["outcome"] for n, r in report["policies"].items()}
     best_p = min(o["casualties_plus_unresolved"] for o in outs.values())
     best_c = min(o["casualties"] for o in outs.values())
-    cls = {n: "A" if o["casualties_plus_unresolved"] == best_p and o["casualties"] == best_c else "B"
-           for n, o in outs.items()}
     uninformative = len({(o["casualties_plus_unresolved"], o["casualties"]) for o in outs.values()}) == 1
     prov = report["provenance"]
-    family = _family(report)
+    family = family_id or _family(report)
+    kind = "p1-12-fixture" if report["scope"] == mt.SCOPE_FIXTURE else "matched-group"
     merged: dict[tuple[str, str, str], dict[str, Any]] = {}
     for name, roll in report["policies"].items():
         for d in roll["decisions"]:
             prop = d["proposal"]
-            key = (cls[name], d["observation_digest"], digest(prop["actions"]))
+            fire = fire_entry_moves(d)
+            why = class_reason(outs[name], name, fire, best_p, best_c, diag)
+            k = "A" if why == "best_outcome" else "B"
+            key = (k, d["observation_digest"], digest(prop["actions"]))
             rec = merged.get(key)
             if rec is None:
-                k = cls[name]
                 rec = merged[key] = {
                     "record_version": RECORD_VERSION, "class": k, "use": USE[k],
                     "scope": report["scope"], "scenario_hash": report["scenario_hash"], "family_id": family,
                     "lineage_id": _lineage(prov["scenario"]["source"], family),
-                    "source": {"kind": "p1-12-fixture", "content_hash": report["content_hash"]},
+                    "source": {"kind": kind, "content_hash": report["content_hash"]},
                     "provenance": {"report_content_hash": report["content_hash"], "simulator": prov["simulator"],
                                    "collector": prov["collector"], "scenario": prov["scenario"], "teachers": {}},
                     "observation": d["observation"], "observation_digest": d["observation_digest"],
                     "teachers": [], "actions": dict(prop["actions"]), "proposal_hashes": [],
                     "teacher_values": None, "step": d["observation"]["step"],
                     "evidence": {"group_best_primary": best_p, "group_best_casualties": best_c,
-                                 "uninformative_scenario": uninformative, "trajectory_outcomes": {}},
+                                 "uninformative_scenario": uninformative, "trajectory_outcomes": {},
+                                 "class_reasons": {}, "fire_entry_moves": fire,
+                                 "teacher_dev_similar_family": bool(teacher_dev_similar)},
                     "replay": {}, "step_diagnostics": d["diagnostics"],
                     "selection": None if k == "A" else
                     {"rule": JOINT_TARGET_RULE, "selected": False, "reason": "class B: contrast and probe queue only"},
@@ -150,7 +178,8 @@ def demonstrations(report: Mapping[str, Any], scenario: Scenario,
             rec["proposal_hashes"].append(prop["proposal_hash"])
             rec["provenance"]["teachers"][name] = prov["teachers"][name]
             rec["replay"][name] = {**roll["replay"], "final_transition_hash": roll["final_transition_hash"]}
-            rec["evidence"]["trajectory_outcomes"][name] = {k: outs[name][k] for k in _TRAJECTORY_KEYS}
+            rec["evidence"]["trajectory_outcomes"][name] = {x: outs[name][x] for x in _TRAJECTORY_KEYS}
+            rec["evidence"]["class_reasons"][name] = why
             if name in VALUE_TEACHERS and prop["values"] is not None:
                 rec["teacher_values"] = {name: prop["values"]}       # computed by T2; copied, never created
     return [_seal(r) for r in merged.values()]
@@ -327,10 +356,22 @@ def _alt(rep: Mapping[str, Any], name: str) -> dict[str, Any]:
 
 
 # ----- weighting ---------------------------------------------------------------------------------
-def assign_weights(records: Sequence[Mapping[str, Any]], protocol: Mapping[str, Any] | None = None
-                   ) -> list[dict[str, Any]]:
+def family_scenario_counts(records: Iterable[Mapping[str, Any]]) -> dict[str, int]:
+    """Number of scenarios per family that have a selected class-A record (the family weighting divisor)."""
+    seen: dict[str, set] = defaultdict(set)
+    for r in records:
+        if r["class"] == "A" and (r.get("selection") or {}).get("selected"):
+            seen[r["family_id"]].add(r["scenario_hash"])
+    return {f: len(s) for f, s in sorted(seen.items())}
+
+
+def assign_weights(records: Sequence[Mapping[str, Any]], protocol: Mapping[str, Any] | None = None,
+                   *, family_scenarios: Mapping[str, int] | None = None) -> list[dict[str, Any]]:
     """Training weights. Re-sealed. Every record ends with a weight > 0 or a weight 0 and an exclusion reason.
 
+    Unit `family` (protocol weighting.unit): a scenario's budget is scenario_budget / (number of scenarios of its
+    family with selected class-A records). `family_scenarios` gives those counts when the dataset is weighted one
+    scenario at a time (streamed build); otherwise they come from `records`. Unit `scenario`: no division.
     Class A: one budget per scenario (x0.25 when uninformative), split EQUALLY over the class-A trajectories
     (tied-best teachers). A short tied-best trajectory is not drowned by a long one, and a rare teacher's
     trajectory gets the same total as a common one.
@@ -344,9 +385,16 @@ def assign_weights(records: Sequence[Mapping[str, Any]], protocol: Mapping[str, 
     B, D, unapproved C and non-selected A: weight 0 with the class's exclusion reason."""
     protocol = protocol or load_protocol()
     w = protocol["weighting"]
+    unit = w.get("unit", "scenario")
+    if unit not in ("scenario", "family"):
+        raise DatasetError(f"unknown weighting unit {unit!r}")
     by = defaultdict(list)
     for r in records:
         by[(r["scenario_hash"], r["class"])].append(r)
+    if unit == "family" and family_scenarios is None:
+        if any(r["class"] == "A" and r.get("selection") is None for r in records):
+            raise DatasetError("class A records need select_joint_targets before weighting")
+        family_scenarios = family_scenario_counts(records)
     out = []
     for (_, k), rs in sorted(by.items()):
         if k == "A" and any(r.get("selection") is None for r in rs):
@@ -355,6 +403,11 @@ def assign_weights(records: Sequence[Mapping[str, Any]], protocol: Mapping[str, 
         if k == "A":
             factor = w["uninformative_scenario_factor"] if rs[0]["evidence"].get("uninformative_scenario") else 1.0
             budget = w["scenario_budget"] * factor
+            if unit == "family" and any(r["selection"]["selected"] for r in rs):
+                n = (family_scenarios or {}).get(rs[0]["family_id"], 0)
+                if n < 1:
+                    raise DatasetError(f"family {rs[0]['family_id']} has no class-A scenario count")
+                budget /= n
             modes = {r["selection"].get("mode") for r in rs}
             if len(modes) != 1 or not modes <= set(JOINT_TARGET_MODES):
                 raise DatasetError(f"class A records of one scenario need one joint-target mode, got {sorted(map(str, modes))}")
@@ -425,6 +478,13 @@ def audit(records: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
                                                                 and not r["selection"]["selected"]
                                                                 for t in r["teachers"]).items())),
             "records_with_teacher_values": sum(1 for r in records if r.get("teacher_values")),
+            "class_reasons": dict(sorted(Counter(why for r in records if r["class"] in ("A", "B")
+                                                 for why in (r["evidence"].get("class_reasons") or {}).values()
+                                                 ).items())),
+            "fire_entry_records": sum(1 for r in records if r["class"] in ("A", "B")
+                                      and r["evidence"].get("fire_entry_moves")),
+            "teacher_dev_similar_weight_A": round(sum(r["weight"] for r in records if r["class"] == "A"
+                                                      and r["evidence"].get("teacher_dev_similar_family")), 9),
             "exclusions": dict(sorted(Counter(r["exclusion_reason"] for r in records if r.get("exclusion_reason")).items())),
             "preference_candidates": sum(1 for r in records if r["class"] == "C"),
             "approved_preferences": sum(1 for r in records if r["class"] == "C"
@@ -445,7 +505,9 @@ def record_problems(r: Mapping[str, Any], protocol: Mapping[str, Any]) -> list[s
     if r["record_version"] != RECORD_VERSION or r["use"] != USE[k]:
         errs.append(f"class {k}: wrong version or use")
     if r["scope"] not in protocol["scope"]["allowed_now"]:
-        errs.append(f"scope {r['scope']!r} is not allowed by a non-frozen protocol")
+        errs.append(f"scope {r['scope']!r} is not allowed by the protocol")
+    elif r["scope"] != mt.SCOPE_FIXTURE and protocol.get("status") != "FROZEN":
+        errs.append(f"real scope {r['scope']!r} needs a FROZEN protocol")
     if digest({x: v for x, v in r.items() if x != "record_hash"}) != r["record_hash"]:
         errs.append("record hash mismatch")
     if digest(r["observation"]) != r["observation_digest"]:
@@ -498,15 +560,19 @@ def record_problems(r: Mapping[str, Any], protocol: Mapping[str, Any]) -> list[s
             errs.append("teacher values from a teacher that does not compute them")
         ev = r["evidence"]
         outs = ev.get("trajectory_outcomes", {})
+        diag = diagnostic_teachers(protocol)
+        fire = ev.get("fire_entry_moves")
+        if not isinstance(fire, list):
+            errs.append("fire_entry_moves evidence is missing")
+            fire = []
         for t in r["teachers"]:
             o = outs.get(t)
             if o is None:
                 errs.append(f"no outcome evidence for {t}")
                 continue
-            best = o["casualties_plus_unresolved"] == ev["group_best_primary"] and \
-                o["casualties"] == ev["group_best_casualties"]
-            if (k == "A") is not best:
-                errs.append(f"class {k} does not follow the outcome rule for {t}")
+            why = class_reason(o, t, fire, ev["group_best_primary"], ev["group_best_casualties"], diag)
+            if (k == "A") is not (why == "best_outcome") or (ev.get("class_reasons") or {}).get(t) != why:
+                errs.append(f"class {k} does not follow the outcome rule for {t} ({why})")
     if k == "C":
         rule = protocol["preference_rule"]
         ev = r["evidence"]
@@ -704,13 +770,42 @@ def source_drift_problems(records: Sequence[Mapping[str, Any]]) -> list[str]:
     return [f"teacher {t} source drift: {len(v)} identities or fingerprints" for t, v in sorted(seen.items()) if len(v) > 1]
 
 
-def export(*_: Any, protocol: Mapping[str, Any] | None = None, authorization: str | None = None) -> None:
-    """Real dataset generation. Refused: protocol not frozen, no authorization, no TRAIN gate."""
+def collection_gate_problems(protocol: Mapping[str, Any], verification: Mapping[str, Any] | None) -> list[str]:
+    """The protocol's collection gate against a collection verification report (train_collect verify)."""
+    g = protocol.get("collection_gate")
+    if not isinstance(g, Mapping):
+        return ["protocol has no collection gate"]
+    if not isinstance(verification, Mapping):
+        return ["TRAIN collection gate: no verification report"]
+    out = []
+    body = {k: v for k, v in verification.items() if k != "verification_hash"}
+    if digest(body) != verification.get("verification_hash"):
+        out.append("verification report hash does not recompute")
+    for key in ("plan_hash", "verification_version", "verification_hash"):
+        if verification.get(key) != g.get(key):
+            out.append(f"verification {key} {verification.get(key)!r} is not the gate's {g.get(key)!r}")
+    if verification.get("full_train_verified") is not True:
+        out.append("collection is not full_train_verified")
+    if verification.get("status_counts") != {"verified_complete": g.get("groups")}:
+        out.append(f"status counts {verification.get('status_counts')} are not {g.get('groups')} verified_complete")
+    if g.get("scope") not in protocol["scope"]["allowed_now"]:
+        out.append(f"gate scope {g.get('scope')!r} is not an allowed scope")
+    return out
+
+
+def export(*_: Any, protocol: Mapping[str, Any] | None = None, authorization: str | None = None,
+           verification: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    """Gate for real dataset generation: FROZEN protocol, owner authorization and the collection gate.
+    Raises DATASET_GENERATION_BLOCKED with every reason; returns the gate record when all pass. The builder
+    (`train_dataset`) still runs validate_dataset over every record before it writes the dataset."""
     protocol = protocol or load_protocol()
     reasons = []
     if protocol.get("status") != "FROZEN":
         reasons.append("protocol is not FROZEN")
     if not authorization:
         reasons.append("no owner authorization")
-    reasons.append("P1-12 TRAIN collection gate is not implemented or approved")
-    raise DatasetError("DATASET_GENERATION_BLOCKED: " + "; ".join(reasons))
+    reasons += collection_gate_problems(protocol, verification)
+    if reasons:
+        raise DatasetError("DATASET_GENERATION_BLOCKED: " + "; ".join(reasons))
+    return {"status": "GATE_PASS", "protocol_version": protocol["version"], "authorization": authorization,
+            "plan_hash": verification["plan_hash"], "verification_hash": verification["verification_hash"]}
