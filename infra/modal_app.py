@@ -187,6 +187,46 @@ class DecisionPolicy:
                                 batched_forward=self.batched_forward, batched_evidence=self.batched_evidence)
 
 
+@app.cls(image=image, gpu="A10", volumes=VOLUMES, timeout=3600, startup_timeout=STARTUP_TIMEOUT_S,
+         scaledown_window=SCALEDOWN_WINDOW_S, retries=RETRIES, max_containers=MAX_CONTAINERS, cpu=4.0, memory=32768)
+class StudentTrainer:
+    """P1-18 student phases (pilot / train / eval) of the FROZEN p1-14-student-train protocol.
+    Data and outputs live on the `ember-v1-checkpoints` volume (/ckpt); the volume is committed at every
+    checkpoint, so a stopped train run resumes from its last checkpoint (student_run.gpu_phase)."""
+    code_commit: str = modal.parameter(default="")
+
+    @modal.method()
+    def run(self, phase: str, protocol_json: str, spec_json: str) -> dict:
+        from ember_v1 import student_run as sr
+        from ember_v1 import student_train as st
+
+        checkpoints.reload()
+        spec = {**json.loads(spec_json), "code_commit": self.code_commit}
+        return sr.gpu_phase(phase, json.loads(protocol_json), spec,
+                            adapter_factory=lambda cfg, checkpoint=None: st.ClefLoraAdapter(cfg, checkpoint=checkpoint),
+                            persist=checkpoints.commit, image_lock_sha256=os.environ.get("EMBER_IMAGE_LOCK_SHA256"))
+
+
+@app.local_entrypoint()
+def student(phase: str, spec: str, authorize: str = "", out: str = ""):
+    """modal run [--detach] infra/modal_app.py::student --phase pilot --spec <spec.json> --authorize pilot"""
+    from ember_v1 import student_train as st
+    from ember_v1.run_report import write_json_atomic
+
+    protocol = st.load_protocol()
+    try:
+        plan = st.gpu_train_plan(phase, protocol, authorize=authorize, code_commit=_code_commit())
+    except (ValueError, PermissionError) as exc:
+        raise SystemExit(f"refused: {exc}")
+    print(json.dumps({"plan": plan}))
+    trainer = StudentTrainer.with_options(gpu=plan["gpu"], timeout=plan["timeout_s"], retries=plan["retries"],
+                                          max_containers=plan["max_containers"])(code_commit=plan["code_commit"])
+    result = trainer.run.remote(phase, json.dumps(protocol), Path(spec).read_text(encoding="utf-8"))
+    if out:
+        write_json_atomic(Path(out), result)
+    print(json.dumps({k: result.get(k) for k in ("phase", "elapsed_s", "go", "reload")}, default=str))
+
+
 def _ints(text: str) -> list[int]:
     return [int(x) for x in text.split(",") if x.strip()]
 

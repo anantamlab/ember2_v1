@@ -317,15 +317,24 @@ def _write(path: Path, doc: Mapping[str, Any]) -> None:
 
 def train(adapter: Adapter, rows: Sequence[Mapping[str, Any]], cfg: Mapping[str, Any], *, guards: Guards,
           out_dir: str | Path, mode: str, protocol: Mapping[str, Any] | None = None, epochs: int | None = None,
-          max_rows: int | None = None) -> dict[str, Any]:
+          max_rows: int | None = None, resume: Mapping[str, Any] | None = None,
+          on_checkpoint: Callable[[dict[str, Any]], None] | None = None) -> dict[str, Any]:
     """`mode="protocol"`: the real run; the protocol must be FROZEN and the epoch count is the protocol's.
+    `mode="gpu_pilot"`: the bounded GPU pilot (frozen protocol, `max_rows` rows, the protocol schedule).
     `mode="s0_fixture"`: CPU fixture only (<= 64 rows, cpu adapter); `epochs` may repeat for the overfit check.
-    `rows` come from `rows_from_epoch`; their order is the epoch's seeded draw order."""
+    `rows` come from `rows_from_epoch`; their order is the epoch's seeded draw order.
+    `resume` = {"path", "meter", "checkpoints"} of a periodic checkpoint of the SAME run (same rows, config):
+    the adapter state is restored and the draws already consumed are skipped. `on_checkpoint` is called after
+    every saved checkpoint (e.g. to persist a volume) with a progress record."""
     out = Path(out_dir)
-    if mode == "protocol":
+    if mode in ("protocol", "gpu_pilot"):
         check_protocol(protocol, require_frozen=True)    # raises StudentTrainProtocolError on a draft
-        if epochs not in (None, cfg["epochs"]) or max_rows is not None:
-            raise TrainError("config", "the protocol run uses the protocol epoch count and every row")
+        if epochs not in (None, cfg["epochs"]):
+            raise TrainError("config", "the protocol run uses the protocol epoch count")
+        if mode == "protocol" and max_rows is not None:
+            raise TrainError("config", "the protocol run uses every row")
+        if mode == "gpu_pilot" and not max_rows:
+            raise TrainError("config", "the GPU pilot is bounded by max_rows")
     elif mode == "s0_fixture":
         if adapter.device != "cpu" or len(rows) > S0_MAX_ROWS:
             raise TrainError("config", f"s0_fixture is a CPU check on <= {S0_MAX_ROWS} rows")
@@ -333,19 +342,36 @@ def train(adapter: Adapter, rows: Sequence[Mapping[str, Any]], cfg: Mapping[str,
         raise TrainError("config", f"unknown mode {mode!r}")
     if cfg["micro_batch_rows"] != 1:
         raise TrainError("config", "batch > 1 needs a padding gate PASS")
-    if out.exists():
+    if out.exists() and resume is None:
         raise TrainError("config", f"{out} exists (write-once)")
     n_epochs = epochs or cfg["epochs"]
     rows = list(rows)[:max_rows] if max_rows else list(rows)
+    if max_rows and rows:           # whole draws only: drop a trailing partial draw
+        last = rows[-1]["draw"]
+        if abs(sum(r["row_share"] for r in rows if r["draw"] == last) - 1.0) > 1e-9:
+            rows = [r for r in rows if r["draw"] != last]
     groups = _draw_groups(rows)
     sched = schedule(len(groups), cfg, n_epochs)
     meter = {"rows": 0, "draws": 0, "tokens": 0, "optimizer_steps": 0, "peak_memory_bytes": 0, "losses": []}
     ckpts: list[dict[str, Any]] = []
+    skip = 0
+    if resume is not None:
+        adapter.load_state(Path(resume["path"]))          # type: ignore[attr-defined]
+        meter = {**resume["meter"], "losses": list(resume["meter"]["losses"])}
+        ckpts = list(resume["checkpoints"])
+        skip = meter["draws"]
+        if meter["optimizer_steps"] * cfg["grad_accum_draws"] != skip:
+            raise TrainError("config", "a resume checkpoint must sit on an optimizer-step boundary")
     stage = "train"
     try:
         accum, run_loss = 0, 0.0
+        seen = 0
         for _ep in range(n_epochs):
             for g in groups:
+                if seen < skip:
+                    seen += 1
+                    continue
+                seen += 1
                 draw_loss = 0.0
                 for row in g:            # one draw = one decision: -log pi(A|s) / N over its rows (chain rule)
                     loss = adapter.loss_and_backward(row, row["row_share"] / cfg["grad_accum_draws"])
@@ -359,6 +385,10 @@ def train(adapter: Adapter, rows: Sequence[Mapping[str, Any]], cfg: Mapping[str,
                 meter["draws"] += 1
                 if accum == cfg["grad_accum_draws"]:
                     step = meter["optimizer_steps"]
+                    if step == 0 and hasattr(adapter, "grad_norms"):
+                        meter["first_step_grad_norms"] = adapter.grad_norms()
+                        if not all(math.isfinite(v) and v > 0 for v in meter["first_step_grad_norms"].values()):
+                            raise TrainError("no_gradient", json.dumps(meter["first_step_grad_norms"]))
                     adapter.optimizer_step(lr_at(step, cfg["lr"], sched), lr_at(step, cfg["head_lr"], sched))
                     meter["optimizer_steps"] += 1
                     meter["losses"].append(run_loss / accum)
@@ -368,6 +398,9 @@ def train(adapter: Adapter, rows: Sequence[Mapping[str, Any]], cfg: Mapping[str,
                     if cfg["checkpoint_every"] and meter["optimizer_steps"] % cfg["checkpoint_every"] == 0:
                         stage = "checkpoint"
                         ckpts.append(_checkpoint(adapter, out, meter["optimizer_steps"]))
+                        if on_checkpoint is not None:
+                            on_checkpoint({"path": str(out / ckpts[-1]["path"]), "meter": dict(meter),
+                                           "checkpoints": list(ckpts), "schedule": sched})
                         stage = "train"
         if accum:
             step = meter["optimizer_steps"]
@@ -391,7 +424,7 @@ def train(adapter: Adapter, rows: Sequence[Mapping[str, Any]], cfg: Mapping[str,
 
 def _meter(m: Mapping[str, Any], g: Guards) -> dict[str, Any]:
     el = g.elapsed()
-    return {**{k: v for k, v in m.items() if k != "losses"}, "elapsed_s": round(el, 3),
+    return {**{k: v for k, v in m.items() if k != "losses"}, "elapsed_s": round(el, 3), "losses": list(m["losses"]),
             "tokens_per_s": round(m["tokens"] / el, 2) if el > 0 else None,
             "projected_usd": round(g.projected_usd(), 4), "first_loss": m["losses"][0] if m["losses"] else None,
             "last_loss": m["losses"][-1] if m["losses"] else None}
@@ -494,10 +527,11 @@ def verify_runtime_pins(meta: Mapping[str, Any], cfg: Mapping[str, Any], *, imag
 # ----- GPU adapter (NOT EXECUTED) --------------------------------------------------------------------------
 GPU_API_ASSUMPTIONS = (
     "unsloth.FastDecisionModel.from_pretrained(model_name, max_seq_length, load_in_4bit, revision)",
+    "unsloth.FastDecisionModel.get_peft_model(model, r, lora_alpha, lora_dropout, target_modules, ...)",
     "unsloth.FastDecisionModel.build_dataset(rows, tokenizer, model) -> (items, report)",
-    "unsloth._vendor.clef.joint_schema_model.collate_records(records, pad_id, device)",
+    "unsloth.models.decision.ClefDataCollator(pad_id)(items) -> batch with target / marker_mask",
     "model(input_ids=, attention_mask=, records=) -> (flat_logits[num_questions, >=5], None)",
-    "peft.LoraConfig / peft.get_peft_model on the decoder backbone (target 'all-linear')",
+    "model.save_pretrained(dir, tokenizer) (adapters + head); unsloth.models.decision._load_clef_checkpoint",
 )
 
 
@@ -505,8 +539,9 @@ def preflight_api() -> dict[str, Any]:
     """Run inside the GPU container before any step: every assumed name must exist, else stop."""
     import importlib
     found = {}
-    for mod, name in (("unsloth", "FastDecisionModel"), ("unsloth._vendor.clef.joint_schema_model", "collate_records"),
-                      ("peft", "LoraConfig"), ("peft", "get_peft_model")):
+    for mod, name in (("unsloth", "FastDecisionModel"), ("unsloth.models.decision", "ClefDataCollator"),
+                      ("unsloth.models.decision", "_load_clef_checkpoint"),
+                      ("unsloth.models.decision", "_clef_amp_dtype"), ("unsloth.models.clef", "question_options")):
         try:
             found[f"{mod}.{name}"] = hasattr(importlib.import_module(mod), name)
         except ImportError:
@@ -516,59 +551,81 @@ def preflight_api() -> dict[str, Any]:
     return found
 
 
-class ClefLoraAdapter:  # pragma: no cover - GPU only, NOT EXECUTED; the A10 pilot is its first run
-    """LoRA r16 on the backbone, full training of the Clef head, bf16, gradient checkpointing, batch 1.
-    Every upstream name it uses is in GPU_API_ASSUMPTIONS and checked by `preflight_api` first."""
+class ClefLoraAdapter:  # pragma: no cover - GPU only; the P1-18 A10 pilot is its first run
+    """Upstream Clef LoRA: `FastDecisionModel.get_peft_model` puts LoRA r16 on the language layers of
+    `model.encoder` (the Qwen3.5 backbone); the fresh `model.head` (float32) trains in full. Loss = the
+    upstream `_soft_cross_entropy` over the row's questions (mean over people = our row-mean CE); the
+    marker mask confines it to each question's options. bf16 autocast, unsloth gradient checkpointing,
+    batch 1. Every upstream name it uses is in GPU_API_ASSUMPTIONS and checked by `preflight_api` first.
 
-    def __init__(self, cfg: Mapping[str, Any]) -> None:
+    `metadata` (p0b.runtime_metadata of the freshly loaded model, BEFORE LoRA) is kept for pin checks."""
+
+    def __init__(self, cfg: Mapping[str, Any], *, checkpoint: str | Path | None = None) -> None:
         import torch
-        from peft import LoraConfig, get_peft_model
+        from unsloth import FastDecisionModel
 
         from . import p0b
         preflight_api()
+        self.torch, self.device, self.cfg = torch, "cuda", cfg
+        if checkpoint is None:
+            model, tok = p0b.load_model(cfg["model"], cfg["max_len"], cfg["precision"], revision=cfg["model_commit"])
+            self.metadata = p0b.runtime_metadata(model, tok, cfg["model"], cfg["precision"], cfg["max_len"],
+                                                 evidence_source="modal:StudentTrainer",
+                                                 requested_revision=cfg["model_commit"])
+            lc = cfg["lora"]
+            model = FastDecisionModel.get_peft_model(
+                model, r=lc["r"], lora_alpha=lc["lora_alpha"], lora_dropout=lc["lora_dropout"],
+                target_modules=lc["target_modules"], bias=lc["bias"],
+                use_gradient_checkpointing="unsloth" if cfg["gradient_checkpointing"] else False,
+                random_state=cfg["seed"])
+        else:  # a saved adapter folder: base at the pinned revision + LoRA + head (inference / evaluation)
+            model, tok = FastDecisionModel.from_pretrained(model_name=str(checkpoint),
+                                                           max_seq_length=cfg["max_len"], load_in_4bit=False)
+            self.metadata = None
+        self.model, self.tok = model, tok
+        self.pad_id = p0b._pad_id(tok)
         torch.manual_seed(cfg["seed"])
-        model, tok = p0b.load_model(cfg["model"], cfg["max_len"], cfg["precision"], revision=cfg["model_commit"])
-        backbone = getattr(model, "backbone", None)
-        if backbone is None:
-            raise TrainError("gpu_api", "decision model has no `backbone` attribute")
-        lc = cfg["lora"]
-        model.backbone = get_peft_model(backbone, LoraConfig(r=lc["r"], lora_alpha=lc["lora_alpha"],
-                                                             lora_dropout=lc["lora_dropout"],
-                                                             target_modules=lc["target_modules"], bias=lc["bias"]))
-        if cfg["gradient_checkpointing"]:
-            model.backbone.gradient_checkpointing_enable()
-        model.train()
-        self.model, self.tok, self.torch, self.device = model, tok, torch, "cuda"
-        lora = [p for n, p in model.named_parameters() if p.requires_grad and "lora_" in n]
-        head = [p for n, p in model.named_parameters() if p.requires_grad and "lora_" not in n
-                and not n.startswith("backbone.")]
-        if not lora or not head:
-            raise TrainError("gpu_api", "no LoRA or no head parameters are trainable")
-        self.opt = torch.optim.AdamW([{"params": lora, "lr": cfg["lr"]}, {"params": head, "lr": cfg["head_lr"]}],
-                                     weight_decay=cfg["weight_decay"])
+        enc = [p for n, p in model.named_parameters() if p.requires_grad and n.startswith("encoder.")]
+        head = [p for n, p in model.named_parameters() if p.requires_grad and n.startswith("head.")]
+        other = [n for n, p in model.named_parameters() if p.requires_grad
+                 and not (n.startswith("encoder.") or n.startswith("head."))]
+        if checkpoint is None and (not enc or not head or other
+                                   or any("lora_" not in n for n, p in model.named_parameters()
+                                          if p.requires_grad and n.startswith("encoder."))):
+            raise TrainError("gpu_api", f"trainable set is not LoRA + head (enc {len(enc)}, head {len(head)}, "
+                                        f"other {other[:3]})")
+        self.trainable = {"lora_tensors": len(enc), "lora_params": sum(p.numel() for p in enc),
+                          "head_tensors": len(head), "head_params": sum(p.numel() for p in head)}
+        self.opt = torch.optim.AdamW([{"params": enc, "lr": cfg["lr"]}, {"params": head, "lr": cfg["head_lr"]}],
+                                     weight_decay=cfg["weight_decay"]) if checkpoint is None else None
+        FastDecisionModel.for_training(model) if checkpoint is None else FastDecisionModel.for_inference(model)
+        from unsloth.models.decision import ClefDataCollator, _clef_amp_dtype
+        self.collate = ClefDataCollator(self.pad_id)
+        self.amp = _clef_amp_dtype(model, torch.device("cuda"))
 
-    def _record(self, row):
+    def item(self, row):
+        """The upstream Clef item of one row; any skip or cut stops the run (no silent truncation)."""
         from unsloth import FastDecisionModel
         items, rep = FastDecisionModel.build_dataset([{k: row[k] for k in ("state", "questions", "gold")}],
                                                      self.tok, self.model)
-        if rep.get("skipped") or rep.get("truncated") or len(items) != 1:
+        if rep.get("skipped") or rep.get("truncated") or len(items) != 1 \
+                or len(items[0]["targets"]) != len(row["questions"]):
             raise TrainError("truncation_detected", json.dumps(rep, default=str))
-        return items[0]["record"]
+        return items[0]
 
-    def _logits(self, record):
-        from unsloth._vendor.clef.joint_schema_model import collate_records
-
-        from . import p0b
-        b = collate_records([record], p0b._pad_id(self.tok), "cuda")
-        with self.torch.autocast("cuda", dtype=self.torch.bfloat16):
-            out = self.model(input_ids=b["input_ids"], attention_mask=b["attention_mask"], records=b["records"])
-        return out[0] if isinstance(out, tuple) else out
+    def _forward(self, item):
+        from unsloth.models.decision import _no_cudnn_attention
+        b = self.collate([item])
+        target, mask = b.pop("target").cuda(), b.pop("marker_mask").cuda()
+        b.pop("ordinal", None)
+        inputs = {k: (v.cuda() if self.torch.is_tensor(v) else v) for k, v in b.items()}
+        with _no_cudnn_attention(), self.torch.autocast("cuda", dtype=self.amp, enabled=self.amp is not None):
+            z, _ = self.model(**inputs)
+        return z.float().masked_fill(~mask, -1e4), target
 
     def loss_and_backward(self, row, scale):
-        rec = self._record(row)
-        logits = self._logits(rec)
-        tgt = self.torch.tensor([q.option_ids.index(row["gold"][q.question_id]) for q in rec.questions], device="cuda")
-        loss = self.torch.nn.functional.cross_entropy(logits.float()[:, :len(ACTIONS)], tgt)
+        z, target = self._forward(self.item(row))
+        loss = -(target * self.torch.log_softmax(z, -1)).sum(-1).mean()
         (loss * scale).backward()
         return float(loss.detach())
 
@@ -577,22 +634,46 @@ class ClefLoraAdapter:  # pragma: no cover - GPU only, NOT EXECUTED; the A10 pil
         self.opt.step()
         self.opt.zero_grad(set_to_none=True)
 
-    def predict(self, row):
+    def grad_norms(self) -> dict[str, float]:
+        """Norms of the accumulated gradients (call before optimizer_step): both groups must be > 0."""
+        out = {}
+        for name, g in (("lora", self.opt.param_groups[0]), ("head", self.opt.param_groups[1])):
+            s = sum(float(p.grad.float().pow(2).sum()) for p in g["params"] if p.grad is not None)
+            out[name] = math.sqrt(s)
+        return out
+
+    def scores(self, row) -> dict[str, dict[str, float]]:
+        """Per person: log-probabilities over that person's options (upstream option order)."""
+        from unsloth.models.clef import question_options
+        it = self.item(row)
         with self.torch.inference_mode():
-            rec = self._record(row)
-            z = self._logits(rec).float()
-        return {q.question_id: q.option_ids[int(z[i, :len(q.option_ids)].argmax())] for i, q in enumerate(rec.questions)}
+            z, _ = self._forward(it)
+            lp = self.torch.log_softmax(z, -1).cpu()
+        out = {}
+        for i, (qid, q) in enumerate(it["source"]["questions"].items()):
+            keys = [k for k, _ in question_options(q)]
+            out[qid] = {k: float(lp[i, j]) for j, k in enumerate(keys)}
+        return out
+
+    def predict(self, row):
+        return {pid: min(s, key=lambda a: (-s[a], a)) for pid, s in self.scores(row).items()}
 
     def save(self, path):
         path.mkdir(parents=True, exist_ok=False)
-        self.model.backbone.save_pretrained(str(path / "lora"))
-        head = {n: p.detach().cpu() for n, p in self.model.named_parameters() if not n.startswith("backbone.")}
-        self.torch.save(head, path / "head.pt")
+        self.model.save_pretrained(str(path), self.tok)
+        if self.opt is not None:
+            self.torch.save(self.opt.state_dict(), path / "optimizer.pt")
+
+    def load_state(self, path):
+        """Resume: adapters + head (upstream loader) and the optimizer state of a periodic checkpoint."""
+        from unsloth.models.decision import _load_clef_checkpoint
+        _load_clef_checkpoint(self.model, Path(path))
+        self.opt.load_state_dict(self.torch.load(Path(path) / "optimizer.pt", map_location="cuda"))
 
     def weights_digest(self):
         h = hashlib.sha256()
         for n, p in sorted(self.model.named_parameters()):
-            if p.requires_grad:
+            if p.requires_grad or "lora_" in n or n.startswith("head."):
                 h.update(n.encode())
                 h.update(p.detach().float().cpu().numpy().tobytes())
         return "sha256:" + h.hexdigest()

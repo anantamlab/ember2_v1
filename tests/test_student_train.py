@@ -25,8 +25,16 @@ def _cost(e):
 
 
 @pytest.fixture(scope="module")
-def proto():
+def frozen_file():
     return st.load_protocol()
+
+
+@pytest.fixture(scope="module")
+def proto(frozen_file):
+    """A draft copy of the frozen file (in memory): the draft-refusal paths stay tested."""
+    d = {**copy.deepcopy(frozen_file), "status": "DRAFT_NOT_FROZEN", "frozen": False,
+         "authorizes": "nothing: draft copy"}
+    return {**d, "protocol_hash": st.protocol_hash(d)}
 
 
 @pytest.fixture(scope="module")
@@ -59,12 +67,14 @@ def _guards(**kw):
 
 
 # ----- protocol and configuration ----------------------------------------------------------------------------
-def test_protocol_is_a_five_teacher_draft_that_authorizes_nothing(proto):
-    rep = st.check_protocol(proto, require_frozen=False)
-    assert rep["protocol_hash"] == proto["protocol_hash"] == st.protocol_hash(proto)
-    assert proto["status"] == "DRAFT_NOT_FROZEN" and proto["frozen"] is False
-    assert proto["teachers"]["demonstrations_from"] == ["T0", "T1", "T2", "T3", "T4"]
-    assert proto["authorizes"].startswith("nothing")
+def test_protocol_file_is_frozen_five_teacher_with_measured_tokens(frozen_file, proto):
+    rep = st.check_protocol(frozen_file, require_frozen=True)
+    assert rep["protocol_hash"] == frozen_file["protocol_hash"] == st.protocol_hash(frozen_file)
+    assert frozen_file["status"] == "FROZEN" and frozen_file["frozen"] is True
+    assert frozen_file["teachers"]["demonstrations_from"] == ["T0", "T1", "T2", "T3", "T4"]
+    tm = frozen_file["data"]["token_measurement"]
+    assert tm["all_rows_ok"] is True and tm["max_row_tokens"] < frozen_file["pins"]["max_len"]
+    assert frozen_file["data"]["token_budget_per_epoch"].startswith("RULE")
     with pytest.raises(st.StudentTrainProtocolError, match="not frozen"):
         st.check_protocol(proto, require_frozen=True)
 
@@ -91,7 +101,7 @@ def test_protocol_checks_fail_closed(proto, mutate, match):
 def test_config_is_the_protocol(cfg, proto):
     assert cfg["model"] == "unsloth/Qwen3.5-2B" and cfg["model_commit"] == proto["pins"]["model_commit"]
     assert cfg["lora"] == {"r": 16, "lora_alpha": 16, "lora_dropout": 0.0, "target_modules": "all-linear", "bias": "none"}
-    assert (cfg["epochs"], cfg["micro_batch_rows"], cfg["grad_accum_draws"], cfg["checkpoint_every"]) == (1, 1, 8, 1000)
+    assert (cfg["epochs"], cfg["micro_batch_rows"], cfg["grad_accum_draws"], cfg["checkpoint_every"]) == (1, 1, 8, 250)
     assert (cfg["chunk_k"], cfg["max_len"], cfg["reservations"]) == (100, 16384, False)
     for k in ("tokenizer_json_sha256", "requirements_lock_sha256", "unsloth_wheel_sha256", "clef_sha256"):
         assert cfg[k] == proto["pins"][k]
