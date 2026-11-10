@@ -230,6 +230,44 @@ def imitation_metrics(adapter: Any, rows: Sequence[Mapping[str, Any]]) -> dict[s
             "wall_s": round(time.perf_counter() - t0, 1)}
 
 
+def encode_step(active: Sequence[str], actions: Mapping[str, str]) -> Any:
+    """One step of a rollout trace: a digit string (ACTION_ORDER index per active person, sorted ids), or the
+    action dict itself when the predicted ids are not exactly the active ids (kept as is, never repaired)."""
+    from . import student_train as st
+    if set(actions) != set(active):
+        return dict(sorted(actions.items()))
+    return "".join(str(st.ACTION_ORDER.index(actions[p])) for p in active)
+
+
+def replay_trace(scenario: Any, trace: Sequence[Any], cfg: Mapping[str, Any],
+                 visit: Callable[[int, Mapping[str, Any], dict[str, str]], None] = lambda t, o, a: None
+                 ) -> dict[str, Any]:
+    """Re-run a student episode from its trace (the simulator is deterministic given the scenario seed and the
+    actions). `visit(step, observation, actions)` sees every student-visited state (DAgger). Returns the final
+    outcome counts so the caller can check them against the rollout record."""
+    from . import student_train as st
+    from .sim import Simulator
+    sim = Simulator(scenario)
+    for t, step in enumerate(trace):
+        if sim.terminated:
+            raise RunError(f"trace longer than the episode (step {t})")
+        obs = sim.observe()
+        if isinstance(step, str):
+            active = sorted(decision_questions(obs, style=cfg["question_style"]))
+            if len(active) != len(step):
+                raise RunError(f"step {t}: {len(step)} trace actions for {len(active)} active people")
+            actions = {p: st.ACTION_ORDER[int(c)] for p, c in zip(active, step)}
+        else:
+            actions = dict(step)
+        visit(t, obs, actions)
+        sim.step(actions)
+    if not sim.terminated:
+        raise RunError("trace ends before the episode")
+    status = Counter(p["status"] for p in sim.private_state()["people"])
+    return {"steps": len(trace), "evacuated": status["evacuated"], "casualties": status["casualty"],
+            "unresolved": status["active"]}
+
+
 class StudentPolicy:
     """The student as a closed-loop policy for `teacher.evaluate.run_episode` (duck-typed ReferencePolicy).
 
@@ -245,6 +283,7 @@ class StudentPolicy:
         self.identity = PolicyIdentity("S", "student", label, conf, digest({"name": "S", "config": conf}))
         self.seed = None
         self.rows = 0
+        self.trace: list[str] = []         # per step: ACTION_ORDER index of each active person, sorted person ids
 
     def decide(self, observation: Mapping[str, Any]) -> Any:
         from types import SimpleNamespace
@@ -260,6 +299,7 @@ class StudentPolicy:
                 row = {"state": r["state"], "questions": {p: qs[p] for p in r["ids"]}, "gold": dict(r["targets"])}
                 actions.update(self.ad.predict(row))
                 self.rows += 1
+        self.trace.append(encode_step(active, actions))
         return SimpleNamespace(actions=actions, diagnostics={},
                                runtime={"wall_ms": (time.perf_counter() - w0) * 1000,
                                         "cpu_ms": (time.thread_time() - c0) * 1000})
@@ -291,9 +331,11 @@ def rollouts(adapter: Any, cfg: Mapping[str, Any], scenarios_path: Path, out_pat
         scn = Scenario.from_dict(it["scenario"])
         if scn.content_hash() != it.get("scenario_hash", scn.content_hash()):
             raise RunError(f"{it['scenario_id']}: scenario hash differs from its list")
+        pol.trace = []
         rec, wall_ms = run_episode(scn, pol)
         rec.update({"set": it["set"], "scenario_id": it["scenario_id"], "family_id": it["family_id"],
-                    "scenario_hash": scn.content_hash(), "label": label,
+                    "scenario_hash": scn.content_hash(), "label": label, "trace": pol.trace,
+                    "trace_encoding": "ACTION_ORDER index per active person (sorted ids) | action dict",
                     "decision_wall_ms_p50": sorted(wall_ms)[len(wall_ms) // 2] if wall_ms else None})
         with open(out_path, "a", encoding="utf-8", newline="\n") as f:
             f.write(json.dumps(rec, sort_keys=True, default=str) + "\n")

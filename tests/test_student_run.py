@@ -177,6 +177,16 @@ def test_eval_phase_scores_val_and_rolls_out_resumably(sft, tokens, frozen, tmp_
     assert ev["val"]["people"] > 0 and ev["rollouts"]["finished"] == 2 and ev["rollouts"]["stopped"] is None
     recs = [json.loads(x) for x in (tmp_path / "ev" / "rollouts.jsonl").read_text().splitlines()]
     assert all(r["people"] == r["evacuated"] + r["casualties"] + r["unresolved"] for r in recs)
+    from ember_v1.sim import Scenario
+    items = {json.loads(x)["scenario_id"]: json.loads(x) for x in lst.read_text().splitlines()}
+    for r in recs:                     # the trace rebuilds every student-visited state and the same outcome
+        seen = []
+        rp = sr.replay_trace(Scenario.from_dict(items[r["scenario_id"]]["scenario"]), r["trace"],
+                             {"question_style": frozen["data"]["question_style"]},
+                             visit=lambda t, o, a: seen.append(t))
+        assert rp["steps"] == r["decisions"] == len(seen)
+        assert {k: rp[k] for k in ("evacuated", "casualties", "unresolved")} == \
+            {k: r[k] for k in ("evacuated", "casualties", "unresolved")}
     ev2 = sr.gpu_phase("eval", frozen, {**spec, "rollout_limit": 3}, adapter_factory=_factory, log=lambda s: None)
     assert ev2["rollouts"]["ran_this_container"] == 1 and ev2["rollouts"]["finished"] == 3
     assert rep["reload"]["pass"]
