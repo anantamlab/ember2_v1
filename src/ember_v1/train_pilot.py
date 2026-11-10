@@ -7,9 +7,9 @@ The real execution path exists but refuses unless EVERY gate passes (`run_precon
 3. all five teacher identities pinned (`registry.check_pins() == []`) and equal to the plan;
 4. a SEPARATE multi-teacher authorization record, read from a trusted git commit, naming the exact plan
    hash, the eight scenarios, attempt 1, all five fingerprints and the execution commit;
-5. that record's approval verified on GitHub: a merged pull request whose latest review by an allowlisted
-   approver (not the PR author) is APPROVED on a commit with byte-identical authorization content.
-   Free-text reviewer names are never evidence;
+5. that record's approval verified on GitHub: ONE allowlisted owner (single-owner rule, owner decision
+   2026-11-10, plan 0.3.0) merged the pull request that adds the record into main, and the PR head holds
+   byte-identical authorization content. Free-text reviewer names are never evidence;
 6. HEAD is the authorized execution commit, is on the trusted ref, descends from the freeze, and the
    checkout is clean;
 7. no attempt marker, log, group output or evidence exists (no retries, no duplicates).
@@ -41,11 +41,11 @@ from . import trust
 from .sim.canonical import digest
 from .teacher.registry import CANDIDATES
 
-PILOT_VERSION = "p1-12-train-pilot@0.2.0-draft"
+PILOT_VERSION = "p1-12-train-pilot@0.3.0"            # 0.3.0: single-owner approval rule
 PLAN_STATUS = "PROPOSED_NOT_FROZEN"
 FROZEN = "FROZEN"
 AUTH_KIND = "p1-12-multiteacher-train-pilot-authorization"
-AUTH_VERSION = "1.0.0"
+AUTH_VERSION = "1.1.0"                                   # 1.1.0: single-owner approval fields
 AUTH_PENDING, AUTH_APPROVED = "PENDING", "APPROVED"
 ATTEMPT_VERSION = "p1-12-train-pilot-attempt@1.0.0"
 EVIDENCE_VERSION = "p1-12-train-pilot-evidence@1.0.0"
@@ -75,19 +75,21 @@ FAILURE_POLICY = {
     "later_groups": "still run in plan order while the pilot deadline holds (diagnostic cost evidence); "
                     "after an interrupt or the pilot deadline no new group starts (recorded not_started)",
     "substitutes": "none", "retries": 0}
-# Approval binding. Free-text names never count; GitHub records the review. GitHub forbids a PR author
-# from approving their own PR, so author != approver holds by construction as well as by this check.
+# Approval binding (plan 0.3.0). Owner decision 2026-11-10 (run 15): one owner's approval is sufficient; the
+# two-owner GitHub review rule of plan 0.2.0 (sha256:eb8dbe29...) is replaced. Free-text names never count;
+# GitHub records who merged the pull request that adds the record.
 APPROVAL_POLICY = {
-    "kind": "github_pr_review", "repository": "anantamlab/ember_v1", "base": "main",
-    "approver_logins": ["sankalphs", "Sathvikar01"],
+    "kind": "single_owner_merged_pr", "repository": "anantamlab/ember_v1", "base": "main",
+    "approver_logins": ["sankalphs", "Sathvikar01"], "required_owner_approvals": 1,
     "rules": ["the pull request that adds the authorization record is merged into main",
               "its merge commit is in the history of the trusted ref",
-              "the latest non-comment review by an allowlisted approver is APPROVED",
-              "the approver is not the pull request author",
-              "the approved commit (review commit_id) holds a byte-identical authorization record",
-              "the record names that approver login (a record cannot name its own commit)"],
+              "the record names one allowlisted owner login, and that login merged the pull request",
+              "the pull request head commit holds a byte-identical authorization record",
+              "approval.owner_instruction states the owner's decision; approval.recorded_by states who wrote "
+              "the record (the owner, or an agent on the owner's instruction)"],
+    "supersedes": "plan 0.2.0 two-owner rule (an approving review by an allowlisted owner who is not the PR author)",
     "trust_boundary": "binds approval to a GitHub account action; it cannot tell the owner from anyone "
-                      "holding that account's token (see the protocol doc, Trust boundary)"}
+                      "holding that account's token, including an agent session (see the protocol doc)"}
 P1_09_EVIDENCE = "data/selection/p1-09-selection@1/evidence.json"
 N_BINS = ((0, 12), (12, 40), (40, 100), (100, 10 ** 6))
 T2_BUDGET_S = 20.0                       # frozen T2 cpu_budget_ms / 1000 (internal fallback per decision)
@@ -317,9 +319,10 @@ def authorization_template(plan: Mapping[str, Any]) -> dict[str, Any]:
             "teacher_fingerprints": fingerprints_of(plan["teacher_pins"]),
             "execution_commit": "<40-hex reviewed commit on main to check out and run>",
             "limits": plan["limits"],
-            "reviewer": {"github_login": "<approver login from the plan allowlist>"},
+            "reviewer": {"github_login": "<owner login from the plan allowlist; must merge the PR>"},
             "approval": {"kind": APPROVAL_POLICY["kind"], "repository": APPROVAL_POLICY["repository"],
-                         "pull_request": None},
+                         "pull_request": None, "owner_instruction": "<the owner's decision, quoted>",
+                         "recorded_by": "<owner | agent on the owner's instruction>"},
             "statement": "I reviewed the frozen plan and authorize exactly one attempt (attempt 1) of the "
                          "eight-scenario five-teacher TRAIN pilot on CPU. No Modal, GPU, training or benchmark."}
 
@@ -327,7 +330,7 @@ def authorization_template(plan: Mapping[str, Any]) -> dict[str, Any]:
 def check_authorization(auth: Mapping[str, Any] | None, plan: Mapping[str, Any]) -> list[str]:
     """Content problems of a multi-teacher pilot authorization (empty list = acceptable content).
 
-    Content alone never proves approval; `verify_approval` checks the GitHub review.
+    Content alone never proves approval; `verify_approval` checks the GitHub merge by the named owner.
     """
     if not auth:
         return ["no multi-teacher TRAIN pilot authorization"]
@@ -365,6 +368,9 @@ def check_authorization(auth: Mapping[str, Any] | None, plan: Mapping[str, Any])
     if ap.get("kind") != APPROVAL_POLICY["kind"] or ap.get("repository") != APPROVAL_POLICY["repository"] \
             or type(ap.get("pull_request")) is not int:
         errs.append("approval must name the GitHub pull request that carries the record")
+    for k in ("owner_instruction", "recorded_by"):
+        if not isinstance(ap.get(k), str) or not ap[k].strip() or ap[k].startswith("<"):
+            errs.append(f"approval.{k} must state the owner's decision and who recorded it")
     return errs
 
 
@@ -377,7 +383,10 @@ def gh_api(path: str) -> Any:
 
 def verify_approval(repo: str | Path, auth: Mapping[str, Any], auth_meta: Mapping[str, Any], *,
                     trusted_ref: str = "origin/main", gh: Callable[[str], Any] = gh_api) -> list[str]:
-    """Problems with the GitHub review that must back the record (empty list = verified owner action)."""
+    """Problems with the single-owner GitHub merge that must back the record (empty list = verified owner action).
+
+    Rule (plan 0.3.0): the named allowlisted owner merged the pull request that adds the record into main; the
+    merge and the record commit are in the trusted history; the PR head holds byte-identical record content."""
     pol, errs = APPROVAL_POLICY, []
     n = (auth.get("approval") or {}).get("pull_request")
     login = (auth.get("reviewer") or {}).get("github_login")
@@ -385,10 +394,8 @@ def verify_approval(repo: str | Path, auth: Mapping[str, Any], auth_meta: Mappin
         return ["no pull request to verify"]
     try:
         pr = gh(f"repos/{pol['repository']}/pulls/{n}")
-        reviews = gh(f"repos/{pol['repository']}/pulls/{n}/reviews?per_page=100")
     except (ValueError, OSError, subprocess.SubprocessError, json.JSONDecodeError) as e:
         return [f"GitHub approval cannot be verified (fail closed): {e}"]
-    author = (pr.get("user") or {}).get("login")
     if not pr.get("merged") or (pr.get("base") or {}).get("ref") != pol["base"]:
         errs.append(f"pull request #{n} is not merged into {pol['base']}")
     merge = pr.get("merge_commit_sha")
@@ -396,28 +403,19 @@ def verify_approval(repo: str | Path, auth: Mapping[str, Any], auth_meta: Mappin
         errs.append(f"the merge commit of #{n} is not in {trusted_ref}")
     if not trust.is_ancestor(repo, auth_meta["commit"], trusted_ref):
         errs.append("the authorization commit is not in the trusted history")
-    if not isinstance(reviews, list) or len(reviews) >= 100:
-        errs.append("review list missing or not complete")
-        reviews = []
-    latest: dict[str, Mapping[str, Any]] = {}
-    for r in sorted(reviews, key=lambda r: (r.get("submitted_at") or "", r.get("id") or 0)):
-        who = (r.get("user") or {}).get("login")
-        if r.get("state") in ("APPROVED", "CHANGES_REQUESTED", "DISMISSED") and who:
-            latest[who] = r
-    ok = [w for w, r in latest.items() if r.get("state") == "APPROVED" and w in pol["approver_logins"]
-          and w != author and (r.get("user") or {}).get("type") == "User"]
-    commit = latest[login].get("commit_id") if login in ok else None
-    if login not in ok:
-        errs.append(f"no current APPROVED review by {login!r} (allowlisted, not the PR author {author!r}); "
-                    f"verified approvers: {sorted(ok)}")
-    elif not isinstance(commit, str) or not trust._HEX40.match(commit):
-        errs.append("the approving review names no commit")
+    merger = pr.get("merged_by") or {}
+    if login not in pol["approver_logins"] or merger.get("login") != login or merger.get("type") != "User":
+        errs.append(f"pull request #{n} was not merged by the named owner {login!r} "
+                    f"(merged by {merger.get('login')!r}, allowlist {pol['approver_logins']})")
+    head = (pr.get("head") or {}).get("sha")
+    if not isinstance(head, str) or not trust._HEX40.match(head):
+        errs.append("the pull request names no head commit")
     else:
-        shown = trust._git(repo, "show", f"{commit}:{auth_meta['path']}")
+        shown = trust._git(repo, "show", f"{head}:{auth_meta['path']}")
         if shown.returncode != 0:
-            errs.append(f"the approved commit {commit[:12]} is not available locally (fetch pull/{n}/head)")
+            errs.append(f"the PR head {head[:12]} is not available locally (fetch pull/{n}/head)")
         elif trust.sha256_lf(shown.stdout) != auth_meta["sha256"]:
-            errs.append("the approved commit holds a different authorization record")
+            errs.append("the PR head holds a different authorization record")
     return errs
 
 

@@ -73,3 +73,33 @@ not be issued. Recommended owner action: close #43 unmerged as superseded.
 ## Local test evidence
 
 Complete suite on this head with `scripts/verify_local.py run` (Python 3.11 and 3.12): see the PR body.
+
+## Re-freeze 0.3.0 — single-owner approval (run 15, 2026-11-10)
+
+**Owner decision (chat, 2026-11-10):** "the 2 owner is not required only i am fine". The owner then chose the
+"single-owner re-freeze" option. This replaces the two-owner GitHub review rule of plan 0.2.0. The 0.2.0
+freeze (`827e88fa…`, execution `1a0128ca…`, hash `sha256:eb8dbe29…b664`) was never authorized and never run.
+It stays in git history and is SUPERSEDED.
+
+| Item | 0.2.0 (superseded) | 0.3.0 (this freeze) |
+|---|---|---|
+| Plan hash | `sha256:eb8dbe293db7f1c1e1b4f342c07f21853031e9e6ab5419eda2833c51f761b664` | **`sha256:cb93c6d17e5b6c74755ca3a569b43955916302805983e39b562e834f6a9a605a`** |
+| `pilot_version` | `p1-12-train-pilot@0.2.0-draft` | `p1-12-train-pilot@0.3.0` |
+| `authorization_policy.kind` | `github_pr_review` (approver ≠ PR author) | `single_owner_merged_pr` (the named owner merged the PR; PR head holds the same record bytes) |
+| Runner fingerprint | `sha256:d9839da8…5d79` | `sha256:b355a6bf072c3814820e16cd20c1e816d154f15092ae1197607230408b88adea` |
+| Authorization record | version 1.0.0 | version 1.1.0: adds `approval.owner_instruction`, `approval.recorded_by` |
+| Proposed / frozen blob sha256 (LF) | `372d83d9…` / `2094a347…` | `e2361ee3454778f2767915f979182837405d274b8effbbb5241c33680b232b59` / `71aba49345b1c79162aa105e8d0dfa4e276f120114406b49bfd6c10366d2a5d1` |
+
+Unchanged and byte-compared against the 0.2.0 plan: the 8 scenarios and their hashes (salt
+`p1-12-train-pilot@1`), all five teacher pins, limits, failure policy, regeneration ids, cost estimate,
+geometry and leakage audits, acceptance rule, output paths, simulator/generator/collector/supervisor
+fingerprints. Only `authorization_policy`, `identities.collector.runner_fingerprint` and `pilot_version`
+differ.
+
+Freeze commit = execution commit: the branch commit that adds this record and the 0.3.0 `plan.json`. The next
+commit pins the preflight and post-run tools to it and adds `authorization.json`. That commit does not change
+`src/` or the plan.
+
+Trust boundary: the record and the merge come from the `sankalphs` GitHub session, which the agent also uses.
+GitHub cannot tell the owner from the agent. The record says it was written by the agent on the owner's chat
+instruction. The owner's chat decision is the approval.

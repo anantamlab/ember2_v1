@@ -113,7 +113,19 @@ def test_committed_proposed_plan_matches_a_fresh_rebuild():
     committed = json.loads((REPO / tp.PLAN_FILE).read_text(encoding="utf-8"))
     fresh = json.loads(json.dumps(tp.live_plan(REPO), sort_keys=True, default=sorted))
     assert committed["status"] == tp.PLAN_STATUS and tp.check_plan(committed, frozen=False) == []
-    assert committed == fresh, sorted(k for k in fresh if committed.get(k) != fresh[k])
+    # The pilot ran (attempt 1 consumed, evidence archived). P1-17 changed only the collector side after it:
+    # pilot_supervisor 1.1.0 (stop hook, scope argument) and the multiteacher scope list. Everything else, and
+    # every teacher, simulator and generator identity, must still equal the frozen pilot plan.
+    changed = {"supervisor_version", "supervisor_fingerprint", "module_fingerprint", "runner_fingerprint"}
+    for k in fresh:
+        if k in ("identities", "plan_hash"):
+            continue
+        assert committed.get(k) == fresh[k], k
+    ci, fi = committed["identities"], fresh["identities"]
+    assert ci["simulator"] == fi["simulator"] and ci["generator"] == fi["generator"]
+    assert {k: v for k, v in ci["collector"].items() if k not in changed} == \
+        {k: v for k, v in fi["collector"].items() if k not in changed}
+    assert fi["collector"]["supervisor_version"] == "p1-12-pilot-supervisor@1.1.0"
     assert committed["geometry_audit"]["pass"] and committed["disjointness_audit"]["pass"]
 
 
@@ -163,8 +175,9 @@ def test_frozen_plan_if_present_is_the_reviewed_plan_with_only_status_changed():
 def approved(plan, **kw):
     a = tp.authorization_template(frozen(plan))
     a.update(status=tp.AUTH_APPROVED, execution_commit=H, plan_freeze={"commit": H, "path": tp.FROZEN_PLAN_FILE},
-             reviewer={"github_login": "Sathvikar01"},
-             approval={**a["approval"], "pull_request": 77})
+             reviewer={"github_login": "sankalphs"},
+             approval={**a["approval"], "pull_request": 77, "owner_instruction": "the 2 owner is not required only i am fine",
+                       "recorded_by": "agent on the owner's instruction"})
     a.update(kw)
     return a
 
@@ -189,7 +202,14 @@ def test_template_is_pending_and_never_acceptable(plan):
     ({"status": "approved by the owner"}, "not APPROVED"),
     ({"reviewer": {"github_login": "The Owner"}}, "allowlisted"),
     ({"reviewer": {"github_login": "Sankalp H S"}}, "allowlisted"),
-    ({"approval": {"kind": "github_pr_review", "repository": "anantamlab/ember_v1", "pull_request": None}},
+    ({"approval": {"kind": "github_pr_review", "repository": "anantamlab/ember_v1", "pull_request": 77,
+                   "owner_instruction": "x", "recorded_by": "y"}}, "pull request"),
+    ({"approval": {"kind": "single_owner_merged_pr", "repository": "anantamlab/ember_v1", "pull_request": 77,
+                   "recorded_by": "y"}}, "owner_instruction"),
+    ({"approval": {"kind": "single_owner_merged_pr", "repository": "anantamlab/ember_v1", "pull_request": 77,
+                   "owner_instruction": "x", "recorded_by": "<owner | agent>"}}, "recorded_by"),
+    ({"approval": {"kind": "single_owner_merged_pr", "repository": "anantamlab/ember_v1", "pull_request": None,
+                   "owner_instruction": "x", "recorded_by": "y"}},
      "pull request"),
     ({"kind": "s1-train-authorization"}, "P1-09"),
     ({"note": "see p1-09 receipt"}, "P1-09"),
@@ -249,10 +269,9 @@ def history(tmp_path, plan):
     auth_ref = {"kind": "git", "commit": merge, "path": tp.AUTH_FILE}
     auth_doc, meta = tp.trust.load_trusted_json(repo, auth_ref, trusted_ref="main")
     gh = {"repos/anantamlab/ember_v1/pulls/77": {"merged": True, "base": {"ref": "main"},
-                                                   "merge_commit_sha": merge, "user": {"login": "sankalphs"}},
-          "repos/anantamlab/ember_v1/pulls/77/reviews?per_page=100": [
-              {"id": 1, "state": "APPROVED", "commit_id": head, "submitted_at": "2026-11-10T10:00:00Z",
-               "user": {"login": "Sathvikar01", "type": "User"}}]}
+                                                   "merge_commit_sha": merge, "user": {"login": "sankalphs"},
+                                                   "merged_by": {"login": "sankalphs", "type": "User"},
+                                                   "head": {"sha": head}}}
     return {"repo": repo, "freeze": freeze, "head": head, "merge": merge, "auth": auth_doc, "meta": meta,
             "auth_ref": auth_ref, "gh": gh, "plan_ref": {"kind": "git", "commit": freeze,
                                                           "path": tp.FROZEN_PLAN_FILE}}
@@ -266,23 +285,23 @@ def _fake(gh):
     return call
 
 
-def test_verified_github_review_is_accepted(history):
+def test_verified_single_owner_merge_is_accepted(history):
     h = history
     assert tp.verify_approval(h["repo"], h["auth"], h["meta"], trusted_ref="main", gh=_fake(h["gh"])) == []
 
 
+PR77 = "repos/anantamlab/ember_v1/pulls/77"
+
+
 @pytest.mark.parametrize("mutate,needle", [
-    (lambda g: g["repos/anantamlab/ember_v1/pulls/77"].update(merged=False), "not merged"),
-    (lambda g: g["repos/anantamlab/ember_v1/pulls/77"].update(user={"login": "Sathvikar01"}), "not the PR author"),
-    (lambda g: g["repos/anantamlab/ember_v1/pulls/77/reviews?per_page=100"].append(
-        {"id": 2, "state": "CHANGES_REQUESTED", "commit_id": "c" * 40, "submitted_at": "2026-11-10T11:00:00Z",
-         "user": {"login": "Sathvikar01", "type": "User"}}), "no current APPROVED"),
-    (lambda g: g["repos/anantamlab/ember_v1/pulls/77/reviews?per_page=100"][0].update(
-        user={"login": "someone-else", "type": "User"}), "no current APPROVED"),
-    (lambda g: g["repos/anantamlab/ember_v1/pulls/77/reviews?per_page=100"][0].update(
-        user={"login": "Sathvikar01", "type": "Bot"}), "no current APPROVED"),
-    (lambda g: g["repos/anantamlab/ember_v1/pulls/77/reviews?per_page=100"].clear(), "no current APPROVED"),
-    (lambda g: g.pop("repos/anantamlab/ember_v1/pulls/77"), "fail closed"),
+    (lambda g: g[PR77].update(merged=False), "not merged"),
+    (lambda g: g[PR77].update(base={"ref": "dev"}), "not merged into main"),
+    (lambda g: g[PR77].update(merged_by={"login": "Sathvikar01", "type": "User"}), "not merged by the named owner"),
+    (lambda g: g[PR77].update(merged_by={"login": "sankalphs", "type": "Bot"}), "not merged by the named owner"),
+    (lambda g: g[PR77].update(merged_by=None), "not merged by the named owner"),
+    (lambda g: g[PR77].update(merge_commit_sha="d" * 40), "not in main"),
+    (lambda g: g[PR77].update(head={}), "no head commit"),
+    (lambda g: g.pop(PR77), "fail closed"),
 ])
 def test_unverifiable_or_wrong_github_approval_is_refused(history, mutate, needle):
     h = history
@@ -292,13 +311,29 @@ def test_unverifiable_or_wrong_github_approval_is_refused(history, mutate, needl
     assert any(needle in e for e in errs), errs
 
 
+def test_record_must_name_a_listed_owner_who_merged(history):
+    h = history
+    auth = {**h["auth"], "reviewer": {"github_login": "someone-else"}}
+    gh = copy.deepcopy(h["gh"])
+    gh[PR77]["merged_by"] = {"login": "someone-else", "type": "User"}
+    errs = tp.verify_approval(h["repo"], auth, h["meta"], trusted_ref="main", gh=_fake(gh))
+    assert any("not merged by the named owner" in e for e in errs), errs
+
+
 def test_approval_of_other_bytes_is_refused(history):
     h = history
     gh = copy.deepcopy(h["gh"])
-    draft = _git(h["repo"], "rev-parse", f"{h['head']}~1")             # approved the draft, not the final record
-    gh["repos/anantamlab/ember_v1/pulls/77/reviews?per_page=100"][0]["commit_id"] = draft
+    draft = _git(h["repo"], "rev-parse", f"{h['head']}~1")             # PR head holds the draft, not the record
+    gh[PR77]["head"]["sha"] = draft
     errs = tp.verify_approval(h["repo"], h["auth"], h["meta"], trusted_ref="main", gh=_fake(gh))
     assert any("different authorization record" in e for e in errs), errs
+
+
+def test_policy_is_single_owner_and_names_what_it_supersedes():
+    pol = tp.APPROVAL_POLICY
+    assert pol["kind"] == "single_owner_merged_pr" and pol["required_owner_approvals"] == 1
+    assert "two-owner" in pol["supersedes"] and "agent" in pol["trust_boundary"]
+    assert tp.PILOT_VERSION == "p1-12-train-pilot@0.3.0" and tp.SALT == "p1-12-train-pilot@1"
 
 
 # ----- full preconditions -------------------------------------------------------------------------------------
