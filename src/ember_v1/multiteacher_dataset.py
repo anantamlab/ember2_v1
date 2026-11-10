@@ -616,7 +616,10 @@ def validate_dataset(records: Iterable[Mapping[str, Any]], protocol: Mapping[str
         sides = [r.get(f) for f in what.get(k, ())]
         acts = [s["actions"] if isinstance(s, Mapping) and "actions" in s else
                 [x.get("actions") for x in s] if isinstance(s, list) else s for s in sides]
-        return k, r.get("observation_digest"), digest(acts)
+        # C/D: one contrast per study report. The same pair under another continuation (another report) is
+        # separate evidence, not a duplicate.
+        report = (r.get("provenance") or {}).get("report_hash") if k in ("C", "D") else None
+        return k, r.get("observation_digest"), digest(acts), report
     seen = Counter(content_key(r) for r in records)
     problems += [f"duplicate record {k}" for k, n in seen.items() if n > 1]
     hashes = Counter(r.get("record_hash") for r in records)

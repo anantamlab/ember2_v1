@@ -59,6 +59,19 @@ def test_step0_records_are_class_c_or_d_with_zero_weight(study):
     assert v["ok"], v["problems"]
 
 
+def test_same_pair_under_two_continuations_is_not_a_duplicate(study):
+    s, g, st = study
+    reps = 1 if s.fire_model == "deterministic" else 3
+    st4 = cf.step0_study(s, g, family_id="fam-x", lineage_id="lin-x", horizon=s.max_steps,
+                         max_horizon=s.max_steps, replicates=reps, continuation_factory=_t("T4"))
+    recs = ds.assign_weights(ds.preferences(st, s, g) + ds.preferences(st4, s, g))
+    v = ds.validate_dataset(recs)
+    assert v["ok"], v["problems"]
+    one = ds.assign_weights(ds.preferences(st, s, g))
+    twice = ds.validate_dataset(one + [one[0]])
+    assert not twice["ok"] and any("duplicate" in p for p in twice["problems"])
+
+
 def test_tampered_probe_or_group_is_refused(study):
     s, g, st = study
     bad = copy.deepcopy(st)
