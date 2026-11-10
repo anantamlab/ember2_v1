@@ -25,17 +25,18 @@
    "Sathvikar01"
   ],
   "base": "main",
-  "kind": "github_pr_review",
+  "kind": "single_owner_merged_pr",
   "repository": "anantamlab/ember_v1",
+  "required_owner_approvals": 1,
   "rules": [
    "the pull request that adds the authorization record is merged into main",
    "its merge commit is in the history of the trusted ref",
-   "the latest non-comment review by an allowlisted approver is APPROVED",
-   "the approver is not the pull request author",
-   "the approved commit (review commit_id) holds a byte-identical authorization record",
-   "the record names that approver login (a record cannot name its own commit)"
+   "the record names one allowlisted owner login, and that login merged the pull request",
+   "the pull request head commit holds a byte-identical authorization record",
+   "approval.owner_instruction states the owner's decision; approval.recorded_by states who wrote the record (the owner, or an agent on the owner's instruction)"
   ],
-  "trust_boundary": "binds approval to a GitHub account action; it cannot tell the owner from anyone holding that account's token (see the protocol doc, Trust boundary)"
+  "supersedes": "plan 0.2.0 two-owner rule (an approving review by an allowlisted owner who is not the PR author)",
+  "trust_boundary": "binds approval to a GitHub account action; it cannot tell the owner from anyone holding that account's token, including an agent session (see the protocol doc)"
  },
  "cost_estimate": {
   "basis": "P1-09 per-scenario T2 CPU (72 scenarios, data/selection/p1-09-selection@1/evidence.json) in the same people bin [[0, 12], [12, 40], [40, 100], [100, 1000000]]",
@@ -438,7 +439,7 @@
  "identities": {
   "collector": {
    "module_fingerprint": "sha256:061eb525303c1689e7b77040b1055e9323222acff62309e6fc6e03b2a3d56d16",
-   "runner_fingerprint": "sha256:d9839da83b343e3599ff745b7606e5cfde26ba95c34d062a4d278dbd624f5d79",
+   "runner_fingerprint": "sha256:b355a6bf072c3814820e16cd20c1e816d154f15092ae1197607230408b88adea",
    "schema_version": "matched-multi-teacher@0.2.0",
    "supervisor_fingerprint": "sha256:5920da88408c5a0336ea926907463a8e758531c5dd3fd1e7dfc6dd71dd65212a",
    "supervisor_version": "p1-12-pilot-supervisor@1.0.0"
@@ -475,8 +476,8 @@
   "log": "log.jsonl (append, fsync per line)",
   "regenerations": "regen/<scenario_id>.json"
  },
- "pilot_version": "p1-12-train-pilot@0.2.0-draft",
- "plan_hash": "sha256:eb8dbe293db7f1c1e1b4f342c07f21853031e9e6ab5419eda2833c51f761b664",
+ "pilot_version": "p1-12-train-pilot@0.3.0",
+ "plan_hash": "sha256:cb93c6d17e5b6c74755ca3a569b43955916302805983e39b562e834f6a9a605a",
  "regeneration": {
   "counts_against": "pilot_wall_s",
   "rule": "the two smallest-N scenarios (ties by rank) are run a second time inside the same attempt, after all eight groups, under the same caps; both must reproduce content_hash",

@@ -1,11 +1,13 @@
 {
  "approval": {
-  "kind": "github_pr_review",
+  "kind": "single_owner_merged_pr",
+  "owner_instruction": "<the owner's decision, quoted>",
   "pull_request": null,
+  "recorded_by": "<owner | agent on the owner's instruction>",
   "repository": "anantamlab/ember_v1"
  },
  "attempt": 1,
- "authorization_version": "1.0.0",
+ "authorization_version": "1.1.0",
  "execution_commit": "<40-hex reviewed commit on main to check out and run>",
  "kind": "p1-12-multiteacher-train-pilot-authorization",
  "limits": {
@@ -27,10 +29,10 @@
   "commit": "<40-hex commit that adds the FROZEN plan>",
   "path": "data/collection/p1-12-train-pilot@1/plan.json"
  },
- "plan_hash": "sha256:eb8dbe293db7f1c1e1b4f342c07f21853031e9e6ab5419eda2833c51f761b664",
- "plan_version": "p1-12-train-pilot@0.2.0-draft",
+ "plan_hash": "sha256:cb93c6d17e5b6c74755ca3a569b43955916302805983e39b562e834f6a9a605a",
+ "plan_version": "p1-12-train-pilot@0.3.0",
  "reviewer": {
-  "github_login": "<approver login from the plan allowlist>"
+  "github_login": "<owner login from the plan allowlist; must merge the PR>"
  },
  "scenarios": [
   {
