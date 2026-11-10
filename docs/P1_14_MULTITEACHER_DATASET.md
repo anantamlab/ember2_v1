@@ -1,8 +1,9 @@
-# P1-14 multi-teacher outcome-aware dataset — protocol draft
+# P1-14 multi-teacher outcome-aware dataset — protocol
 
-**Status:** `DRAFT_NOT_FROZEN` (`data/protocols/p1-14-multiteacher-dataset.json`, version `0.3.0-draft`).
-**Authorizes nothing.** `multiteacher_dataset.export` always raises `DATASET_GENERATION_BLOCKED`. Records can be
-built only from `synthetic_fixture` reports. Issue #47. Depends on #45 (P1-12) and #46 (P1-13).
+**Status:** `FROZEN` (`data/protocols/p1-14-multiteacher-dataset.json`, version `1.0.0`, run 17, commit `b2437d4`).
+**Authorizes:** CPU building of class A-D records from the verified collection `p1-17-train-full@1`, stored outside
+git. No training, GPU, preference approval, DEV, EMBERBench or locked-test data. Issue #47. Section 7 lists the
+1.0.0 changes and the real build. Sections 1-6 are the draft history (0.3.0); where they differ, section 7 wins.
 
 ## 1. Evidence classes
 

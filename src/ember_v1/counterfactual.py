@@ -51,6 +51,11 @@ CAUSAL_LIMIT = (
     "or a population causal effect. No preference training eligibility."
 )
 HARD_MAX_HORIZON = 64
+# Real-scope studies (P1-17 Phase 7, preregistered batch): the verified TRAIN collection only, run to
+# termination (horizon = the scenario's max_steps, at most REAL_MAX_HORIZON). DEV/EMBERBench never.
+REAL_SCOPES = ("p1-17-train-full@1",)
+REAL_MAX_HORIZON = 300
+STEP0_SOURCE = "matched-group-step0"
 MAX_REPLICATES = 16
 # Preregistered verdict rule (fixture version; P1-14 must freeze its own copy before use).
 VERDICT_RULE = {
@@ -66,6 +71,10 @@ VERDICTS = ("a_better", "b_better", "no_difference", "inconclusive")
 
 class CounterfactualError(ValueError):
     """Invalid prefix, shared-state intervention, provenance or resource bound."""
+
+
+def horizon_cap(scope: str) -> int:
+    return REAL_MAX_HORIZON if scope in REAL_SCOPES else HARD_MAX_HORIZON
 
 
 def _replay_prefix(scenario: Scenario, records: Sequence[Mapping[str, Any]]) -> Simulator:
@@ -249,12 +258,12 @@ def counterfactual_fixture(
     All alternatives share each replicate's future fire stream. If a branch remains
     active at the limit, its outcome is CENSORED; it is never ranked.
     """
-    if scope != SCOPE:
+    if scope != SCOPE and scope not in REAL_SCOPES:
         raise CounterfactualError("real split counterfactuals require reviewed source authorization")
     if not isinstance(scenario, Scenario):
         raise CounterfactualError("scenario must be a validated Scenario")
     if type(horizon) is not int or type(max_horizon) is not int or \
-            not 1 <= horizon <= max_horizon <= HARD_MAX_HORIZON:
+            not 1 <= horizon <= max_horizon <= horizon_cap(scope):
         raise CounterfactualError("invalid or unbounded horizon")
     if isinstance(cpu_ms_per_branch_cap, bool) or not isinstance(cpu_ms_per_branch_cap, (int, float)) \
             or cpu_ms_per_branch_cap <= 0:
@@ -322,7 +331,7 @@ def counterfactual_fixture(
                 "training_preference_allowed": False,
             })
     body = {
-        "counterfactual_version": CF_VERSION, "scope": SCOPE, "training_eligible": False,
+        "counterfactual_version": CF_VERSION, "scope": scope, "training_eligible": False,
         "scenario_hash": scenario.content_hash(), "common_observation_digest": digest(obs),
         "prefix_hash": prefix_hash, "prefix_steps": len(prefix_records),
         "prefix_source": dict(prefix_source) if prefix_source else None,
@@ -376,7 +385,7 @@ def verify_counterfactual(report: Mapping[str, Any], scenario: Scenario, *,
         raise CounterfactualError("report hash mismatch: content was altered")
     if report.get("scenario_hash") != scenario.content_hash() or report.get("training_eligible") is not False:
         raise CounterfactualError("report belongs to another scenario or claims eligibility")
-    if report.get("scope") != SCOPE or report.get("counterfactual_version") != CF_VERSION:
+    if report.get("scope") not in (SCOPE, *REAL_SCOPES) or report.get("counterfactual_version") != CF_VERSION:
         raise CounterfactualError("unsupported counterfactual scope or version")
     if report.get("fire_model") != scenario.fire_model or report.get("verdict_rule") != VERDICT_RULE:
         raise CounterfactualError("fire model or verdict rule differs from the preregistered rule")
@@ -384,7 +393,7 @@ def verify_counterfactual(report: Mapping[str, Any], scenario: Scenario, *,
     n_rep, horizon = report.get("replicates"), report.get("horizon")
     if type(n_rep) is not int or not 1 <= n_rep <= MAX_REPLICATES or (not stochastic and n_rep != 1):
         raise CounterfactualError("invalid replicate count")
-    if type(horizon) is not int or not 1 <= horizon <= HARD_MAX_HORIZON:
+    if type(horizon) is not int or not 1 <= horizon <= horizon_cap(report["scope"]):
         raise CounterfactualError("invalid horizon")
     prefix = report["prefix_records"]
     if digest(list(prefix)) != report["prefix_hash"] or len(prefix) != report.get("prefix_steps"):
@@ -523,6 +532,80 @@ def shared_state_study(scenario: Scenario, fixture_report: Mapping[str, Any], te
             "training_eligible": False}
 
 
+def stored_step0_probe(group: Mapping[str, Any]) -> dict[str, Any]:
+    """The five teachers' STORED step-0 proposals of a verified matched group, as a probe.
+
+    Step 0 is the matched initial state: every teacher decided on the identical observation, so the stored
+    proposals are the same-state alternatives without any live teacher call (no T2 budget-dependent
+    re-decision). Same fields as `multiteacher.probe_shared_state`, with the group's scope and source."""
+    props, digests = {}, set()
+    for name in mt.CANDIDATES:
+        d = group["policies"][name]["decisions"][0]
+        props[name] = d["proposal"]
+        digests.add(d["observation_digest"])
+    if len(digests) != 1:
+        raise CounterfactualError("step-0 observations differ: not a matched initial state")
+    obs = group["policies"][mt.CANDIDATES[0]]["decisions"][0]["observation"]
+    for p in props.values():
+        proposals.validate_proposal(obs, p)
+    delta = proposals.disagreement(obs, list(props.values()))
+    distinct = Counter(digest(p["actions"]) for p in props.values())
+    body = {"schema_version": mt.SCHEMA_VERSION, "scope": group["scope"], "source": STEP0_SOURCE,
+            "group_content_hash": group["content_hash"], "training_eligible": False,
+            "observation_digest": digest(obs), "proposals": props, "disagreement": delta,
+            "distinct_joint_actions": len(distinct),
+            "note": "Stored step-0 proposals on the matched initial state; agreement alone is not quality evidence."}
+    return {**body, "probe_hash": digest(mt.deterministic_view(body))}
+
+
+def step0_study(scenario: Scenario, group: Mapping[str, Any], *, family_id: str, lineage_id: str,
+                **kw: Any) -> dict[str, Any]:
+    """Real-scope study at the matched initial state of a verified group (P1-17 Phase 7): the distinct stored
+    step-0 teacher joint maps are the interventions; empty prefix; continuation and replicates from `kw`."""
+    mt.verify_fixture(group, scenario)
+    if group.get("scope") not in REAL_SCOPES or not group.get("group_complete"):
+        raise CounterfactualError("step-0 studies need a complete group of an authorized real scope")
+    probe = stored_step0_probe(group)
+    alts, sources = alternatives_from_probe(probe)
+    src = {"kind": STEP0_SOURCE, "content_hash": group["content_hash"], "teacher": None, "step": 0,
+           "probe_hash": probe["probe_hash"], "family_id": family_id, "lineage_id": lineage_id}
+    if len(alts) < 2:
+        return {"counterfactual_version": CF_VERSION, "status": "no_disagreement", "prefix_source": src,
+                "probe": probe, "training_eligible": False}
+    report = counterfactual_fixture(scenario, [], alts, scope=group["scope"], alternative_sources=sources,
+                                    prefix_source=src, **kw)
+    if report["common_observation_digest"] != probe["observation_digest"]:
+        raise CounterfactualError("stored step-0 observation is not the scenario's initial state")
+    return {"counterfactual_version": CF_VERSION, "status": "contrasted", "probe": probe, "report": report,
+            "training_eligible": False}
+
+
+def _verify_step0_study(study: Mapping[str, Any], scenario: Scenario, group: Mapping[str, Any],
+                        continuation_factory: Callable[[], Any] | None) -> dict[str, Any]:
+    probe = study["probe"]
+    if probe != stored_step0_probe(group):
+        raise CounterfactualError("probe is not the group's stored step-0 proposals")
+    src = study.get("prefix_source") if study.get("status") == "no_disagreement" else study["report"]["prefix_source"]
+    if src.get("content_hash") != group["content_hash"] or src.get("probe_hash") != probe["probe_hash"] or \
+            src.get("step") != 0:
+        raise CounterfactualError("study does not bind the source group and probe")
+    alts, sources = alternatives_from_probe(probe)
+    if study["status"] == "no_disagreement":
+        if len(alts) >= 2:
+            raise CounterfactualError("the probe disagrees; 'no_disagreement' is not supported")
+        return {"verified": True, "status": "no_disagreement", "probe_hash": probe["probe_hash"]}
+    if study["status"] != "contrasted":
+        raise CounterfactualError(f"unknown study status {study.get('status')!r}")
+    rep = study["report"]
+    if rep["prefix_records"] != [] or rep["scope"] != group["scope"]:
+        raise CounterfactualError("a step-0 study has an empty prefix and the group's scope")
+    got = {n: (b["intervention_actions"], b["sources"]) for n, b in rep["branches"].items()}
+    if got != {n: (alts[n], sources[n]) for n in alts}:
+        raise CounterfactualError("alternatives are not exactly the stored step-0 teacher joint actions")
+    out = verify_counterfactual(rep, scenario, continuation_factory=continuation_factory)
+    return {**out, "status": "contrasted", "probe_hash": probe["probe_hash"], "teachers_reasked": False}
+
+
 def verify_shared_state_study(study: Mapping[str, Any], scenario: Scenario, fixture_report: Mapping[str, Any], *,
                               factories: Mapping[str, Callable[[], Any]] | None = None,
                               continuation_factory: Callable[[], Any] | None = None) -> dict[str, Any]:
@@ -543,6 +626,10 @@ def verify_shared_state_study(study: Mapping[str, Any], scenario: Scenario, fixt
     if set(probe["proposals"]) != set(mt.CANDIDATES):
         raise CounterfactualError("the probe must hold one proposal from each of the five teachers")
     src = study.get("prefix_source") if study.get("status") == "no_disagreement" else study["report"]["prefix_source"]
+    if src.get("kind") == STEP0_SOURCE:
+        if factories is not None:
+            raise CounterfactualError("step-0 studies use stored proposals; teachers are not re-asked")
+        return _verify_step0_study(study, scenario, fixture_report, continuation_factory)
     teacher, step = src["teacher"], src["step"]
     if src.get("kind") != "p1-12-fixture" or src.get("content_hash") != fixture_report["content_hash"] or \
             src.get("probe_hash") != probe["probe_hash"]:
