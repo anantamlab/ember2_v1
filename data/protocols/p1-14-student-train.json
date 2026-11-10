@@ -1,0 +1,85 @@
+{
+  "protocol_id": "p1-14-student-train",
+  "version": "0.1.0-draft",
+  "status": "DRAFT_NOT_FROZEN",
+  "frozen": false,
+  "authorizes": "nothing: no real-data training, no GPU, no Modal spend",
+  "method": {
+    "stage_1": "weighted multi-teacher SFT on coherent complete joint-action class-A demonstrations (docs/P1_14_STUDENT_TRAINING_METHOD.md)",
+    "stage_2": "DPO/IPO on approved class-C same-state preferences; needs its own freeze",
+    "stage_3": "student-visited states (class E); blocked until P1-16",
+    "objective": "student_objective.sft_nll: -log pi(A|s) / N per decision, chain rule over chunk rows",
+    "teacher_at_inference": "never"
+  },
+  "teachers": {
+    "demonstrations_from": ["T0", "T1", "T2", "T3", "T4"],
+    "identity": "provenance only; never a model input, never a weight",
+    "superseded": "P1-11 T1-only protocol (PR #42/#44) is not a source of pins' permissions or of training rights"
+  },
+  "pins": {
+    "source": "model identity facts copied from data/training/p1-11-student@1/protocol.json (PR #44 branch); identities only",
+    "model": "unsloth/Qwen3.5-2B",
+    "model_commit": "fffbc0d8711cf87df6d1f97938c5e50ef94aadc7",
+    "tokenizer_json_sha256": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+    "tokenizer_state_sha256": "a57b5c62cd5f242a06c632b82cc0b4f8239d08cc80fd9347fc1f629be977c6ca",
+    "requirements_lock_sha256": "9613f929b53c0fed65105b1f808f64e8f842dab29e837b3dca3e503cbd60bc2c",
+    "unsloth_wheel_sha256": "baff520eacd8da49a8d211a49fb62e407cddd80a72570fd2ffe596a68150992e",
+    "unsloth_zoo_wheel_sha256": "8e638f8e41ab153430a478f744bb10cdc5aff2c9bde381dd557ee2331df658c7",
+    "clef_sha256": "0e304cf7c6500e8bb59bef7e2afd2c6373f82596dfb3b57d1aa93c175e2dc3a3",
+    "encoder_config_sha256_a10": "5ed1d7d417ed4f32134c7f18ac9b11c5ce36435c8a47394fdd27cc4ed3596355",
+    "head_init_sha256_a10": "0f31b5311331e30daef25d4d6c61dccc636fa17c2b0e134c338b39a997467630",
+    "gpu": "A10",
+    "precision": "bf16",
+    "max_len": 16384
+  },
+  "data": {
+    "source": "student_ingest.epoch_rows",
+    "dataset_protocol": "data/protocols/p1-14-multiteacher-dataset.json (must be FROZEN; real split needs owner authorization)",
+    "examples": "student_ingest.prepare_examples: selected, weighted class-A whole joint maps only",
+    "sampling": "student_ingest.sample_epoch: weight-proportional draws with replacement to a fixed token budget",
+    "token_budget_per_epoch": "TO_BE_SET_FROM_MEASURED_TRAIN_DATA",
+    "encoding": "ascii",
+    "question_style": "compact",
+    "chunk_k": 100,
+    "reservations": false,
+    "row_status_required": "OK",
+    "truncation": "forbidden: a non-OK row stops the run"
+  },
+  "training": {
+    "adapter": {"type": "lora", "r": 16, "alpha": 16, "dropout": 0.0, "target": "all linear layers of the backbone"},
+    "lr": 0.0002,
+    "head_lr": 0.0001,
+    "schedule": "cosine",
+    "warmup_ratio": 0.03,
+    "weight_decay": 0.0,
+    "epochs": 1,
+    "micro_batch_rows": 1,
+    "grad_accum_draws": 8,
+    "gradient_checkpointing": true,
+    "seed": 20261121,
+    "epoch_seed": "p1-14-student-train@1/epoch-1",
+    "checkpoints": "every 1000 optimizer steps (resume only) and at the end"
+  },
+  "compute": {
+    "gpu": "A10G",
+    "rates_usd_per_h": {"gpu": 1.1, "cpu_core": 0.0473, "memory_gib": 0.008},
+    "container": {"cpu_cores": 4, "memory_gib": 32},
+    "rates_source": "docs/P0B_GPU_INSPECT.md section 4 (Modal billing rates, read 2026-11-08)",
+    "phases": {
+      "pilot": {"wall_cap_s": 3600, "usd_cap": 2.0},
+      "train": {"wall_cap_s": 57600, "usd_cap": 25.0},
+      "eval": {"wall_cap_s": 7200, "usd_cap": 4.0}
+    },
+    "total_usd_cap": 31.0,
+    "project_ceiling_usd": 200.0,
+    "before_paid_job": "read actual Modal spend; stop and ask for a budget decision if the job could exceed the remaining budget",
+    "memory_estimate_gb": {"a10_usable": 22.0, "status": "ESTIMATE_NOT_MEASURED"},
+    "enforcement": {"retries": 0, "max_concurrent_containers": 1, "modal_dollar_cap_enforced": false}
+  },
+  "evaluation": {
+    "protocol": "data/protocols/p1-15-student-evaluation.json",
+    "metrics": ["training loss", "validation casualties_plus_unresolved", "evacuated", "action validity", "inference latency", "model memory", "throughput", "unseen-family generalization"],
+    "strategy_mixing_check": "on same-state class-A conflicts, measure whether the factorized student emits a joint map no teacher proposed and whether it is worse; if so, compare bounded global strategy conditioning before any larger architecture change"
+  },
+  "protocol_hash": "sha256:f9e718d98f5f506cc0e0f58a640aee7f14c983dc3e81fa99da54a5ee4c4903d3"
+}

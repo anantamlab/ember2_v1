@@ -4,7 +4,9 @@
 stay as frozen-out history (their fail-closed guards stay). **No GPU, no Modal, no training is authorized.**
 
 Model: pinned Qwen3.5-2B + Clef joint-schema head (pins, LoRA r16, bf16, `max_len` 16 384, A10) as in
-`docs/P1_STUDENT_TRAINING_PROTOCOL.md` §3 of #42. Batch size 1 until DeltaNet padding parity is measured.
+`docs/P1_STUDENT_TRAINING_PROTOCOL.md` §3 of #42 (identities now copied into
+`data/protocols/p1-14-student-train.json`; no #42 permission carries over). Batch size 1 until DeltaNet padding
+parity is measured.
 The student never calls a reference teacher at inference.
 
 ## 1. The student's probability model (audited in run 8)
@@ -177,11 +179,21 @@ proxy gap.
 
 ## 6. Harness rebuild
 
-Reuse from #44 (`student_train.py`, after review): model/tokenizer pinning, `verify_runtime_pins`, LoRA setup,
-checkpoint integrity and save/reload tests, GPU memory logging, token-budget checks, `gpu_train_plan` limits
-and the `pilot_go_rule`. Remove from the NEW path: `teacher.sole_teacher`, T1-only row builders, T1-only gold
-labels. Add: weighted row sampler (P1-14 §3), `student_objective` losses, reservation rows (`token_budget.
-chunk_rows(..., reservations=True)`). The old T1-only route stays refused in two layers (tested in #44).
+**Done (run 15, CPU only).** `src/ember_v1/student_train.py` is the #44 harness (f9696a4) ported to this path;
+protocol `data/protocols/p1-14-student-train.json` (`DRAFT_NOT_FROZEN`, authorizes nothing).
+
+- Kept from #44: model/tokenizer pinning, `verify_runtime_pins`, LoRA setup, checkpoint integrity and
+  save/reload, memory logging, token-budget row checks, wall/cost guards, `gpu_train_plan`, `pilot_go_rule`,
+  the `ClefLoraAdapter` (still NOT EXECUTED).
+- Removed: the `s1` training set, the P1-11 `student_protocol` gate and T1-only hard labels. The P1-11
+  protocol, its doc and its permissions stay on the #44 branch only.
+- Added: `rows_from_epoch` (only `student_ingest.prepare_examples` + `sample_epoch` output becomes rows);
+  per-draw loss scaling so one draw contributes exactly `student_objective.sft_nll` (tested against it);
+  gradient accumulation counts draws; partial or interleaved draws are refused; `check_protocol` requires all
+  five teachers, the ingest source, a matching hash and phase caps that cover their wall caps.
+- A T1-only protocol stays refused in two layers (`check_protocol` id check, then `sole_teacher`).
+- Not yet: reservation rows in training (`reservations: false` in the draft), DPO/IPO stage, strategy-mixing
+  evaluation. Next: measured GPU preflight, then freeze with the measured token budget.
 
 ## 7. Cost plan (planning estimates, not billing caps)
 
