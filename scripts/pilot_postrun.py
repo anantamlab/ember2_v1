@@ -25,8 +25,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
-FREEZE_COMMIT = "827e88fa79d9fae9667f2fda590b4b23852988fc"
-PLAN_HASH = "sha256:eb8dbe293db7f1c1e1b4f342c07f21853031e9e6ab5419eda2833c51f761b664"
+FREEZE_COMMIT = "ee5455f24c61598febb8979188d5b8cecb46e1ae"   # plan 0.3.0 (run 15)
+PLAN_HASH = "sha256:cb93c6d17e5b6c74755ca3a569b43955916302805983e39b562e834f6a9a605a"
 OUT_DIR = "data/collection/p1-12-train-pilot@1"
 POSTRUN_VERSION = "p1-12-pilot-postrun@1.0.0"
 

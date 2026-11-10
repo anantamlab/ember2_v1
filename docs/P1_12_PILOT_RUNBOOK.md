@@ -1,15 +1,16 @@
 # P1-12 pilot runbook — attempt 1 of `p1-12-train-pilot@1`
 
-**Status: NOT EXECUTED. Authorization: `PENDING_AUTHORIZATION`.** Prepared in run 12 (2026-11-10). This
-runbook approves nothing. Only an owner runs it, and only after the authorization PR
-([P1_12_AUTHORIZATION_HANDOFF.md](P1_12_AUTHORIZATION_HANDOFF.md)) is merged with an independent approval.
+**Status: NOT EXECUTED.** Prepared in run 12; updated in run 15 (2026-11-10) for plan 0.3.0 (single-owner
+approval, `P1_12_PILOT_FREEZE_RECORD.md` §Re-freeze 0.3.0). This runbook approves nothing. It runs only after
+the PR that adds `authorization.json` is merged into `main` by the owner it names. Commands below that name
+0.2.0 commits are history; use the identities in this table.
 
 | Item | Value |
 |---|---|
 | Plan | `data/collection/p1-12-train-pilot@1/plan.json`, status `FROZEN` |
-| Plan hash | `sha256:eb8dbe293db7f1c1e1b4f342c07f21853031e9e6ab5419eda2833c51f761b664` |
-| Freeze commit | `827e88fa79d9fae9667f2fda590b4b23852988fc` |
-| Execution commit | `1a0128ca5711557fba9db837f0ed251233bf6359` (tree equal to the freeze commit tree) |
+| Plan hash | `sha256:cb93c6d17e5b6c74755ca3a569b43955916302805983e39b562e834f6a9a605a` (0.3.0; 0.2.0 `eb8dbe29…` superseded) |
+| Freeze commit | `ee5455f24c61598febb8979188d5b8cecb46e1ae` |
+| Execution commit | `ee5455f24c61598febb8979188d5b8cecb46e1ae` (= the freeze commit) |
 | Scenarios | 8 TRAIN (4 feasible, 3 difficult, 1 unreachable); regeneration checks: `g-0821b9cfcfbdc9a9`, `g-b9f6d81f3b5bfce7` |
 | Teachers | T0, T1, T2, T3, T4 (pinned fingerprints in the plan); one spawned, killable process per teacher per group |
 | Limits | decision CPU s: T0 5, T1 5, T2 30, T3 5, T4 5; group wall 7200 s; pilot wall 14400 s; retries 0; substitutes none |

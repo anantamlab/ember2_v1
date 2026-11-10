@@ -1,0 +1,100 @@
+{
+ "approval": {
+  "kind": "single_owner_merged_pr",
+  "owner_instruction": "Owner decision in chat, 2026-11-10 (run 15): 'the 2 owner is not required only i am fine'; then chose 'Single-owner re-freeze' and its stated sequence: re-freeze, full suite, preflight, one pilot run.",
+  "pull_request": 58,
+  "recorded_by": "agent (Claude Code) on the owner's chat instruction, in the owner's sankalphs GitHub session",
+  "repository": "anantamlab/ember_v1"
+ },
+ "attempt": 1,
+ "authorization_version": "1.1.0",
+ "execution_commit": "ee5455f24c61598febb8979188d5b8cecb46e1ae",
+ "kind": "p1-12-multiteacher-train-pilot-authorization",
+ "limits": {
+  "decision_cpu_s": {
+   "T0": 5,
+   "T1": 5,
+   "T2": 30,
+   "T3": 5,
+   "T4": 5
+  },
+  "decisions_per_teacher": "one per simulator step until termination (at most max_steps)",
+  "group_wall_s": 7200,
+  "pilot_wall_s": 14400,
+  "process_model": "one spawned, killable process per teacher per group; groups run in plan order",
+  "processes_per_teacher": 1,
+  "retries": 0
+ },
+ "plan_freeze": {
+  "commit": "ee5455f24c61598febb8979188d5b8cecb46e1ae",
+  "path": "data/collection/p1-12-train-pilot@1/plan.json"
+ },
+ "plan_hash": "sha256:cb93c6d17e5b6c74755ca3a569b43955916302805983e39b562e834f6a9a605a",
+ "plan_version": "p1-12-train-pilot@0.3.0",
+ "reviewer": {
+  "github_login": "sankalphs"
+ },
+ "scenarios": [
+  {
+   "scenario_hash": "sha256:0e85ca6079f2002b7706c2cc43796fc47ae42098af324d0d5334ffa03c641108",
+   "scenario_id": "g-a2993d188ad45093"
+  },
+  {
+   "scenario_hash": "sha256:99fa0d0409db18edb77b86fe6c0a31bea365380169be04b933d9ca316f3fc8ff",
+   "scenario_id": "g-6dfef26f38a144d0"
+  },
+  {
+   "scenario_hash": "sha256:8f871dec96187985b941894b131f23281edaf0f755c3fc352e89ca32ee8918c3",
+   "scenario_id": "g-b9f6d81f3b5bfce7"
+  },
+  {
+   "scenario_hash": "sha256:6333c75294fbaa6c19e904ae1feb8c1cc64c177f8cd4e344206a63d7ef0d8f6d",
+   "scenario_id": "g-35cca9f1d42320be"
+  },
+  {
+   "scenario_hash": "sha256:c43b142da86e55a9cd8d9e120ba885ed3044a6b7eb0af6a1f7b712b947e5bb84",
+   "scenario_id": "g-0821b9cfcfbdc9a9"
+  },
+  {
+   "scenario_hash": "sha256:45e5807ee9a0eaf9f5f38fbdc5e82b3463f35d65251fb953a05f618c34172294",
+   "scenario_id": "g-0ee55267388889cc"
+  },
+  {
+   "scenario_hash": "sha256:07635cf78bd747464e6e97be8b6260240bb051ea05625df084c9044c44eabf75",
+   "scenario_id": "g-1a8b6230b6107b0e"
+  },
+  {
+   "scenario_hash": "sha256:54f05807b587a5e7557f1e90b9b488f688d63c1c338def7cf8fd051ec1497c7f",
+   "scenario_id": "g-5082bdcde677aea4"
+  }
+ ],
+ "statement": "I reviewed the frozen plan and authorize exactly one attempt (attempt 1) of the eight-scenario five-teacher TRAIN pilot on CPU. No Modal, GPU, training or benchmark.",
+ "status": "APPROVED",
+ "teacher_fingerprints": {
+  "T0": {
+   "code_fingerprint": "sha256:8ddf9370263284107ae5249c9adafe7323ed8deab2d45077fe9894979e6c84aa",
+   "config_hash": "sha256:bdc4d3580bcf3889348c563aaf622334d135a535d9cb2aaeedc3c0528f10208a",
+   "version": "1.0.0"
+  },
+  "T1": {
+   "code_fingerprint": "sha256:52dc61f4ff9599e55bfd29f47068bf301895321ce85f6c9aaa9feec1dc568eac",
+   "config_hash": "sha256:5047e942db3326706b6184c9f29e0b992078920f03c8a53adc8cc24258345361",
+   "version": "1.0.0"
+  },
+  "T2": {
+   "code_fingerprint": "sha256:afe987d862caaa32701777050f19fb3126c03f9edd6ab8ac6ed375a95504db74",
+   "config_hash": "sha256:302139e18ba05fdcdc5561b7390b95f725600ec8791e336d065f77cea0c507e5",
+   "version": "1.0.0"
+  },
+  "T3": {
+   "code_fingerprint": "sha256:82294a3f0d7aa3caf38598505dbffd367c5cb14ade1f725fd9ee23e73c2c14f1",
+   "config_hash": "sha256:5a8d4985b1f65d5de18a06c86d8dd522e2ca95e2accd583165b7e7d7ea1d02e0",
+   "version": "1.0.0"
+  },
+  "T4": {
+   "code_fingerprint": "sha256:fa66a0f354dc82f992d1f0a1896851fc90dc9e19dea244f815a76857361ce75e",
+   "config_hash": "sha256:79bd3322b9cf7ccd25928f3a70502089732496af5427f88f00ecd2ff6ba12504",
+   "version": "1.2.0"
+  }
+ }
+}

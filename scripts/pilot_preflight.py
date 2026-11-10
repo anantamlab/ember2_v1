@@ -30,9 +30,9 @@ from pathlib import Path
 from typing import Any
 
 PREFLIGHT_VERSION = "p1-12-pilot-preflight@1.0.0"
-PLAN_HASH = "sha256:eb8dbe293db7f1c1e1b4f342c07f21853031e9e6ab5419eda2833c51f761b664"
-FREEZE_COMMIT = "827e88fa79d9fae9667f2fda590b4b23852988fc"
-EXECUTION_COMMIT = "1a0128ca5711557fba9db837f0ed251233bf6359"
+PLAN_HASH = "sha256:cb93c6d17e5b6c74755ca3a569b43955916302805983e39b562e834f6a9a605a"            # plan 0.3.0 (run 15)
+FREEZE_COMMIT = "ee5455f24c61598febb8979188d5b8cecb46e1ae"
+EXECUTION_COMMIT = "ee5455f24c61598febb8979188d5b8cecb46e1ae"   # = freeze commit (plan 0.3.0)
 OUT_DIR = "data/collection/p1-12-train-pilot@1"
 PLAN_PATH = f"{OUT_DIR}/plan.json"
 AUTH_PATH = f"{OUT_DIR}/authorization.json"
