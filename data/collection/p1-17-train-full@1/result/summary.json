@@ -1,0 +1,373 @@
+{
+ "collection": {
+  "cpu_s_total": {
+   "T0": 171.7,
+   "T1": 347.4,
+   "T2": 43568.4,
+   "T3": 808.4,
+   "T4": 450.6
+  },
+  "decision_cap_overruns": {},
+  "evidence_hash": "sha256:e5427ff7f9939149e9ea575a36b74dc93f69b5011f95a56afe3aba12c5dc8829",
+  "families": 64,
+  "families_best_count": {
+   "T0": 22,
+   "T1": 43,
+   "T2": 41,
+   "T3": 35,
+   "T4": 51
+  },
+  "full_train_verified": true,
+  "host_min_free_gib": 5.34,
+  "max_live_groups": 8,
+  "people": 8571,
+  "pilot_overlap_identical": {
+   "g-0821b9cfcfbdc9a9": "all",
+   "g-0ee55267388889cc": "all",
+   "g-1a8b6230b6107b0e": "all",
+   "g-35cca9f1d42320be": "all",
+   "g-5082bdcde677aea4": "all",
+   "g-6dfef26f38a144d0": "all",
+   "g-a2993d188ad45093": [
+    "T2"
+   ],
+   "g-b9f6d81f3b5bfce7": "all"
+  },
+  "plan_hash": "sha256:bff49b473c82d89c041a1aa5e279bff612aec80148f088228cad644bfe07c341",
+  "ram_waits": 0,
+  "regeneration": {
+   "g-0821b9cfcfbdc9a9": {
+    "budget_limited_t2": 0,
+    "differs": [],
+    "identical": true
+   },
+   "g-525081107b864f7d": {
+    "budget_limited_t2": 0,
+    "differs": [],
+    "identical": true
+   },
+   "g-7490c1432df58c70": {
+    "budget_limited_t2": 0,
+    "differs": [],
+    "identical": true
+   },
+   "g-9655b53de725243e": {
+    "budget_limited_t2": 10,
+    "differs": [
+     "T2"
+    ],
+    "identical": false
+   },
+   "g-96d986d2052d1417": {
+    "budget_limited_t2": 0,
+    "differs": [],
+    "identical": true
+   },
+   "g-c92b6cdf6d8ae760": {
+    "budget_limited_t2": 0,
+    "differs": [],
+    "identical": true
+   },
+   "g-e5bdfae1ec8e1b79": {
+    "budget_limited_t2": 0,
+    "differs": [],
+    "identical": true
+   },
+   "g-f3ed186eb2bd001d": {
+    "budget_limited_t2": 0,
+    "differs": [],
+    "identical": true
+   }
+  },
+  "sessions": 1,
+  "status_counts": {
+   "verified_complete": 189
+  },
+  "step0_all_five_identical_share": 0.1217,
+  "t2_budget_limited_decisions": 325,
+  "t2_budget_limited_groups": 20,
+  "t2_fire_entries": 17,
+  "teacher_episodes_complete": 945,
+  "totals": {
+   "T0": {
+    "casualties": 3320,
+    "casualties_plus_unresolved": 3508,
+    "evacuated": 5063,
+    "unresolved": 188
+   },
+   "T1": {
+    "casualties": 2646,
+    "casualties_plus_unresolved": 2919,
+    "evacuated": 5652,
+    "unresolved": 273
+   },
+   "T2": {
+    "casualties": 2643,
+    "casualties_plus_unresolved": 2923,
+    "evacuated": 5648,
+    "unresolved": 280
+   },
+   "T3": {
+    "casualties": 2831,
+    "casualties_plus_unresolved": 3055,
+    "evacuated": 5516,
+    "unresolved": 224
+   },
+   "T4": {
+    "casualties": 2587,
+    "casualties_plus_unresolved": 2933,
+    "evacuated": 5638,
+    "unresolved": 346
+   }
+  },
+  "training_eligible": false,
+  "verification_hash": "sha256:4aeb92936e87fd9dbf8f5c4c0d304e8db09a0cb5e53c526066a1dad33fa776f1",
+  "wall_s": 6501.938
+ },
+ "counterfactual_batch": {
+  "all_verified": true,
+  "approved_preferences": 0,
+  "batch_hash": "sha256:53db04bb51dfe5cbcf79d76b78698c8f1121a34377c7045742729c8b848ec825",
+  "by_continuation": {
+   "T1": {
+    "censored_contrasts": 0,
+    "contrasted": 14,
+    "no_disagreement": 2,
+    "studies": 16,
+    "verdict_a_better": 9,
+    "verdict_b_better": 12,
+    "verdict_inconclusive": 3,
+    "verdict_no_difference": 66,
+    "verified": 16
+   },
+   "T4": {
+    "censored_contrasts": 0,
+    "contrasted": 14,
+    "no_disagreement": 2,
+    "studies": 16,
+    "verdict_a_better": 2,
+    "verdict_b_better": 6,
+    "verdict_inconclusive": 9,
+    "verdict_no_difference": 73,
+    "verified": 16
+   }
+  },
+  "cpu_s_total": 1538.8,
+  "failed": 0,
+  "record_classes": {
+   "C": 12,
+   "D": 168
+  },
+  "records": 180,
+  "records_valid": false,
+  "revalidation": {
+   "approved": 0,
+   "class_C_pairs": [
+    {
+     "chosen": "T0",
+     "continuation": "T1",
+     "n": 1,
+     "rejected": "T3"
+    },
+    {
+     "chosen": "T1",
+     "continuation": "T1",
+     "n": 1,
+     "rejected": "T3"
+    },
+    {
+     "chosen": "T1+T2",
+     "continuation": "T1",
+     "n": 1,
+     "rejected": "T0"
+    },
+    {
+     "chosen": "T2",
+     "continuation": "T1",
+     "n": 1,
+     "rejected": "T3"
+    },
+    {
+     "chosen": "T3",
+     "continuation": "T1",
+     "n": 1,
+     "rejected": "T0"
+    },
+    {
+     "chosen": "T4",
+     "continuation": "T1",
+     "n": 1,
+     "rejected": "T0"
+    },
+    {
+     "chosen": "T4",
+     "continuation": "T1",
+     "n": 1,
+     "rejected": "T3"
+    },
+    {
+     "chosen": "T0",
+     "continuation": "T4",
+     "n": 1,
+     "rejected": "T3"
+    },
+    {
+     "chosen": "T1",
+     "continuation": "T4",
+     "n": 1,
+     "rejected": "T3"
+    },
+    {
+     "chosen": "T1+T2",
+     "continuation": "T4",
+     "n": 1,
+     "rejected": "T0"
+    },
+    {
+     "chosen": "T3",
+     "continuation": "T4",
+     "n": 1,
+     "rejected": "T0"
+    },
+    {
+     "chosen": "T4",
+     "continuation": "T4",
+     "n": 1,
+     "rejected": "T0"
+    }
+   ],
+   "classes": {
+    "C": 12,
+    "D": 168
+   },
+   "code_commit": "9d7691668fb9a6b24044754a4d5f887d2534d3f4",
+   "ok": true,
+   "records": 180,
+   "revalidation_hash": "sha256:8dc74e46265a4faf03ab283fd5a735fbb6e0a172fae84c0f7be1878b4f08a02e",
+   "weights_all_zero": true
+  },
+  "spec_hash": "sha256:ba333f5e3302844f0fd15f66f7e37b39278782489061892e1fcdf8f6db0771c4",
+  "studies": 32,
+  "verified": 32,
+  "wall_s": 290.1
+ },
+ "dataset": {
+  "audit": {
+   "class_reasons": {
+    "best_outcome": 32409,
+    "diagnostic_teacher": 4827,
+    "outcome_not_best": 15908,
+    "unsafe_fire_entry": 8
+   },
+   "classes": {
+    "A": 26411,
+    "B": 20441
+   },
+   "fire_entry_records": 16,
+   "selection_decided_by": {
+    "action_digest_tie_break": 176,
+    "mean_trajectory_steps": 64,
+    "only_class_A_map_at_state": 25803
+   },
+   "states_with_competing_A_maps": 240,
+   "strata_share_A": {
+    "n<=110|deterministic": 0.048165339,
+    "n<=110|stochastic": 0.11356227,
+    "n<=50|deterministic": 0.323735358,
+    "n<=50|stochastic": 0.469467058,
+    "n>110|deterministic": 0.008729934,
+    "n>110|stochastic": 0.036340041
+   },
+   "teacher_dev_similar_weight_A": 2.75,
+   "teacher_share_A": {
+    "T1": 0.235705328,
+    "T2": 0.22744074,
+    "T3": 0.193019383,
+    "T4": 0.343834549
+   },
+   "weight_by_class": {
+    "A": 37.0,
+    "B": 0.0,
+    "C": 0,
+    "D": 0,
+    "E": 0
+   }
+  },
+  "dataset_hash": "sha256:d7e374d2ffdf9b9324e3952cc9275c647cfadc153409468bb1f94abe4aa76951",
+  "families_with_A": 64,
+  "family_share_max": 0.027027027,
+  "n_problems": 0,
+  "protocol_version": "1.0.0",
+  "record_version": "mt-dataset-record@1.0.0",
+  "records_total": 46852,
+  "scenarios_only_T0_best": [],
+  "scenarios_without_class_A": [
+   "g-44f1e96b951b895a",
+   "g-673c66e0077d2604"
+  ],
+  "selection_bias_flagged": [
+   "strata:n>110|deterministic",
+   "teacher:T0"
+  ],
+  "sft_examples": 26043,
+  "status": "VALID",
+  "wall_s": 333.0
+ },
+ "evidence_root_outside_git": "D:\\Coding\\ember-evidence",
+ "kind": "p1-17-run-summary",
+ "namespace": "p1-17-train-full@1",
+ "not_done": [
+  "no training",
+  "no GPU or Modal spend (USD 0)",
+  "no EMBERBench or DEV evaluation",
+  "no preference approval (every class C weight 0)",
+  "token counts need the pinned tokenizer"
+ ],
+ "sft": {
+  "dataset_hash": "sha256:d7e374d2ffdf9b9324e3952cc9275c647cfadc153409468bb1f94abe4aa76951",
+  "heldout_overlap": {
+   "core_hash": 0,
+   "family_id": 0,
+   "lineage_id": 0,
+   "scenario_hash": 0
+  },
+  "k": 100,
+  "manifest_hash": "sha256:eb055418d8fb0819d33f51602b5e48e8519be300785c3e5c360584d3e5da34bb",
+  "reservations": false,
+  "splits": {
+   "train": {
+    "examples": 23913,
+    "families": 58,
+    "max_state_chars": 4165,
+    "rows": 26000,
+    "rows_per_example": {
+     "1": 21826,
+     "2": 2087
+    },
+    "weight_total": 33.75
+   },
+   "val": {
+    "examples": 2130,
+    "families": 6,
+    "max_state_chars": 3836,
+    "rows": 2285,
+    "rows_per_example": {
+     "1": 1975,
+     "2": 155
+    },
+    "weight_total": 3.25
+   }
+  },
+  "status": "PREPARED_NOT_AUTHORIZED_FOR_TRAINING",
+  "token_budget": "NOT MEASURED HERE: the pinned Qwen3.5-2B tokenizer is not on this machine; count tokens per row on the training host (token_budget.max_chunk) and fail closed on any row over the 16,384 bound before fixing token_budget_per_epoch",
+  "val_families": [
+   "fam-1a2a9a4ea7c99a65",
+   "fam-2993f502e99b2c40",
+   "fam-2b163636edc667d7",
+   "fam-349e5a71b9f50060",
+   "fam-93d0127086f97018",
+   "fam-cf7548ce87fd7b61"
+  ]
+ },
+ "summary_hash": "sha256:da15d8d6784c4089f9b79596bdaecf661c4888fa1d3491cea68eaa560145b26f"
+}

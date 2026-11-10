@@ -182,3 +182,18 @@ before any TRAIN data exists.
 | Preference model view | `preference_example(r)`: only an APPROVED, weighted class-C record; returns observation, chosen and rejected whole maps, weight. Proposer sets, outcomes, evidence and provenance never pass (test: no teacher name, no `sources`). |
 | Outcome-selection bias | `selection_bias_audit(records)` (review only, not a gate): pool share (all A/B state-map records) vs class-A weight share by people band x fire model, step band, teacher and scenario; ratio outside [1/2, 2] flagged; scenarios with no class-A weight; minority evidence kept (B, unselected A, D). |
 | Student readiness | Tests: exact chain rule at N = 120, k = 40 with reservations (one term per person, later chunks do not cancel); CPU mock training loop (5-parameter toy head, exact SFT objective of an ingested epoch, loss decreases; not the student); Qwen3.5-2B and audited Clef head pins cross-checked. |
+
+## 7. Version 1.0.0 (FROZEN, run 17) and the real build
+
+| Item | 1.0.0 rule |
+|---|---|
+| Scope | `synthetic_fixture` and `p1-17-train-full@1` only. DEV, EMBERBench and the locked test set are never a scope. |
+| Collection gate | `export` passes only with a FROZEN protocol, an owner authorization and a verification report whose hash recomputes and equals the pinned `verification_hash`, with 189/189 `verified_complete`. |
+| Class A | group-best outcome over all five teachers, AND not a diagnostic teacher (T0), AND no move into a burning cell (`train_collect.fire_entry_moves`). Each record holds `evidence.class_reasons` per teacher and `evidence.fire_entry_moves`; `record_problems` re-derives both. |
+| T0 | diagnostic/contrastive only: always class B. A scenario where only T0 is best gets no class A (none occurred). |
+| Weighting | unit `family`: each family's budget is split over its scenarios with selected class A; then the scenario rules of §3. |
+| Flags | records of the 3 teacher-development-similar families carry `teacher_dev_similar_family: true`. |
+| Preferences | approval stays disabled: every class C has weight 0. The C/D duplicate key includes the study report (fix `9d76916`). |
+| Builder | `train_dataset` (two passes, parallel, write-once, outside git); VALID only if every per-record, per-state and whole-dataset check passes. |
+
+Real build: `docs/P1_17_RESULTS.md` §2.
