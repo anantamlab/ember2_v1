@@ -209,6 +209,51 @@ def sft(*, dataset_dir: Path, out: Path, p17_sft: Path = Path(P17_SFT), k: int =
     return {**body, "manifest_hash": digest(body)}
 
 
+def filter_sft(src: Path, token_counts: Path, out: Path, *, max_len: int = 16384) -> dict[str, Any]:
+    """Copy an SFT dir without the TRAIN examples that have a row over `max_len` tokens (measured by
+    `student_run.measure`, whose partial output keeps every example's `max_row`). Rows are never truncated: an
+    example that does not fit the fixed architecture is left out and listed. Val must fit unchanged."""
+    from . import student_run as sr
+    if out.exists():
+        raise BuildBlocked(f"{out} exists (write-once)")
+    man = sr.check_sft_dir(src)
+    over: dict[str, list[str]] = {"train": [], "val": []}
+    seen: set[tuple[str, str]] = set()
+    for line in si_lines(token_counts):
+        d = json.loads(line)
+        seen.add((d["split"], d["example_id"]))
+        if d["max_row"] > max_len:
+            over[d["split"]].append(d["example_id"])
+    if over["val"]:
+        raise BuildBlocked(f"{len(over['val'])} val examples do not fit: val must stay unchanged")
+    drop = set(over["train"])
+    n_train = sum(1 for _ in si_lines(src / "train.jsonl"))
+    if sum(1 for s, _ in seen if s == "train") != n_train:
+        raise BuildBlocked("token counts do not cover every train example (measure the whole train split)")
+    tmp = out.with_name(out.name + ".partial")
+    tmp.mkdir(parents=True)
+    shutil.copyfile(src / "val.jsonl", tmp / "val.jsonl")
+    kept, w_drop = 0, 0.0
+    with open(tmp / "train.jsonl", "w", encoding="utf-8", newline="\n") as fh:
+        for line in si_lines(src / "train.jsonl"):
+            ex = json.loads(line)
+            if ex["example_id"] in drop:
+                w_drop += ex["weight"]
+                continue
+            fh.write(line if line.endswith("\n") else line + "\n")
+            kept += 1
+    body = {**{k: v for k, v in man.items() if k not in ("files", "manifest_hash")},
+            "filtered_from": man["manifest_hash"], "max_len": max_len,
+            "excluded_over_max_len": {"examples": sorted(drop), "count": len(drop), "weight": round(w_drop, 9),
+                                      "rule": "any Clef row over max_len tokens: no truncation, example left out"},
+            "train_examples_kept": kept,
+            "files": {n: _sha(tmp / n) for n in ("train.jsonl", "val.jsonl")}}
+    (tmp / "sft_manifest.json").write_text(json.dumps({**body, "manifest_hash": digest(body)}, indent=1,
+                                                      sort_keys=True), encoding="utf-8", newline="\n")
+    os.replace(tmp, out)
+    return {**body, "manifest_hash": digest(body)}
+
+
 def si_lines(p: Path):
     with open(p, encoding="utf-8") as f:
         for line in f:
@@ -227,7 +272,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     s = sub.add_parser("sft")
     s.add_argument("--dataset", type=Path, required=True)
     s.add_argument("--out", type=Path, required=True)
+    f = sub.add_parser("filter")
+    f.add_argument("--sft", type=Path, required=True)
+    f.add_argument("--token-counts", type=Path, required=True)
+    f.add_argument("--out", type=Path, required=True)
     a = ap.parse_args(argv)
+    if a.cmd == "filter":
+        r = filter_sft(a.sft, a.token_counts, a.out)
+        print(json.dumps({k: r[k] for k in ("train_examples_kept", "manifest_hash")} |
+                         {"excluded": r["excluded_over_max_len"]["count"]}, indent=1))
+        return 0
     if a.cmd == "build":
         r = build(repo=a.repo, root=a.root, out=a.out, workers=a.workers)
         print(json.dumps({k: r[k] for k in ("status", "groups_used", "n_problems", "records_total", "sft_examples",
