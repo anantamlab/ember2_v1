@@ -265,7 +265,8 @@ def gpu_phase(phase: str, protocol: Mapping[str, Any], spec: Mapping[str, Any], 
     out.mkdir(parents=True, exist_ok=True)
     prog_path = out / "progress.json"
     prior = _read_json(prog_path) if prog_path.exists() else None
-    prior_s = float(prior["elapsed_total_s"]) if prior else 0.0
+    # + GPU seconds that failed earlier attempts of this phase (other out dirs) already spent: one phase cap
+    prior_s = (float(prior["elapsed_total_s"]) if prior else 0.0) + float(spec.get("prior_attempts_s", 0.0))
     t_start = time.monotonic()
 
     def guards_now() -> Any:           # caps minus everything already spent (earlier containers + this setup)

@@ -533,6 +533,7 @@ GPU_API_ASSUMPTIONS = (
     "unsloth.models.decision.ClefDataCollator(pad_id)(items) -> batch with target / marker_mask",
     "model(input_ids=, attention_mask=, records=) -> (flat_logits[num_questions, >=5], None)",
     "model.save_pretrained(dir, tokenizer) (adapters + head); unsloth.models.decision._load_clef_checkpoint",
+    "unsloth.models._block_compile._causal_conv1d_adapter(original, depthwise_conv) (wrapped: x= call)",
 )
 
 
@@ -542,7 +543,8 @@ def preflight_api() -> dict[str, Any]:
     found = {}
     for mod, name in (("unsloth", "FastDecisionModel"), ("unsloth.models.decision", "ClefDataCollator"),
                       ("unsloth.models.decision", "_load_clef_checkpoint"),
-                      ("unsloth.models.decision", "_clef_amp_dtype"), ("unsloth.models.clef", "question_options")):
+                      ("unsloth.models.decision", "_clef_amp_dtype"), ("unsloth.models.clef", "question_options"),
+                      ("unsloth.models._block_compile", "_causal_conv1d_adapter")):
         try:
             found[f"{mod}.{name}"] = hasattr(importlib.import_module(mod), name)
         except ImportError:
@@ -550,6 +552,30 @@ def preflight_api() -> dict[str, Any]:
     if not all(found.values()):
         raise TrainError("gpu_api", json.dumps(found))
     return found
+
+
+def _conv_x_shim() -> None:  # pragma: no cover - GPU only
+    """P1-18 pilot@2 fault: unsloth's block-compile conv adapter (`_block_compile._causal_conv1d_adapter`)
+    takes `hidden_states`, but transformers 5.2's Qwen3.5 GatedDeltaNet calls `causal_conv1d_fn(x=...)`.
+    After a training-mode forward routes the conv, a no-grad training-mode call raised TypeError. This
+    wrapper accepts either name and forwards positionally; it changes no math."""
+    import functools
+
+    from unsloth.models import _block_compile as bc
+    orig = bc._causal_conv1d_adapter
+    if getattr(orig, "_ember_x_kw", False):
+        return
+
+    def adapter(original, depthwise_conv):
+        fn = orig(original, depthwise_conv)
+
+        @functools.wraps(fn, updated=())
+        def causal_conv1d_fn(hidden_states=None, weight=None, bias=None, activation=None, x=None, **kwargs):
+            return fn(x if hidden_states is None else hidden_states, weight, bias, activation, **kwargs)
+        causal_conv1d_fn._unsloth_block_adapter = True
+        return causal_conv1d_fn
+    adapter._ember_x_kw = True
+    bc._causal_conv1d_adapter = adapter
 
 
 class ClefLoraAdapter:  # pragma: no cover - GPU only; the P1-18 A10 pilot is its first run
@@ -567,6 +593,7 @@ class ClefLoraAdapter:  # pragma: no cover - GPU only; the P1-18 A10 pilot is it
 
         from . import p0b
         preflight_api()
+        _conv_x_shim()
         self.torch, self.device, self.cfg = torch, "cuda", cfg
         if checkpoint is None:
             model, tok = p0b.load_model(cfg["model"], cfg["max_len"], cfg["precision"], revision=cfg["model_commit"])
@@ -647,9 +674,14 @@ class ClefLoraAdapter:  # pragma: no cover - GPU only; the P1-18 A10 pilot is it
         """Per person: log-probabilities over that person's options (upstream option order)."""
         from unsloth.models.clef import question_options
         it = self.item(row)
-        with self.torch.inference_mode():
-            z, _ = self._forward(it)
-            lp = self.torch.log_softmax(z, -1).cpu()
+        was_training = self.model.training
+        self.model.eval()  # upstream `_clef_logits` scores in eval mode under no_grad (no dropout)
+        try:
+            with self.torch.no_grad():
+                z, _ = self._forward(it)
+                lp = self.torch.log_softmax(z, -1).cpu()
+        finally:
+            self.model.train(was_training)
         out = {}
         for i, (qid, q) in enumerate(it["source"]["questions"].items()):
             keys = [k for k, _ in question_options(q)]
