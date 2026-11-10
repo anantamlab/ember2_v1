@@ -159,3 +159,24 @@ def test_train_resumes_from_its_checkpoint_to_the_same_weights(sft, tokens, froz
     assert res["resumed_from"].endswith("ckpt-000002")
     assert res["train"]["final_weights_digest"] == ref["train"]["final_weights_digest"]
     assert res["train"]["meter"]["draws"] == ref["train"]["meter"]["draws"]
+
+
+def test_eval_phase_scores_val_and_rolls_out_resumably(sft, tokens, frozen, tmp_path):
+    rep = sr.gpu_phase("pilot", frozen, _spec(sft, tokens, tmp_path, 30_000, "p"), adapter_factory=_factory,
+                       log=lambda s: None)
+    ck = str(tmp_path / "p" / "run" / "final")
+    lst = tmp_path / "scen.jsonl"
+    with open(lst, "w", encoding="utf-8") as f:
+        for i in range(3):
+            s = random_scenario(random.Random(500 + i))
+            f.write(json.dumps({"set": "t", "scenario_id": f"s{i}", "family_id": f"f{i}",
+                                "scenario": s.to_dict(), "scenario_hash": s.content_hash()}) + "\n")
+    spec = {"sft_dir": str(sft), "checkpoint": ck, "out": str(tmp_path / "ev"), "rollouts": str(lst),
+            "rollout_limit": 2, "label": "mock"}
+    ev = sr.gpu_phase("eval", frozen, spec, adapter_factory=_factory, log=lambda s: None)
+    assert ev["val"]["people"] > 0 and ev["rollouts"]["finished"] == 2 and ev["rollouts"]["stopped"] is None
+    recs = [json.loads(x) for x in (tmp_path / "ev" / "rollouts.jsonl").read_text().splitlines()]
+    assert all(r["people"] == r["evacuated"] + r["casualties"] + r["unresolved"] for r in recs)
+    ev2 = sr.gpu_phase("eval", frozen, {**spec, "rollout_limit": 3}, adapter_factory=_factory, log=lambda s: None)
+    assert ev2["rollouts"]["ran_this_container"] == 1 and ev2["rollouts"]["finished"] == 3
+    assert rep["reload"]["pass"]
