@@ -332,3 +332,15 @@ def test_pins_match_the_audited_head():
     from ember_v1 import p0b
     p = st.load_protocol()
     assert p["pins"]["model"] == p0b.PINNED_MODEL and p["pins"]["clef_sha256"] == p0b.AUDITED_CLEF_SHA256
+
+
+def test_v2_protocol_changes_only_data_and_caps():
+    v1 = st.load_protocol()
+    v2 = st.load_protocol(st.REPO / "data/protocols/p1-18-student-v2.json")
+    st.check_protocol(v2, require_frozen=True)
+    a, b = st.config_from_protocol(v1), st.config_from_protocol(v2)
+    diff = {k for k in a if a[k] != b[k]}
+    assert diff == {"protocol_hash", "epoch_seed", "phases"}
+    assert v2["based_on"]["protocol_hash"] == v1["protocol_hash"]
+    assert sum(ph["usd_cap"] for ph in v2["compute"]["phases"].values()) <= 70.0
+    assert "128,701,152" in v2["data"]["token_budget_per_epoch"]

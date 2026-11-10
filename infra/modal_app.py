@@ -208,12 +208,13 @@ class StudentTrainer:
 
 
 @app.local_entrypoint()
-def student(phase: str, spec: str, authorize: str = "", out: str = ""):
-    """modal run [--detach] infra/modal_app.py::student --phase pilot --spec <spec.json> --authorize pilot"""
+def student(phase: str, spec: str, authorize: str = "", out: str = "", protocol: str = ""):
+    """modal run [--detach] infra/modal_app.py::student --phase pilot --spec <spec.json> --authorize pilot
+    [--protocol data/protocols/p1-18-student-v2.json] (default: the V1 protocol p1-14-student-train.json)"""
     from ember_v1 import student_train as st
     from ember_v1.run_report import write_json_atomic
 
-    protocol = st.load_protocol()
+    protocol = st.load_protocol(protocol) if protocol else st.load_protocol()
     try:
         plan = st.gpu_train_plan(phase, protocol, authorize=authorize, code_commit=_code_commit())
     except (ValueError, PermissionError) as exc:
