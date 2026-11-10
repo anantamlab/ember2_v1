@@ -97,6 +97,54 @@ def test_edited_evidence_fails_its_hash(attempt, tmp_path):
     assert any("evidence hash" in p for p in pr.verify_attempt(d, plan, scs)["problems"])
 
 
+def _rehash_evidence(d: Path, edit) -> None:
+    from ember_v1.sim.canonical import digest
+    ev = d / "attempt-1" / "evidence.json"
+    doc = json.loads(ev.read_text(encoding="utf-8"))
+    edit(doc)
+    body = {k: v for k, v in doc.items() if k != "evidence_hash"}
+    ev.write_text(json.dumps({**body, "evidence_hash": digest(body)}), encoding="utf-8")
+
+
+def test_group_report_missing_although_evidence_says_ran(attempt, tmp_path):
+    out, plan, scs = attempt
+    d = _copy(out, tmp_path / "g")
+    (d / "attempt-1" / "groups" / "fx-1.json").unlink()
+    rep = pr.verify_attempt(d, plan, scs)
+    assert not rep["integrity_verified"] and not rep["accepted"]
+    assert any("fx-1: evidence says the group ran but its report is missing" in p for p in rep["problems"])
+
+
+def test_evidence_rows_must_match_stored_reports(attempt, tmp_path):
+    out, plan, scs = attempt
+    d = _copy(out, tmp_path / "h")
+
+    def edit(doc):
+        doc["groups"][1]["content_hash"] = "sha256:other"
+        doc["regeneration"]["fx-0"]["content_hash"] = "sha256:other"
+    _rehash_evidence(d, edit)
+    probs = pr.verify_attempt(d, plan, scs)["problems"]
+    assert any("fx-1: evidence content_hash differs" in p for p in probs)
+    assert any("fx-0: evidence regeneration content_hash differs" in p for p in probs)
+    assert not any("evidence hash" in p for p in probs)
+
+
+def test_stored_report_for_a_group_that_did_not_start(attempt, tmp_path):
+    out, plan, scs = attempt
+    d = _copy(out, tmp_path / "n")
+
+    def edit(doc):
+        doc["groups"][1]["status"] = "not_started"
+    _rehash_evidence(d, edit)
+    probs = pr.verify_attempt(d, plan, scs)["problems"]
+    assert any("fx-1: a report is stored but evidence says status 'not_started'" in p for p in probs)
+
+    def drop(doc):
+        doc["groups"] = doc["groups"][:1]
+    _rehash_evidence(d, drop)
+    assert any("evidence group rows differ" in p for p in pr.verify_attempt(d, plan, scs)["problems"])
+
+
 def test_out_inside_checkout_refused(tmp_path):
     with pytest.raises(SystemExit, match="outside the execution checkout"):
         pr.main(["--repo", str(tmp_path), "--out", str(tmp_path / "postrun.json")])

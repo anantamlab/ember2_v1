@@ -87,18 +87,23 @@ echo "exit=$?" | tee ../pilot-evidence/run_exit.txt
 cd ..
 ```
 
-PowerShell:
+PowerShell (Windows PowerShell 5.1 or PowerShell 7). `cmd /d /c` does the redirection, so the evidence files
+keep the runner's raw bytes (PowerShell 5.1 `>` writes UTF-16 and wraps stderr lines as error records):
 
 ```powershell
+$AUTH = "<mergeCommit oid, 40 hex>"
 cd ember_v1-pilot
 $env:PYTHONPATH = "src"
-python -m ember_v1.train_pilot run `
-  --plan-ref 827e88fa79d9fae9667f2fda590b4b23852988fc:data/collection/p1-12-train-pilot@1/plan.json `
-  --auth-ref "${AUTH}:data/collection/p1-12-train-pilot@1/authorization.json" `
-  > ..\pilot-evidence\run_stdout.json 2> ..\pilot-evidence\run_stderr.txt
-"exit=$LASTEXITCODE" | Tee-Object ..\pilot-evidence\run_exit.txt
+cmd /d /c "python -m ember_v1.train_pilot run --plan-ref 827e88fa79d9fae9667f2fda590b4b23852988fc:data/collection/p1-12-train-pilot@1/plan.json --auth-ref ${AUTH}:data/collection/p1-12-train-pilot@1/authorization.json > ..\pilot-evidence\run_stdout.json 2> ..\pilot-evidence\run_stderr.txt"
+$code = $LASTEXITCODE
+Set-Content -Path ..\pilot-evidence\run_exit.txt -Value "exit=$code" -Encoding ascii
+"exit=$code"
+Remove-Item Env:PYTHONPATH
 cd ..
 ```
+
+Write `${AUTH}`, not `$AUTH:` (PowerShell reads `$AUTH:data` as a drive-qualified variable). Step 3 creates
+`pilot-evidence\` (the preflight `--out` makes its parent folder); run it first in the same parent folder.
 
 What the runner does, in order: every gate again; atomic write-once marker `attempt-1.json` (open `x` + fsync)
 BEFORE the first teacher call; the eight groups in plan order, each with five spawned teacher workers under
@@ -122,7 +127,9 @@ python -I ember_v1-tools/scripts/pilot_preflight.py --repo ember_v1-pilot --auth
 
 `pilot_postrun.py` replays every stored group report in a fresh simulator (`multiteacher.verify_fixture`),
 checks both regenerations (`g-0821b9cfcfbdc9a9`, `g-b9f6d81f3b5bfce7`) equal the primary `content_hash` and replay,
-re-hashes the marker and `evidence.json`, and lists sha256 (raw and LF) of every attempt file.
+re-hashes the marker and `evidence.json`, checks every evidence row against the stored group and regeneration
+files (same `content_hash`; no report for a group that did not start; no missing report for a group that ran),
+and lists sha256 (raw and LF) of every attempt file.
 `integrity_verified` must be true. `accepted` reports the acceptance verdict; false is a valid, reportable result.
 
 ## 6. Evidence packet (owner opens a results PR; no retry)

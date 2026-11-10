@@ -7,7 +7,9 @@ From the execution checkout's own code (`<repo>/src`, bytecode writing off) it:
 2. replays every stored group report in a fresh simulator (`multiteacher.verify_fixture`): every joint action,
    observation, record and outcome is re-derived and every hash recomputed;
 3. checks the two planned regenerations: stored regeneration == primary `content_hash`, and both replay;
-4. re-hashes the attempt marker and `evidence.json` and checks they name the frozen plan hash;
+4. re-hashes the attempt marker and `evidence.json`, checks they name the frozen plan hash, and checks every
+   evidence row against the stored files (a group that ran has its report with the same `content_hash`; a group
+   that did not start has none);
 5. lists sha256 (raw bytes and LF-normalized) and size of every attempt file, for the evidence packet.
 
 `integrity_verified` is about the stored bytes; `accepted` is the runner's acceptance verdict, copied from
@@ -118,6 +120,24 @@ def verify_attempt(out_dir: Path, plan: dict[str, Any], scenarios: dict[str, Any
         claimed = {k: bool(v.get("regenerated_identical")) for k, v in (evidence.get("regeneration") or {}).items()}
         if claimed != {k: v["identical"] for k, v in regen.items()}:
             problems.append("evidence regeneration verdicts differ from the stored files")
+        for sid, row in regen.items():
+            if ((evidence.get("regeneration") or {}).get(sid) or {}).get("content_hash") != row.get("content_hash"):
+                problems.append(f"{sid}: evidence regeneration content_hash differs from the stored file")
+        # The evidence rows and the stored group files must describe the same attempt: a group the runner ran has
+        # exactly its report on disk (same content_hash); a group it did not start has no report.
+        ev_rows = list(evidence.get("groups") or [])
+        rows = {r.get("scenario_id"): r for r in ev_rows}
+        if len(rows) != len(ev_rows) or set(rows) != set(groups):
+            problems.append("evidence group rows differ from the plan's scenarios")
+        for sid, g in groups.items():
+            r = rows.get(sid) or {}
+            if r.get("status") == "ran":
+                if not g["present"]:
+                    problems.append(f"{sid}: evidence says the group ran but its report is missing")
+                elif r.get("content_hash") != g.get("content_hash"):
+                    problems.append(f"{sid}: evidence content_hash differs from the stored report")
+            elif g["present"]:
+                problems.append(f"{sid}: a report is stored but evidence says status {r.get('status')!r}")
     files = [paths["marker"]] if paths["marker"].is_file() else []
     if paths["dir"].is_dir():
         files += [p for p in paths["dir"].rglob("*") if p.is_file()]

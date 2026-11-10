@@ -66,6 +66,14 @@ print(tp.check_authorization(auth, plan) or "content OK (GitHub approval is chec
 EOF
 ```
 
+PowerShell (from the repository root of the authorization branch):
+
+```powershell
+$env:PYTHONPATH = "src"
+python -c "import json; from ember_v1 import train_pilot as tp; plan = json.load(open(tp.FROZEN_PLAN_FILE, encoding='utf-8')); auth = json.load(open(tp.AUTH_FILE, encoding='utf-8')); print(tp.check_authorization(auth, plan) or 'content OK (GitHub approval is checked separately at run time)')"
+Remove-Item Env:PYTHONPATH
+```
+
 ## Agent preflight result in run 12 (no teacher call)
 
 Checkout `D:/Coding/ember_v1-pilot`: fresh worktree, detached at `1a0128ca…`, zero modified, untracked or
@@ -87,3 +95,9 @@ ignored paths. `scripts/pilot_preflight.py` result:
 
 Overall `BLOCKED` at that moment only because of available RAM; with the machine idle the same checks give
 `PENDING_AUTHORIZATION`. Re-run the preflight immediately before the authorized run.
+
+Run 13 (2026-11-10), same checkout, still detached at `1a0128ca…` with zero modified, untracked or ignored
+paths before and after the preflight: every identity, rebuild (`differs: []`, 36 s), scenario, teacher,
+attempt and clean-tree check passes. `machine` fails again: 24 logical CPUs, 23.12 GiB total, **3.14 GiB
+available** (< 4.0; browsers open), 54.9 GiB free disk. Runner gate reasons: authorization only. Overall
+`BLOCKED`. The 4 GiB rule stays unchanged.
