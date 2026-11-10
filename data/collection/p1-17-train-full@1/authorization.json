@@ -1,0 +1,879 @@
+{
+ "approval": {
+  "kind": "single_owner_merged_pr",
+  "owner_instruction": "Owner decision in chat, 2026-11-10 (run 17), AskUserQuestion on the frozen plan sha256:bff49b47...c341 at commit 3355ba1, amended to 6df51e8 by a test-only fix before any push (189 scenarios x T0-T4 v1.2.0, local CPU, concurrency 8, caps unchanged, T2 CPU total cap 160,672 s, evidence root D:/Coding/ember-evidence/p1-17-train-full@1, up to 4 sessions, no retry of a started group, no Modal/GPU/training/benchmark): answered 'Authorize; agent merges (Recommended)'. Run-17 prompt: 'Once the owner's full-TRAIN authorization is valid and all preflight checks pass, execute the collection in a persistent background process.'",
+  "pull_request": 59,
+  "recorded_by": "agent (Claude Code) on the owner's chat instruction, in the owner's sankalphs GitHub session",
+  "repository": "anantamlab/ember_v1"
+ },
+ "attempt": 1,
+ "authorization_version": "1.0.0",
+ "code_identities": {
+  "collection": {
+   "module_fingerprint": "sha256:6c392bd78427b7f454d57728d81973d7b1383ce674b0175b3e8635f669f8a020",
+   "version": "p1-17-train-full@1.0.0"
+  },
+  "collector": {
+   "module_fingerprint": "sha256:e92885a31e49d615dc86cf492d8081af59373d81b648f9400adc72756d3d9887",
+   "runner_fingerprint": "sha256:4494581159545a29978dee742492b3294788030ee6421d3e91ff8515437c0bcf",
+   "schema_version": "matched-multi-teacher@0.2.0",
+   "supervisor_fingerprint": "sha256:eae6a705ad0d4417a48af9f85e3d446ada9e6b38f62c2536bc3c364723b565c9",
+   "supervisor_version": "p1-12-pilot-supervisor@1.1.0"
+  },
+  "generator": {
+   "module_fingerprint": "sha256:58335ff478528a6d0e526e3ffc79ddb11ad1f3f33812a5b9e501ecdc844d7a0a",
+   "revision": "gen-1.0.0",
+   "splits_fingerprint": "sha256:d1ed4077c6df51cd278a34e0c3e62f74b3418042c342769f3561c204ea872e45"
+  },
+  "simulator": {
+   "module_fingerprint": "sha256:4c961d54c3fc001f27aa0d1045d29090b8889716c0db720d7cb474e7a0e86d2d",
+   "observation_version": "1.0"
+  }
+ },
+ "execution_commit": "6df51e829a2afa02ddb99914072a9fd45bb060a0",
+ "expected_storage_gib": 3.0,
+ "failure_policy": {
+  "effect": "the matched group is incomplete: kept as diagnostic evidence with every streamed decision, never retried, never replaced, never training-eligible",
+  "fresh_clone": "the evidence root is outside the checkout and bound by the plan; a fresh clone sees the same markers and is refused",
+  "integrity_error": "a worker stream that does not replay is a collector fault: recorded integrity_error",
+  "interrupted": "a group that started (started/<sid>.json) but has no row when a later session opens is recorded interrupted/<sid>.json; it is never rerun in this attempt",
+  "not_started": "groups that never started (stop request, session wall cap, T2 CPU total cap) may run in a later session of the same attempt, at most max_sessions sessions",
+  "retry": "a retry of an incomplete, crashed or interrupted group needs a NEW authorization that names the group ids; this plan version allows none",
+  "runner_crashed": "a group runner that exits without a row: recorded runner_crashed, kept, never rerun",
+  "substitutes": "none",
+  "teacher_failures": [
+   "teacher_exception",
+   "invalid_proposal",
+   "decision_cpu_cap",
+   "group_wall_cap",
+   "pilot_wall_cap",
+   "worker_crashed",
+   "worker_unresponsive",
+   "missing_policy_response",
+   "code_drift",
+   "identity_drift",
+   "interrupted",
+   "supervisor_error"
+  ]
+ },
+ "kind": "p1-17-train-full-collection-authorization",
+ "limits": {
+  "decision_cpu_s": {
+   "T0": 5,
+   "T1": 5,
+   "T2": 30,
+   "T3": 5,
+   "T4": 5
+  },
+  "decisions_per_teacher": "one per simulator step until termination (at most max_steps)",
+  "group_wall_s": 7200,
+  "max_concurrent_groups": 8,
+  "max_sessions": 4,
+  "min_free_ram_gib_to_start": 2.0,
+  "process_model": "one group-runner process per matched group, which spawns one killable process per teacher; at most max_concurrent_groups runners at once",
+  "processes_per_teacher": 1,
+  "retries": 0,
+  "session_wall_s": 129600,
+  "t2_cpu_s_total_cap": 160672.0,
+  "worker_processes_max": 40
+ },
+ "manifest_hash": "sha256:96a564819bdc6910708cb2891b043ae3fa6a3d9066d5927ba721aa61d44b442d",
+ "namespace": "p1-17-train-full@1",
+ "plan_freeze": {
+  "commit": "6df51e829a2afa02ddb99914072a9fd45bb060a0",
+  "path": "data/collection/p1-17-train-full@1/plan.json"
+ },
+ "plan_hash": "sha256:bff49b473c82d89c041a1aa5e279bff612aec80148f088228cad644bfe07c341",
+ "plan_version": "p1-17-train-full@1.0.0",
+ "reviewer": {
+  "github_login": "sankalphs"
+ },
+ "scenarios": [
+  {
+   "scenario_hash": "sha256:0e85ca6079f2002b7706c2cc43796fc47ae42098af324d0d5334ffa03c641108",
+   "scenario_id": "g-a2993d188ad45093"
+  },
+  {
+   "scenario_hash": "sha256:f0a05679a0aff1eeb2e41bea7320c6881cafd91f3b6429ab4444202d1d9b49c5",
+   "scenario_id": "g-6b946b4f393e4cf2"
+  },
+  {
+   "scenario_hash": "sha256:9369370f949ba8beb7734d1667627bb6fb9306dc35797cf4741daa053eb521fb",
+   "scenario_id": "g-f72d9c3b1cb40c1f"
+  },
+  {
+   "scenario_hash": "sha256:efbf5a2e621bdac460da560e51ca017d104be21773c3e5feabfcf296b96d5f0f",
+   "scenario_id": "g-b089aac02f848500"
+  },
+  {
+   "scenario_hash": "sha256:8448dd8ff45e12d527bb7ab8ac151eefe5582cab9bc94d843b3d365e596e5522",
+   "scenario_id": "g-f23f7721f8a9f026"
+  },
+  {
+   "scenario_hash": "sha256:25e9294fc6e9fb1b6f5ea52a1bc3bbd9292530d5dd36a1b5aef56dd71034ab38",
+   "scenario_id": "g-e61051116a76c842"
+  },
+  {
+   "scenario_hash": "sha256:a29564b63319b940fc0bd35f4bd1755536e8cd93ae81afe8356a800a8ff0cac8",
+   "scenario_id": "g-24520018dfd407b2"
+  },
+  {
+   "scenario_hash": "sha256:17321a2c10da49974d972c4190a12c6b23ad521a25089a5328910d079ba49d01",
+   "scenario_id": "g-e902a986217e9a2f"
+  },
+  {
+   "scenario_hash": "sha256:db23a2b574e52b99e4b41a4a65497ac6fee20fa11e3eee5250854e0e44a0e405",
+   "scenario_id": "g-1d6372a91d4e2c88"
+  },
+  {
+   "scenario_hash": "sha256:44e23b1c96227616ad0717ad07e8034a96a1bf505afa296a570504f4c9f3116c",
+   "scenario_id": "g-b692b37fe6591491"
+  },
+  {
+   "scenario_hash": "sha256:c25a1498e95071fa4f7ff891b2f620efb615ba61e57148f5f871a655c7d12db8",
+   "scenario_id": "g-9e7bf311d99b5ee5"
+  },
+  {
+   "scenario_hash": "sha256:457ecbdefed53f4e818c425fe31ef3a1ed131c6e196f9a8faad68cb02eaa4f81",
+   "scenario_id": "g-53030ed4d09f3638"
+  },
+  {
+   "scenario_hash": "sha256:728bcaf8f606fc38f2a860963d400053486d9e99792cfd0b3bfdee756ac72a1e",
+   "scenario_id": "g-1833efa4dd054e4b"
+  },
+  {
+   "scenario_hash": "sha256:3883fd2c7e1fc6798938eb0720c8e9868933dd3c813cab379a75357c8e63b73a",
+   "scenario_id": "g-96d986d2052d1417"
+  },
+  {
+   "scenario_hash": "sha256:eb87f7fe9c5c762b0e0252e1ec759af4717ea895137f8c4615249ff93d161560",
+   "scenario_id": "g-813546e1ab6b094f"
+  },
+  {
+   "scenario_hash": "sha256:8e25f9cf5fafd5614b5ca00345258d5e558825c694d4364e7f8b0372cf74d727",
+   "scenario_id": "g-4b58e4d3d0e6f460"
+  },
+  {
+   "scenario_hash": "sha256:4085ccce56643848ad9c2515723a560546b19a7a3d84e46a12520d78b2121e46",
+   "scenario_id": "g-08f5fd629cca00ce"
+  },
+  {
+   "scenario_hash": "sha256:1d568c861e1aadb4b437160e4e8ea054f5dff7c2fa5c3864156a9c3760b57667",
+   "scenario_id": "g-9655b53de725243e"
+  },
+  {
+   "scenario_hash": "sha256:0f0166be00afa0841800515d9e2ffb68071c0840fd182440d8c438de7c302c08",
+   "scenario_id": "g-3f02f29fe99ed001"
+  },
+  {
+   "scenario_hash": "sha256:c1632af474b4c391b67c65138bf1a7068b8a0249e8bcfbd645515e0305156f94",
+   "scenario_id": "g-c48a81a54d6e5ab5"
+  },
+  {
+   "scenario_hash": "sha256:b7a73a91dec1173b4fff8d2e3994203f0aa814ea71d38ebd1c80739a6efb952c",
+   "scenario_id": "g-592c39d88a9160d5"
+  },
+  {
+   "scenario_hash": "sha256:54f05807b587a5e7557f1e90b9b488f688d63c1c338def7cf8fd051ec1497c7f",
+   "scenario_id": "g-5082bdcde677aea4"
+  },
+  {
+   "scenario_hash": "sha256:45e5807ee9a0eaf9f5f38fbdc5e82b3463f35d65251fb953a05f618c34172294",
+   "scenario_id": "g-0ee55267388889cc"
+  },
+  {
+   "scenario_hash": "sha256:52d725e44c2b1b1124ccf9ba5d750cd140d7f7ab564522b75dddc655f001fda6",
+   "scenario_id": "g-645a06ba519b1527"
+  },
+  {
+   "scenario_hash": "sha256:9dba1febcfc1bb6e3c18b47883ba61e17c4dc7de1ca7330a08ceb48387c55c2a",
+   "scenario_id": "g-b40b712b71ce7c2a"
+  },
+  {
+   "scenario_hash": "sha256:f45f28a09298f76b3a52fbd34e627ea87b1399f1b2fa3d91a0ab848b1b1a0d88",
+   "scenario_id": "g-9ca94babe1559237"
+  },
+  {
+   "scenario_hash": "sha256:c52a3045320f12433109fb51b7e2f154e55a78098eff58607e6ac2d1550737cd",
+   "scenario_id": "g-8714431651ae3324"
+  },
+  {
+   "scenario_hash": "sha256:12260fab068f9293a9c2fbfc8c433afe629ad5f0c7390dc72076aa46b9731235",
+   "scenario_id": "g-859498c686fa602b"
+  },
+  {
+   "scenario_hash": "sha256:0f7324aeff60f1fe6a44624eff80624404dda116fa103c2e5240eabc47e1b230",
+   "scenario_id": "g-6bc0208509c807a6"
+  },
+  {
+   "scenario_hash": "sha256:bad50055a7bddc23f5c68854de582f7de385535b063d37dddef4b7ce8dd04edc",
+   "scenario_id": "g-cc00b2c27a524170"
+  },
+  {
+   "scenario_hash": "sha256:a7d28c8c0e722805cc427aa5482b543e09c7d5106c5f7a0f06952e946cf39080",
+   "scenario_id": "g-ad0a0d951a8a3a48"
+  },
+  {
+   "scenario_hash": "sha256:4f5756fa6333f16b19d5eee6e423db2b08473af52de5189dddfff7e57c6bffcf",
+   "scenario_id": "g-e30dac220967f0c0"
+  },
+  {
+   "scenario_hash": "sha256:c2a1d6260dcbbcf70685a867cab23644f9aa6204cfb3fa68b0b617cffc26972a",
+   "scenario_id": "g-590903ab61b9ea10"
+  },
+  {
+   "scenario_hash": "sha256:1ba1690e2e664e74dffc5af56500596e622e5eae80c9aa6dff1fe86cc97d7352",
+   "scenario_id": "g-673c66e0077d2604"
+  },
+  {
+   "scenario_hash": "sha256:83d36c0cc457e28e6412251960d365922bb0f247f53cef697f9bb875c5df26d9",
+   "scenario_id": "g-7281dc03640e5ef7"
+  },
+  {
+   "scenario_hash": "sha256:7f3614c93f91abb6af0b0dd1c2bf4fed84a643403dcada303134496fc57567ba",
+   "scenario_id": "g-3725ccb1ca000e56"
+  },
+  {
+   "scenario_hash": "sha256:cad67834e7a04f923ea75577b5038574e60186dbb7a868f502d88ad43ccb6525",
+   "scenario_id": "g-fe862d8d20fc70ee"
+  },
+  {
+   "scenario_hash": "sha256:9aeb68b9818749ea3ea5d6872d055979296d16649ccddbecdae5a0538dc20f8b",
+   "scenario_id": "g-1702706048b6449b"
+  },
+  {
+   "scenario_hash": "sha256:338c18bc2b331a8a16a40e835c4d7eee8d2638767715214dd12f5c8d17b3a385",
+   "scenario_id": "g-134316d9ca753e27"
+  },
+  {
+   "scenario_hash": "sha256:791491ba60c4fb8eeed6c54df704c022bae8080c124be80e76caf23f2d8dff0f",
+   "scenario_id": "g-5964484e59eba2f0"
+  },
+  {
+   "scenario_hash": "sha256:f5984bce6dcd9dbc17c5789d534dfe028391f353cc1722a0059bd2f516eeb8c1",
+   "scenario_id": "g-339da8ab3ba6ed80"
+  },
+  {
+   "scenario_hash": "sha256:4cd1265b87985b9d64ab1e2c2494999c395e69b37a176cd11b124449af9ef2ea",
+   "scenario_id": "g-37a04f89be3ab19a"
+  },
+  {
+   "scenario_hash": "sha256:4d33d10f5b9e6c920a78a4643290a7714d257360f77849d659357b952da49e0e",
+   "scenario_id": "g-5bf033109b31daf3"
+  },
+  {
+   "scenario_hash": "sha256:1c3cfe16478a403ea7c7c1a6484633d8dbe6c3c5a9015818f0dbda9eb46ea80c",
+   "scenario_id": "g-27adeca7ae27899c"
+  },
+  {
+   "scenario_hash": "sha256:7dcd296ea574ba1c3c232076d6460f48dd03133f5be4b3d1b9214bfbc4360f08",
+   "scenario_id": "g-a73f93f6af2ceb55"
+  },
+  {
+   "scenario_hash": "sha256:92eb397a41fc78034568d67f21eb3c9aec1ab850e3d712a8c57ff6554346afd6",
+   "scenario_id": "g-981d266803f4c2aa"
+  },
+  {
+   "scenario_hash": "sha256:e6d8b6b7db2e5a3dff8841e430cc7b2fbe26ef87e1c33211fd156b86e1856b1b",
+   "scenario_id": "g-05a9b1a6fb96b680"
+  },
+  {
+   "scenario_hash": "sha256:b57fc0fe6c52857f9feb87329532c67099e7d816cf2da3d517d2f919e25ba7d8",
+   "scenario_id": "g-a5506e24be223a28"
+  },
+  {
+   "scenario_hash": "sha256:3e7e9196ee0767dade39b6044b4d540384cf29a31c8b5dc0a7fb056a00832553",
+   "scenario_id": "g-a60679a1297bcb2b"
+  },
+  {
+   "scenario_hash": "sha256:d0f4825cbb5ec44900f93c0ab5ccc958fde14edb178ef18b4f4f6f668d5343fc",
+   "scenario_id": "g-b50514c9e5fd4ea0"
+  },
+  {
+   "scenario_hash": "sha256:7b3d48df0d8c500358804611ed4dc416d3393fb5a1cb8790fd1a0c20adade142",
+   "scenario_id": "g-843e5338913a61a6"
+  },
+  {
+   "scenario_hash": "sha256:e740f1a9e42bba0f2ef74ba4d56c9d883ab128b1062ac61e68e75155b5ea9c8f",
+   "scenario_id": "g-525081107b864f7d"
+  },
+  {
+   "scenario_hash": "sha256:201b6019f87ae1a2aad106e850d29dff57673046c3e8854ab617bb93a0012361",
+   "scenario_id": "g-1a9985e23275ac4e"
+  },
+  {
+   "scenario_hash": "sha256:ed801737f50a6f2fec14c55b8b6c2cc5ea9e1d67709e50584efd386c6901d30f",
+   "scenario_id": "g-2248b8450630a6cc"
+  },
+  {
+   "scenario_hash": "sha256:7cbbf13afa25957af092adc47f57ad7a1d319f16a144f1afc42eb70ba93e24b0",
+   "scenario_id": "g-58a192b8045ed5b2"
+  },
+  {
+   "scenario_hash": "sha256:bf06b58e30eae7d65d7220a0542008124a42f4a31256f4e50a4671c90e76a82b",
+   "scenario_id": "g-7aa74cd8ddab1897"
+  },
+  {
+   "scenario_hash": "sha256:3be397bb1397a08c4552719389ee93b75d3cf2a6cceea8f7dc8da65dff30f95f",
+   "scenario_id": "g-5213de4813e992bb"
+  },
+  {
+   "scenario_hash": "sha256:41257238ed1b15622b3bedf37b5035daa2853a940259ab6c8c0bbaa4d58bc4a0",
+   "scenario_id": "g-ce3a77b4f8fd4587"
+  },
+  {
+   "scenario_hash": "sha256:4cec9ab05777093dfa299d3364f8b191414f2c743e7166f589a2d4e4fba78f8a",
+   "scenario_id": "g-feea9b484fe754d8"
+  },
+  {
+   "scenario_hash": "sha256:1667fd401808a168c51964ea67a8f1d60d199922e5e4b0b9c372048992133843",
+   "scenario_id": "g-ef23bf878e504b03"
+  },
+  {
+   "scenario_hash": "sha256:02fb05aa060cc7ac0db6c01bd0a12c822b9f3b9167bcef6c93957ac73d0156e7",
+   "scenario_id": "g-0967f7cf7737a582"
+  },
+  {
+   "scenario_hash": "sha256:3397413db72f82246261e0998abf11cc25a26258fc1c52be1b13e62c7031e22e",
+   "scenario_id": "g-aa2357d50ff80652"
+  },
+  {
+   "scenario_hash": "sha256:558db8d8e32cdd5c6f29ae4ea76ed3c6ac9e7ccf057238acd5488799f399e9ca",
+   "scenario_id": "g-f0217bfad24caba2"
+  },
+  {
+   "scenario_hash": "sha256:9efae56ce8fda40c8c67d3ef135fc66c97ef7f1c9b4556a56e3f259b6d534126",
+   "scenario_id": "g-a7508ce67aae33c0"
+  },
+  {
+   "scenario_hash": "sha256:b31ad1f9fa2297ffa9ce5255edf4036018f8cd2bcbcbc1f58527611ec86eee5d",
+   "scenario_id": "g-44f1e96b951b895a"
+  },
+  {
+   "scenario_hash": "sha256:6e6dab37377ca76f5574139c550354b50e8617519d4f6b0db24c98739fb91313",
+   "scenario_id": "g-868762f567665bf4"
+  },
+  {
+   "scenario_hash": "sha256:c2afb64d9972253529b89f1992abc0d6f1df16e38383ff876735af01751a02f9",
+   "scenario_id": "g-9ffd354f21e820c2"
+  },
+  {
+   "scenario_hash": "sha256:c50239361db30e50270daffa043b7daf5dc251237cf77ed54e7025d808aa9e8a",
+   "scenario_id": "g-55c425da64ec8387"
+  },
+  {
+   "scenario_hash": "sha256:7bbb7f5f692e3bc09a42258b15809a79512372515ba458762f87830c74a122b5",
+   "scenario_id": "g-1f4c91385316cc71"
+  },
+  {
+   "scenario_hash": "sha256:59f7b4c9e8becce6c7e4dfad9352db050d1954c813307558466d220959f1c46e",
+   "scenario_id": "g-e5bdfae1ec8e1b79"
+  },
+  {
+   "scenario_hash": "sha256:6b85570a6ecff298ff18bc21f74c9b32e74436d8b082c4e7252eaa397d0a3ffb",
+   "scenario_id": "g-ce2bd1395b8f8004"
+  },
+  {
+   "scenario_hash": "sha256:98a4442e66987eacace079cf8c097f7871b508e7cee7667884e70961fe556ee9",
+   "scenario_id": "g-0672d27f74bdc0f5"
+  },
+  {
+   "scenario_hash": "sha256:ecd57785ce4fb170b23fd2a0ec7403d10ad23be1c6b6d0f9d2fe3da3dfe5e307",
+   "scenario_id": "g-8bae8d2865f0cc9d"
+  },
+  {
+   "scenario_hash": "sha256:ec99be3c5640fd17ae25f97c7d4ebb69a02a64e8778bdc83dbe21958cf7410d4",
+   "scenario_id": "g-3ee0d2dfedfc65ed"
+  },
+  {
+   "scenario_hash": "sha256:282f1626cddf3a74e4e9c95516348975ad376917eb0831af6a3b88e4280b23cb",
+   "scenario_id": "g-40d389e5ba4383ca"
+  },
+  {
+   "scenario_hash": "sha256:34780e36b0dfa4ede504e983b9d13d1712d00685fba88d5c511ab01ff77bcdfd",
+   "scenario_id": "g-cb03f8885edadc9f"
+  },
+  {
+   "scenario_hash": "sha256:07635cf78bd747464e6e97be8b6260240bb051ea05625df084c9044c44eabf75",
+   "scenario_id": "g-1a8b6230b6107b0e"
+  },
+  {
+   "scenario_hash": "sha256:318e2536fdfdd4aecbd36881f4f44a1c82596c90b13371d216c52d8c87375046",
+   "scenario_id": "g-836260a0086ea586"
+  },
+  {
+   "scenario_hash": "sha256:ad0da8473558233b5f3b4fcc06e71aa88bdd3275b22f73a08a656ae25a46cd5f",
+   "scenario_id": "g-750bb4b60fc963d4"
+  },
+  {
+   "scenario_hash": "sha256:d8ecfe35a066de05ac458aceb4105ae728849a282b8bd36c5cd21f6b522a9857",
+   "scenario_id": "g-7227ba65d0a2146e"
+  },
+  {
+   "scenario_hash": "sha256:9fe29fa6d2bdd2242c863e1b7e87808fe288e0fad4237b205ae9d300c0e048a1",
+   "scenario_id": "g-0995ac00857eebde"
+  },
+  {
+   "scenario_hash": "sha256:61a66d3bda7b0efedad27a15833c2ad425e2b3998df240669e1bb6fb93d81969",
+   "scenario_id": "g-05d40c6ee791d30a"
+  },
+  {
+   "scenario_hash": "sha256:793b031a86a590dfd1b4e0b438629ab8ad1821149d24a364f855a73377f82820",
+   "scenario_id": "g-ce63413098d90e82"
+  },
+  {
+   "scenario_hash": "sha256:e27e108ac6f604670c2ad9d99e4fbd32e96c5df8a23c8c92353cb71dcb3c7843",
+   "scenario_id": "g-9b4e93644dc90d58"
+  },
+  {
+   "scenario_hash": "sha256:a06516651478be0c98ec226cfd7e0b5fc9087317eb0a63ebc1abe94e14a6195c",
+   "scenario_id": "g-fa22d4ca2cf0fdfc"
+  },
+  {
+   "scenario_hash": "sha256:bb2dc879df664e747892a620e86d3d2d6277917f2fae3c3ffe685dd7c023f558",
+   "scenario_id": "g-2e3ac555e9850688"
+  },
+  {
+   "scenario_hash": "sha256:d03ad4ca265b057f7945e94c548d01d3adb6797770c766d9497debeeca8abad8",
+   "scenario_id": "g-837b2aace4f90bfd"
+  },
+  {
+   "scenario_hash": "sha256:3c36122cf041595e1dbb203596a030a753143aa285e34f7af849e1df6913f285",
+   "scenario_id": "g-5c4a95d0cc57468e"
+  },
+  {
+   "scenario_hash": "sha256:631b8984f287c8598dec3c84e296ee16a3b3cfa386f2130612410ab7e4f27b72",
+   "scenario_id": "g-6549b92f69b34295"
+  },
+  {
+   "scenario_hash": "sha256:5ef1eb411e2e36bf9ac8e57c0a97766b73ddca8df23635764d43b16618ed5ada",
+   "scenario_id": "g-c636d9db3319bd40"
+  },
+  {
+   "scenario_hash": "sha256:03c151ef5cc4696f49c02d3248d838fad144f4e1e95ad345bb1bfa18642f52e8",
+   "scenario_id": "g-c7d1e9d09ba98776"
+  },
+  {
+   "scenario_hash": "sha256:509a62dacd51921b348f31f26e518ee3b822cd03495a4be8770466bef5fc1286",
+   "scenario_id": "g-7b84169d2fea5737"
+  },
+  {
+   "scenario_hash": "sha256:99fa0d0409db18edb77b86fe6c0a31bea365380169be04b933d9ca316f3fc8ff",
+   "scenario_id": "g-6dfef26f38a144d0"
+  },
+  {
+   "scenario_hash": "sha256:8b239be17c4a4b229c1c53110ce76104c25ec31e421ebc8f84d5017e408e3ec3",
+   "scenario_id": "g-5c0ccafad5aef14a"
+  },
+  {
+   "scenario_hash": "sha256:d860f6f5b491ba601be567a0a415337129348cc525610a93275de592ab14afa0",
+   "scenario_id": "g-7490c1432df58c70"
+  },
+  {
+   "scenario_hash": "sha256:098f7cfcc3a34ed6d8fb70d2beb4ba30236a5d7ddbec47ffb1ddddc55dc101b9",
+   "scenario_id": "g-414b0f658f7c4580"
+  },
+  {
+   "scenario_hash": "sha256:ef19901319861f2edb215dc741a54e949c79d7af5565e5a487b76e0bb1304678",
+   "scenario_id": "g-f6417ba52a360767"
+  },
+  {
+   "scenario_hash": "sha256:02decd7f8880d6d7c8eb0f296a15d2b9fc95a27a973fffdbd3a7d8a3278efbbd",
+   "scenario_id": "g-a5df6180cbf52469"
+  },
+  {
+   "scenario_hash": "sha256:eaa73549920b1c5f87ebc14a1e50f1932e7253958635423725dd5cc4ea6da04a",
+   "scenario_id": "g-0dc24a37855b9f29"
+  },
+  {
+   "scenario_hash": "sha256:4a24d376f44fda2b3e1335bfb51104173a28659a0440bc9adb5ce76e861c1528",
+   "scenario_id": "g-21707803b954ae94"
+  },
+  {
+   "scenario_hash": "sha256:6ad63260bfb653c78d01ff8f78ef677f9abbf94dc4495f83bbc4ba2417633d6d",
+   "scenario_id": "g-f7e66cb2cc799554"
+  },
+  {
+   "scenario_hash": "sha256:478f5cc6a64fcecc24c4400970d55d33cc537c3b072002af474d8ff5c42397b6",
+   "scenario_id": "g-c5b36f1e60a13258"
+  },
+  {
+   "scenario_hash": "sha256:3fcfcb59438d481c47360f4f6b20ab2329574d502fecabb96d25755e7c7ef077",
+   "scenario_id": "g-10b5eb3b91790c4d"
+  },
+  {
+   "scenario_hash": "sha256:b87794cb6b2ab938e6aa4687b79420303532d7e81da01c65d5206bc8697bb8d5",
+   "scenario_id": "g-f5e8eb41d67c0d02"
+  },
+  {
+   "scenario_hash": "sha256:ca2da6b2c0f79deed96d8c3e78c577b4aa5882ba09b9dea1cc42ee6d2ec42b35",
+   "scenario_id": "g-1cc63b508fc405e9"
+  },
+  {
+   "scenario_hash": "sha256:d6eec0a4468e4faf8d39b848275a4cc8b3704fc5bde7ed88dc79d5d5632b79c3",
+   "scenario_id": "g-f0d6ae35a19c98a0"
+  },
+  {
+   "scenario_hash": "sha256:97f6559538842b2c9ace9167c2fcd53b31bb6a7621ad9fedc5b81285eece6ff3",
+   "scenario_id": "g-b849bf0fe55355ab"
+  },
+  {
+   "scenario_hash": "sha256:ea04da443819371cc68370448f869b38fd636e54b2948de933113df7e575fbee",
+   "scenario_id": "g-7341268c7a056017"
+  },
+  {
+   "scenario_hash": "sha256:40bd4301eeacb6a408ebcdbe7ad08bbc08482df5efb95efd63aa2b5985a10614",
+   "scenario_id": "g-09dec40f5e22fb2f"
+  },
+  {
+   "scenario_hash": "sha256:6333c75294fbaa6c19e904ae1feb8c1cc64c177f8cd4e344206a63d7ef0d8f6d",
+   "scenario_id": "g-35cca9f1d42320be"
+  },
+  {
+   "scenario_hash": "sha256:ad1faf8daf7a70bfb2a8c4a7c1998662ba78089296fa150f07e196c5fb9191e9",
+   "scenario_id": "g-2cd0be8e5ae13d2a"
+  },
+  {
+   "scenario_hash": "sha256:6fc7f5d621918335e63bb44d303a08d30465c3c6debef8fd5c80a9168b991eb2",
+   "scenario_id": "g-3c43e12ffff3a96d"
+  },
+  {
+   "scenario_hash": "sha256:9ec214d7b16bc229c9fdcba864239c3c6340b7c3d5edb29cea6343727c47cf17",
+   "scenario_id": "g-5790da976e885781"
+  },
+  {
+   "scenario_hash": "sha256:dc0f36a834031ba8ca26689c227cce5da84135bd42cebb14e47028b37dd9853b",
+   "scenario_id": "g-078eea823f0d59c7"
+  },
+  {
+   "scenario_hash": "sha256:23f462dd71fae82f464d040dc0d7d1bae04f426d3eb65937e244ea6aa84b14a0",
+   "scenario_id": "g-0b4dad0431ae2bfc"
+  },
+  {
+   "scenario_hash": "sha256:c759193b971c487ab6fdff54e3a3b413e02ce4a547fa8b0c4b4bcc05005de7f3",
+   "scenario_id": "g-01ba25dcb7f70b19"
+  },
+  {
+   "scenario_hash": "sha256:09a6ac8da801eac6cb7c18fa03a0792c33ab0a6644d42f34c3935e514805e303",
+   "scenario_id": "g-e5c6ab6acf9465a9"
+  },
+  {
+   "scenario_hash": "sha256:f3e00d87bb54b194c17b5b47707ad47d24b4f4806473f3fed37be13d7db5f6d5",
+   "scenario_id": "g-c92b6cdf6d8ae760"
+  },
+  {
+   "scenario_hash": "sha256:c512be550e5c047f25f1c98ae9db4b8840ed3086452ab8dce42334153c63088a",
+   "scenario_id": "g-1310670dc1523ece"
+  },
+  {
+   "scenario_hash": "sha256:3670ce1f2797093756327ea74e4f34da91a1d83f38ef1e6634e3490864d2f595",
+   "scenario_id": "g-6b0cc1cd8e8db3fb"
+  },
+  {
+   "scenario_hash": "sha256:e1a11746ce131fce52c0f6f0d0f4be2235c59a942fbd165e38513b9d454b6eca",
+   "scenario_id": "g-6296999d9a448789"
+  },
+  {
+   "scenario_hash": "sha256:f1b58e367fde8a5032dade15a40239d00c3f87c51c98c0b107c505e5f00faacf",
+   "scenario_id": "g-438849247e97074c"
+  },
+  {
+   "scenario_hash": "sha256:f473012862359b40d7c1b13f97863d64fcee32ef13f4f2c9760f2671d6eb8571",
+   "scenario_id": "g-d583f7975d54c2f6"
+  },
+  {
+   "scenario_hash": "sha256:dca17b521f4bc1bc2f047d3d52cb4e1b4e49fce8f052aaf299ace90e2f2b7229",
+   "scenario_id": "g-045f6e95eec0cad6"
+  },
+  {
+   "scenario_hash": "sha256:054b1fd180cf6c2baddd711fe9d8056bdf400b0e59351100923aebf5884b2ce6",
+   "scenario_id": "g-50bd409f985ae422"
+  },
+  {
+   "scenario_hash": "sha256:ec008ea40ff601c8fd2669e4feb4ad6e55aa6de0b111dfe1f047efeda194b938",
+   "scenario_id": "g-3fb3d21bf73f2014"
+  },
+  {
+   "scenario_hash": "sha256:03a65669bb0022aab855644c4219b77fde5e2f867585110971441e6aa704a07a",
+   "scenario_id": "g-8e2cda0dbd55ab2e"
+  },
+  {
+   "scenario_hash": "sha256:b85b08330589644646da3c05d97c138b567f4517c82c29d7456656f9e8cfc63a",
+   "scenario_id": "g-29054703d8890510"
+  },
+  {
+   "scenario_hash": "sha256:74897120300591bf9560349ccf4b6fc8996a35278bf936d3a4199e36bb8712c1",
+   "scenario_id": "g-bd54759879d1e380"
+  },
+  {
+   "scenario_hash": "sha256:d6809a02f158c41f0336ee4bb13aa7c5c2ed2347eb67f8266e740a3c4879e125",
+   "scenario_id": "g-160353455784c59c"
+  },
+  {
+   "scenario_hash": "sha256:4cea151987f02650466b94df29dc2aa6f3b925af5cec24eb7882e27f12562e59",
+   "scenario_id": "g-8eacb003bae2fa56"
+  },
+  {
+   "scenario_hash": "sha256:3ccf6b763d2af116a2d87356a49e32a6d4b1f85fec489debe44ca922944287b3",
+   "scenario_id": "g-4c818b50e202f668"
+  },
+  {
+   "scenario_hash": "sha256:f6a02a0b17eee8385440393f5b402fd0a0a2519643c55678b656c4340457efb6",
+   "scenario_id": "g-0718767cc7988413"
+  },
+  {
+   "scenario_hash": "sha256:252eaec862482bd190a9e78bd7327454fbfe843c77435ac289713d2e6b95ce46",
+   "scenario_id": "g-5ea99e40847e9d1b"
+  },
+  {
+   "scenario_hash": "sha256:92a27f44247f865c9095a62b287d9165da76a682feed36e9121f4dc2e95c3e90",
+   "scenario_id": "g-3a2e31927736945c"
+  },
+  {
+   "scenario_hash": "sha256:8a2ccf31d0f3e3eba781626b26858a8d04709f59a16ce093a193e142158cb7f3",
+   "scenario_id": "g-f5e5962b84ddab75"
+  },
+  {
+   "scenario_hash": "sha256:c994ed4ad6a90416d693b77fc15e659ac852a906b8b9f5616ddedfafccb68313",
+   "scenario_id": "g-d6f92e9291dbfda7"
+  },
+  {
+   "scenario_hash": "sha256:769a25444224a65165181c31fd1f396201185a2d707bd3413c322f9f9a8d802e",
+   "scenario_id": "g-750880448f7524f0"
+  },
+  {
+   "scenario_hash": "sha256:1b9efcb12f1d14f4e78d3c87af641e58fd065f4cef4cc91be0cded5f523b6431",
+   "scenario_id": "g-b97f6d685a13c6fe"
+  },
+  {
+   "scenario_hash": "sha256:e8880ecd70b6375ef1b07a4835d53280bce4c2a4bd9b67cb3237c00c6e87f7b5",
+   "scenario_id": "g-4f31dde2ac967ce4"
+  },
+  {
+   "scenario_hash": "sha256:52877b2f391af4ef797c8f01a507fd04791719f5e73b5831c3b066071982de07",
+   "scenario_id": "g-9c0009b1aacfdda4"
+  },
+  {
+   "scenario_hash": "sha256:08f257204413187f060dcbf411cb2ddcddf2b85f425d956729e7938caa5825e6",
+   "scenario_id": "g-077d462265ad3f6a"
+  },
+  {
+   "scenario_hash": "sha256:d7d40e342b6ff0a0393e1960d9d7a878e786807796fa1239c4ad406870c8e341",
+   "scenario_id": "g-bba6c2e43b07648e"
+  },
+  {
+   "scenario_hash": "sha256:003e7b28fa92fa084298a0140a8d818c03f67c697cbe867f4552c1aedde4bd41",
+   "scenario_id": "g-bcbfd684f9a93d82"
+  },
+  {
+   "scenario_hash": "sha256:9a8d1bfc0056eaa01b8e2e18b17578e977ab706b536e4308410a9f0106e7cc4f",
+   "scenario_id": "g-5f1e888556dbf2a0"
+  },
+  {
+   "scenario_hash": "sha256:d3a32739f1dcb28ef8c590e79393b1afc098fc76f3b7563e1fb57af6fc3b243d",
+   "scenario_id": "g-864b4eddb21c9eed"
+  },
+  {
+   "scenario_hash": "sha256:5b8632e603d714b102ad10172922a3c93aa928028db57915efa3bdb149550733",
+   "scenario_id": "g-c6fc5ee6acff9bac"
+  },
+  {
+   "scenario_hash": "sha256:d8dfeb4abc7dfc7a523007db155fed2414e1541006c215c3975bceb5d296865e",
+   "scenario_id": "g-8d3842d548773aa2"
+  },
+  {
+   "scenario_hash": "sha256:4d4be4830446bcd027089100bac75765874c176e9a994661a664a18f4ad4a251",
+   "scenario_id": "g-25b27c9194d02b76"
+  },
+  {
+   "scenario_hash": "sha256:3ef08818704ea19bb341d273917968579daa0aac82d5c9deb7e60b186e5e8e7b",
+   "scenario_id": "g-80dc8935243a3be5"
+  },
+  {
+   "scenario_hash": "sha256:2de3cb3ca2e7b53736c1020fd77acb50ef6ce1b4bd836c1ac0805556b66c802a",
+   "scenario_id": "g-697cf8932159366f"
+  },
+  {
+   "scenario_hash": "sha256:83f64e78ea467516bbb47cdafa251b5faa6159df535d5ea2d938694833bb29fd",
+   "scenario_id": "g-705345c9205c7e9e"
+  },
+  {
+   "scenario_hash": "sha256:6d04453f4094e9d9f635450436a9fb69d0c44541488565ec1d70db0fdb989452",
+   "scenario_id": "g-4e939a62ffabcf01"
+  },
+  {
+   "scenario_hash": "sha256:a73593646dae1fb699e84fbc46ae806a7ed1139560e0b7d7d2e227e7c933ff14",
+   "scenario_id": "g-a7c38a7496c6dec3"
+  },
+  {
+   "scenario_hash": "sha256:857bda257a5d1a50e7ef8bcdf6cd981519a9cb6a2d7242c6e96a0966331087df",
+   "scenario_id": "g-b89bfadf70137365"
+  },
+  {
+   "scenario_hash": "sha256:dda50d6ed3c4b43824d7356df378c38464a674b1d1de09d947512c2b41eb5a69",
+   "scenario_id": "g-b040648beae04575"
+  },
+  {
+   "scenario_hash": "sha256:62ec27cc40cb1fab984c307dda3aadd9c4370c8bed9921bfd4fef40cd8f2f584",
+   "scenario_id": "g-7417569b20afbca5"
+  },
+  {
+   "scenario_hash": "sha256:fff180ebc610fc80024ea6d2c668ac5c26b5c5b7b1bfb8387277453b9b0649c9",
+   "scenario_id": "g-8f02b88396e08267"
+  },
+  {
+   "scenario_hash": "sha256:8f871dec96187985b941894b131f23281edaf0f755c3fc352e89ca32ee8918c3",
+   "scenario_id": "g-b9f6d81f3b5bfce7"
+  },
+  {
+   "scenario_hash": "sha256:1a0c252514c68c172e61e8d27e605a91d0428e9ad5c444d9afeac2a31fba98a3",
+   "scenario_id": "g-f3ed186eb2bd001d"
+  },
+  {
+   "scenario_hash": "sha256:797925ee747f2e6c30a8e6149a03d7da89afd2644ea9300e89e1579b77b14967",
+   "scenario_id": "g-aa9cafe4b3073ab9"
+  },
+  {
+   "scenario_hash": "sha256:6928066cd0f30484256ccec6067be8ec0e6077b14cbd147e5194a83828206e54",
+   "scenario_id": "g-7959b0e11c6ec38e"
+  },
+  {
+   "scenario_hash": "sha256:8ca4d4f308b62cd7a667db13adc9342897027c1fb6ca25d730b6bbc3f664d1e2",
+   "scenario_id": "g-ac31d114336ae217"
+  },
+  {
+   "scenario_hash": "sha256:aa8ddd56b5af09f4d5539d2b4db687538d8cc75925ed3de0c45fc0e4a1cfebf4",
+   "scenario_id": "g-bccd59e80e25fbd5"
+  },
+  {
+   "scenario_hash": "sha256:4526d1f5706527d92a9573985f276cc91abcd624fcda181e5cb2bb86cd81ab70",
+   "scenario_id": "g-ec207981b011ab0d"
+  },
+  {
+   "scenario_hash": "sha256:cd09c48f4144b8ef184e2b0a007df78e3f383ff6e011e15c274ed213eea450f9",
+   "scenario_id": "g-4e5b681e45d52a55"
+  },
+  {
+   "scenario_hash": "sha256:c43b142da86e55a9cd8d9e120ba885ed3044a6b7eb0af6a1f7b712b947e5bb84",
+   "scenario_id": "g-0821b9cfcfbdc9a9"
+  },
+  {
+   "scenario_hash": "sha256:9caa40a51eeb04555358a49861092e76be2bd50d0ef246cfdc8d17836895fa31",
+   "scenario_id": "g-ef391af30299b866"
+  },
+  {
+   "scenario_hash": "sha256:7f41112e8fab93f64ee5e913551ae1f26582bb4634b0f98da5d5698ca3b66df9",
+   "scenario_id": "g-70eaf86834cb32f2"
+  },
+  {
+   "scenario_hash": "sha256:44234a669ca88b8697af68c035823dc1cb8ff8ab7e068cf0c45d7ff01412d9d8",
+   "scenario_id": "g-9b2dab4932f6a63d"
+  },
+  {
+   "scenario_hash": "sha256:e36083364c64ec051845f4e7347da05f2df4b4dfd7d176e7e157bb3a61281b21",
+   "scenario_id": "g-930272844504b352"
+  },
+  {
+   "scenario_hash": "sha256:26e2265a1148f923ef90407bd152f88c8ffa90254b9bb04d1efe10f43d354795",
+   "scenario_id": "g-5f9ba32fa9cd4367"
+  },
+  {
+   "scenario_hash": "sha256:949d248c2c244748577d935320166991278781eb0d27d87cabf066af5ad90abb",
+   "scenario_id": "g-42c18dc58bd8e216"
+  },
+  {
+   "scenario_hash": "sha256:aeeebb67e115b4d7c90091890a323c82f96f0991882bc1b6c0979485926e871e",
+   "scenario_id": "g-10d70d91ec798044"
+  },
+  {
+   "scenario_hash": "sha256:28095dee6e80eb5e3bcb5a4d36cb01c8e3b7b4da9cc9718a309eb5bb54d6a9ac",
+   "scenario_id": "g-0f5c45250316491b"
+  },
+  {
+   "scenario_hash": "sha256:06fde6854249c033d1a281a2e318130563ee5959900c0c39debbe74b0aaa0afa",
+   "scenario_id": "g-bc9d78ab06685110"
+  },
+  {
+   "scenario_hash": "sha256:17b18c12914031ed94dd57a7836bef23037a8dbe0fec2bea2e3f2c4a3b5f12d7",
+   "scenario_id": "g-cfb6909ae1c502a3"
+  },
+  {
+   "scenario_hash": "sha256:0583ed6f4872126f1b13ef685dfdbb1df1b77daad42324b1fa5d3e57bd7a4abf",
+   "scenario_id": "g-7e91df6a61520241"
+  },
+  {
+   "scenario_hash": "sha256:8ebc28861fc4870c9e12b79c91a30f8bfb9f5ef1c255aec27f8755a65b80a3db",
+   "scenario_id": "g-f0c007209dcfcd24"
+  },
+  {
+   "scenario_hash": "sha256:61f7ffafb6165bff04a26ccd25a8e3769198e4d307216f16e948fb29841e01ff",
+   "scenario_id": "g-e9a7dab72dca367f"
+  },
+  {
+   "scenario_hash": "sha256:e5df5564508e5c9cf536ce60b4bdc71c613105cdd585ef3ea58a6ef9514ceb16",
+   "scenario_id": "g-b2d7abd72ac48121"
+  },
+  {
+   "scenario_hash": "sha256:80b506103537be8aeeb5e6ecf9b6103db5b7559b7e5337e0a52c76a5c767535b",
+   "scenario_id": "g-d9fcc5087ca96388"
+  },
+  {
+   "scenario_hash": "sha256:01a50fd48754bb4506630caa9a9fb305f0ee9a609ef9790e28269a2199b51bac",
+   "scenario_id": "g-9ce175f8e7926df6"
+  },
+  {
+   "scenario_hash": "sha256:145f422ed768342ce50d717fb290333c0c526806946c2ff9f520d50a3caf5e56",
+   "scenario_id": "g-a2108dc770cfe0dd"
+  },
+  {
+   "scenario_hash": "sha256:3545854b9c8bedbd0bb6553daf883f3ef02db5e6cd50b2bfa587cd30d3ee5537",
+   "scenario_id": "g-89b59c902fdfac5b"
+  },
+  {
+   "scenario_hash": "sha256:256777eaa2db69840eea5e1a9c2fc475edcc3d511d29e6feb4aa0ddd827ba7cd",
+   "scenario_id": "g-aa31d4cd7d8e5c74"
+  },
+  {
+   "scenario_hash": "sha256:db3376c24128054196ad7f64fd064b261e7f553add9904820bf86891df907d05",
+   "scenario_id": "g-f9ef2085290bb225"
+  },
+  {
+   "scenario_hash": "sha256:bab0752f04a41fa97516a3b80cf0b8277c22f1addb88d411f038a6f1eb581987",
+   "scenario_id": "g-b150f801c6c86b21"
+  },
+  {
+   "scenario_hash": "sha256:fe17414de4137ed9b583b328c7063cabbe9fbbe85fbeef5ee4e9b49c4d2d1c56",
+   "scenario_id": "g-abe436d168a92ecf"
+  }
+ ],
+ "statement": "I reviewed the frozen plan and authorize attempt 1 of the full 189-scenario five-teacher TRAIN collection on local CPU, in up to max_sessions sessions that run only never-started groups. No retry of a started group, no Modal, GPU, training or benchmark.",
+ "status": "APPROVED",
+ "storage_root": "D:/Coding/ember-evidence/p1-17-train-full@1",
+ "teacher_fingerprints": {
+  "T0": {
+   "code_fingerprint": "sha256:8ddf9370263284107ae5249c9adafe7323ed8deab2d45077fe9894979e6c84aa",
+   "config_hash": "sha256:bdc4d3580bcf3889348c563aaf622334d135a535d9cb2aaeedc3c0528f10208a",
+   "version": "1.0.0"
+  },
+  "T1": {
+   "code_fingerprint": "sha256:52dc61f4ff9599e55bfd29f47068bf301895321ce85f6c9aaa9feec1dc568eac",
+   "config_hash": "sha256:5047e942db3326706b6184c9f29e0b992078920f03c8a53adc8cc24258345361",
+   "version": "1.0.0"
+  },
+  "T2": {
+   "code_fingerprint": "sha256:afe987d862caaa32701777050f19fb3126c03f9edd6ab8ac6ed375a95504db74",
+   "config_hash": "sha256:302139e18ba05fdcdc5561b7390b95f725600ec8791e336d065f77cea0c507e5",
+   "version": "1.0.0"
+  },
+  "T3": {
+   "code_fingerprint": "sha256:82294a3f0d7aa3caf38598505dbffd367c5cb14ade1f725fd9ee23e73c2c14f1",
+   "config_hash": "sha256:5a8d4985b1f65d5de18a06c86d8dd522e2ca95e2accd583165b7e7d7ea1d02e0",
+   "version": "1.0.0"
+  },
+  "T4": {
+   "code_fingerprint": "sha256:fa66a0f354dc82f992d1f0a1896851fc90dc9e19dea244f815a76857361ce75e",
+   "config_hash": "sha256:79bd3322b9cf7ccd25928f3a70502089732496af5427f88f00ecd2ff6ba12504",
+   "version": "1.2.0"
+  }
+ }
+}
