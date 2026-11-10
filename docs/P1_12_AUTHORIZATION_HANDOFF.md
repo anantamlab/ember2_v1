@@ -1,5 +1,7 @@
 # P1-12 pilot authorization handoff (two owners)
 
+**SUPERSEDED (run 15, 2026-11-10).** The owner replaced the two-owner rule with a single-owner rule (plan 0.3.0, `docs/P1_12_PILOT_FREEZE_RECORD.md` §Re-freeze 0.3.0). The checklists below describe the 0.2.0 procedure and are kept as history.
+
 **Status: `PENDING_AUTHORIZATION`. This document approves nothing.** Prepared in run 12 (2026-11-10) by an
 agent. The agent did not open, review, approve or merge any authorization PR, and holds no approval role.
 Procedure details: [P1_12_AUTHORIZATION_PR_TEMPLATE.md](P1_12_AUTHORIZATION_PR_TEMPLATE.md). Execution after

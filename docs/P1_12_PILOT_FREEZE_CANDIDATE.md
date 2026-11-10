@@ -5,7 +5,7 @@ Prepared in run 9 (2026-11-09) on PR #50 (issue #45). Protocol: `docs/P1_12_TRAI
 
 Proposed plan: `data/collection/p1-12-train-pilot@1/plan_PROPOSED.json`
 
-**Proposed plan hash: `sha256:eb8dbe293db7f1c1e1b4f342c07f21853031e9e6ab5419eda2833c51f761b664`**
+**Proposed plan hash: `sha256:cb93c6d17e5b6c74755ca3a569b43955916302805983e39b562e834f6a9a605a`** (plan 0.3.0, run 15; supersedes `sha256:eb8dbe293db7f1c1e1b4f342c07f21853031e9e6ab5419eda2833c51f761b664` of plan 0.2.0 — only the approval policy and the runner fingerprint changed, see `docs/P1_12_PILOT_FREEZE_RECORD.md` §Re-freeze 0.3.0)
 
 `status` is outside the hash: the FROZEN copy keeps this hash. `tests/test_train_pilot.py` rebuilds the plan from
 the current code and data and fails if the committed plan differs (no stale hash). Run-8 hash
