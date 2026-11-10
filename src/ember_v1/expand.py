@@ -28,7 +28,7 @@ from typing import Any
 
 from .gen import analysis as A
 from .gen import splits as S
-from .gen.generator import Family, GenerationError, generate_family, generate_lineage, sample_target
+from .gen.generator import Family, GenerationError, build_family, generate_family, generate_lineage, sample_target
 from .gen.rng import derive_seed
 from .gen.spec import DEFAULT_SPEC, GENERATOR_REVISION, GeneratorSpec, _merge
 from .sim import Scenario
@@ -225,6 +225,15 @@ def build_manifest(entries: Mapping[str, Sequence[Mapping[str, Any]]], reference
     return {**body, "manifest_hash": digest(body)}
 
 
+def family_of(f: Mapping[str, Any]) -> Family:
+    """Rebuild an accepted family from its seed AND recorded attempt (the reject rules may have skipped earlier
+    attempts, so `generate_family` without them could return another map); its family_id must match."""
+    fam = build_family(spec_of(f["stratum"]), f["family_seed"], f["attempt"])
+    if not isinstance(fam, Family) or fam.family_id != f["family_id"]:
+        raise ExpandError(f"{f['family_id']}: family does not rebuild from its seed and attempt")
+    return fam
+
+
 def isolation_report(manifest: Mapping[str, Any], entries: Mapping[str, Sequence[Mapping[str, Any]]],
                      provenance: Mapping[str, Any], pilots: Sequence[C.PilotMap]) -> dict[str, Any]:
     """Overlap of every isolation key with every historical set, uniqueness, counts and the pilot-map screen."""
@@ -233,7 +242,7 @@ def isolation_report(manifest: Mapping[str, Any], entries: Mapping[str, Sequence
     fam = Counter(s["family_id"] for s in manifest["scenarios"])
     hits = []
     for f in manifest["families"]:
-        g = generate_family(spec_of(f["stratum"]), f["family_seed"])[0]
+        g = family_of(f)
         hits += [{"family_id": f["family_id"], "pilot_set": pm.set, "scenario_id": pm.scenario_id, "rule": r}
                  for pm in pilots if (r := C.pilot_match(g, pm))]
     n = Counter((s["stratum"], "le120" if s["n_people"] <= 120 else "121-200") for s in manifest["scenarios"])
@@ -271,7 +280,7 @@ def materialize(manifest: Mapping[str, Any], *, partitions: Sequence[str] = PART
             continue
         f = seeds[e["family_id"]]
         if e["family_id"] not in fams:
-            fams[e["family_id"]] = generate_family(spec_of(f["stratum"]), f["family_seed"])[0]
+            fams[e["family_id"]] = family_of(f)
         g, _ = generate_lineage(spec_of(f["stratum"]), fams[e["family_id"]], e["lineage_seed"])
         if (g.scenario.content_hash(), g.core_hash(), g.lineage_id) != (e["scenario_hash"], e["core_hash"],
                                                                          e["lineage_id"]):
