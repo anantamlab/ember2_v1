@@ -1,0 +1,41 @@
+{
+ "config_version": "ember-run-config@1",
+ "run_id": "r19-v1-arms@1",
+ "kind": "v1-policy-ablation",
+ "authorization": {
+  "status": "NOT_AUTHORIZED",
+  "note": "Phase 8 prepares this run only. The owner must authorize it; the laptop then commits status AUTHORIZED (a new commit) before prepare-run accepts it."
+ },
+ "purpose": "Arms A_raw / B_static_mask / C_joint_coord of ONE V1 checkpoint on matched held-out scenarios (DEV 48 + expansion val 100); identical scenario seeds, hence identical fire; raw model argmax and executed actions recorded separately",
+ "inputs": {
+  "model": {
+   "repo": "models",
+   "artifact_id": "p1-18-v1-train@1",
+   "path": "v1/p1-18-v1-train@1",
+   "manifest_sha256": "sha256:fb7573a93f9630b8486eeaa6d3e2bfce58ad1e2e8e7db74ff3f39651949d0952"
+  },
+  "records": {
+   "repo": "experiments",
+   "artifact_id": "p1-18-v1-records@1",
+   "path": "v1-evaluation/p1-18-v1-records@1",
+   "manifest_sha256": "sha256:49598d1d796925db0564b5a265278061b2dcb92eb348e7c3908eda22ef9eb6ed"
+  }
+ },
+ "params": {
+  "scenarios": "rollouts/v2-eval.jsonl",
+  "sets": [
+   "p1-02-v1/dev",
+   "p1-18-expand@1/val/core",
+   "p1-18-expand@1/val/stress"
+  ],
+  "arms": [
+   "A_raw",
+   "B_static_mask",
+   "C_joint_coord"
+  ],
+  "block": 4
+ },
+ "comparison": "laptop: python -m ember_v1.p1_18_compare --list <scenarios.jsonl from the result> --student A_raw=outputs/rollouts-A_raw.jsonl --student B_static_mask=... --student C_joint_coord=... --teachers <p1-18-dev-teachers@1> --teachers <p1-18-expand@1> --out arms_compare.json",
+ "result_path": "v1-policy-ablation/r19-v1-arms@1",
+ "max_wall_s": 172800
+}

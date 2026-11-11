@@ -1,0 +1,5 @@
+# Run 19 CPU-only route (Windows-native or Linux without GPU): HF transfer + simulator replay.
+# Same huggingface-hub / hf-xet versions as infra/p0b-requirements.lock.txt.
+# Regenerate: uv pip compile infra/ws-cpu-requirements.in --universal --python-version 3.11 --generate-hashes --no-header -o infra/ws-cpu-requirements.lock.txt
+huggingface-hub==1.33.0
+hf-xet==1.8.0

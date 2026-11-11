@@ -1,0 +1,40 @@
+{
+ "config_version": "ember-run-config@1",
+ "run_id": "r19-v1-repro@1",
+ "kind": "v1-reproduce",
+ "authorization": {
+  "status": "AUTHORIZED",
+  "by": "owner, run-19 prompt Phase 7 (transfer test: GPU smoke + reproduce a few recorded V1 predictions)",
+  "date": "2026-11-11"
+ },
+ "purpose": "Load the real V1 checkpoint and re-predict the first 6 recorded steps of 5 recorded V1 episodes (DEV x2, expansion val core, expansion val stress 200 people = 2 chunks, P1-17 val); argmax must equal the A10 record",
+ "inputs": {
+  "model": {
+   "repo": "models",
+   "artifact_id": "p1-18-v1-train@1",
+   "path": "v1/p1-18-v1-train@1",
+   "manifest_sha256": "sha256:fb7573a93f9630b8486eeaa6d3e2bfce58ad1e2e8e7db74ff3f39651949d0952"
+  },
+  "records": {
+   "repo": "experiments",
+   "artifact_id": "p1-18-v1-records@1",
+   "path": "v1-evaluation/p1-18-v1-records@1",
+   "manifest_sha256": "sha256:49598d1d796925db0564b5a265278061b2dcb92eb348e7c3908eda22ef9eb6ed"
+  }
+ },
+ "params": {
+  "records": "eval-out/rollouts.jsonl",
+  "scenarios": "rollouts/v1-eval.jsonl",
+  "scenario_ids": [
+   "g-194f6878898f6849",
+   "g-255ca5b2ef3958cb",
+   "g-0421f6efd40f92c5",
+   "g-1412f45b69d26554",
+   "g-705345c9205c7e9e"
+  ],
+  "max_steps": 6,
+  "near_tie": 0.05
+ },
+ "result_path": "v1-evaluation/r19-v1-repro@1",
+ "max_wall_s": 3600
+}

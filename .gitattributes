@@ -1,2 +1,4 @@
 # Shell hooks must keep LF endings on every platform.
 scripts/git-hooks/* text eol=lf
+# The workstation wrapper runs in Linux / WSL2 bash.
+ops/workstation/*.sh text eol=lf

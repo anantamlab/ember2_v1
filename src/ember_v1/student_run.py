@@ -307,10 +307,12 @@ class StudentPolicy:
 
 def rollouts(adapter: Any, cfg: Mapping[str, Any], scenarios_path: Path, out_path: Path, *, label: str,
              guards: Callable[[], Any], persist: Callable[[], None] = lambda: None, limit: int | None = None,
-             log: Callable[[str], None] = print, min_wall_s: float = 180.0, min_usd: float = 0.05) -> dict[str, Any]:
+             log: Callable[[str], None] = print, min_wall_s: float = 180.0, min_usd: float = 0.05,
+             policy: Any = None) -> dict[str, Any]:
     """Closed-loop episodes of the student on the listed scenarios (JSONL: set, scenario_id, family_id, scenario).
     Resumable (finished scenario ids in `out_path` are skipped). Stops before an episode when the phase cap is
-    nearly used; the stop is recorded, never hidden."""
+    nearly used; the stop is recorded, never hidden. `policy` (default `StudentPolicy`) may be a subclass that
+    post-processes actions (policy_arms); its `record_extra()` fields are added to each record."""
     from .sim import Scenario
     from .teacher.evaluate import run_episode
     done = set()
@@ -319,7 +321,7 @@ def rollouts(adapter: Any, cfg: Mapping[str, Any], scenarios_path: Path, out_pat
     items = [json.loads(line) for line in scenarios_path.read_text(encoding="utf-8").splitlines() if line]
     if limit is not None:
         items = items[:limit]
-    pol = StudentPolicy(adapter, cfg, label)
+    pol = policy if policy is not None else StudentPolicy(adapter, cfg, label)
     ran, stopped = 0, None
     for it in items:
         if it["scenario_id"] in done:
@@ -332,11 +334,14 @@ def rollouts(adapter: Any, cfg: Mapping[str, Any], scenarios_path: Path, out_pat
         if scn.content_hash() != it.get("scenario_hash", scn.content_hash()):
             raise RunError(f"{it['scenario_id']}: scenario hash differs from its list")
         pol.trace = []
+        if hasattr(pol, "reset"):
+            pol.reset()
         rec, wall_ms = run_episode(scn, pol)
         rec.update({"set": it["set"], "scenario_id": it["scenario_id"], "family_id": it["family_id"],
                     "scenario_hash": scn.content_hash(), "label": label, "trace": pol.trace,
                     "trace_encoding": "ACTION_ORDER index per active person (sorted ids) | action dict",
-                    "decision_wall_ms_p50": sorted(wall_ms)[len(wall_ms) // 2] if wall_ms else None})
+                    "decision_wall_ms_p50": sorted(wall_ms)[len(wall_ms) // 2] if wall_ms else None,
+                    **(pol.record_extra() if hasattr(pol, "record_extra") else {})})
         with open(out_path, "a", encoding="utf-8", newline="\n") as f:
             f.write(json.dumps(rec, sort_keys=True, default=str) + "\n")
         ran += 1
