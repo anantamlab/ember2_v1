@@ -208,9 +208,11 @@ class StudentTrainer:
 
 
 @app.local_entrypoint()
-def student(phase: str, spec: str, authorize: str = "", out: str = "", protocol: str = ""):
+def student(phase: str, spec: str, authorize: str = "", out: str = "", protocol: str = "", spawn: bool = False):
     """modal run [--detach] infra/modal_app.py::student --phase pilot --spec <spec.json> --authorize pilot
-    [--protocol data/protocols/p1-18-student-v2.json] (default: the V1 protocol p1-14-student-train.json)"""
+    [--protocol data/protocols/p1-18-student-v2.json] (default: the V1 protocol p1-14-student-train.json)
+    [--spawn]: with --detach, start the call and return at once (results on the volume), so a later local
+    network error cannot tear the app down."""
     from ember_v1 import student_train as st
     from ember_v1.run_report import write_json_atomic
 
@@ -222,6 +224,10 @@ def student(phase: str, spec: str, authorize: str = "", out: str = "", protocol:
     print(json.dumps({"plan": plan}))
     trainer = StudentTrainer.with_options(gpu=plan["gpu"], timeout=plan["timeout_s"], retries=plan["retries"],
                                           max_containers=plan["max_containers"])(code_commit=plan["code_commit"])
+    if spawn:
+        call = trainer.run.spawn(phase, json.dumps(protocol), Path(spec).read_text(encoding="utf-8"))
+        print(json.dumps({"spawned": call.object_id}))
+        return
     result = trainer.run.remote(phase, json.dumps(protocol), Path(spec).read_text(encoding="utf-8"))
     if out:
         write_json_atomic(Path(out), result)
