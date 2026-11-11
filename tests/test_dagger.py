@@ -58,6 +58,9 @@ def test_labels_are_group_best_maps_on_replayed_states(world):
     ex = D.sft_examples(out, world["tmp"] / "dg_sft.jsonl")
     if ex["examples"]:
         assert ex["weight_total"] == pytest.approx(ex["families"])
+    ex = D.sft_examples(out, world["tmp"] / "dg_sft_q.jsonl", family_weight=0.25)
+    if ex["examples"]:
+        assert ex["weight_total"] == pytest.approx(0.25 * ex["families"])
 
 
 def test_heldout_partitions_are_refused(world):

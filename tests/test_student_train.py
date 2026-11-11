@@ -344,3 +344,16 @@ def test_v2_protocol_changes_only_data_and_caps():
     assert v2["based_on"]["protocol_hash"] == v1["protocol_hash"]
     assert sum(ph["usd_cap"] for ph in v2["compute"]["phases"].values()) <= 70.0
     assert "128,701,152" in v2["data"]["token_budget_per_epoch"]
+
+
+def test_v3_protocol_changes_only_data_and_caps_and_fits_the_v2_bucket():
+    v2 = st.load_protocol(st.REPO / "data/protocols/p1-18-student-v2.json")
+    v3 = st.load_protocol(st.REPO / "data/protocols/p1-18-student-v3.json")
+    st.check_protocol(v3, require_frozen=True)
+    a, b = st.config_from_protocol(v2), st.config_from_protocol(v3)
+    assert {k for k in a if a[k] != b[k]} == {"protocol_hash", "epoch_seed", "phases"}
+    assert v3["based_on"]["protocol_hash"] == v2["protocol_hash"]
+    worst = (sum(ph["usd_cap"] for ph in v2["compute"]["phases"].values())
+             + sum(ph["usd_cap"] for ph in v3["compute"]["phases"].values()) + v3["compute"]["phases"]["eval"]["usd_cap"])
+    assert worst <= 70.0                                  # V3 eval phase runs twice (V2 visit + V3 eval)
+    assert "128,701,152" in v3["data"]["token_budget_per_epoch"]

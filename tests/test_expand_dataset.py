@@ -99,6 +99,28 @@ def test_val_family_leak_into_sft_is_refused(world, monkeypatch):
         (p17 / "sft_manifest.json").write_text(json.dumps({"val_families": ["fam-p17-val"]}), encoding="utf-8")
 
 
+def test_append_keeps_base_bytes_and_refuses_duplicate_ids(tmp_path):
+    src = tmp_path / "sft"
+    src.mkdir()
+    ex = {"example_id": "e0", "observation": {}, "actions": {}, "weight": 1.0}
+    (src / "train.jsonl").write_text(json.dumps(ex) + "\n", encoding="utf-8", newline="\n")
+    (src / "val.jsonl").write_text(json.dumps(ex) + "\n", encoding="utf-8", newline="\n")
+    body = {"k": 100, "files": {n: XD._sha(src / n) for n in ("train.jsonl", "val.jsonl")}}
+    (src / "sft_manifest.json").write_text(json.dumps({**body, "manifest_hash": digest(body)}), encoding="utf-8")
+    extra = tmp_path / "extra.jsonl"
+    extra.write_text(json.dumps({**ex, "example_id": "d0", "weight": 0.25}) + "\n", encoding="utf-8")
+    r = XD.append_sft(src, extra, tmp_path / "out", note="dagger")
+    assert r["appended"]["examples"] == 1 and r["appended"]["weight"] == 0.25
+    out = (tmp_path / "out" / "train.jsonl").read_bytes()
+    assert out.startswith((src / "train.jsonl").read_bytes()) and out.count(b"\n") == 2
+    from ember_v1 import student_run as sr
+    assert sr.check_sft_dir(tmp_path / "out")["appended_to"] == digest(body)
+    extra.write_text(json.dumps(ex) + "\n", encoding="utf-8")
+    with pytest.raises(XD.BuildBlocked):
+        XD.append_sft(src, extra, tmp_path / "out2", note="dup")
+    assert not (tmp_path / "out2.partial").exists()
+
+
 def test_filter_drops_and_lists_over_length_train_examples(tmp_path):
     src = tmp_path / "sft"
     src.mkdir()

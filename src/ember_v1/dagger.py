@@ -187,8 +187,9 @@ def summarize(out: Path) -> dict[str, Any]:
             "student_agreement_mean": round(sum(agree) / len(agree), 4) if agree else None}
 
 
-def sft_examples(out: Path, dest: Path) -> dict[str, Any]:
-    """Labelled states as SFT examples: per family one weight budget spread evenly over its states."""
+def sft_examples(out: Path, dest: Path, *, family_weight: float = 1.0) -> dict[str, Any]:
+    """Labelled states as SFT examples: per family one weight budget (`family_weight`) spread evenly over its
+    states. Inconclusive and teacher-cap states are never examples."""
     from . import student_ingest as si
     labs = [json.loads(x) for p in sorted((out / "labels").glob("*.jsonl"))
             for x in p.read_text(encoding="utf-8").splitlines() if x]
@@ -200,11 +201,13 @@ def sft_examples(out: Path, dest: Path) -> dict[str, Any]:
     dest.parent.mkdir(parents=True, exist_ok=True)
     with open(dest, "w", encoding="utf-8", newline="\n") as f:
         for r in labs:
-            ex = {"observation": r["observation"], "actions": r["actions"], "weight": 1.0 / per_fam[r["family_id"]]}
+            ex = {"observation": r["observation"], "actions": r["actions"], "weight": family_weight / per_fam[r["family_id"]]}
             ex = {"example_id": si.example_id(ex), **ex}
             by_fam[r["family_id"]] += ex["weight"]
             f.write(json.dumps(ex, sort_keys=True, separators=(",", ":")) + "\n")
-    return {"examples": len(labs), "families": len(per_fam), "weight_total": round(sum(by_fam.values()), 9)}
+    return {"examples": len(labs), "families": len(per_fam), "family_weight": family_weight,
+            "weight_total": round(sum(by_fam.values()), 9),
+            "file_sha256": "sha256:" + hashlib.sha256(dest.read_bytes()).hexdigest()}
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -220,12 +223,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     s = sub.add_parser("sft")
     s.add_argument("--out", type=Path, required=True)
     s.add_argument("--dest", type=Path, required=True)
+    s.add_argument("--family-weight", type=float, default=1.0)
     a = ap.parse_args(argv)
     if a.cmd == "label":
         print(json.dumps(run(rollouts=a.rollouts, root=a.root, out=a.out, workers=a.workers, states=a.states),
                          indent=1))
     else:
-        print(json.dumps(sft_examples(a.out, a.dest), indent=1))
+        print(json.dumps(sft_examples(a.out, a.dest, family_weight=a.family_weight), indent=1))
     return 0
 
 

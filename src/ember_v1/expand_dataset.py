@@ -254,6 +254,41 @@ def filter_sft(src: Path, token_counts: Path, out: Path, *, max_len: int = 16384
     return {**body, "manifest_hash": digest(body)}
 
 
+def append_sft(src: Path, extra: Path, out: Path, *, note: str) -> dict[str, Any]:
+    """SFT dir = `src` train (bytes unchanged) + the examples of `extra` (JSONL: example_id, observation, actions,
+    weight), val unchanged. Duplicate example ids are refused (the epoch sampler keys on them)."""
+    from . import student_run as sr
+    if out.exists():
+        raise BuildBlocked(f"{out} exists (write-once)")
+    man = sr.check_sft_dir(src)
+    ids = {json.loads(line)["example_id"] for line in si_lines(src / "train.jsonl")}
+    tmp = out.with_name(out.name + ".partial")
+    tmp.mkdir(parents=True)
+    shutil.copyfile(src / "val.jsonl", tmp / "val.jsonl")
+    shutil.copyfile(src / "train.jsonl", tmp / "train.jsonl")
+    n, w, bad = 0, 0.0, ""
+    with open(tmp / "train.jsonl", "a", encoding="utf-8", newline="\n") as fh:
+        for line in si_lines(extra):
+            ex = json.loads(line)
+            if set(ex) != {"example_id", "observation", "actions", "weight"} or ex["example_id"] in ids:
+                bad = repr(ex.get("example_id"))
+                break
+            ids.add(ex["example_id"])
+            fh.write(line if line.endswith("\n") else line + "\n")
+            n, w = n + 1, w + ex["weight"]
+    if bad or n == 0:
+        shutil.rmtree(tmp)
+        raise BuildBlocked(f"extra example {bad}: bad keys or duplicate id" if bad else "no extra examples")
+    body = {**{k: v for k, v in man.items() if k not in ("files", "manifest_hash")},
+            "appended_to": man["manifest_hash"], "appended": {"file": _sha(extra), "examples": n,
+                                                               "weight": round(w, 9), "note": note},
+            "files": {n_: _sha(tmp / n_) for n_ in ("train.jsonl", "val.jsonl")}}
+    (tmp / "sft_manifest.json").write_text(json.dumps({**body, "manifest_hash": digest(body)}, indent=1,
+                                                      sort_keys=True), encoding="utf-8", newline="\n")
+    os.replace(tmp, out)
+    return {**body, "manifest_hash": digest(body)}
+
+
 def si_lines(p: Path):
     with open(p, encoding="utf-8") as f:
         for line in f:
@@ -276,7 +311,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     f.add_argument("--sft", type=Path, required=True)
     f.add_argument("--token-counts", type=Path, required=True)
     f.add_argument("--out", type=Path, required=True)
+    p = sub.add_parser("append")
+    p.add_argument("--sft", type=Path, required=True)
+    p.add_argument("--extra", type=Path, required=True)
+    p.add_argument("--out", type=Path, required=True)
+    p.add_argument("--note", required=True)
     a = ap.parse_args(argv)
+    if a.cmd == "append":
+        r = append_sft(a.sft, a.extra, a.out, note=a.note)
+        print(json.dumps({k: r[k] for k in ("appended", "manifest_hash")}, indent=1))
+        return 0
     if a.cmd == "filter":
         r = filter_sft(a.sft, a.token_counts, a.out)
         print(json.dumps({k: r[k] for k in ("train_examples_kept", "manifest_hash")} |
