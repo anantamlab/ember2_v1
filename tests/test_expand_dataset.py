@@ -124,17 +124,17 @@ def test_append_keeps_base_bytes_and_refuses_duplicate_ids(tmp_path):
 def test_filter_drops_and_lists_over_length_train_examples(tmp_path):
     src = tmp_path / "sft"
     src.mkdir()
-    exs = [{"example_id": f"e{i}", "observation": {}, "actions": {}, "weight": 1.0} for i in range(3)]
+    exs = [{"example_id": f"e{i}", "observation": {}, "actions": {}, "weight": 1.0} for i in range(4)]
     (src / "train.jsonl").write_text("".join(json.dumps(e) + "\n" for e in exs), encoding="utf-8", newline="\n")
     (src / "val.jsonl").write_text(json.dumps(exs[0]) + "\n", encoding="utf-8", newline="\n")
     body = {"k": 100, "dataset_hash": "d", "files": {n: XD._sha(src / n) for n in ("train.jsonl", "val.jsonl")}}
     (src / "sft_manifest.json").write_text(json.dumps({**body, "manifest_hash": digest(body)}), encoding="utf-8")
     tc = tmp_path / "tc.jsonl"
     tc.write_text("".join(json.dumps({"split": "train", "example_id": f"e{i}", "max_row": m}) + "\n"
-                          for i, m in enumerate([100, 16385, 16384])) +
+                          for i, m in enumerate([100, 16385, 16383, 16384])) +
                   json.dumps({"split": "val", "example_id": "e0", "max_row": 100}) + "\n", encoding="utf-8")
     r = XD.filter_sft(src, tc, tmp_path / "out")
-    assert r["excluded_over_max_len"]["examples"] == ["e1"] and r["train_examples_kept"] == 2
+    assert r["excluded_over_max_len"]["examples"] == ["e1", "e3"] and r["train_examples_kept"] == 2
     from ember_v1 import student_run as sr
     assert sr.check_sft_dir(tmp_path / "out")["k"] == 100
     kept = [json.loads(x)["example_id"] for x in (tmp_path / "out" / "train.jsonl").read_text().splitlines()]

@@ -210,7 +210,8 @@ def sft(*, dataset_dir: Path, out: Path, p17_sft: Path = Path(P17_SFT), k: int =
 
 
 def filter_sft(src: Path, token_counts: Path, out: Path, *, max_len: int = 16384) -> dict[str, Any]:
-    """Copy an SFT dir without the TRAIN examples that have a row over `max_len` tokens (measured by
+    """Copy an SFT dir without the TRAIN examples that have a row of `max_len` tokens or more (token_budget.classify:
+    a row needs one spare token, so `max_len` itself is NO_SPARE_TOKEN; measured by
     `student_run.measure`, whose partial output keeps every example's `max_row`). Rows are never truncated: an
     example that does not fit the fixed architecture is left out and listed. Val must fit unchanged."""
     from . import student_run as sr
@@ -222,7 +223,7 @@ def filter_sft(src: Path, token_counts: Path, out: Path, *, max_len: int = 16384
     for line in si_lines(token_counts):
         d = json.loads(line)
         seen.add((d["split"], d["example_id"]))
-        if d["max_row"] > max_len:
+        if d["max_row"] >= max_len:
             over[d["split"]].append(d["example_id"])
     if over["val"]:
         raise BuildBlocked(f"{len(over['val'])} val examples do not fit: val must stay unchanged")
@@ -245,7 +246,8 @@ def filter_sft(src: Path, token_counts: Path, out: Path, *, max_len: int = 16384
     body = {**{k: v for k, v in man.items() if k not in ("files", "manifest_hash")},
             "filtered_from": man["manifest_hash"], "max_len": max_len,
             "excluded_over_max_len": {"examples": sorted(drop), "count": len(drop), "weight": round(w_drop, 9),
-                                      "rule": "any Clef row over max_len tokens: no truncation, example left out"},
+                                      "rule": "any Clef row of max_len tokens or more (STATE_CUT or NO_SPARE_TOKEN): no truncation, "
+                                              "example left out"},
             "train_examples_kept": kept,
             "files": {n: _sha(tmp / n) for n in ("train.jsonl", "val.jsonl")}}
     (tmp / "sft_manifest.json").write_text(json.dumps({**body, "manifest_hash": digest(body)}, indent=1,
