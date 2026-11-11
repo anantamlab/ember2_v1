@@ -135,7 +135,23 @@ python -m ember_v1.workstation fetch-results --path v1-evaluation/r19-v1-repro@1
   --records D:/Coding/ember-evidence/p1-18-v1/eval-out/rollouts.jsonl
 ```
 
-## 5. Prepared, not authorized: V1 policy arms (`data/runs/r19-v1-arms@1.json`)
+## 5. Transfer test status (2026-11-11)
+
+| Step | Where | Result |
+|---|---|---|
+| Laptop-simulated workstation: clean detached checkout of `020dfeaf`, fresh Python 3.11 venv from `infra/ws-cpu-requirements.lock.txt` (hub 1.33.0), empty `HF_HOME` | laptop | done |
+| `prepare-run r19-trace-replay@1 --attempt 900` (records @ `283a753c`) | laptop | PASS: 36 files fetched and hash-checked |
+| `execute-run` | laptop | COMPLETE: 156/156 traces replay to the recorded outcome |
+| `execute-run` again | laptop | REFUSED (COMPLETE is never rerun) |
+| `publish-results` → experiments `student-rollouts/r19-trace-replay@1/attempt-900` | laptop | PASS: manifest commit `f50a6216`, verified `d3456fb7` |
+| `publish-results` again | laptop | idempotent no-op |
+| `fetch-results` with hub 2.4.0 | laptop | PASS: verdict rechecked, 156/156 |
+| `env-check` (GPU, sm_120) | workstation | **NOT EXECUTED**: no workstation access |
+| `v1-reproduce` | workstation | **NOT EXECUTED** |
+
+Attempt 900 is reserved for this laptop simulation. Its manifest records host and platform. Workstation runs use attempts 1, 2, ….
+
+## 6. Prepared, not authorized: V1 policy arms (`data/runs/r19-v1-arms@1.json`)
 
 All arms use one checkpoint (`p1-18-v1-train@1`), the same scenarios and the same fire. Fire depends only on the scenario seed. The arms are interleaved in blocks of 4 scenarios, with one rollouts file per arm.
 
