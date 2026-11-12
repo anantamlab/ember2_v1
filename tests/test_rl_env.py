@@ -44,6 +44,19 @@ def test_terminal_unresolved_and_stays_are_not_penalized_per_action():
     assert info["terminal_reward"] == reward
 
 
+def test_terminal_casualty_weight_and_reward_configuration():
+    from dataclasses import replace
+    scenario = replace(tiny(max_steps=1), spread_interval=1)
+    env = EvacuationEnv(scenario)
+    env.reset()
+    _, reward, done, _, info = env.step({"P0": "east", "P1": "north"})
+    assert done and info["evacuated"] == 1 and info["casualties"] == 1
+    assert reward == (1-2)/2
+    for cfg in ({"gamma": 0}, {"eta": -1}, {"casualty": float("nan")}):
+        with pytest.raises(ValueError):
+            RewardConfig(**cfg)
+
+
 def test_shaping_discounted_telescoping_and_terminal_zero():
     gamma, eta = 0.9, 0.3
     env = EvacuationEnv(tiny(), RewardConfig(gamma=gamma, eta=eta))
@@ -97,3 +110,37 @@ def test_rollout_interface_and_invalid_partial_joint_action():
     env.reset()
     with pytest.raises(ValueError):
         env.step({"P0": "east"})
+
+
+def test_independent_evidence_audit_replays_and_detects_probability_tampering(tmp_path):
+    import json
+    from ember_v1.rl_verify import verify
+    cfg = {"gamma": 0.99, "shaping_eta": 0.1, "evacuated_weight": 1,
+           "casualty_weight": -2, "unresolved_weight": -0.75, "gae_lambda": 0.95}
+    scenario = tiny()
+    env = EvacuationEnv(scenario, RewardConfig(eta=0.1))
+    obs, _ = env.reset()
+    rows = []
+    while True:
+        actions = {p["id"]: "east" for p in obs["people"] if p["status"] == "active"}
+        nxt, reward, done, _, info = env.step(actions)
+        rows.append({"label": "train-0", "scenario_id": scenario.scenario_id, "observation": obs,
+                     "sampled_actions": actions, "executed_actions": actions,
+                     "person_logprobs": [[-math.log(5)]*5 for _ in actions],
+                     "old_joint_logprob": -len(actions)*math.log(5), "record": info["record"],
+                     "reward": reward, "done": done, "value": 0.0})
+        obs = nxt
+        if done:
+            break
+    (tmp_path / "execution.json").write_text(json.dumps({"config": cfg}))
+    (tmp_path / "scenarios.json").write_text(json.dumps({"train": [scenario.to_dict()], "dev": []}))
+    def save():
+        (tmp_path / "transitions.jsonl").write_text("".join(json.dumps(r)+"\n" for r in rows))
+    save()
+    result = verify(tmp_path)
+    assert result["status"] == "PASS" and result["transitions_replayed"] == 2
+    assert result["training_advantages_recomputed"] == 2
+    rows[0]["old_joint_logprob"] += 0.2
+    save()
+    with pytest.raises(RuntimeError, match="probability audit failed"):
+        verify(tmp_path)

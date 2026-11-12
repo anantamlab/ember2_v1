@@ -166,10 +166,11 @@ def parameter_delta(actor, initial):
             "group_l2": {k: v**0.5 for k, v in per_group.items()}}
 
 
-def run(config, root, out, attempt):
+def run(config, root, out, attempt, remaining_seconds=None):
     if sys.version_info[:2] != (3, 11):
         raise RuntimeError("Python 3.11 required")
     cfg = json.loads(config.read_text())
+    budget = cfg["wall_cap_seconds"] if remaining_seconds is None else remaining_seconds
     if cfg["status"] != "FROZEN" or not 1 <= attempt <= cfg["max_attempts"]:
         raise RuntimeError("unfrozen plan or attempt outside authorized bounds")
     out.mkdir(parents=True, exist_ok=False)
@@ -182,7 +183,8 @@ def run(config, root, out, attempt):
             raise RuntimeError("commit code before running pilot")
         write(out / "execution.json", {"config": cfg, "config_sha256": hashlib.sha256(config.read_bytes()).hexdigest(),
               "code_commit": sha, "python": platform.python_version(), "attempt": attempt,
-              "model_root": str(root), "command": sys.argv, "started_unix": time.time()})
+              "model_root": str(root), "command": sys.argv, "started_unix": time.time(),
+              "remaining_budget_seconds": budget})
         provenance = verify_inputs(root, cfg)
         write(out / "input_verification.json", provenance)
         train = [fresh_scenario(cfg["scenario_namespace"], "train", i, cfg["max_steps"])
@@ -228,7 +230,7 @@ def run(config, root, out, attempt):
             updates, all_train = [], []
             training_start = time.monotonic()
             for update in range(cfg["updates"]):
-                if time.monotonic()-started > cfg["wall_cap_seconds"]:
+                if time.monotonic()-started > budget:
                     raise TimeoutError("bounded pilot wall cap reached")
                 t0 = time.monotonic()
                 torch.manual_seed(cfg["seed"]+3000+update)
@@ -247,6 +249,13 @@ def run(config, root, out, attempt):
                 print(json.dumps({"update": update, "summary": rep["rollout"], "optimizer_steps": optimization["optimizer_steps"],
                                   "seconds": time.monotonic()-t0}), flush=True)
                 del groups
+                if (update+1) % 2 == 0:
+                    snapshots = out / "intermediate"
+                    snapshots.mkdir(exist_ok=True)
+                    actor.save(snapshots / f"update-{update+1:04d}")
+                    torch.save({"critic": critic.state_dict(), "optimizer": opt.state_dict(),
+                                "completed_updates": update+1, "torch_rng": torch.get_rng_state(),
+                                "cuda_rng": torch.cuda.get_rng_state_all()}, snapshots / f"trainer-{update+1:04d}.pt")
             training_s = time.monotonic()-training_start
             delta = parameter_delta(actor, initial)
             if delta["group_l2"]["lora"] <= 0 or delta["group_l2"]["head"] <= 0:
@@ -318,7 +327,8 @@ def main():
     spent = sum(json.loads(p.read_text()).get("elapsed_seconds", 0) for p in base.glob("attempt-*/failure.json"))
     if spent >= cfg["wall_cap_seconds"]:
         raise RuntimeError("total authorized retry budget exhausted")
-    run(args.config, args.model_root, base / f"attempt-{args.attempt}", args.attempt)
+    run(args.config, args.model_root, base / f"attempt-{args.attempt}", args.attempt,
+        remaining_seconds=cfg["wall_cap_seconds"]-spent)
 
 
 if __name__ == "__main__":

@@ -125,12 +125,13 @@ def optimize(actor, critic, optimizer, groups, cfg):
     mean, std = advantages.mean(), advantages.std(unbiased=False).clamp_min(1e-8)
     results, max_replay_error, steps = [], 0.0, 0
     # Fundamental on-policy audit before the first update, not confounded by changed weights.
-    with torch.no_grad():
+    with torch.enable_grad():
         for g in groups:
             zs = actor.logits(g["batch"])
             lp = torch.stack([joint_statistics(z, a)[0] for z, a in zip(zs, g["actions"])])
-            error = float((lp - g["old_joint"]).abs().max())
+            error = float((lp - g["old_joint"]).detach().abs().max())
             max_replay_error = max(error, max_replay_error)
+            del zs, lp  # never retain multiple full backbone graphs during the audit
     if max_replay_error > 1e-5:
         raise RuntimeError(f"on-policy probability replay differs: {max_replay_error}")
     all_params = [p for group in optimizer.param_groups for p in group["params"]]
