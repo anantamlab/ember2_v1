@@ -1,0 +1,6 @@
+{
+  "head_precision": "float32, exact=True",
+  "max_logit_error": 0.0,
+  "parameter_digest_equal": true,
+  "status": "PASS"
+}

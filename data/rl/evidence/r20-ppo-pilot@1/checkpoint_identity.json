@@ -1,0 +1,150 @@
+{
+  "code_commit": "bb8c74034dc755ab8962605f2606fe0b3ef27d7f",
+  "config": {
+    "accumulation_groups": 16,
+    "authorization": "Owner explicitly requested implementation and actual RTX 5090 PPO training in this session, including bounded diagnosis and retries. No SFT; stop after Phase 1.",
+    "baseline": "p1-18-v1-train@1",
+    "casualty_weight": -2.0,
+    "clip": 0.2,
+    "cpu_workers": 4,
+    "dev_episodes": 16,
+    "entropy_coef": 0.001,
+    "episodes_per_update": 8,
+    "evacuated_weight": 1.0,
+    "evaluation": "Fresh fixed DEV families, generated and hashed before training; raw argmax and paired stochastic policies. Final iterate, no DEV checkpoint selection.",
+    "excluded_inputs": [
+      "p1-18-expand@1",
+      "p1-18-dataset-v2",
+      "all 1200-scenario expansion artifacts",
+      "EMBERBench hidden scenarios and internal simulator"
+    ],
+    "gae_lambda": 0.95,
+    "gamma": 0.99,
+    "head_lr": 1e-05,
+    "lora_lr": 3e-06,
+    "max_attempts": 6,
+    "max_grad_norm": 1.0,
+    "max_steps": 40,
+    "model_manifest_sha256": "fb7573a93f9630b8486eeaa6d3e2bfce58ad1e2e8e7db74ff3f39651949d0952",
+    "model_revision": "1fc405f723718e308c8a22b137fee4a025086fde",
+    "parallel_envs": 2,
+    "policy": "Exact V1 ASCII / compact questions / chunk_k=100 / no reservations; unmasked categorical sampling, no action repair. Sum person log probabilities for one simultaneous joint action.",
+    "ppo_epochs": 2,
+    "retry_note": "Owner authorized bounded diagnosis/retries. Attempts 1-2 stopped before GPU load; attempt 3 hit WDDM VRAM saturation after 3 rollout updates. Attempt 4 detected a 0.00218 bf16 no-grad/autograd joint likelihood mismatch before any update. Attempt 5 completed 64 episodes / 140 updates but failed exact reload because public Unsloth save quantized the float32 Clef head to bf16. Attempt 6 uses exact=True adapter/head saving with a pre-training roundtrip, matching autograd-enabled TRAIN collection/replay and 2-env batches with 16 accumulated groups. Reward, learning rates, scenarios and final update count unchanged. Total three-hour cap includes prior attempts.",
+    "run_id": "r20-ppo-pilot@1",
+    "scenario_namespace": "ember-r20-independent-rl-20261112-v1",
+    "seed": 20261112,
+    "shaping_eta": 0.1,
+    "status": "FROZEN",
+    "target_joint_kl": 0.04,
+    "unresolved_weight": -0.75,
+    "updates": 8,
+    "value_coef": 0.5,
+    "value_lr": 0.0003,
+    "wall_cap_seconds": 10800
+  },
+  "files": [
+    {
+      "git_sha1": "a2ce2ff46fbfd6d5642f2ef097af70f35ed1ff79",
+      "path": "README.md",
+      "secrets": [],
+      "sha256": "4839c3850d0e52cafa33d37fa7a11983f5bbf5a4a689df90a3aa57a39f6cffe1",
+      "size": 5200
+    },
+    {
+      "git_sha1": "562ec00e681dcf03190b9756f888880c89aa2fa1",
+      "path": "adapter_config.json",
+      "secrets": [],
+      "sha256": "0db1fd12dcab6a7ac615622dca7c20a2bfab2a71315a6c58945f448d112e88a0",
+      "size": 1768
+    },
+    {
+      "git_sha1": "43e82a0cd4438553050a2c16f69cbb4296d728e9",
+      "path": "adapter_model.safetensors",
+      "secrets": [],
+      "sha256": "172f09e115853b972bc77cbd016b71b06b488e39ea7bb20e891680488f11c62c",
+      "size": 67332688
+    },
+    {
+      "git_sha1": "c7c8f996ef89234e681044289ef389a6694fc635",
+      "path": "chat_template.jinja",
+      "secrets": [],
+      "sha256": "ea210e5b4997b7b1d3af5ee3ad34e7677ffe38df7469e8d88089789b5a27fae5",
+      "size": 7991
+    },
+    {
+      "git_sha1": "75f057e3f68306d401d3cd66666ae9c2feff6a7e",
+      "path": "joint_head.safetensors",
+      "secrets": [],
+      "sha256": "2fa988fad107c4386f459d469f94e622be1062557113204288f0bcc894606d74",
+      "size": 121902840
+    },
+    {
+      "git_sha1": "f3c2cb6bd617f9f5fff5ad27df2668423aedf312",
+      "path": "joint_head_config.json",
+      "secrets": [],
+      "sha256": "9ec32207deca79a5ec809cb8306c8222d435163da3800e6fdb42e8789a69b8f8",
+      "size": 116
+    },
+    {
+      "git_sha1": "7ad6acdf4203f22b7b990e36ccc3a1fe38563d5e",
+      "path": "processor_config.json",
+      "secrets": [],
+      "sha256": "14932921ca485d458a04dafd8069fbb0a4505622a48208d19ed247115801385b",
+      "size": 1300
+    },
+    {
+      "git_sha1": "b561cafdcf4f484cc19fb9e8d403d2a223a782e6",
+      "path": "tokenizer.json",
+      "secrets": [],
+      "sha256": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+      "size": 19989343
+    },
+    {
+      "git_sha1": "35e403ec0858e4de70b75648e78121ad28278dc4",
+      "path": "tokenizer_config.json",
+      "secrets": [],
+      "sha256": "1a71fa1e006db5fddc1903926f8d645a608a598504e630c1d82fb7057ee30978",
+      "size": 7160
+    },
+    {
+      "git_sha1": "faa40db512ec14ba4afcf3ea17e40fe3ebaeb208",
+      "path": "unsloth_decision_config.json",
+      "secrets": [],
+      "sha256": "38a82e265362e2e863d5108e78cfc9927f744b4befd3ceffab5be35c738fd31f",
+      "size": 240
+    }
+  ],
+  "frozen_v1_digest": "sha256:c31cae7011dbee64304d091bd744f39ab5a90be35df72a7206477748b98822d3",
+  "parameter_delta": {
+    "changed_tensors": 494,
+    "group_l2": {
+      "head": 0.5708707580886128,
+      "lora": 0.1583148689202709
+    },
+    "l2": 0.5924162558217911,
+    "relative_l2": 0.003283785135652349
+  },
+  "parent": "p1-18-v1-train@1",
+  "parent_revision": "1fc405f723718e308c8a22b137fee4a025086fde",
+  "probe_max_logit_change": 0.5195236206054688,
+  "reload_max_logit_error": 0.0,
+  "rl_digest": "sha256:f6b56137acc791bd1ed0862547a1dd3ca2ef81f336af6c969947840b46c66374",
+  "run_id": "r20-ppo-pilot@1",
+  "student_config": {
+    "chunk_k": 100,
+    "encoding": "ascii",
+    "lora": {
+      "bias": "none",
+      "lora_alpha": 16,
+      "lora_dropout": 0.0,
+      "r": 16,
+      "target_modules": "all-linear"
+    },
+    "max_len": 16384,
+    "precision": "bf16",
+    "question_style": "compact",
+    "reservations": false,
+    "seed": 20261121
+  }
+}
