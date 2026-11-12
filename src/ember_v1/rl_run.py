@@ -136,8 +136,8 @@ def verify_inputs(root, cfg):
         got = hash_file(root / f["path"], scan=False)
         if got["sha256"] != f["sha256"] or got["size"] != f["size"]:
             raise RuntimeError(f"V1 checkpoint hash differs: {f['path']}")
-    from .workstation import _base_snapshot
-    base = _base_snapshot(root, print)
+    from .workstation import fetch_base_model
+    base = fetch_base_model(root, print)
     return {"checkpoint_files_verified": len(manifest["files"]), "base": base,
             "model_manifest_sha256": cfg["model_manifest_sha256"], "model_revision": cfg["model_revision"]}
 
