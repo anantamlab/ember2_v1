@@ -223,6 +223,17 @@ def run(config, root, out, attempt, remaining_seconds=None):
         probe = actor.prepare([EvacuationEnv(dev[0]).reset()[0]])
         with torch.no_grad():
             before = [z.cpu() for z in actor.logits(probe)]
+        actor.save(out / "preflight_roundtrip")
+        roundtrip = V1Actor(student_cfg, out / "preflight_roundtrip")
+        with torch.no_grad():
+            roundtrip_z = roundtrip.logits(roundtrip.prepare([EvacuationEnv(dev[0]).reset()[0]]))
+        preflight_error = max(float((a.cpu()-b).abs().max()) for a, b in zip(roundtrip_z, before))
+        if preflight_error > 1e-5 or roundtrip.ad.weights_digest() != frozen_digest:
+            raise RuntimeError(f"V1 exact-save preflight mismatch: {preflight_error}")
+        write(out / "save_preflight.json", {"status": "PASS", "max_logit_error": preflight_error,
+              "parameter_digest_equal": True, "head_precision": "float32, exact=True"})
+        del roundtrip, roundtrip_z
+        torch.cuda.empty_cache()
         with ProcessPoolExecutor(max_workers=cfg["cpu_workers"], mp_context=multiprocessing.get_context("spawn")) as pool:
             torch.manual_seed(cfg["seed"]+1000)
             baseline, _ = collect(actor, None, dev, cfg, pool, out, "v1-greedy", greedy=True)
@@ -264,6 +275,7 @@ def run(config, root, out, attempt, remaining_seconds=None):
             delta = parameter_delta(actor, initial)
             if delta["group_l2"]["lora"] <= 0 or delta["group_l2"]["head"] <= 0:
                 raise RuntimeError("LoRA or head did not update")
+            actor.set_trainable(False)
             with torch.no_grad():
                 after = [z.cpu() for z in actor.logits(probe)]
             probe_change = max(float((a-b).abs().max()) for a, b in zip(after, before))

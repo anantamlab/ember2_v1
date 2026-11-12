@@ -1,14 +1,14 @@
-# ember_v1 — Evacuation Decision Model (Anantam Labs, Phase 0A)
+# ember_v1 — Evacuation Decision Model (Anantam Labs)
 
 Package `ember_v1`, CLI `ember-v1`, Modal app `ember-v1`. Formerly "evac-decision" (HLD v2).
 
-A **standalone, training-boundary-safe** starter for adapting **pretrained Qwen3.5** into a Jev-style non-generative decision policy using **Unsloth FastDecisionModel**. It does not fork or edit EMBERBench, does not run GPU training, and contains **no official benchmark or hidden evaluation data**.
+A standalone evacuation decision policy using Qwen3.5 and Unsloth FastDecisionModel, with an independent CPU simulator. It contains no official benchmark or hidden evaluation data.
 
-Read the phase-by-phase [High-Level Design](docs/HLD.md). This initial project implements data-contract and profiling groundwork plus a **CPU-only padding-parity verdict checker** for upcoming GPU evidence; no real padding equivalence has been measured yet. The GPU `FastDecisionModel` compatibility test is the next gate.
+The current Phase 1 work adds an RL environment and joint-action PPO initialized from the actual trained V1 checkpoint, with a frozen baseline and fresh TRAIN-only scenarios. See the [PPO experiment report](docs/R20_PPO_PHASE1_REPORT.md) for results, exact checkpoint references, failure diagnoses and reproduction commands. The [High-Level Design](docs/HLD.md) and earlier phase reports retain the project's research history.
 
 ## Run locally
 
-There is no GitHub CI. Before every push, run the complete suite locally on Python 3.11 and 3.12 with
+There is no GitHub CI. Before every push, run the complete CPU suite locally on Python 3.11 with
 `python scripts/verify_local.py run` — see [AGENTS.md](AGENTS.md).
 
 ```bash

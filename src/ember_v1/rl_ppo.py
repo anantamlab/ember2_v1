@@ -103,9 +103,12 @@ class V1Actor:
         return maps, indices, torch.stack(logps), torch.stack(entropies), distributions
 
     def save(self, path):
+        from unsloth.models.decision import _save_clef_adapter
         path = Path(path)
         path.mkdir(exist_ok=False)
-        self.model.save_pretrained(str(path), self.ad.tok)
+        # Public save_pretrained ignores exact=True and quantizes the head to bf16.
+        # The pinned resumable-checkpoint path preserves every float32 Clef weight.
+        _save_clef_adapter(self.model, str(path), self.ad.tok, exact=True)
 
 
 def make_value_head():
