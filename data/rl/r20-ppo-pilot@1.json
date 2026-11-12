@@ -30,8 +30,8 @@
   "accumulation_groups": 16,
   "max_grad_norm": 1.0,
   "wall_cap_seconds": 10800,
-  "max_attempts": 4,
-  "retry_note": "Owner authorized bounded diagnosis/retries. Attempts 1-2 stopped before GPU load; attempt 3 hit WDDM VRAM saturation with 4-env backward batches after 3 rollout updates. Attempt 4 uses 2-env batches with 16 accumulated groups; reward, learning rates, scenarios and final update count unchanged. Total three-hour cap includes prior attempts.",
+  "max_attempts": 5,
+  "retry_note": "Owner authorized bounded diagnosis/retries. Attempts 1-2 stopped before GPU load; attempt 3 hit WDDM VRAM saturation with 4-env backward batches after 3 rollout updates. Attempt 4 detected a 0.00218 bf16 no-grad/autograd joint likelihood mismatch before any optimizer update. Attempt 5 uses matching autograd-enabled TRAIN collection/replay and 2-env batches with 16 accumulated groups; reward, learning rates, scenarios and final update count unchanged. Total three-hour cap includes prior attempts.",
   "evaluation": "Fresh fixed DEV families, generated and hashed before training; raw argmax and paired stochastic policies. Final iterate, no DEV checkpoint selection.",
   "excluded_inputs": ["p1-18-expand@1", "p1-18-dataset-v2", "all 1200-scenario expansion artifacts", "EMBERBench hidden scenarios and internal simulator"],
   "policy": "Exact V1 ASCII / compact questions / chunk_k=100 / no reservations; unmasked categorical sampling, no action repair. Sum person log probabilities for one simultaneous joint action."

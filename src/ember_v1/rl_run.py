@@ -66,8 +66,12 @@ def collect(actor, critic, scenarios, cfg, pool, out, label, *, greedy=False, tr
         live = list(range(len(envs)))
         while live:
             batch = actor.prepare([observations[i] for i in live])
-            with torch.no_grad():
+            # bf16 kernels can differ between no_grad and autograd, even in eval mode.
+            # TRAIN behavior must use the same forward path as differentiable PPO replay.
+            with torch.set_grad_enabled(train):
                 maps, indices, logps, entropy, old_lp = actor.sample(batch, greedy)
+            logps, entropy = logps.detach(), entropy.detach()
+            with torch.no_grad():
                 values = critic(batch["features"]).squeeze(-1) if critic is not None else torch.zeros(len(live), device="cuda")
             group = {"batch": batch, "actions": indices, "old_joint": logps.detach(), "old_lp": old_lp}
             group_rows = []
