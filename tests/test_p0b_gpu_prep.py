@@ -65,9 +65,12 @@ def test_torchao_is_built_for_the_locked_torch():
 
 
 # ------------------------------------------------------------ install check
-def test_contract_without_installed_unsloth_never_matches():
+def test_contract_without_installed_unsloth_never_matches(monkeypatch):
+    monkeypatch.setattr(p0b, "_installed_file", lambda relative: None)
     contract = p0b._upstream_contract()
     assert contract["all_match_audited"] is False
+    assert all(contract[f"{name}_sha256"] is None for name in p0b.AUDITED_UPSTREAM_FILES)
+    assert all(contract[f"{name}_matches_audited"] is False for name in p0b.AUDITED_UPSTREAM_FILES)
     assert set(p0b.AUDITED_UPSTREAM_FILES) <= {k.removesuffix("_matches_audited") for k in contract}
 
 

@@ -130,6 +130,24 @@ def test_pilot_phase_trains_reloads_and_projects(sft, tokens, frozen, tmp_path):
     assert rep["go"]["go"] in (True, False) and (tmp_path / "p" / "pilot_report.json").exists()
 
 
+@pytest.mark.parametrize("cuda_available", [False, True])
+def test_pilot_resets_cuda_stats_only_when_available(sft, tokens, frozen, tmp_path, monkeypatch, cuda_available):
+    torch = pytest.importorskip("torch")
+    resets = []
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: cuda_available)
+    monkeypatch.setattr(torch.cuda, "empty_cache", lambda: None)
+
+    def reset_peak():
+        assert cuda_available, "CPU mock runs must not reset CUDA allocator statistics"
+        resets.append(True)
+
+    monkeypatch.setattr(torch.cuda, "reset_peak_memory_stats", reset_peak)
+    rep = sr.gpu_phase("pilot", frozen, _spec(sft, tokens, tmp_path, 30_000, "p"),
+                       adapter_factory=_factory, log=lambda s: None)
+    assert rep["reload"]["pass"] is True
+    assert len(resets) == (1 if cuda_available else 0)
+
+
 def test_pilot_refuses_a_draft_protocol(sft, tokens, frozen, tmp_path):
     d = {**copy.deepcopy(frozen), "status": "DRAFT_NOT_FROZEN", "frozen": False}
     d["protocol_hash"] = st.protocol_hash(d)

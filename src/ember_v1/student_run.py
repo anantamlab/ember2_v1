@@ -476,8 +476,9 @@ def gpu_phase(phase: str, protocol: Mapping[str, Any], spec: Mapping[str, Any], 
 
             import torch
             gc.collect()
-            torch.cuda.empty_cache()
-            torch.cuda.reset_peak_memory_stats()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+                torch.cuda.reset_peak_memory_stats()
         except ImportError:
             pass
         fresh = adapter_factory(cfg, checkpoint=str(run_dir / "final"))
