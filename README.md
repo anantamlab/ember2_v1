@@ -4,11 +4,23 @@ Package `ember_v1`, CLI `ember-v1`, Modal app `ember-v1`. Formerly "evac-decisio
 
 A standalone evacuation decision policy using Qwen3.5 and Unsloth FastDecisionModel, with an independent CPU simulator. It contains no official benchmark or hidden evaluation data.
 
-Start with the [workstation and research handoff](handoff/HANDOFF.md) for Run 19 through Phase 3, exact checkpoints, and reproduction notes.
+**This repository is the only canonical EMBER V1 development repository.** `anantamlab/ember-v1-research-handoff` is a read-only backup; its commit is part of this history.
 
-The [Phase 2 online PPO experiment](docs/R21_PPO_PHASE2_REPORT.md) completed 1,024 on-policy episodes from the verified Phase 1 checkpoint. On fresh reporting DEV, the selected PPO actor tied raw V1 at 48.60% evacuation. The report records the casualty uncertainty, persistent movement failures, exact checkpoint identity and reproduction commands. The [Phase 1 pilot report](docs/R20_PPO_PHASE1_REPORT.md) and [High-Level Design](docs/HLD.md) retain the project's research history.
+## Start here
 
-The [Phase 3 experiment](docs/R22_COUNTERFACTUAL_REPORT.md) compared PPO-only with counterfactual-assisted PPO from the verified Phase 2 checkpoint. Counterfactual assistance reduced casualties on reporting DEV, but the evacuation difference remained inconclusive. The selection split froze PPO-only update 16. The report links both trained checkpoint identities and the independently replayed counterfactual dataset index. Final evaluation remains sealed.
+Read **[docs/CURRENT_STATE.md](docs/CURRENT_STATE.md)**. It is the authoritative current state: code map, completed SFT and RL runs, verified findings, checkpoint locations, how to verify and what remains. The [research handoff](handoff/HANDOFF.md) keeps the Run 19 to Phase 3 archive with exact checkpoints and recovery notes.
+
+Status on 2026-11-13:
+
+- **V1 (SFT, `p1-18-v1-train@1`)** is trained and stored on private Hugging Face at revision `1fc405f7`.
+- **[R20 Phase 1](docs/R20_PPO_PHASE1_REPORT.md)** verified real PPO weight updates on V1, with no DEV evacuation gain.
+- **[R21 Phase 2](docs/R21_PPO_PHASE2_REPORT.md)** online PPO update 96 tied raw V1 at 48.60% evacuation on its reporting panel.
+- **[R22 Phase 3](docs/R22_COUNTERFACTUAL_REPORT.md)** counterfactual PPO reduced casualties relative to PPO-only on reporting DEV (−2.11 pp [−3.96, −0.39]) but did not establish an evacuation gain (+0.85 pp [−1.86, +3.48]). The predefined DEV selector froze PPO-only update 16.
+- Rule-based masking and coordination still outperform the raw learned policies on the compared panels. The T0–T4 teachers are far stronger.
+- **Final held-out evaluation is sealed.** The 1,200-scenario expansion and `p1-18-dataset-v2` are reserved for V1.1.
+- Checkpoints: [data/rl/checkpoint_registry.json](data/rl/checkpoint_registry.json); verify with `python scripts/verify_checkpoint.py --list`. The R20–R22 weights are on the workstation only, not on Hugging Face.
+
+`PHASE_CHECKPOINT.json` and the P0B sections below are historical P0A/P0B records. They are not the current state.
 
 ## Run locally
 
@@ -17,6 +29,7 @@ There is no GitHub CI. Before every push, run the complete CPU suite locally on 
 
 ```bash
 python -m pip install -e '.[test]'
+python scripts/verify_local.py run --python <path-to-python3.11>   # full gate on a clean committed tree
 python -m pytest -q
 python -m ember_v1.cli encode examples/observation.json --mode ascii --local-neighbors
 python -m ember_v1.cli encode examples/observation.json --mode coords
@@ -57,7 +70,9 @@ S0 (`p0a-scaffold-fixtures`) holds 1 hand-written trace (2 decisions). It is for
 
 `ember_v1` is a standalone project, not part of `anantamlab/EMBERBench`. EMBERBench stays the evaluation instrument.
 
-## P0B on Modal (**NOT RUN**)
+## Historical: P0B on Modal (P0A-era notes)
+
+These P0B notes predate the trained V1. The P0B harness itself was not run as written here. V1 was later trained on Modal (see [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md)).
 
 Design: [HLD v3 §5](docs/HLD.md#5-modal-deployment). Logic lives in `src/ember_v1/p0b.py`; `infra/modal_app.py` runs it on Modal GPUs. The harness is preflight-hardened on CPU only (P0B-01). The upstream audit, open GPU-only assumptions, the full run checklist and the budget are in [docs/P0B_PREFLIGHT.md](docs/P0B_PREFLIGHT.md).
 

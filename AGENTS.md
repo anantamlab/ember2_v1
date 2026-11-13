@@ -6,6 +6,13 @@ GitHub Actions workflow `P0A contract tests` (`.github/workflows/p0a-tests.yml`)
 
 Permanent rule: **Implement → full local test → verify PASS → push. Never push untested code.**
 
+## Canonical repository and current state
+
+`anantamlab/ember_v1` is the only development repository. Do not push to `anantamlab/ember-v1-research-handoff`
+(read-only backup). Read [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md) first; `PHASE_CHECKPOINT.json` is a
+historical P0A record. Scripts under `handoff/` are archived evidence: never run them unchanged, and never edit
+files listed in `handoff/FILES.sha256`.
+
 ## Mandatory rules
 
 1. Read this file, the PR you continue and its latest resume notes before you change anything. Check the
