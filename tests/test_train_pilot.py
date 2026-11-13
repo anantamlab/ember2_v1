@@ -483,6 +483,23 @@ def test_code_drift_in_a_worker_is_a_teacher_failure(tmp_path, mini_plan):
     assert rep["failed_teachers"] == ["T2"] and rep["policies"]["T2"]["failure"]["kind"] == "code_drift"
 
 
+def test_code_drift_rejects_a_worker_that_finished_before_parent_drained(tmp_path, mini_plan, monkeypatch):
+    real = ps.run_group
+    def completed_then_rejected(*args, **kwargs):
+        run = real(*args, **kwargs)
+        assert run["streams"]["T2"] and "T2" in run["done"]
+        run["failures"]["T2"] = {"kind": "code_drift", "message": "fingerprint rejected", "decisions_received": 0}
+        run["done"].pop("T2")
+        return run
+    monkeypatch.setattr(ps, "run_group", completed_then_rejected)
+    tp.execute(mini_plan, mini_scenarios(), tmp_path, {"execution_commit": H})
+    rep = load(tp.attempt_paths(tmp_path)["groups"] / "fx-0.json")
+    assert rep["failed_teachers"] == ["T2"]
+    assert rep["policies"]["T2"]["failure"]["kind"] == "code_drift"
+    assert rep["policies"]["T2"]["decisions"] == []
+    assert mt.verify_fixture(rep, tiny(0))["verified"]
+
+
 def test_forged_worker_stream_is_an_integrity_error_not_a_result(tmp_path, mini_plan):
     out, doc, ev = _failed(tmp_path, mini_plan, fk.forged_observation_t1)
     assert "integrity_error" in doc and doc["group_complete"] is False and doc["training_eligible"] is False
