@@ -8,7 +8,7 @@ A standalone evacuation decision policy using Qwen3.5 and Unsloth FastDecisionMo
 
 ## Start here
 
-Read **[docs/CURRENT_STATE.md](docs/CURRENT_STATE.md)**. It is the authoritative current state: code map, completed SFT and RL runs, verified findings, checkpoint locations, how to verify and what remains. The [research handoff](handoff/HANDOFF.md) keeps the Run 19 to Phase 3 archive with exact checkpoints and recovery notes.
+Read **[docs/CURRENT_STATE.md](docs/CURRENT_STATE.md)**. It is the authoritative current state: code map, completed SFT and RL runs, verified findings, checkpoint locations, how to verify and what remains. The [research handoff](handoff/HANDOFF.md) keeps the Run 19 to Phase 3 archive with exact checkpoints and recovery notes. For RL work, read the [RL results handoff](docs/RL_RESULTS_HANDOFF.md): the RL system as built and all R19–R22 metrics.
 
 Status on 2026-11-13:
 

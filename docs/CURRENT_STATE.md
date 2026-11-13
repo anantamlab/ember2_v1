@@ -121,4 +121,6 @@ These files describe earlier phases. Do not read them as the current state.
 
 ## 9. Recommended next milestone
 
+For RL work, read **[RL_RESULTS_HANDOFF.md](RL_RESULTS_HANDOFF.md)**: the RL system as built and every R19–R22 metric.
+
 Diagnose the raw policy's movement failures before more PPO of the same kind. Target the wall/boundary blocks and repeated ineffective moves (R21/R22 diagnostics). Test whether a representation or objective change fixes them on selection DEV, under a new frozen plan. Before that, upload the R20–R22 selected checkpoints to private HF so they no longer depend on one workstation.
