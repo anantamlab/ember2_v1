@@ -55,6 +55,22 @@ def build_scenarios(namespace, split, count, max_steps):
         stub = {"map": {"height": h, "width": w, "obstacles": [list(p) for p in walls],
                         "exits": [{"position": list(p)} for p in exits]}, "burning": []}
         reachable = sorted(set(safe_distances(stub))-set(exits))
+        if len(reachable) < 7:
+            # A random exit can land in a tiny isolated corner. Ensure capacity using
+            # only connected components of public geometry, never simulator outcomes.
+            unseen, components = set(free), []
+            while unseen:
+                seed = min(unseen)
+                stub["map"]["exits"] = [{"position": list(seed)}]
+                component = set(safe_distances(stub))
+                unseen -= component
+                edge = sorted(component & set(boundary))
+                if edge:
+                    components.append((len(component), edge[0]))
+            exits[0] = max(components)[1]
+            exits = list(dict.fromkeys(exits))
+            stub["map"]["exits"] = [{"position": list(p)} for p in exits]
+            reachable = sorted(set(safe_distances(stub))-set(exits))
         candidates = sorted(set(free)-set(exits)) if stratum == "inaccessible" else reachable
         rng.shuffle(candidates)
         # Alternating density strata, independent of fire/geometry outcomes.

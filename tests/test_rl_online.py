@@ -46,3 +46,8 @@ def test_resume_rejects_changed_configuration_and_checkpoint(tmp_path):
     actor.write_bytes(b"corruption")
     with pytest.raises(RuntimeError, match="hash"):
         verify_snapshot(tmp_path, "frozen")
+
+
+def test_full_frozen_namespace_has_population_capacity():
+    rows = build_scenarios("ember-r21-independent-online-20261113-v1", "train", 1024, 48)
+    assert all(4 <= len(s.people) <= 20 for s, _ in rows)

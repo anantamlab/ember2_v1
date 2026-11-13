@@ -45,3 +45,9 @@ Keep a durable execution ledger here and external evidence. Stop before Phase 3.
 Ledger: baseline branch/head verified at 9f12f1b1ea1a0190c3a59caf302e88ac9e9466d7; PR #53
 and latest comments read. Existing integrated research branch retained. No Phase 2 rollouts
 have started. Final whole-branch fresh-context review follows execution.
+
+Attempt 1: stopped before GPU load/rollouts when a rare random exit landed in a tiny
+isolated component. Full 1,024-family regression reproduced it. Corrected population
+capacity by placing one exit in the largest boundary-connected public component only
+when fewer than seven non-exit cells are reachable. No outcome rejection or reward change.
+Attempt 2 uses its own fresh TRAIN namespace and the same fixed DEV geometry generator.
