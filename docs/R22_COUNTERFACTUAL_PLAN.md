@@ -37,8 +37,13 @@ All counterfactual examples retain an explicit offline label and collection-poli
 - Save scenario, evaluator seed, complete private state including RNG, current chain hash
   and public-observation digest. Restore every field exactly, independently replay the
   factual prefix, and test next-step record equality. Snapshot data never enters policies.
-- Select at most four states per CF update by deterministic episode/step indexing, from
-  states the current on-policy student actually visited. Do not select using outcomes.
+- Select at most four states per CF update, at most one per episode. Rank the current
+  sampled joint action using public movement resolution, before consulting the factual
+  transition record. Weight repeated ineffective intents by 3, wall/boundary attempts
+  and coordination blocks by 2, contested narrow passages and missed adjacent exits by 1;
+  normalize by active population and break ties with a seeded hash. Repetition uses the
+  prior public positions and intents. This is a sampling priority, with no effect on PPO
+  rewards or actions. The verifier recomputes it from the public trace.
 - Candidates: factual sampled student action; student greedy joint action; T0–T4 decisions
   on deep copies of the same public observation; four seeded changes affecting at most
   two people. Deduplicate identical full maps; at most 12 candidates. Do not repair the
@@ -79,7 +84,9 @@ Fix 32 selection DEV and 32 further reporting DEV families before training. Incl
 stages and structural strata, with additional unseen geometry families. Selection every
 64 episodes uses outcome utility and Phase 2's +2pp casualty tolerance. Reporting DEV
 never influences training/curriculum/selection. Evaluate original V1, frozen selected
-Phase 2, matched-budget PPO-only continuation, PPO+CF, and T0–T4. Teacher variants and
+Phase 2, matched-budget PPO-only continuation, PPO+CF, and T0–T4. Report original V1
+with the existing mask and coordinator as two external ablations on the same reporting
+families; these arms are not candidates for freezing. Teacher variants and
 resource limits must be named exactly; budget-limited variants cannot be called full-budget
 reference teachers. Use bounded teacher candidate generation where necessary, and evaluate
 the frozen default teachers on reporting DEV where practical within the CPU budget.
@@ -143,3 +150,9 @@ that cumulative count explicitly. The Phase 2 dependency also requires final aud
 process exit codes to pass, bound into its artifact manifest, not merely intermediate
 PASS files. A native suite on 0724899 had all 1,617 tests pass but correctly returned
 SOURCE_CHANGED while these final checks were added; it is not a valid push receipt.
+
+Execution freeze: the owner authorized the bounded run from verified R21 update 96.
+The configuration pins its actor and manifest digests. Before any R22 collection, this
+revision adds the public visit ranking above and the two requested reporting ablations.
+The four-hour experiment cap, one-hour independent audit cap, seed, curriculum,
+matched update limits, continuation policy, and auxiliary loss remain unchanged.

@@ -122,6 +122,8 @@ def run(args):
     if cfg["status"] != "FROZEN" or sys.version_info[:2] != (3, 11):
         raise ValueError("frozen configuration and Python 3.11 required")
     binding = verify_parent(args.phase2)  # dependency gate BEFORE reserving any attempt
+    if any(binding[key] != value for key, value in cfg["expected_phase2"].items()):
+        raise ValueError("verified Phase 2 identity differs from the frozen update-96 parent")
     base = args.output_root/cfg["run_id"]
     base.mkdir(parents=True, exist_ok=True)
     if any(base.glob("attempt-*/summary.json")) or not 1 <= args.attempt <= cfg["max_attempts"]:
@@ -261,10 +263,13 @@ def run(args):
             ep, _ = collect(actor, None, dev_report, cfg, pool, out, "phase2", greedy=True)
             comparisons["phase2"] = summarize(ep)
             original = V1Actor(student_cfg, args.model_root/"final")
+            original_digest = original.ad.weights_digest()
             ep, _ = collect(original, None, dev_select, cfg, pool, out, "select-v1", greedy=True)
             original_selection = summarize(ep)
-            ep, _ = collect(original, None, dev_report, cfg, pool, out, "v1", greedy=True)
-            comparisons["v1"] = summarize(ep)
+            for name, postprocess in (("v1", None), ("v1-mask", "mask"), ("v1-coordinate", "coordinate")):
+                ep, _ = collect(original, None, dev_report, cfg, pool, out, name, greedy=True,
+                                postprocess=postprocess)
+                comparisons[name] = summarize(ep)
             del original
             gc.collect()
             torch.cuda.empty_cache()
@@ -419,8 +424,10 @@ def run(args):
             teacher_summaries = {name: summarize([r for r in teacher_results if r["label"] == name and r["status"] == "COMPLETE"])
                                  for name in ("T0", "T1", "T2", "T3", "T4")
                                  if any(r["label"] == name and r["status"] == "COMPLETE" for r in teacher_results)}
-        candidates = [{"update": 0, "name": "v1", "selection": original_selection, "actor": str(args.model_root/"final")},
-                      {"update": 0, "name": "phase2", "selection": baseline_selection, "actor": str(Path(binding["checkpoint"])/"actor")}]
+        candidates = [{"update": 0, "name": "v1", "selection": original_selection, "actor": str(args.model_root/"final"),
+                       "actor_digest": original_digest},
+                      {"update": 0, "name": "phase2", "selection": baseline_selection,
+                       "actor": str(Path(binding["checkpoint"])/"actor"), "actor_digest": binding["actor_digest"]}]
         candidates += [{**b, "name": arm} for arm, b in best_by_arm.items()]
         frozen = select_checkpoint(candidates, original_selection)
         write(out/"best_checkpoint.json", {"frozen_candidate": frozen, "trained_arms": best_by_arm,

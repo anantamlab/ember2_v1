@@ -3,11 +3,14 @@ from __future__ import annotations
 
 import copy
 import json
+from collections import Counter
 from pathlib import Path
 
 from .rl_counterfactual import snapshot
+from .rl_env import safe_distances
 from .sim import Simulator
 from .sim.canonical import digest
+from .sim.movement import DELTAS, resolve_moves
 from .student_train import ACTION_ORDER
 
 
@@ -31,8 +34,50 @@ def trained_checkpoint_candidates(selections, updates, *, require_counterfactual
                                         for u in updates)]
 
 
+def prioritize_visits(rows, *, count, seed, update):
+    """Rank public observations and sampled intents, without reading any step outcomes."""
+    groups = {}
+    for row in rows:
+        groups.setdefault(row["scenario_id"], []).append(row)
+    ranked = []
+    for sid, history in groups.items():
+        previous, best = {}, None
+        for row in sorted(history, key=lambda r: r["observation"]["step"]):
+            obs, actions = row["observation"], row["sampled_actions"]
+            m = obs["map"]
+            walls, burning = frozenset(map(tuple, m["obstacles"])), frozenset(map(tuple, obs["burning"]))
+            positions = {p["id"]: tuple(p["position"]) for p in obs["people"] if p["status"] == "active"}
+            intents = {p: (r+DELTAS[actions[p]][0], c+DELTAS[actions[p]][1]) for p, (r, c) in positions.items()}
+            movement = resolve_moves(height=m["height"], width=m["width"], walls=walls, burning=burning,
+                                     enter_fire="blocked", positions=positions, actions=actions)
+            blocked = {p: (positions[p], actions[p]) for p, (kind, _) in movement.items()
+                       if kind.startswith("blocked_")}
+            counts = Counter(kind for kind, _ in movement.values())
+            dist = safe_distances(obs)
+            crowded_targets = Counter(intents[p] for p in positions if actions[p] != "stay")
+            def degree(pos):
+                r, c = pos
+                return sum((r+dr, c+dc) in dist for a, (dr, dc) in DELTAS.items() if a != "stay")
+            signals = {
+                "wall_or_boundary": counts["blocked_wall"]+counts["blocked_boundary"],
+                "repeated_ineffective": sum(previous.get(p) == v for p, v in blocked.items()),
+                "coordination_conflict": sum(counts[k] for k in ("blocked_conflict", "blocked_occupied", "blocked_cycle")),
+                "bottleneck": sum(n > 1 and pos in dist and degree(pos) <= 2 for pos, n in crowded_targets.items()),
+                "delayed_escape": sum(dist.get(pos) == 1 and (kind != "moved" or dist.get(end) != 0)
+                                      for p, (kind, end) in movement.items() for pos in [positions[p]]),
+            }
+            previous = blocked
+            score = (3*signals["repeated_ineffective"] + 2*signals["wall_or_boundary"]
+                     + 2*signals["coordination_conflict"] + signals["bottleneck"] + signals["delayed_escape"])
+            key = (score/max(1, len(positions)), digest([seed, update, sid, obs["step"]]))
+            if best is None or key > best[0]:
+                best = (key, row, signals)
+        ranked.append(best)
+    return [(row, signals) for _, row, signals in sorted(ranked, key=lambda item: item[0], reverse=True)[:count]]
+
+
 def jobs_from_visits(rows, by_id, cfg, update, policy_digest):
-    """Select deterministic visited-state indices, independent of their outcomes."""
+    """Reconstruct the factual prefix only after public-only state selection."""
     groups = {}
     for row in rows:
         groups.setdefault(row["scenario_id"], []).append(row)
@@ -41,10 +86,9 @@ def jobs_from_visits(rows, by_id, cfg, update, policy_digest):
     from .provenance import code_fingerprint
     continuation_identity = {"identity": T1CongestionAware().identity.to_dict(),
                              "code_fingerprint": code_fingerprint(T1CongestionAware)}
-    for i, (sid, history) in enumerate(list(groups.items())[:cfg["cf_states_per_update"]]):
-        history.sort(key=lambda r: r["observation"]["step"])
-        step = min((update+i*5) % 24, len(history)-1)
-        visit = history[step]
+    for visit, signals in prioritize_visits(rows, count=cfg["cf_states_per_update"], seed=cfg["seed"], update=update):
+        sid, step = visit["scenario_id"], visit["observation"]["step"]
+        history = sorted(groups[sid], key=lambda r: r["observation"]["step"])
         sim = Simulator(by_id[sid])
         prefix = []
         for row in history[:step]:
@@ -67,7 +111,8 @@ def jobs_from_visits(rows, by_id, cfg, update, policy_digest):
                      "factual_visit": visit,
                      "source": {"split": "train", "scenario_id": sid, "step": visit["observation"]["step"],
                                 "on_policy_label": visit["label"], "policy_digest": policy_digest,
-                                "kind": "fresh_on_policy_visited_state", "update": update+1}})
+                                "kind": "fresh_on_policy_visited_state", "update": update+1,
+                                "public_priority_signals": signals}})
     return jobs
 
 

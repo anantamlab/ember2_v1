@@ -19,7 +19,8 @@ def report(root):
     best = json.loads((root/"best_checkpoint.json").read_text())
     documents = json.loads((root/"scenarios.json").read_text())
     episodes = read_rows(root/"episodes.jsonl")
-    by_arm = {a: [r for r in episodes if r["label"] == a] for a in ("v1", "phase2")}
+    by_arm = {a: [r for r in episodes if r["label"] == a]
+              for a in ("v1", "v1-mask", "v1-coordinate", "phase2")}
     by_arm.update({a: [r for r in read_rows(root/a/"episodes.jsonl") if r["label"] == a] for a in ("ppo", "cf")})
     paired = reporting_statistics(root)
     if paired != audit["paired_reporting"]:
@@ -56,16 +57,22 @@ def report(root):
     optimization = {a: {key: statistics.mean(m[key] for u in h["updates"] for m in u["minibatches"])
                         for key in ("actor_loss", "critic_loss", "joint_kl", "person_entropy", "clip_fraction")}
                     for a, h in history.items()}
+    movement = {arm: {k: sum(r.get(k, 0) for r in values) for k in
+                ("attempted", "blocked_wall", "blocked_boundary", "repeated_ineffective_moves",
+                 "blocked_conflict", "blocked_occupied", "blocked_cycle", "postprocess_changes")}
+                for arm, values in by_arm.items()}
     data = {"verdict": verdict, "credible_cf_benefit": credible, "cf_minus_ppo_paired_family_95": delta,
             "matched_teacher_panel_families": len(common), "matched_teacher_panel": teacher_panel,
             "per_family": families, "latency": latency, "teacher_alternative_effects": effects,
             "preupdate_probability_replay_max": replay, "optimization_means": optimization,
+            "movement": movement, "public_priority_study_counts": audit["public_priority_study_counts"],
             "paired_behavior_and_family_uncertainty": paired}
     write(root/"analysis.json", data)
-    table = '| Raw learned policy | Evacuated | Casualties | Unresolved | Stay | Blocked / attempted |\n|---|---:|---:|---:|---:|---:|\n'
+    table = '| Policy | Evacuated | Casualties | Unresolved | Stay | Blocked / attempted | Wall/boundary blocks | Repeated ineffective |\n|---|---:|---:|---:|---:|---:|---:|---:|\n'
     for arm in by_arm:
         s = summary["comparisons"][arm]
-        table += f'| {arm} | {s["evacuated_rate"]:.2%} | {s["casualties_rate"]:.2%} | {s["unresolved_rate"]:.2%} | {s["stay_rate"]:.2%} | {s["blocked_per_attempt"]:.2%} |\n'
+        m = movement[arm]
+        table += f'| {arm} | {s["evacuated_rate"]:.2%} | {s["casualties_rate"]:.2%} | {s["unresolved_rate"]:.2%} | {s["stay_rate"]:.2%} | {s["blocked_per_attempt"]:.2%} | {m["blocked_wall"]+m["blocked_boundary"]} | {m["repeated_ineffective_moves"]} |\n'
     text = f'''# EMBER V1 Phase 3 — counterfactual-assisted online PPO
 
 {verdict}
@@ -74,6 +81,7 @@ def report(root):
 Reporting DEV has 32 independent fresh topology families, separate from selection DEV and
 all TRAIN experience. Original V1, frozen selected Phase 2, equal-budget PPO continuation
 and equal-budget PPO+CF use raw argmax, without external movement masking/coordination.
+V1-mask and V1-coordinate are separate reporting-only ablations with external postprocessing.
 All remain in the original Qwen3.5-2B V1 / LoRA / Clef lineage. No SFT, V1.1 artifacts,
 expansion data or hidden benchmark simulator was used. Final evaluation remains sealed.
 
@@ -110,13 +118,17 @@ pair only when its empirical paired lower interval is positive and measured casu
 never increase. Candidate-selection and small-fire-sample uncertainty are exploratory;
 only the independent reporting comparison can support a generalization claim.
 
-| Proposal source | States | Helped | Harmed | Tied | Mean utility change vs factual |
-|---|---:|---:|---:|---:|---:|
+The public priority signal counts are {json.dumps(audit["public_priority_study_counts"])}.
+Helped and harmed below refer to the sign of the measured mean. Inconclusive counts
+nonzero means whose paired interval includes zero. Eligible applies the casualty rule as well.
+
+| Proposal source | States | Helped | Harmed | Tied | Inconclusive | Eligible | Mean utility change vs factual |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
 '''
     for name in ("T0", "T1", "T2", "T3", "T4"):
         e = effects.get(name)
         if e:
-            text += f'| {name} | {e["states"]} | {e["helped"]} | {e["harmed"]} | {e["tied"]} | {e["mean_utility_delta"]:+.5f} |\n'
+            text += f'| {name} | {e["states"]} | {e["helped"]} | {e["harmed"]} | {e["tied"]} | {e["inconclusive_nonzero"]} | {e["eligible"]} | {e["mean_utility_delta"]:+.5f} |\n'
     text += '\nCF proposal T2/T3 use the explicitly recorded bounded configurations (500ms/24 rollouts and 200ms/20,000 ant steps); their effects must not be confused with the frozen default teachers evaluated below. Other proposal configurations and every failure/limit flag are preserved. Local variations can beat, tie or harm the factual action independently of any teacher.\n\n## Independent uncertainty\n\nPaired 5,000-replicate bootstrap over fixed reporting families, CF minus PPO, percentage points:\n'
     for metric, d in delta.items():
         text += f'- {metric}: {100*d["difference"]:+.2f} [{100*d["lower_95"]:+.2f}, {100*d["upper_95"]:+.2f}].\n'

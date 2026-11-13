@@ -84,6 +84,8 @@ METRICS = {
     "unresolved": (lambda r: r["unresolved"], lambda r: r["people"], "proportion"),
     "stay_rate": (lambda r: r["stay"], lambda r: r["person_steps"], "proportion"),
     "blocked_rate": (lambda r: r["blocked"], lambda r: r["attempted"], "proportion"),
+    "wall_boundary_rate": (lambda r: r.get("blocked_wall", 0)+r.get("blocked_boundary", 0),
+                           lambda r: r["attempted"], "proportion"),
     "coordination_conflict_rate": (lambda r: sum(r.get(k, 0) for k in ("blocked_conflict", "blocked_occupied", "blocked_cycle")),
                                    lambda r: r["attempted"], "proportion"),
     "repeated_ineffective_rate": (lambda r: r.get("repeated_ineffective_moves", 0), lambda r: r["attempted"], "proportion"),

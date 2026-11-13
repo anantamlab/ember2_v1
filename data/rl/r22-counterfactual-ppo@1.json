@@ -35,7 +35,7 @@
   "evaluation_reserve_seconds": 1800,
   "max_attempts": 3,
   "memory_policy": "One untruncated public state per GPU forward; stage4 grows to24-32people, with exact-parent largest-state differentiable memory preflight before training",
-  "evaluation": "Fixed 32 selection and 32 reporting families. Equal matched update rounds for PPO-only and PPO+CF, same frozen parent and initial optimizer. Compare original V1, Phase2, both continuations and default frozen T0–T4; record any timed-out teacher episodes as incomplete, never as successes.",
+  "evaluation": "Fixed 32 selection and 32 reporting families. Equal matched update rounds for PPO-only and PPO+CF, same frozen parent and initial optimizer. Compare original V1, V1 with external mask and coordination (reporting only), Phase2, both continuations and default frozen T0–T4; record timed-out teacher episodes as incomplete.",
   "excluded_inputs": [
     "p1-18-expand@1",
     "p1-18-dataset-v2",
@@ -61,6 +61,12 @@
   "curriculum_min_episodes": 16,
   "curriculum_force_after": 32,
   "parent": "Completed and independently verified DEV-selected r21-online-ppo@1 checkpoint, exact identity bound before any Phase3 training",
+  "expected_phase2": {
+    "selected_update": 96,
+    "actor_digest": "sha256:901e22e8be0af3f4ff7002b9041d16e4a0dacd8c602a79b66121429507275120",
+    "phase2_manifest_sha256": "04c3b6f35f54f968da142221947882fbe9722974c79e987f9c4dfd8de322d452"
+  },
+  "visit_priority": "One candidate visit per episode, top four by (3*repeated ineffective + 2*wall or boundary + 2*coordination conflict + bottleneck + delayed adjacent escape)/active people; seeded deterministic tie break. Uses public state and current/prior sampled intents only.",
   "policy": "PPO remains primary, unmasked complete joint actions; separately labeled offline measured-outcome pair loss only in CF arm. Fixed frozen T1 continuation, original and seven matched future-fire forks for stochastic TRAIN states.",
   "curriculum_control": "PPO-only TRAIN metrics choose one shared curriculum for both arms",
   "checkpoint_retention": "Two latest complete paired resume states plus every DEV candidate; immutable selected actors and raw evidence retained",

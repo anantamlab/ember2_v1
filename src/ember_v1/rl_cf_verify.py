@@ -8,7 +8,7 @@ import multiprocessing
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
-from .rl_cf_training import CounterfactualObjective, verify_parent
+from .rl_cf_training import CounterfactualObjective, prioritize_visits, verify_parent
 from .rl_cf_evidence import lineage_roots, reconcile_history, reporting_statistics, read_rows as evidence_rows
 from .rl_counterfactual import fixed_t1, verify_study
 from .rl_online import verify_snapshot
@@ -34,6 +34,9 @@ def verify(root):
         raise ValueError("experiment incomplete or final evaluation boundary violated")
     if verify_parent(Path(execution["phase2_root"])) != execution["parent_binding"]:
         raise ValueError("Phase 2 parent identity changed")
+    cfg = execution["config"]
+    if any(execution["parent_binding"][k] != v for k, v in cfg["expected_phase2"].items()):
+        raise ValueError("Phase 2 binding does not match the frozen parent")
     online = {"baselines": verify_online(root)}
     for arm in ("ppo", "cf"):
         online[arm] = verify_online(root/arm)
@@ -69,7 +72,10 @@ def verify(root):
     from .provenance import code_fingerprint
     expected_continuation = {"identity": T1CongestionAware().identity.to_dict(),
                              "code_fingerprint": code_fingerprint(T1CongestionAware)}
-    visits_cache, totals, teacher = {}, {"studies": 0, "branches": 0, "transitions": 0, "eligible_pairs": 0}, {}
+    from collections import Counter, defaultdict
+    visits_cache, visit_batches, expected_priorities, observed_priorities = {}, {}, {}, defaultdict(dict)
+    priority_totals = Counter()
+    totals, teacher = {"studies": 0, "branches": 0, "transitions": 0, "eligible_pairs": 0}, {}
     actual_pairs = {}
     with ProcessPoolExecutor(max_workers=execution["config"]["cpu_workers"],
                              mp_context=multiprocessing.get_context("spawn")) as pool:
@@ -83,14 +89,29 @@ def verify(root):
             raise ValueError("counterfactual continuation identity is not the frozen T1")
         factual_root = path.parent.parent
         if factual_root not in visits_cache:
-            visits_cache[factual_root] = {(r["label"], r["scenario_id"], r["observation"]["step"]): r
-                                          for r in rows(factual_root/"cf"/"transitions.jsonl")}
+            visits_cache[factual_root], visit_batches[factual_root] = {}, defaultdict(list)
+            for r in evidence_rows(factual_root/"cf"/"transitions.jsonl",
+                                   allow_trailing_partial=(factual_root/"failure.json").exists()):
+                if r["label"].startswith("train-"):
+                    visits_cache[factual_root][r["label"], r["scenario_id"], r["observation"]["step"]] = r
+                    visit_batches[factual_root][r["label"]].append(r)
         source = study["source"]
         key = source["on_policy_label"], source["scenario_id"], source["step"]
         if (key[0], key[1]) not in origins.get((factual_root.resolve(), "cf"), set()):
             raise ValueError("counterfactual source is outside the committed model training history")
         if visits_cache[factual_root].get(key) != study["factual_visit"]:
             raise ValueError("CF state is not found in the real on-policy rollout")
+        batch = factual_root, key[0]
+        if batch not in expected_priorities:
+            expected_priorities[batch] = {(r["scenario_id"], r["observation"]["step"]): signals for r, signals in
+                prioritize_visits(visit_batches[factual_root][key[0]], count=cfg["cf_states_per_update"],
+                                  seed=cfg["seed"], update=entry["update"]-1)}
+        signals = source["public_priority_signals"]
+        if (source["update"] != entry["update"] or key[0] != f"train-{entry['update']-1}"
+                or expected_priorities[batch].get(key[1:]) != signals or key[1:] in observed_priorities[batch]):
+            raise ValueError("CF study does not match the frozen public visit priority")
+        observed_priorities[batch][key[1:]] = signals
+        priority_totals.update(k for k, count in signals.items() if count)
         proof = branch_proof
         if not proof["visited_source_verified"] or not proof["continuation_recomputed"]:
             raise ValueError("incomplete causal source/continuation proof")
@@ -105,10 +126,17 @@ def verify(root):
             mean = study["estimates"][name]["paired"]["utility"]["mean"]
             for candidate in origin:
                 label = candidate["name"]
-                s = teacher.setdefault(label, {"states": 0, "helped": 0, "harmed": 0, "tied": 0, "utility_sum": 0.})
+                s = teacher.setdefault(label, {"states": 0, "helped": 0, "harmed": 0, "tied": 0,
+                                                "eligible": 0, "inconclusive_nonzero": 0, "utility_sum": 0.})
                 s["states"] += 1
                 s["helped" if mean > 1e-12 else "harmed" if mean < -1e-12 else "tied"] += 1
+                estimate = study["estimates"][name]
+                s["eligible"] += estimate["training_eligible"]
+                interval = estimate["paired"]["utility"]
+                s["inconclusive_nonzero"] += (abs(mean) > 1e-12 and interval["lower_95"] <= 0 <= interval["upper_95"])
                 s["utility_sum"] += mean
+    if dict(observed_priorities) != expected_priorities or len(expected_priorities) != len(history["cf"]["updates"]):
+        raise ValueError("incomplete frozen public visit sample")
     for update in history["cf"]["updates"]:
         expected_pairs = sum(entry["study_hash"] in actual_pairs for entry in update["counterfactual_studies"])
         if expected_pairs != update["counterfactual_pairs"]:
@@ -137,6 +165,18 @@ def verify(root):
             raise ValueError("selected CF checkpoint contains no verified counterfactual learning")
     scenarios = json.loads((root/"scenarios.json").read_text())
     by_id = {s["scenario_id"]: Scenario.from_dict(s) for s in scenarios["report"]}
+    for folder, expected in ((root, {"v1": None, "v1-mask": "mask", "v1-coordinate": "coordinate", "phase2": None}),
+                             (root/"ppo", {"ppo": None}), (root/"cf", {"cf": None})):
+        panels = defaultdict(list)
+        for r in evidence_rows(folder/"episodes.jsonl"):
+            if r["label"] in expected:
+                panels[r["label"]].append(r)
+        for arm, panel in ((a, panels[a]) for a in expected):
+            if sorted(r["scenario_id"] for r in panel) != sorted(by_id) or summarize(panel) != summary["comparisons"][arm]:
+                raise ValueError(f"missing or inconsistent reporting panel for {arm}")
+        for r in evidence_rows(folder/"transitions.jsonl"):
+            if r["label"] in expected and r["postprocess"] != expected[r["label"]]:
+                raise ValueError(f"unexpected reporting postprocessing for {r['label']}")
     teacher_steps, teacher_failures = 0, 0
     for episode in rows(root/"teacher_episodes.jsonl"):
         sim = Simulator(by_id[episode["scenario_id"]])
@@ -156,7 +196,7 @@ def verify(root):
     result = {"status": "PASS", "online": online, "resume_ancestry_audits": ancestry_audits,
               "all_collected_train_environment_steps": all_collected,
               "committed_train_environment_steps": {a: summary["training"][a]["steps"] for a in ("ppo", "cf")},
-              "paired_reporting": paired, "counterfactual": totals,
+              "paired_reporting": paired, "counterfactual": totals, "public_priority_study_counts": dict(priority_totals),
               "teacher_alternative_effects": teacher, "teacher_transitions_replayed": teacher_steps,
               "teacher_failures_preserved": teacher_failures, "final_evaluation_run": False}
     write(root/"independent_counterfactual_audit.json", result)

@@ -50,14 +50,16 @@ def test_resume_history_reconciles_prior_raw_evidence_and_rejects_tampering(tmp_
 def test_paired_uncertainty_includes_outcomes_behavior_and_latency():
     a = [{"scenario_id": f"s{i}", "people": 10, "evacuated": 4, "casualties": 3, "unresolved": 3,
           "stay": 20, "person_steps": 100, "blocked": 30, "attempted": 80, "steps": 10,
-          "blocked_conflict": 5, "blocked_occupied": 5, "repeated_ineffective_moves": 8, "inference_seconds": .5}
+          "blocked_conflict": 5, "blocked_occupied": 5, "blocked_wall": 10,
+          "repeated_ineffective_moves": 8, "inference_seconds": .5}
          for i in range(4)]
     b = [{**r, "evacuated": 6, "casualties": 2, "unresolved": 2, "stay": 10, "blocked": 10,
-          "blocked_conflict": 2, "blocked_occupied": 3, "repeated_ineffective_moves": 2, "inference_seconds": .4}
+          "blocked_conflict": 2, "blocked_occupied": 3, "blocked_wall": 2,
+          "repeated_ineffective_moves": 2, "inference_seconds": .4}
          for r in a]
     result = paired_statistics(a, b, repeats=200)
     assert result["evacuated"]["lower_95"] > 0
-    for key in ("casualties", "unresolved", "stay_rate", "blocked_rate", "coordination_conflict_rate",
+    for key in ("casualties", "unresolved", "stay_rate", "blocked_rate", "wall_boundary_rate", "coordination_conflict_rate",
                 "repeated_ineffective_rate", "mean_joint_latency_ms"):
         assert result[key]["upper_95"] < 0
     with pytest.raises(ValueError, match="matched"):

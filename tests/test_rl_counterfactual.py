@@ -131,3 +131,43 @@ def test_full_teacher_candidate_job_on_hand_built_fire_chain(tmp_path):
     with ProcessPoolExecutor(max_workers=2, mp_context=multiprocessing.get_context("spawn")) as pool:
         proofs = list(pool.map(verify_study_path, [str(path), str(path)]))
     assert all(h == study["study_hash"] and p["status"] == "PASS" for h, p in proofs)
+
+
+def test_public_priority_favors_repeated_wall_and_boundary_attempts_without_reading_outcomes():
+    from ember_v1.rl_cf_training import prioritize_visits
+
+    def visit(sid, step, first, second):
+        return {"scenario_id": sid, "observation": {
+            "step": step, "map": {"height": 3, "width": 4, "obstacles": [[1, 1]],
+                                 "exits": [{"position": [1, 3]}]},
+            "burning": [], "people": [{"id": "a", "status": "active", "position": [1, 0]},
+                                      {"id": "b", "status": "active", "position": [0, 2]}]},
+            "sampled_actions": {"a": first, "b": second}}
+
+    quiet = visit("quiet", 0, "south", "east")
+    first = visit("bad", 0, "east", "north")
+    repeated = visit("bad", 1, "east", "north")
+    rows = [quiet, first, repeated]
+    result = prioritize_visits(rows, count=2, seed=17, update=0)
+    assert [(r["scenario_id"], r["observation"]["step"]) for r, _ in result] == [("bad", 1), ("quiet", 0)]
+    assert result[0][1]["wall_or_boundary"] == 2
+    assert result[0][1]["repeated_ineffective"] == 2
+    poisoned = [{**r, "record": {"movements": {}}, "reward": 1000-i, "done": True} for i, r in enumerate(rows)]
+    assert [(r["scenario_id"], r["observation"]["step"], signals) for r, signals in
+            prioritize_visits(poisoned[::-1], count=2, seed=17, update=0)] == [
+                (r["scenario_id"], r["observation"]["step"], signals) for r, signals in result]
+
+
+def test_public_priority_detects_coordination_bottleneck_and_delayed_exit():
+    from ember_v1.rl_cf_training import prioritize_visits
+
+    obs = {"step": 0, "map": {"height": 3, "width": 5, "obstacles": [[0, 2], [2, 2]],
+                             "exits": [{"position": [1, 4]}]},
+           "burning": [], "people": [{"id": "a", "status": "active", "position": [1, 1]},
+                                     {"id": "b", "status": "active", "position": [1, 3]}]}
+    row = {"scenario_id": "door", "observation": obs, "sampled_actions": {"a": "east", "b": "west"}}
+    _, signals = prioritize_visits([row], count=1, seed=17, update=0)[0]
+    assert signals["coordination_conflict"] == signals["bottleneck"] == 1
+    near = {**obs, "people": [{"id": "a", "status": "active", "position": [1, 3]}]}
+    row = {"scenario_id": "exit", "observation": near, "sampled_actions": {"a": "stay"}}
+    assert prioritize_visits([row], count=1, seed=17, update=0)[0][1]["delayed_escape"] == 1
