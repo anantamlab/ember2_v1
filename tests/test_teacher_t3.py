@@ -483,7 +483,13 @@ def test_zero_ant_budget_falls_back_to_labeled_bfs_descent():
     assert d.deterministic_dict() == T3DynamicACO({"max_ant_steps": 0}).decide(obs).deterministic_dict()
 
 
-def test_cpu_budget_stops_the_colony_and_labels_fallbacks():
+def test_cpu_budget_stops_the_colony_and_labels_fallbacks(monkeypatch):
+    # Windows thread CPU time can stay at zero across several fast ants. Test the
+    # budget-check behavior with an advancing clock, not the host timer's quantum.
+    # Keep the exact one-iteration, fallback-label and movement assertions below.
+    from itertools import count
+    ticks = count(0, 1_000_000)
+    monkeypatch.setattr("ember_v1.teacher.t3.time.thread_time_ns", lambda: next(ticks))
     d = T3DynamicACO({"cpu_budget_ms": 0.0}).decide(obs_of(room(32, 100, 4, "stochastic")))
     dg = d.diagnostics
     assert dg["status"] == "budget_limited" and dg["budget"]["limit_hit"] == "cpu_budget_ms"

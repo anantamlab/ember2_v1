@@ -71,3 +71,10 @@ and corrected fingerprints, requires the live plan hash to differ, and compares 
 other plan field after substituting only those three explicit revisions. This preserves
 historical provenance and detects future unexpected drift rather than authorizing reuse
 of an old plan with changed code. The failed full-suite logs remain available.
+
+A further native suite run exposed a Windows-clock-dependent fixture: zero-budget T3
+expected exactly one ant iteration, but the thread CPU clock had not advanced until
+iteration three. Its test now supplies a deterministic advancing clock and retains every
+original iteration/fallback/movement assertion. The frozen teacher implementation and
+fingerprints are unchanged. Focused regression/provenance checks pass; all failed full
+runs are preserved, and a complete clean-tree run is still required before push.
