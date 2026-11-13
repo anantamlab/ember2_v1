@@ -19,7 +19,7 @@ from pathlib import Path
 
 from .rl_cf_scenarios import scenarios
 from .rl_cf_training import (CounterfactualObjective, activate, advance_shared_curriculum, capture, cpu_copy,
-                             jobs_from_visits, verify_parent)
+                             jobs_from_visits, trained_checkpoint_candidates, verify_parent)
 from .rl_counterfactual import curriculum_stage, evaluate_job
 from .rl_env import outcomes
 from .rl_online import hash_path, identity, verify_snapshot
@@ -364,7 +364,14 @@ def run(args):
                     path = out/arm/"checkpoints"/f"update-{completed_rounds:04d}"
                     state["selections"].append({"update": completed_rounds, "selection": summarize(ep), "checkpoint": str(path)})
                     save_arm(actor, state, path, config_hash, Path(binding["checkpoint"]), completed_rounds, sha)
-                best = select_checkpoint(state["selections"], baseline_selection)
+                eligible_selections = trained_checkpoint_candidates(state["selections"], state["updates"],
+                                                                     require_counterfactual=arm == "cf")
+                if arm == "cf":
+                    # An early pure-PPO iterate cannot stand in for the requested
+                    # counterfactual-trained checkpoint, even if its DEV score wins.
+                    if not eligible_selections:
+                        raise ValueError("no DEV candidate contains an actual counterfactual update")
+                best = select_checkpoint(eligible_selections, baseline_selection)
                 best_path = Path(best["checkpoint"])
                 ident = verify_snapshot(best_path, config_hash)
                 selected_state = torch.load(best_path/"trainer.pt", map_location="cpu", weights_only=False)
@@ -393,7 +400,9 @@ def run(args):
                 if min(delta["group_l2"].values()) <= 0:
                     raise ValueError("continued arm did not update real V1 LoRA and head")
                 best_by_arm[arm] = {**best, "actor": str(best_path/"actor"), "identity": ident,
-                                    "parameter_delta_from_phase2": delta, "fresh_reload_max_logit_error": reload_error}
+                                    "parameter_delta_from_phase2": delta, "fresh_reload_max_logit_error": reload_error,
+                                    "auxiliary_optimizer_steps_in_checkpoint": sum(
+                                        u["auxiliary_optimizer_steps"] for u in selected_state["updates"])}
             aux_steps = sum(u["auxiliary_optimizer_steps"] for u in states["cf"]["updates"])
             if aux_steps <= 0:
                 raise ValueError("no actual counterfactual gradient update occurred")

@@ -73,6 +73,14 @@ def test_unfinished_phase2_cannot_be_used_as_counterfactual_parent(tmp_path):
         verify_parent(tmp_path)
 
 
+def test_counterfactual_checkpoint_must_contain_an_actual_auxiliary_update():
+    from ember_v1.rl_cf_training import trained_checkpoint_candidates
+    selections = [{"update": 8}, {"update": 16}]
+    updates = [{"update": 8, "auxiliary_optimizer_steps": 0}, {"update": 16, "auxiliary_optimizer_steps": 2}]
+    assert trained_checkpoint_candidates(selections, updates, require_counterfactual=True) == [{"update": 16}]
+    assert trained_checkpoint_candidates(selections, updates) == selections
+
+
 def test_both_arms_use_identical_train_controlled_curriculum():
     from ember_v1.rl_cf_training import advance_shared_curriculum
     bad = [{"people": 10, "evacuated": 1, "casualties": 5}]*16

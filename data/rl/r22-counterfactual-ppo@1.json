@@ -65,5 +65,6 @@
   "curriculum_control": "PPO-only TRAIN metrics choose one shared curriculum for both arms",
   "checkpoint_retention": "Two latest complete paired resume states plus every DEV candidate; immutable selected actors and raw evidence retained",
   "counterfactual_pair_rule": "Positive empirical paired utility lower interval and no casualty increase in any measured fire replicate; behavior-relative joint margin; explicitly offline",
-  "max_active_people": 32
+  "max_active_people": 32,
+  "audit_wall_cap_seconds": 3600
 }

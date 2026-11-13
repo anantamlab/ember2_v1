@@ -132,6 +132,9 @@ def verify(root):
         verify_snapshot(Path(item["checkpoint"]), execution["config_sha256"])
         if item["fresh_reload_max_logit_error"] > 1e-5:
             raise ValueError("saved arm failed exact upstream reload")
+        expected_aux = sum(u["auxiliary_optimizer_steps"] for u in history[arm]["updates"] if u["update"] <= item["update"])
+        if item["auxiliary_optimizer_steps_in_checkpoint"] != expected_aux or (arm == "cf" and expected_aux <= 0):
+            raise ValueError("selected CF checkpoint contains no verified counterfactual learning")
     scenarios = json.loads((root/"scenarios.json").read_text())
     by_id = {s["scenario_id"]: Scenario.from_dict(s) for s in scenarios["report"]}
     teacher_steps, teacher_failures = 0, 0

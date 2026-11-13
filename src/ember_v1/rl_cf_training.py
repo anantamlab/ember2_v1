@@ -24,6 +24,13 @@ def advance_shared_curriculum(states):
             state["episodes_in_stage"] = 0
 
 
+def trained_checkpoint_candidates(selections, updates, *, require_counterfactual=False):
+    if not require_counterfactual:
+        return list(selections)
+    return [s for s in selections if any(u["auxiliary_optimizer_steps"] > 0 and u["update"] <= s["update"]
+                                        for u in updates)]
+
+
 def jobs_from_visits(rows, by_id, cfg, update, policy_digest):
     """Select deterministic visited-state indices, independent of their outcomes."""
     groups = {}
@@ -142,7 +149,8 @@ def activate(state, actor, critic, optimizer):
 
 def verify_parent(root):
     from .rl_online import hash_path
-    required = {"summary.json": "COMPLETE", "independent_replay.json": "PASS", "optimizer_resume_audit.json": "PASS"}
+    required = {"summary.json": "COMPLETE", "independent_replay.json": "PASS", "optimizer_resume_audit.json": "PASS",
+                "FINAL_AUDIT_EXIT_CODES.json": "PASS"}
     for name, expected in required.items():
         if not (root/name).exists() or json.loads((root/name).read_text()).get("status") != expected:
             raise ValueError(f"Phase 2 is not complete and verified: {name}")

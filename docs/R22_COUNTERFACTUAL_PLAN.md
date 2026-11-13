@@ -16,6 +16,8 @@ Use at most four additional hours of Phase 3 experiment process wall time, inclu
 collection, counterfactual CPU work, GPU updates and comparisons; reserve 1,800 seconds
 for final verification/evaluation. Maximum 256 newly collected on-policy episodes per
 continuation arm, 32 updates of eight, three guarded attempts across the experiment.
+Independent post-run CPU/GPU audits and artifact verification have a separate one-hour
+cap; report both components, with a five-hour total Phase 3 process envelope.
 Train two arms sequentially from the identical verified Phase 2 actor/critic/Adam state:
 PPO-only and PPO+counterfactual. Give both the same prespecified episode/update budget;
 if time requires an earlier stop, compare matched completed update counts. Report actual
@@ -133,3 +135,11 @@ under spawn. A full-suite run also exposed an existing mock-training throughput 
 finished inside one Windows clock tick; it now uses the already-supported injected clock,
 retaining every accuracy, loss, token and throughput assertion. Production SFT code and
 all trained V1 weights remain unchanged; no actual SFT run was performed.
+
+Checkpoint eligibility refinement before data: a selected CF checkpoint must already
+contain an applied, verified counterfactual gradient update. An early pure-PPO iterate
+cannot be reported as counterfactual-trained. The reporter/independent verifier check
+that cumulative count explicitly. The Phase 2 dependency also requires final audit
+process exit codes to pass, bound into its artifact manifest, not merely intermediate
+PASS files. A native suite on 0724899 had all 1,617 tests pass but correctly returned
+SOURCE_CHANGED while these final checks were added; it is not a valid push receipt.
