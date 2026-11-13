@@ -267,6 +267,10 @@ class MockDecisionAdapter:
             out[pid] = ACTION_ORDER[out[pid]]
         return out
 
+    def scores(self, row):
+        """Per person: one score per action (the shape of `ClefLoraAdapter.scores`)."""
+        return {pid: dict(zip(ACTION_ORDER, self._logits(self._key(row, pid)))) for pid in row["questions"]}
+
     def save(self, path):
         path.mkdir(parents=True, exist_ok=False)
         (path / "weights.json").write_text(json.dumps({"seed": self.seed, "w": self.w}, sort_keys=True),

@@ -123,4 +123,8 @@ These files describe earlier phases. Do not read them as the current state.
 
 For RL work, read **[RL_RESULTS_HANDOFF.md](RL_RESULTS_HANDOFF.md)**: the RL system as built and every R19–R22 metric.
 
+A human point-of-view track (per-person partial views, an automatic belief teacher, DAgger and per-person PPO)
+is implemented and CPU-tested but **not trained**: see **[HUMAN_POV_RUNBOOK.md](HUMAN_POV_RUNBOOK.md)**.
+Its GPU path is unverified until `experiments/human_gpu_checks.py` passes on the workstation.
+
 Diagnose the raw policy's movement failures before more PPO of the same kind. Target the wall/boundary blocks and repeated ineffective moves (R21/R22 diagnostics). Test whether a representation or objective change fixes them on selection DEV, under a new frozen plan. Before that, upload the R20–R22 selected checkpoints to private HF so they no longer depend on one workstation.
