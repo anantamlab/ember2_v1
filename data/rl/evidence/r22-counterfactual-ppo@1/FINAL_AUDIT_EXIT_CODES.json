@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "exit_codes": {
+    "r22-train.exit": 0,
+    "r22-cpu-audit.exit": 0,
+    "r22-gpu-audit.exit": 0
+  }
+}

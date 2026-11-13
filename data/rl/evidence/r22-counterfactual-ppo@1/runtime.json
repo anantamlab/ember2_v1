@@ -1,0 +1,61 @@
+{
+  "cuda": "12.8",
+  "gpu": "NVIDIA GeForce RTX 5090",
+  "python": "3.11.13",
+  "student_config": {
+    "checkpoint_every": 250,
+    "chunk_k": 100,
+    "clef_sha256": "0e304cf7c6500e8bb59bef7e2afd2c6373f82596dfb3b57d1aa93c175e2dc3a3",
+    "encoder_config_sha256": "5ed1d7d417ed4f32134c7f18ac9b11c5ce36435c8a47394fdd27cc4ed3596355",
+    "encoding": "ascii",
+    "epoch_seed": "p1-18-student-v1@1/epoch-1",
+    "epochs": 1,
+    "gpu": "A10",
+    "grad_accum_draws": 8,
+    "gradient_checkpointing": true,
+    "head_init_sha256": "0f31b5311331e30daef25d4d6c61dccc636fa17c2b0e134c338b39a997467630",
+    "head_lr": 0.0001,
+    "hourly_usd": 1.5452000000000001,
+    "lora": {
+      "bias": "none",
+      "lora_alpha": 16,
+      "lora_dropout": 0.0,
+      "r": 16,
+      "target_modules": "all-linear"
+    },
+    "lr": 0.0002,
+    "max_len": 16384,
+    "micro_batch_rows": 1,
+    "model": "unsloth/Qwen3.5-2B",
+    "model_commit": "fffbc0d8711cf87df6d1f97938c5e50ef94aadc7",
+    "phases": {
+      "eval": {
+        "usd_cap": 4.0,
+        "wall_cap_s": 7200
+      },
+      "pilot": {
+        "usd_cap": 2.0,
+        "wall_cap_s": 3600
+      },
+      "train": {
+        "usd_cap": 25.0,
+        "wall_cap_s": 57600
+      }
+    },
+    "precision": "bf16",
+    "protocol_hash": "sha256:cfabab002ffba8da4202c1a2649cd269fa826f0f77b844f8435a1a43fe288b26",
+    "protocol_id": "p1-14-student-train",
+    "question_style": "compact",
+    "requirements_lock_sha256": "9613f929b53c0fed65105b1f808f64e8f842dab29e837b3dca3e503cbd60bc2c",
+    "reservations": false,
+    "schedule": "cosine",
+    "seed": 20261121,
+    "tokenizer_json_sha256": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+    "tokenizer_state_sha256": "a57b5c62cd5f242a06c632b82cc0b4f8239d08cc80fd9347fc1f629be977c6ca",
+    "unsloth_wheel_sha256": "baff520eacd8da49a8d211a49fb62e407cddd80a72570fd2ffe596a68150992e",
+    "unsloth_zoo_wheel_sha256": "8e638f8e41ab153430a478f744bb10cdc5aff2c9bde381dd557ee2331df658c7",
+    "warmup_ratio": 0.03,
+    "weight_decay": 0.0
+  },
+  "torch": "2.8.0+cu128"
+}

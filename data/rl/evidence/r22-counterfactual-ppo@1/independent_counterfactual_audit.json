@@ -1,0 +1,687 @@
+{
+  "all_collected_train_environment_steps": {
+    "cf": 9992,
+    "ppo": 9980
+  },
+  "committed_train_environment_steps": {
+    "cf": 9668,
+    "ppo": 9675
+  },
+  "counterfactual": {
+    "branches": 4038,
+    "eligible_pairs": 26,
+    "studies": 108,
+    "transitions": 43201
+  },
+  "final_evaluation_run": false,
+  "online": {
+    "baselines": {
+      "episodes_replayed": 192,
+      "errors": [],
+      "max_distribution_normalization_error": 1.8274982827026776e-07,
+      "max_joint_sum_error": 0.0,
+      "max_ppo_target_error": 0.0,
+      "status": "PASS",
+      "training_advantages_recomputed": 0,
+      "transitions_replayed": 7921
+    },
+    "cf": {
+      "episodes_replayed": 344,
+      "errors": [],
+      "max_distribution_normalization_error": 1.8631173959171576e-07,
+      "max_joint_sum_error": 0.0,
+      "max_ppo_target_error": 0.0,
+      "status": "PASS",
+      "training_advantages_recomputed": 8539,
+      "transitions_replayed": 15330
+    },
+    "ppo": {
+      "episodes_replayed": 344,
+      "errors": [],
+      "max_distribution_normalization_error": 1.9444425503056806e-07,
+      "max_joint_sum_error": 0.0,
+      "max_ppo_target_error": 0.0,
+      "status": "PASS",
+      "training_advantages_recomputed": 8507,
+      "transitions_replayed": 15277
+    }
+  },
+  "paired_reporting": {
+    "by_family": {
+      "competing-exits": {
+        "blocked_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.030416648093785636,
+          "families": 6,
+          "lower_95": -0.10166855581943623,
+          "unit": "proportion",
+          "upper_95": 0.038809845746835436
+        },
+        "casualties": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.03278688524590165,
+          "families": 6,
+          "lower_95": -0.05737704918032788,
+          "unit": "proportion",
+          "upper_95": -0.008547008547008551
+        },
+        "coordination_conflict_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.01834263521105639,
+          "families": 6,
+          "lower_95": -0.0931250488166836,
+          "unit": "proportion",
+          "upper_95": 0.09820658361582024
+        },
+        "evacuated": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.0,
+          "families": 6,
+          "lower_95": -0.04464285714285715,
+          "unit": "proportion",
+          "upper_95": 0.046511627906976716
+        },
+        "mean_joint_latency_ms": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.12836767034146845,
+          "families": 6,
+          "lower_95": -2.253588487090177,
+          "unit": "milliseconds",
+          "upper_95": 1.6411531674650561
+        },
+        "repeated_ineffective_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.03856760538349191,
+          "families": 6,
+          "lower_95": -0.1196577309094855,
+          "unit": "proportion",
+          "upper_95": 0.04570882851405045
+        },
+        "restricted_episode_steps": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.6666666666666643,
+          "families": 6,
+          "lower_95": -2.0,
+          "unit": "steps",
+          "upper_95": 0.0
+        },
+        "stay_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.004133549335671709,
+          "families": 6,
+          "lower_95": -0.005413181254873998,
+          "unit": "proportion",
+          "upper_95": 0.011905717634591612
+        },
+        "unresolved": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.03278688524590162,
+          "families": 6,
+          "lower_95": -0.01538461538461533,
+          "unit": "proportion",
+          "upper_95": 0.08396946564885499
+        },
+        "wall_boundary_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.04838693804492106,
+          "families": 6,
+          "lower_95": -0.10337373234441255,
+          "unit": "proportion",
+          "upper_95": 0.026119341855931344
+        }
+      },
+      "congestion": {
+        "blocked_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.01141602768707728,
+          "families": 7,
+          "lower_95": -0.026169361912365408,
+          "unit": "proportion",
+          "upper_95": 0.008802160235998335
+        },
+        "casualties": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.041666666666666685,
+          "families": 7,
+          "lower_95": -0.09459459459459463,
+          "unit": "proportion",
+          "upper_95": 0.0
+        },
+        "coordination_conflict_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.03773954091303766,
+          "families": 7,
+          "lower_95": -0.11526877096413524,
+          "unit": "proportion",
+          "upper_95": 0.031776128628094424
+        },
+        "evacuated": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.02777777777777779,
+          "families": 7,
+          "lower_95": 0.0,
+          "unit": "proportion",
+          "upper_95": 0.08108108108108103
+        },
+        "mean_joint_latency_ms": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.6102856754717791,
+          "families": 7,
+          "lower_95": -2.8945831749792603,
+          "unit": "milliseconds",
+          "upper_95": 2.194727873817712
+        },
+        "repeated_ineffective_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.010456029643761244,
+          "families": 7,
+          "lower_95": -0.03452481076534908,
+          "unit": "proportion",
+          "upper_95": 0.013559322033898313
+        },
+        "restricted_episode_steps": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.4285714285714306,
+          "families": 7,
+          "lower_95": 0.0,
+          "unit": "steps",
+          "upper_95": 1.2857142857142883
+        },
+        "stay_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.025433493377950783,
+          "families": 7,
+          "lower_95": -0.011794364515281389,
+          "unit": "proportion",
+          "upper_95": 0.09042868033164791
+        },
+        "unresolved": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.013888888888888867,
+          "families": 7,
+          "lower_95": 0.0,
+          "unit": "proportion",
+          "upper_95": 0.04545454545454544
+        },
+        "wall_boundary_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.022673074806471794,
+          "families": 7,
+          "lower_95": -0.041543231959258686,
+          "unit": "proportion",
+          "upper_95": 0.08804307078043205
+        }
+      },
+      "dynamic-fire": {
+        "blocked_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.0012391087388002875,
+          "families": 6,
+          "lower_95": -0.08551668762403986,
+          "unit": "proportion",
+          "upper_95": 0.06446410628462129
+        },
+        "casualties": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.02985074626865669,
+          "families": 6,
+          "lower_95": -0.10606060606060602,
+          "unit": "proportion",
+          "upper_95": 0.06153846153846154
+        },
+        "coordination_conflict_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.06588021575069808,
+          "families": 6,
+          "lower_95": -0.11719097788989463,
+          "unit": "proportion",
+          "upper_95": -0.005904967528301108
+        },
+        "evacuated": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.0,
+          "families": 6,
+          "lower_95": -0.12307692307692308,
+          "unit": "proportion",
+          "upper_95": 0.09090909090909088
+        },
+        "mean_joint_latency_ms": {
+          "bootstrap_replicates": 2000,
+          "difference": 2.6911607884351767,
+          "families": 6,
+          "lower_95": 1.0328272821516364,
+          "unit": "milliseconds",
+          "upper_95": 4.121814474176233
+        },
+        "repeated_ineffective_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.005771667582448403,
+          "families": 6,
+          "lower_95": -0.09385506750007144,
+          "unit": "proportion",
+          "upper_95": 0.06099216294204646
+        },
+        "restricted_episode_steps": {
+          "bootstrap_replicates": 2000,
+          "difference": -1.0,
+          "families": 6,
+          "lower_95": -4.166666666666664,
+          "unit": "steps",
+          "upper_95": 1.3333333333333357
+        },
+        "stay_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.020892757270693507,
+          "families": 6,
+          "lower_95": -0.01658191051997089,
+          "unit": "proportion",
+          "upper_95": 0.0940882352485038
+        },
+        "unresolved": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.029850746268656705,
+          "families": 6,
+          "lower_95": -0.0704225352112676,
+          "unit": "proportion",
+          "upper_95": 0.14285714285714288
+        },
+        "wall_boundary_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.06282113100911668,
+          "families": 6,
+          "lower_95": 0.003808343426945693,
+          "unit": "proportion",
+          "upper_95": 0.1045887565389022
+        }
+      },
+      "large-unseen": {
+        "blocked_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.005192732162956237,
+          "families": 6,
+          "lower_95": -0.014232045783756808,
+          "unit": "proportion",
+          "upper_95": 0.04586662695202315
+        },
+        "casualties": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.005681818181818177,
+          "families": 6,
+          "lower_95": -0.017441860465116282,
+          "unit": "proportion",
+          "upper_95": 0.0
+        },
+        "coordination_conflict_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.01086511428473974,
+          "families": 6,
+          "lower_95": -0.059867321357680525,
+          "unit": "proportion",
+          "upper_95": 0.04268858913186413
+        },
+        "evacuated": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.005681818181818177,
+          "families": 6,
+          "lower_95": -0.02777777777777779,
+          "unit": "proportion",
+          "upper_95": 0.03977272727272729
+        },
+        "mean_joint_latency_ms": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.5063386252509758,
+          "families": 6,
+          "lower_95": -2.815751263875029,
+          "unit": "milliseconds",
+          "upper_95": 1.6746622805436004
+        },
+        "repeated_ineffective_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.0012118908752490887,
+          "families": 6,
+          "lower_95": -0.02002213666116015,
+          "unit": "proportion",
+          "upper_95": 0.0419256412217236
+        },
+        "restricted_episode_steps": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.0,
+          "families": 6,
+          "lower_95": 0.0,
+          "unit": "steps",
+          "upper_95": 0.0
+        },
+        "stay_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.009206325161430724,
+          "families": 6,
+          "lower_95": -0.022130342562040377,
+          "unit": "proportion",
+          "upper_95": 0.0018869335187638274
+        },
+        "unresolved": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.0,
+          "families": 6,
+          "lower_95": -0.034883720930232565,
+          "unit": "proportion",
+          "upper_95": 0.03260869565217389
+        },
+        "wall_boundary_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.014838159555237262,
+          "families": 6,
+          "lower_95": -0.015237086545799028,
+          "unit": "proportion",
+          "upper_95": 0.048313489783405106
+        }
+      },
+      "navigation": {
+        "blocked_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.0106158343346614,
+          "families": 7,
+          "lower_95": -0.08334361692443082,
+          "unit": "proportion",
+          "upper_95": 0.03056313180812642
+        },
+        "casualties": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.0,
+          "families": 7,
+          "lower_95": 0.0,
+          "unit": "proportion",
+          "upper_95": 0.0
+        },
+        "coordination_conflict_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.013565360372704838,
+          "families": 7,
+          "lower_95": -0.11705813911594973,
+          "unit": "proportion",
+          "upper_95": 0.13303621732074233
+        },
+        "evacuated": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.027777777777777735,
+          "families": 7,
+          "lower_95": -0.08333333333333331,
+          "unit": "proportion",
+          "upper_95": 0.15384615384615385
+        },
+        "mean_joint_latency_ms": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.27717648156664865,
+          "families": 7,
+          "lower_95": -4.303560712937077,
+          "unit": "milliseconds",
+          "upper_95": 3.604248500864962
+        },
+        "repeated_ineffective_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.018192550119105255,
+          "families": 7,
+          "lower_95": -0.09447146524251171,
+          "unit": "proportion",
+          "upper_95": 0.03587515235016692
+        },
+        "restricted_episode_steps": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.0,
+          "families": 7,
+          "lower_95": 0.0,
+          "unit": "steps",
+          "upper_95": 0.0
+        },
+        "stay_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.00010964886880204111,
+          "families": 7,
+          "lower_95": -0.015818711775716712,
+          "unit": "proportion",
+          "upper_95": 0.014664931503015545
+        },
+        "unresolved": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.02777777777777779,
+          "families": 7,
+          "lower_95": -0.15384615384615385,
+          "unit": "proportion",
+          "upper_95": 0.08333333333333337
+        },
+        "wall_boundary_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.030847931642669968,
+          "families": 7,
+          "lower_95": -0.15232738287461522,
+          "unit": "proportion",
+          "upper_95": 0.09096649100129262
+        }
+      }
+    },
+    "interpretation": "Paired bootstrap over independently generated topology families; conditional on one training seed per arm.",
+    "overall": {
+      "blocked_rate": {
+        "bootstrap_replicates": 5000,
+        "difference": -0.007782254168084424,
+        "families": 32,
+        "lower_95": -0.033180813733202696,
+        "unit": "proportion",
+        "upper_95": 0.017048214611516954
+      },
+      "casualties": {
+        "bootstrap_replicates": 5000,
+        "difference": -0.02114164904862581,
+        "families": 32,
+        "lower_95": -0.03960396039603964,
+        "unit": "proportion",
+        "upper_95": -0.0039215686274509665
+      },
+      "coordination_conflict_rate": {
+        "bootstrap_replicates": 5000,
+        "difference": -0.01008933512277016,
+        "families": 32,
+        "lower_95": -0.04811183995022256,
+        "unit": "proportion",
+        "upper_95": 0.025627233874022437
+      },
+      "evacuated": {
+        "bootstrap_replicates": 5000,
+        "difference": 0.008456659619450302,
+        "families": 32,
+        "lower_95": -0.018617021276595758,
+        "unit": "proportion",
+        "upper_95": 0.034764826175869123
+      },
+      "mean_joint_latency_ms": {
+        "bootstrap_replicates": 5000,
+        "difference": 0.20446712642128517,
+        "families": 32,
+        "lower_95": -1.1403962299409187,
+        "unit": "milliseconds",
+        "upper_95": 1.5061564368841829
+      },
+      "repeated_ineffective_rate": {
+        "bootstrap_replicates": 5000,
+        "difference": -0.013786734476019524,
+        "families": 32,
+        "lower_95": -0.04192651330005659,
+        "unit": "proportion",
+        "upper_95": 0.013926901585129436
+      },
+      "restricted_episode_steps": {
+        "bootstrap_replicates": 5000,
+        "difference": -0.21875,
+        "families": 32,
+        "lower_95": -0.875,
+        "unit": "steps",
+        "upper_95": 0.3125
+      },
+      "stay_rate": {
+        "bootstrap_replicates": 5000,
+        "difference": 0.0025327097050469247,
+        "families": 32,
+        "lower_95": -0.007983875267684036,
+        "unit": "proportion",
+        "upper_95": 0.01625696331310121
+      },
+      "unresolved": {
+        "bootstrap_replicates": 5000,
+        "difference": 0.012684989429175508,
+        "families": 32,
+        "lower_95": -0.012722646310432573,
+        "unit": "proportion",
+        "upper_95": 0.03984063745019917
+      },
+      "wall_boundary_rate": {
+        "bootstrap_replicates": 5000,
+        "difference": 0.0005657350436060193,
+        "families": 32,
+        "lower_95": -0.029045363370224564,
+        "unit": "proportion",
+        "upper_95": 0.031179757005323383
+      }
+    }
+  },
+  "public_priority_study_counts": {
+    "bottleneck": 14,
+    "coordination_conflict": 75,
+    "delayed_escape": 2,
+    "repeated_ineffective": 108,
+    "wall_or_boundary": 107
+  },
+  "resume_ancestry_audits": [
+    {
+      "arm": "ppo",
+      "proof": {
+        "episodes_replayed": 32,
+        "errors": [],
+        "max_distribution_normalization_error": 1.560385796128827e-07,
+        "max_joint_sum_error": 0.0,
+        "max_ppo_target_error": 0.0,
+        "status": "PASS",
+        "training_advantages_recomputed": 1168,
+        "transitions_replayed": 1168
+      },
+      "source": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1"
+    },
+    {
+      "arm": "cf",
+      "proof": {
+        "episodes_replayed": 32,
+        "errors": [],
+        "max_distribution_normalization_error": 1.4967986805558553e-07,
+        "max_joint_sum_error": 0.0,
+        "max_ppo_target_error": 0.0,
+        "status": "PASS",
+        "training_advantages_recomputed": 1129,
+        "transitions_replayed": 1129
+      },
+      "source": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1"
+    }
+  ],
+  "status": "PASS",
+  "teacher_alternative_effects": {
+    "T0": {
+      "eligible": 23,
+      "harmed": 1,
+      "helped": 24,
+      "inconclusive_nonzero": 1,
+      "states": 108,
+      "tied": 83,
+      "utility_sum": 1.6020657133727645
+    },
+    "T1": {
+      "eligible": 25,
+      "harmed": 0,
+      "helped": 27,
+      "inconclusive_nonzero": 1,
+      "states": 108,
+      "tied": 81,
+      "utility_sum": 1.8564059911505422
+    },
+    "T2": {
+      "eligible": 25,
+      "harmed": 0,
+      "helped": 27,
+      "inconclusive_nonzero": 1,
+      "states": 108,
+      "tied": 81,
+      "utility_sum": 1.8564059911505422
+    },
+    "T3": {
+      "eligible": 24,
+      "harmed": 0,
+      "helped": 26,
+      "inconclusive_nonzero": 0,
+      "states": 108,
+      "tied": 82,
+      "utility_sum": 1.8043226578172091
+    },
+    "T4": {
+      "eligible": 26,
+      "harmed": 0,
+      "helped": 28,
+      "inconclusive_nonzero": 1,
+      "states": 108,
+      "tied": 80,
+      "utility_sum": 1.9084893244838756
+    },
+    "local-0": {
+      "eligible": 5,
+      "harmed": 2,
+      "helped": 6,
+      "inconclusive_nonzero": 2,
+      "states": 108,
+      "tied": 100,
+      "utility_sum": 0.2861458333333333
+    },
+    "local-1": {
+      "eligible": 3,
+      "harmed": 2,
+      "helped": 4,
+      "inconclusive_nonzero": 1,
+      "states": 108,
+      "tied": 102,
+      "utility_sum": 0.07474630376344094
+    },
+    "local-2": {
+      "eligible": 4,
+      "harmed": 1,
+      "helped": 4,
+      "inconclusive_nonzero": 0,
+      "states": 108,
+      "tied": 103,
+      "utility_sum": 0.22415994623655924
+    },
+    "local-3": {
+      "eligible": 3,
+      "harmed": 2,
+      "helped": 3,
+      "inconclusive_nonzero": 0,
+      "states": 108,
+      "tied": 103,
+      "utility_sum": 0.027796474358974352
+    },
+    "student": {
+      "eligible": 0,
+      "harmed": 0,
+      "helped": 0,
+      "inconclusive_nonzero": 0,
+      "states": 108,
+      "tied": 108,
+      "utility_sum": 0.0
+    },
+    "student-greedy": {
+      "eligible": 1,
+      "harmed": 0,
+      "helped": 1,
+      "inconclusive_nonzero": 0,
+      "states": 108,
+      "tied": 107,
+      "utility_sum": 0.07
+    }
+  },
+  "teacher_failures_preserved": 0,
+  "teacher_transitions_replayed": 3453
+}

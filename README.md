@@ -6,6 +6,8 @@ A standalone evacuation decision policy using Qwen3.5 and Unsloth FastDecisionMo
 
 The [Phase 2 online PPO experiment](docs/R21_PPO_PHASE2_REPORT.md) completed 1,024 on-policy episodes from the verified Phase 1 checkpoint. On fresh reporting DEV, the selected PPO actor tied raw V1 at 48.60% evacuation. The report records the casualty uncertainty, persistent movement failures, exact checkpoint identity and reproduction commands. The [Phase 1 pilot report](docs/R20_PPO_PHASE1_REPORT.md) and [High-Level Design](docs/HLD.md) retain the project's research history.
 
+The [Phase 3 experiment](docs/R22_COUNTERFACTUAL_REPORT.md) compared PPO-only with counterfactual-assisted PPO from the verified Phase 2 checkpoint. Counterfactual assistance reduced casualties on reporting DEV, but the evacuation difference remained inconclusive. The selection split froze PPO-only update 16. The report links both trained checkpoint identities and the independently replayed counterfactual dataset index. Final evaluation remains sealed.
+
 ## Run locally
 
 There is no GitHub CI. Before every push, run the complete CPU suite locally on Python 3.11 with
