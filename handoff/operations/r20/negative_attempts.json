@@ -1,0 +1,32 @@
+[
+  {
+    "attempt": 1,
+    "elapsed_seconds": 1.6885080770007335,
+    "status": "FAILED",
+    "traceback": "Traceback (most recent call last):\n  File \"/mnt/c/Users/Admin/Documents/Test/ember_v1/src/ember_v1/rl_run.py\", line 182, in run\n    raise RuntimeError(\"commit code before running pilot\")\nRuntimeError: commit code before running pilot\n"
+  },
+  {
+    "attempt": 2,
+    "elapsed_seconds": 0.8015130379972106,
+    "status": "FAILED",
+    "traceback": "Traceback (most recent call last):\n  File \"/mnt/c/Users/Admin/Documents/Test/ember_v1/src/ember_v1/rl_run.py\", line 186, in run\n    provenance = verify_inputs(root, cfg)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/c/Users/Admin/Documents/Test/ember_v1/src/ember_v1/rl_run.py\", line 139, in verify_inputs\n    from .workstation import _base_snapshot\nImportError: cannot import name '_base_snapshot' from 'ember_v1.workstation' (/mnt/c/Users/Admin/Documents/Test/ember_v1/src/ember_v1/workstation.py)\n"
+  },
+  {
+    "attempt": 3,
+    "status": "INTERRUPTED",
+    "elapsed_seconds": 763.7488851547241,
+    "reason": "Four-env backward batches saturated WDDM VRAM (~32105 MiB) and update 4 stalled for several minutes; bounded memory fix retries with two-env batches and intermediate checkpoints. First 3 rollout updates / 48 optimizer steps retained in logs."
+  },
+  {
+    "attempt": 4,
+    "elapsed_seconds": 102.94243766,
+    "status": "FAILED",
+    "traceback": "Traceback (most recent call last):\n  File \"/mnt/c/Users/Admin/Documents/Test/ember_v1/src/ember_v1/rl_run.py\", line 241, in run\n    optimization = optimize(actor, critic, opt, groups, cfg)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/c/Users/Admin/Documents/Test/ember_v1/src/ember_v1/rl_ppo.py\", line 136, in optimize\n    raise RuntimeError(f\"on-policy probability replay differs: {max_replay_error}\")\nRuntimeError: on-policy probability replay differs: 0.002176225185394287\n"
+  },
+  {
+    "attempt": 5,
+    "elapsed_seconds": 620.3233506549986,
+    "status": "FAILED",
+    "traceback": "Traceback (most recent call last):\n  File \"/mnt/c/Users/Admin/Documents/Test/ember_v1/src/ember_v1/rl_run.py\", line 287, in run\n    raise RuntimeError(f\"saved RL checkpoint reload mismatch: {reload_error}\")\nRuntimeError: saved RL checkpoint reload mismatch: 0.01564931869506836\n"
+  }
+]

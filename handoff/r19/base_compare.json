@@ -1,0 +1,6957 @@
+{
+ "bootstrap": {
+  "n": 2000,
+  "seed": 20261110
+ },
+ "sets": {
+  "p1-02-v1/dev": {
+   "contrasts": {
+    "BASE_A_raw-BASE_B_mask": {
+     "casualties": {
+      "ci95": [
+       0.020015,
+       0.042271
+      ],
+      "diff": 0.029988,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.011246,
+       0.039974
+      ],
+      "diff": 0.025375,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.011577,
+       0.001983
+      ],
+      "diff": -0.004614,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_A_raw-BASE_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.03036,
+       0.084925
+      ],
+      "diff": 0.054787,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.032639,
+       0.088608
+      ],
+      "diff": 0.057093,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.004162,
+       0.009288
+      ],
+      "diff": 0.002307,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_A_raw-T0": {
+     "casualties": {
+      "ci95": [
+       0.47658,
+       0.687913
+      ],
+      "diff": 0.597463,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.559322,
+       0.751035
+      ],
+      "diff": 0.66782,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.017387,
+       0.139313
+      ],
+      "diff": 0.070358,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_A_raw-T1": {
+     "casualties": {
+      "ci95": [
+       0.589159,
+       0.76863
+      ],
+      "diff": 0.690888,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.607242,
+       0.81355
+      ],
+      "diff": 0.727797,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.025267,
+       0.102299
+      ],
+      "diff": 0.036909,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_A_raw-T2": {
+     "casualties": {
+      "ci95": [
+       0.594466,
+       0.773672
+      ],
+      "diff": 0.697809,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.609827,
+       0.815825
+      ],
+      "diff": 0.730104,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.025424,
+       0.092784
+      ],
+      "diff": 0.032295,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_A_raw-T3": {
+     "casualties": {
+      "ci95": [
+       0.539548,
+       0.749871
+      ],
+      "diff": 0.657439,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.601382,
+       0.813776
+      ],
+      "diff": 0.72376,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.015729,
+       0.125055
+      ],
+      "diff": 0.066321,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_A_raw-T4": {
+     "casualties": {
+      "ci95": [
+       0.589945,
+       0.770651
+      ],
+      "diff": 0.692618,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.609817,
+       0.815789
+      ],
+      "diff": 0.730681,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.01543,
+       0.096316
+      ],
+      "diff": 0.038062,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_A_raw-V1_A_raw": {
+     "casualties": {
+      "ci95": [
+       0.116932,
+       0.253875
+      ],
+      "diff": 0.193195,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.123372,
+       0.25857
+      ],
+      "diff": 0.199539,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.000955,
+       0.015635
+      ],
+      "diff": 0.006344,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_A_raw-V1_B_mask": {
+     "casualties": {
+      "ci95": [
+       0.184859,
+       0.33933
+      ],
+      "diff": 0.268166,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.189672,
+       0.34868
+      ],
+      "diff": 0.27451,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.001852,
+       0.017673
+      ],
+      "diff": 0.006344,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_A_raw-V1_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.233124,
+       0.4541
+      ],
+      "diff": 0.346597,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.254585,
+       0.469903
+      ],
+      "diff": 0.363322,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.004826,
+       0.033543
+      ],
+      "diff": 0.016724,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_A_raw-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.596273,
+       0.772455
+      ],
+      "diff": 0.696655,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.612698,
+       0.819149
+      ],
+      "diff": 0.734141,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.025267,
+       0.103093
+      ],
+      "diff": 0.037486,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_B_mask-BASE_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.042271,
+       -0.020015
+      ],
+      "diff": -0.029988,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.039974,
+       -0.011246
+      ],
+      "diff": -0.025375,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.001983,
+       0.011577
+      ],
+      "diff": 0.004614,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_B_mask-BASE_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.006082,
+       0.05
+      ],
+      "diff": 0.024798,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.014996,
+       0.058685
+      ],
+      "diff": 0.031719,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.000967,
+       0.013971
+      ],
+      "diff": 0.00692,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_B_mask-T0": {
+     "casualties": {
+      "ci95": [
+       0.443535,
+       0.656552
+      ],
+      "diff": 0.567474,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.533635,
+       0.725078
+      ],
+      "diff": 0.642445,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.018802,
+       0.145695
+      ],
+      "diff": 0.074971,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_B_mask-T1": {
+     "casualties": {
+      "ci95": [
+       0.559796,
+       0.737738
+      ],
+      "diff": 0.6609,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.580731,
+       0.789142
+      ],
+      "diff": 0.702422,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.022405,
+       0.108621
+      ],
+      "diff": 0.041522,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_B_mask-T2": {
+     "casualties": {
+      "ci95": [
+       0.568565,
+       0.7425
+      ],
+      "diff": 0.66782,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.584,
+       0.791251
+      ],
+      "diff": 0.704729,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.022727,
+       0.098774
+      ],
+      "diff": 0.036909,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_B_mask-T3": {
+     "casualties": {
+      "ci95": [
+       0.506655,
+       0.721035
+      ],
+      "diff": 0.627451,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.575812,
+       0.791045
+      ],
+      "diff": 0.698385,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.017834,
+       0.133036
+      ],
+      "diff": 0.070934,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_B_mask-T4": {
+     "casualties": {
+      "ci95": [
+       0.558989,
+       0.742871
+      ],
+      "diff": 0.66263,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.583543,
+       0.791835
+      ],
+      "diff": 0.705306,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.013609,
+       0.103475
+      ],
+      "diff": 0.042676,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_B_mask-V1_A_raw": {
+     "casualties": {
+      "ci95": [
+       0.084438,
+       0.223544
+      ],
+      "diff": 0.163206,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.10119,
+       0.229863
+      ],
+      "diff": 0.174164,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.003025,
+       0.021254
+      ],
+      "diff": 0.010957,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_B_mask-V1_B_mask": {
+     "casualties": {
+      "ci95": [
+       0.153343,
+       0.310008
+      ],
+      "diff": 0.238178,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.168269,
+       0.321149
+      ],
+      "diff": 0.249135,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.00099,
+       0.024525
+      ],
+      "diff": 0.010957,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_B_mask-V1_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.200852,
+       0.426692
+      ],
+      "diff": 0.316609,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.227957,
+       0.446187
+      ],
+      "diff": 0.337947,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.007267,
+       0.039634
+      ],
+      "diff": 0.021338,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_B_mask-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.567742,
+       0.741277
+      ],
+      "diff": 0.666667,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.586902,
+       0.795442
+      ],
+      "diff": 0.708766,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.022405,
+       0.109952
+      ],
+      "diff": 0.042099,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_C_coord-BASE_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.084925,
+       -0.03036
+      ],
+      "diff": -0.054787,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.088608,
+       -0.032639
+      ],
+      "diff": -0.057093,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.009288,
+       0.004162
+      ],
+      "diff": -0.002307,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_C_coord-BASE_B_mask": {
+     "casualties": {
+      "ci95": [
+       -0.05,
+       -0.006082
+      ],
+      "diff": -0.024798,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.058685,
+       -0.014996
+      ],
+      "diff": -0.031719,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.013971,
+       -0.000967
+      ],
+      "diff": -0.00692,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_C_coord-T0": {
+     "casualties": {
+      "ci95": [
+       0.409544,
+       0.63662
+      ],
+      "diff": 0.542676,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.490729,
+       0.698605
+      ],
+      "diff": 0.610727,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.016865,
+       0.136861
+      ],
+      "diff": 0.068051,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_C_coord-T1": {
+     "casualties": {
+      "ci95": [
+       0.521739,
+       0.71936
+      ],
+      "diff": 0.636101,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.538232,
+       0.765116
+      ],
+      "diff": 0.670704,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.025721,
+       0.095368
+      ],
+      "diff": 0.034602,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_C_coord-T2": {
+     "casualties": {
+      "ci95": [
+       0.528117,
+       0.725156
+      ],
+      "diff": 0.643022,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.541783,
+       0.766705
+      ],
+      "diff": 0.67301,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.026273,
+       0.085738
+      ],
+      "diff": 0.029988,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_C_coord-T3": {
+     "casualties": {
+      "ci95": [
+       0.471602,
+       0.702405
+      ],
+      "diff": 0.602653,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.535988,
+       0.765984
+      ],
+      "diff": 0.666667,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.01633,
+       0.119324
+      ],
+      "diff": 0.064014,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_C_coord-T4": {
+     "casualties": {
+      "ci95": [
+       0.518617,
+       0.723783
+      ],
+      "diff": 0.637832,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.541516,
+       0.765705
+      ],
+      "diff": 0.673587,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.016436,
+       0.089888
+      ],
+      "diff": 0.035755,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_C_coord-V1_A_raw": {
+     "casualties": {
+      "ci95": [
+       0.048012,
+       0.201349
+      ],
+      "diff": 0.138408,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.056287,
+       0.205515
+      ],
+      "diff": 0.142445,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.001461,
+       0.012097
+      ],
+      "diff": 0.004037,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_C_coord-V1_B_mask": {
+     "casualties": {
+      "ci95": [
+       0.111796,
+       0.292048
+      ],
+      "diff": 0.213379,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.1159,
+       0.300654
+      ],
+      "diff": 0.217416,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.00499,
+       0.015764
+      ],
+      "diff": 0.004037,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_C_coord-V1_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.158835,
+       0.410088
+      ],
+      "diff": 0.291811,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.175149,
+       0.426119
+      ],
+      "diff": 0.306228,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.004529,
+       0.028994
+      ],
+      "diff": 0.014418,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "BASE_C_coord-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.527926,
+       0.723477
+      ],
+      "diff": 0.641869,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.545508,
+       0.770328
+      ],
+      "diff": 0.677047,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.025721,
+       0.096597
+      ],
+      "diff": 0.035179,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_A_raw-BASE_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.253875,
+       -0.116932
+      ],
+      "diff": -0.193195,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.25857,
+       -0.123372
+      ],
+      "diff": -0.199539,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.015635,
+       0.000955
+      ],
+      "diff": -0.006344,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_A_raw-BASE_B_mask": {
+     "casualties": {
+      "ci95": [
+       -0.223544,
+       -0.084438
+      ],
+      "diff": -0.163206,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.229863,
+       -0.10119
+      ],
+      "diff": -0.174164,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.021254,
+       -0.003025
+      ],
+      "diff": -0.010957,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_A_raw-BASE_C_coord": {
+     "casualties": {
+      "ci95": [
+       -0.201349,
+       -0.048012
+      ],
+      "diff": -0.138408,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.205515,
+       -0.056287
+      ],
+      "diff": -0.142445,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.012097,
+       0.001461
+      ],
+      "diff": -0.004037,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_A_raw-T0": {
+     "casualties": {
+      "ci95": [
+       0.299784,
+       0.499399
+      ],
+      "diff": 0.404268,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.356902,
+       0.579933
+      ],
+      "diff": 0.468281,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.013776,
+       0.130165
+      ],
+      "diff": 0.064014,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_A_raw-T1": {
+     "casualties": {
+      "ci95": [
+       0.429533,
+       0.566077
+      ],
+      "diff": 0.497693,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.416728,
+       0.632261
+      ],
+      "diff": 0.528258,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.029772,
+       0.090629
+      ],
+      "diff": 0.030565,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_A_raw-T2": {
+     "casualties": {
+      "ci95": [
+       0.4347,
+       0.571261
+      ],
+      "diff": 0.504614,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.420577,
+       0.635456
+      ],
+      "diff": 0.530565,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.0299,
+       0.081761
+      ],
+      "diff": 0.025952,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_A_raw-T3": {
+     "casualties": {
+      "ci95": [
+       0.369844,
+       0.551724
+      ],
+      "diff": 0.464245,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.408922,
+       0.63474
+      ],
+      "diff": 0.524221,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.013066,
+       0.114224
+      ],
+      "diff": 0.059977,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_A_raw-T4": {
+     "casualties": {
+      "ci95": [
+       0.427394,
+       0.56836
+      ],
+      "diff": 0.499423,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.42133,
+       0.634181
+      ],
+      "diff": 0.531142,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.020775,
+       0.084231
+      ],
+      "diff": 0.031719,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_A_raw-V1_B_mask": {
+     "casualties": {
+      "ci95": [
+       0.032555,
+       0.117079
+      ],
+      "diff": 0.074971,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.03696,
+       0.116739
+      ],
+      "diff": 0.074971,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.005017,
+       0.006275
+      ],
+      "diff": 0.0,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_A_raw-V1_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.076811,
+       0.235984
+      ],
+      "diff": 0.153403,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.084619,
+       0.248943
+      ],
+      "diff": 0.163783,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.002876,
+       0.01992
+      ],
+      "diff": 0.010381,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_A_raw-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.436375,
+       0.571353
+      ],
+      "diff": 0.50346,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.424586,
+       0.638982
+      ],
+      "diff": 0.534602,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.029772,
+       0.091767
+      ],
+      "diff": 0.031142,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_B_mask-BASE_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.33933,
+       -0.184859
+      ],
+      "diff": -0.268166,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.34868,
+       -0.189672
+      ],
+      "diff": -0.27451,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.017673,
+       0.001852
+      ],
+      "diff": -0.006344,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_B_mask-BASE_B_mask": {
+     "casualties": {
+      "ci95": [
+       -0.310008,
+       -0.153343
+      ],
+      "diff": -0.238178,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.321149,
+       -0.168269
+      ],
+      "diff": -0.249135,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.024525,
+       -0.00099
+      ],
+      "diff": -0.010957,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_B_mask-BASE_C_coord": {
+     "casualties": {
+      "ci95": [
+       -0.292048,
+       -0.111796
+      ],
+      "diff": -0.213379,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.300654,
+       -0.1159
+      ],
+      "diff": -0.217416,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.015764,
+       0.00499
+      ],
+      "diff": -0.004037,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_B_mask-T0": {
+     "casualties": {
+      "ci95": [
+       0.233195,
+       0.408072
+      ],
+      "diff": 0.329296,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.285971,
+       0.491217
+      ],
+      "diff": 0.39331,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.010107,
+       0.131715
+      ],
+      "diff": 0.064014,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_B_mask-T1": {
+     "casualties": {
+      "ci95": [
+       0.360264,
+       0.478614
+      ],
+      "diff": 0.422722,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.346882,
+       0.545646
+      ],
+      "diff": 0.453287,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.032322,
+       0.094011
+      ],
+      "diff": 0.030565,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_B_mask-T2": {
+     "casualties": {
+      "ci95": [
+       0.366513,
+       0.482974
+      ],
+      "diff": 0.429642,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.349132,
+       0.548358
+      ],
+      "diff": 0.455594,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.032533,
+       0.084722
+      ],
+      "diff": 0.025952,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_B_mask-T3": {
+     "casualties": {
+      "ci95": [
+       0.301663,
+       0.464402
+      ],
+      "diff": 0.389273,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.335781,
+       0.547929
+      ],
+      "diff": 0.44925,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.010083,
+       0.116022
+      ],
+      "diff": 0.059977,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_B_mask-T4": {
+     "casualties": {
+      "ci95": [
+       0.35723,
+       0.480934
+      ],
+      "diff": 0.424452,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.349921,
+       0.547044
+      ],
+      "diff": 0.456171,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.021985,
+       0.087876
+      ],
+      "diff": 0.031719,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_B_mask-V1_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.117079,
+       -0.032555
+      ],
+      "diff": -0.074971,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.116739,
+       -0.03696
+      ],
+      "diff": -0.074971,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.006275,
+       0.005017
+      ],
+      "diff": 0.0,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_B_mask-V1_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.030385,
+       0.131463
+      ],
+      "diff": 0.078431,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.039452,
+       0.143141
+      ],
+      "diff": 0.088812,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.001628,
+       0.021674
+      ],
+      "diff": 0.010381,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_B_mask-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.366359,
+       0.482743
+      ],
+      "diff": 0.428489,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.35247,
+       0.55148
+      ],
+      "diff": 0.459631,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.032322,
+       0.09512
+      ],
+      "diff": 0.031142,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_C_coord-BASE_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.4541,
+       -0.233124
+      ],
+      "diff": -0.346597,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.469903,
+       -0.254585
+      ],
+      "diff": -0.363322,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.033543,
+       -0.004826
+      ],
+      "diff": -0.016724,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_C_coord-BASE_B_mask": {
+     "casualties": {
+      "ci95": [
+       -0.426692,
+       -0.200852
+      ],
+      "diff": -0.316609,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.446187,
+       -0.227957
+      ],
+      "diff": -0.337947,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.039634,
+       -0.007267
+      ],
+      "diff": -0.021338,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_C_coord-BASE_C_coord": {
+     "casualties": {
+      "ci95": [
+       -0.410088,
+       -0.158835
+      ],
+      "diff": -0.291811,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.426119,
+       -0.175149
+      ],
+      "diff": -0.306228,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.028994,
+       -0.004529
+      ],
+      "diff": -0.014418,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_C_coord-T0": {
+     "casualties": {
+      "ci95": [
+       0.154568,
+       0.347167
+      ],
+      "diff": 0.250865,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.201661,
+       0.416122
+      ],
+      "diff": 0.304498,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.005978,
+       0.11651
+      ],
+      "diff": 0.053633,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_C_coord-T1": {
+     "casualties": {
+      "ci95": [
+       0.26725,
+       0.419098
+      ],
+      "diff": 0.344291,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.264404,
+       0.459097
+      ],
+      "diff": 0.364475,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.038287,
+       0.073584
+      ],
+      "diff": 0.020185,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_C_coord-T2": {
+     "casualties": {
+      "ci95": [
+       0.274298,
+       0.422033
+      ],
+      "diff": 0.351211,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.266176,
+       0.460438
+      ],
+      "diff": 0.366782,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.038287,
+       0.064481
+      ],
+      "diff": 0.015571,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_C_coord-T3": {
+     "casualties": {
+      "ci95": [
+       0.224311,
+       0.393898
+      ],
+      "diff": 0.310842,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.256654,
+       0.456753
+      ],
+      "diff": 0.360438,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.005978,
+       0.098175
+      ],
+      "diff": 0.049596,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_C_coord-T4": {
+     "casualties": {
+      "ci95": [
+       0.269006,
+       0.41786
+      ],
+      "diff": 0.346021,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.266623,
+       0.460849
+      ],
+      "diff": 0.367359,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.027864,
+       0.067526
+      ],
+      "diff": 0.021338,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_C_coord-V1_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.235984,
+       -0.076811
+      ],
+      "diff": -0.153403,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.248943,
+       -0.084619
+      ],
+      "diff": -0.163783,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.01992,
+       -0.002876
+      ],
+      "diff": -0.010381,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_C_coord-V1_B_mask": {
+     "casualties": {
+      "ci95": [
+       -0.131463,
+       -0.030385
+      ],
+      "diff": -0.078431,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.143141,
+       -0.039452
+      ],
+      "diff": -0.088812,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.021674,
+       -0.001628
+      ],
+      "diff": -0.010381,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "V1_C_coord-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.273215,
+       0.425295
+      ],
+      "diff": 0.350058,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.270164,
+       0.463567
+      ],
+      "diff": 0.370819,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.038284,
+       0.074742
+      ],
+      "diff": 0.020761,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    }
+   },
+   "families": 16,
+   "missing_pairs": [],
+   "policies": {
+    "BASE_A_raw": {
+     "blocked": 69890,
+     "blocked_rate": 40.305652,
+     "casualties": 1543,
+     "casualties_rate": 0.88985,
+     "collisions": 25818,
+     "collisions_rate": 14.889273,
+     "cu": 1682,
+     "cu_rate": 0.970012,
+     "evacuated": 52,
+     "evacuated_rate": 0.029988,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 139,
+     "unresolved_rate": 0.080161
+    },
+    "BASE_B_mask": {
+     "blocked": 43764,
+     "blocked_rate": 25.238754,
+     "casualties": 1491,
+     "casualties_rate": 0.859862,
+     "collisions": 43764,
+     "collisions_rate": 25.238754,
+     "cu": 1638,
+     "cu_rate": 0.944637,
+     "evacuated": 96,
+     "evacuated_rate": 0.055363,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 147,
+     "unresolved_rate": 0.084775
+    },
+    "BASE_C_coord": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1448,
+     "casualties_rate": 0.835063,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1583,
+     "cu_rate": 0.912918,
+     "evacuated": 151,
+     "evacuated_rate": 0.087082,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 135,
+     "unresolved_rate": 0.077855
+    },
+    "T0": {
+     "blocked": 14294,
+     "blocked_rate": 8.243368,
+     "casualties": 507,
+     "casualties_rate": 0.292388,
+     "collisions": 14294,
+     "collisions_rate": 8.243368,
+     "cu": 524,
+     "cu_rate": 0.302191,
+     "evacuated": 1210,
+     "evacuated_rate": 0.697809,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 17,
+     "unresolved_rate": 0.009804
+    },
+    "T1": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 345,
+     "casualties_rate": 0.198962,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 420,
+     "cu_rate": 0.242215,
+     "evacuated": 1314,
+     "evacuated_rate": 0.757785,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 75,
+     "unresolved_rate": 0.043253
+    },
+    "T2": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 333,
+     "casualties_rate": 0.192042,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 416,
+     "cu_rate": 0.239908,
+     "evacuated": 1318,
+     "evacuated_rate": 0.760092,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 83,
+     "unresolved_rate": 0.047866
+    },
+    "T3": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 403,
+     "casualties_rate": 0.232411,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 427,
+     "cu_rate": 0.246251,
+     "evacuated": 1307,
+     "evacuated_rate": 0.753749,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 24,
+     "unresolved_rate": 0.013841
+    },
+    "T4": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 342,
+     "casualties_rate": 0.197232,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 415,
+     "cu_rate": 0.239331,
+     "evacuated": 1319,
+     "evacuated_rate": 0.760669,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 73,
+     "unresolved_rate": 0.042099
+    },
+    "V1_A_raw": {
+     "blocked": 50619,
+     "blocked_rate": 29.192042,
+     "casualties": 1208,
+     "casualties_rate": 0.696655,
+     "collisions": 27269,
+     "collisions_rate": 15.726067,
+     "cu": 1336,
+     "cu_rate": 0.770473,
+     "evacuated": 398,
+     "evacuated_rate": 0.229527,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 128,
+     "unresolved_rate": 0.073818
+    },
+    "V1_B_mask": {
+     "blocked": 29301,
+     "blocked_rate": 16.897924,
+     "casualties": 1078,
+     "casualties_rate": 0.621684,
+     "collisions": 29301,
+     "collisions_rate": 16.897924,
+     "cu": 1206,
+     "cu_rate": 0.695502,
+     "evacuated": 528,
+     "evacuated_rate": 0.304498,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 128,
+     "unresolved_rate": 0.073818
+    },
+    "V1_C_coord": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 942,
+     "casualties_rate": 0.543253,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1052,
+     "cu_rate": 0.60669,
+     "evacuated": 682,
+     "evacuated_rate": 0.39331,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 110,
+     "unresolved_rate": 0.063437
+    },
+    "best_T1-T4": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 335,
+     "casualties_rate": 0.193195,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 409,
+     "cu_rate": 0.235871,
+     "evacuated": 1325,
+     "evacuated_rate": 0.764129,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 74,
+     "unresolved_rate": 0.042676
+    }
+   },
+   "scenarios": 48
+  },
+  "p1-18-expand@1/val/core": {
+   "contrasts": {
+    "BASE_A_raw-BASE_B_mask": {
+     "casualties": {
+      "ci95": [
+       0.016374,
+       0.048
+      ],
+      "diff": 0.031791,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.020683,
+       0.043998
+      ],
+      "diff": 0.031161,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.012425,
+       0.010043
+      ],
+      "diff": -0.00063,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_A_raw-BASE_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.016367,
+       0.071232
+      ],
+      "diff": 0.047214,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.04582,
+       0.083538
+      ],
+      "diff": 0.064526,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.000739,
+       0.04212
+      ],
+      "diff": 0.017312,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_A_raw-T0": {
+     "casualties": {
+      "ci95": [
+       0.340206,
+       0.60827
+      ],
+      "diff": 0.479698,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.448425,
+       0.675207
+      ],
+      "diff": 0.560277,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.034716,
+       0.154593
+      ],
+      "diff": 0.080579,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_A_raw-T1": {
+     "casualties": {
+      "ci95": [
+       0.418712,
+       0.680071
+      ],
+      "diff": 0.554611,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.488393,
+       0.730795
+      ],
+      "diff": 0.610324,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.014254,
+       0.121651
+      ],
+      "diff": 0.055713,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_A_raw-T2": {
+     "casualties": {
+      "ci95": [
+       0.418719,
+       0.682158
+      ],
+      "diff": 0.55587,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.489275,
+       0.732155
+      ],
+      "diff": 0.610954,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.012758,
+       0.121651
+      ],
+      "diff": 0.055083,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_A_raw-T3": {
+     "casualties": {
+      "ci95": [
+       0.388214,
+       0.6444
+      ],
+      "diff": 0.52282,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.482349,
+       0.708749
+      ],
+      "diff": 0.595216,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.027235,
+       0.147988
+      ],
+      "diff": 0.072395,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_A_raw-T4": {
+     "casualties": {
+      "ci95": [
+       0.417291,
+       0.673984
+      ],
+      "diff": 0.553667,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.489565,
+       0.724573
+      ],
+      "diff": 0.608436,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.008995,
+       0.124077
+      ],
+      "diff": 0.054769,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_A_raw-V1_A_raw": {
+     "casualties": {
+      "ci95": [
+       0.0537,
+       0.187772
+      ],
+      "diff": 0.112055,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.066532,
+       0.202811
+      ],
+      "diff": 0.129367,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.009129,
+       0.049175
+      ],
+      "diff": 0.017312,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_A_raw-V1_B_mask": {
+     "casualties": {
+      "ci95": [
+       0.078729,
+       0.312288
+      ],
+      "diff": 0.192949,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.11784,
+       0.342474
+      ],
+      "diff": 0.229777,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.002641,
+       0.085009
+      ],
+      "diff": 0.036827,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_A_raw-V1_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.109145,
+       0.355023
+      ],
+      "diff": 0.228517,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.153325,
+       0.391684
+      ],
+      "diff": 0.270066,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.002817,
+       0.100394
+      ],
+      "diff": 0.041549,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_A_raw-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.412391,
+       0.682031
+      ],
+      "diff": 0.554926,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.493459,
+       0.734874
+      ],
+      "diff": 0.61536,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.012422,
+       0.134926
+      ],
+      "diff": 0.060434,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_B_mask-BASE_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.048,
+       -0.016374
+      ],
+      "diff": -0.031791,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.043998,
+       -0.020683
+      ],
+      "diff": -0.031161,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.010043,
+       0.012425
+      ],
+      "diff": 0.00063,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_B_mask-BASE_C_coord": {
+     "casualties": {
+      "ci95": [
+       -0.0082,
+       0.034925
+      ],
+      "diff": 0.015423,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.018957,
+       0.047066
+      ],
+      "diff": 0.033365,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.006215,
+       0.035331
+      ],
+      "diff": 0.017941,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_B_mask-T0": {
+     "casualties": {
+      "ci95": [
+       0.305597,
+       0.573781
+      ],
+      "diff": 0.447907,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.42124,
+       0.639301
+      ],
+      "diff": 0.529116,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.036059,
+       0.153418
+      ],
+      "diff": 0.081209,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_B_mask-T1": {
+     "casualties": {
+      "ci95": [
+       0.38624,
+       0.644892
+      ],
+      "diff": 0.52282,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.459788,
+       0.6961
+      ],
+      "diff": 0.579163,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.020019,
+       0.116371
+      ],
+      "diff": 0.056342,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_B_mask-T2": {
+     "casualties": {
+      "ci95": [
+       0.386771,
+       0.646331
+      ],
+      "diff": 0.524079,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.460625,
+       0.698005
+      ],
+      "diff": 0.579792,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.01939,
+       0.116557
+      ],
+      "diff": 0.055713,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_B_mask-T3": {
+     "casualties": {
+      "ci95": [
+       0.35365,
+       0.612765
+      ],
+      "diff": 0.491029,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.452568,
+       0.673318
+      ],
+      "diff": 0.564054,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.030383,
+       0.146195
+      ],
+      "diff": 0.073025,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_B_mask-T4": {
+     "casualties": {
+      "ci95": [
+       0.385727,
+       0.638767
+      ],
+      "diff": 0.521876,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.460964,
+       0.689972
+      ],
+      "diff": 0.577274,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.016844,
+       0.119259
+      ],
+      "diff": 0.055398,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_B_mask-V1_A_raw": {
+     "casualties": {
+      "ci95": [
+       0.018271,
+       0.155537
+      ],
+      "diff": 0.080264,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.035277,
+       0.169183
+      ],
+      "diff": 0.098206,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.000624,
+       0.043034
+      ],
+      "diff": 0.017941,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_B_mask-V1_B_mask": {
+     "casualties": {
+      "ci95": [
+       0.04902,
+       0.278735
+      ],
+      "diff": 0.161158,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.086553,
+       0.307258
+      ],
+      "diff": 0.198615,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.008918,
+       0.080087
+      ],
+      "diff": 0.037457,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_B_mask-V1_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.076396,
+       0.322625
+      ],
+      "diff": 0.196726,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.122122,
+       0.357
+      ],
+      "diff": 0.238905,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.009407,
+       0.099526
+      ],
+      "diff": 0.042178,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_B_mask-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.378674,
+       0.645381
+      ],
+      "diff": 0.523135,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.46334,
+       0.701114
+      ],
+      "diff": 0.584199,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.019155,
+       0.131354
+      ],
+      "diff": 0.061064,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_C_coord-BASE_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.071232,
+       -0.016367
+      ],
+      "diff": -0.047214,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.083538,
+       -0.04582
+      ],
+      "diff": -0.064526,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.04212,
+       -0.000739
+      ],
+      "diff": -0.017312,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_C_coord-BASE_B_mask": {
+     "casualties": {
+      "ci95": [
+       -0.034925,
+       0.0082
+      ],
+      "diff": -0.015423,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.047066,
+       -0.018957
+      ],
+      "diff": -0.033365,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.035331,
+       -0.006215
+      ],
+      "diff": -0.017941,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_C_coord-T0": {
+     "casualties": {
+      "ci95": [
+       0.298771,
+       0.554698
+      ],
+      "diff": 0.432483,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.383232,
+       0.609914
+      ],
+      "diff": 0.495751,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.027278,
+       0.125485
+      ],
+      "diff": 0.063267,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_C_coord-T1": {
+     "casualties": {
+      "ci95": [
+       0.36901,
+       0.624286
+      ],
+      "diff": 0.507397,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.422242,
+       0.664276
+      ],
+      "diff": 0.545798,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.009273,
+       0.090008
+      ],
+      "diff": 0.038401,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_C_coord-T2": {
+     "casualties": {
+      "ci95": [
+       0.369906,
+       0.625844
+      ],
+      "diff": 0.508656,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.421356,
+       0.665972
+      ],
+      "diff": 0.546427,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.008012,
+       0.090138
+      ],
+      "diff": 0.037771,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_C_coord-T3": {
+     "casualties": {
+      "ci95": [
+       0.34193,
+       0.592158
+      ],
+      "diff": 0.475606,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.416093,
+       0.643495
+      ],
+      "diff": 0.530689,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.020536,
+       0.117223
+      ],
+      "diff": 0.055083,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_C_coord-T4": {
+     "casualties": {
+      "ci95": [
+       0.367551,
+       0.620384
+      ],
+      "diff": 0.506453,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.422685,
+       0.65931
+      ],
+      "diff": 0.543909,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.00531,
+       0.093202
+      ],
+      "diff": 0.037457,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_C_coord-V1_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.002609,
+       0.136181
+      ],
+      "diff": 0.064841,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.00101,
+       0.137659
+      ],
+      "diff": 0.064841,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.016554,
+       0.015907
+      ],
+      "diff": 0.0,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_C_coord-V1_B_mask": {
+     "casualties": {
+      "ci95": [
+       0.033852,
+       0.259041
+      ],
+      "diff": 0.145735,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.048725,
+       0.277418
+      ],
+      "diff": 0.16525,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.003374,
+       0.052632
+      ],
+      "diff": 0.019515,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_C_coord-V1_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.062518,
+       0.303876
+      ],
+      "diff": 0.181303,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.083819,
+       0.326363
+      ],
+      "diff": 0.20554,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.002454,
+       0.072666
+      ],
+      "diff": 0.024237,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "BASE_C_coord-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.365063,
+       0.625995
+      ],
+      "diff": 0.507712,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.425835,
+       0.669627
+      ],
+      "diff": 0.550834,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.007651,
+       0.102633
+      ],
+      "diff": 0.043122,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_A_raw-BASE_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.187772,
+       -0.0537
+      ],
+      "diff": -0.112055,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.202811,
+       -0.066532
+      ],
+      "diff": -0.129367,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.049175,
+       0.009129
+      ],
+      "diff": -0.017312,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_A_raw-BASE_B_mask": {
+     "casualties": {
+      "ci95": [
+       -0.155537,
+       -0.018271
+      ],
+      "diff": -0.080264,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.169183,
+       -0.035277
+      ],
+      "diff": -0.098206,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.043034,
+       0.000624
+      ],
+      "diff": -0.017941,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_A_raw-BASE_C_coord": {
+     "casualties": {
+      "ci95": [
+       -0.136181,
+       0.002609
+      ],
+      "diff": -0.064841,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.137659,
+       0.00101
+      ],
+      "diff": -0.064841,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.015907,
+       0.016554
+      ],
+      "diff": 0.0,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_A_raw-T0": {
+     "casualties": {
+      "ci95": [
+       0.268266,
+       0.436184
+      ],
+      "diff": 0.367642,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.369518,
+       0.486747
+      ],
+      "diff": 0.43091,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.026398,
+       0.122689
+      ],
+      "diff": 0.063267,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_A_raw-T1": {
+     "casualties": {
+      "ci95": [
+       0.356375,
+       0.505582
+      ],
+      "diff": 0.442556,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.408444,
+       0.542601
+      ],
+      "diff": 0.480957,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.01339,
+       0.082335
+      ],
+      "diff": 0.038401,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_A_raw-T2": {
+     "casualties": {
+      "ci95": [
+       0.357143,
+       0.50671
+      ],
+      "diff": 0.443815,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.408903,
+       0.543367
+      ],
+      "diff": 0.481586,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.012649,
+       0.082552
+      ],
+      "diff": 0.037771,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_A_raw-T3": {
+     "casualties": {
+      "ci95": [
+       0.318235,
+       0.476769
+      ],
+      "diff": 0.410765,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.403612,
+       0.520764
+      ],
+      "diff": 0.465848,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.022766,
+       0.110665
+      ],
+      "diff": 0.055083,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_A_raw-T4": {
+     "casualties": {
+      "ci95": [
+       0.355358,
+       0.505963
+      ],
+      "diff": 0.441612,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.408041,
+       0.539228
+      ],
+      "diff": 0.479068,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.01137,
+       0.08536
+      ],
+      "diff": 0.037457,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_A_raw-V1_B_mask": {
+     "casualties": {
+      "ci95": [
+       0.020521,
+       0.132878
+      ],
+      "diff": 0.080894,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.045,
+       0.149014
+      ],
+      "diff": 0.100409,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.006466,
+       0.039292
+      ],
+      "diff": 0.019515,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_A_raw-V1_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.049386,
+       0.176427
+      ],
+      "diff": 0.116462,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.076795,
+       0.197848
+      ],
+      "diff": 0.140699,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.005232,
+       0.059732
+      ],
+      "diff": 0.024237,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_A_raw-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.348145,
+       0.510944
+      ],
+      "diff": 0.442871,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.412575,
+       0.547982
+      ],
+      "diff": 0.485993,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.013456,
+       0.096119
+      ],
+      "diff": 0.043122,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_B_mask-BASE_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.312288,
+       -0.078729
+      ],
+      "diff": -0.192949,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.342474,
+       -0.11784
+      ],
+      "diff": -0.229777,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.085009,
+       -0.002641
+      ],
+      "diff": -0.036827,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_B_mask-BASE_B_mask": {
+     "casualties": {
+      "ci95": [
+       -0.278735,
+       -0.04902
+      ],
+      "diff": -0.161158,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.307258,
+       -0.086553
+      ],
+      "diff": -0.198615,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.080087,
+       -0.008918
+      ],
+      "diff": -0.037457,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_B_mask-BASE_C_coord": {
+     "casualties": {
+      "ci95": [
+       -0.259041,
+       -0.033852
+      ],
+      "diff": -0.145735,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.277418,
+       -0.048725
+      ],
+      "diff": -0.16525,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.052632,
+       0.003374
+      ],
+      "diff": -0.019515,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_B_mask-T0": {
+     "casualties": {
+      "ci95": [
+       0.219224,
+       0.339389
+      ],
+      "diff": 0.286749,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.287901,
+       0.374897
+      ],
+      "diff": 0.3305,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.014999,
+       0.090535
+      ],
+      "diff": 0.043752,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_B_mask-T1": {
+     "casualties": {
+      "ci95": [
+       0.311025,
+       0.404025
+      ],
+      "diff": 0.361662,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.338158,
+       0.421076
+      ],
+      "diff": 0.380548,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.00305,
+       0.047813
+      ],
+      "diff": 0.018886,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_B_mask-T2": {
+     "casualties": {
+      "ci95": [
+       0.311454,
+       0.405605
+      ],
+      "diff": 0.362921,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.339039,
+       0.421131
+      ],
+      "diff": 0.381177,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.002053,
+       0.047813
+      ],
+      "diff": 0.018256,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_B_mask-T3": {
+     "casualties": {
+      "ci95": [
+       0.266041,
+       0.376258
+      ],
+      "diff": 0.329871,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.327052,
+       0.405903
+      ],
+      "diff": 0.365439,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.011816,
+       0.079075
+      ],
+      "diff": 0.035568,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_B_mask-T4": {
+     "casualties": {
+      "ci95": [
+       0.304933,
+       0.406624
+      ],
+      "diff": 0.360718,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.336854,
+       0.419933
+      ],
+      "diff": 0.378659,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.000617,
+       0.050484
+      ],
+      "diff": 0.017941,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_B_mask-V1_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.132878,
+       -0.020521
+      ],
+      "diff": -0.080894,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.149014,
+       -0.045
+      ],
+      "diff": -0.100409,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.039292,
+       -0.006466
+      ],
+      "diff": -0.019515,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_B_mask-V1_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.013647,
+       0.057106
+      ],
+      "diff": 0.035568,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.020699,
+       0.063927
+      ],
+      "diff": 0.04029,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.007092,
+       0.022437
+      ],
+      "diff": 0.004721,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_B_mask-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.297786,
+       0.41044
+      ],
+      "diff": 0.361977,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.343835,
+       0.425857
+      ],
+      "diff": 0.385584,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.00093,
+       0.061879
+      ],
+      "diff": 0.023607,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_C_coord-BASE_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.355023,
+       -0.109145
+      ],
+      "diff": -0.228517,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.391684,
+       -0.153325
+      ],
+      "diff": -0.270066,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.100394,
+       -0.002817
+      ],
+      "diff": -0.041549,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_C_coord-BASE_B_mask": {
+     "casualties": {
+      "ci95": [
+       -0.322625,
+       -0.076396
+      ],
+      "diff": -0.196726,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.357,
+       -0.122122
+      ],
+      "diff": -0.238905,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.099526,
+       -0.009407
+      ],
+      "diff": -0.042178,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_C_coord-BASE_C_coord": {
+     "casualties": {
+      "ci95": [
+       -0.303876,
+       -0.062518
+      ],
+      "diff": -0.181303,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.326363,
+       -0.083819
+      ],
+      "diff": -0.20554,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.072666,
+       0.002454
+      ],
+      "diff": -0.024237,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_C_coord-T0": {
+     "casualties": {
+      "ci95": [
+       0.180248,
+       0.302313
+      ],
+      "diff": 0.25118,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.235358,
+       0.344121
+      ],
+      "diff": 0.290211,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.01444,
+       0.07983
+      ],
+      "diff": 0.039031,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_C_coord-T1": {
+     "casualties": {
+      "ci95": [
+       0.271097,
+       0.365534
+      ],
+      "diff": 0.326094,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.28757,
+       0.386355
+      ],
+      "diff": 0.340258,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.000683,
+       0.036525
+      ],
+      "diff": 0.014164,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_C_coord-T2": {
+     "casualties": {
+      "ci95": [
+       0.271363,
+       0.367272
+      ],
+      "diff": 0.327353,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.287973,
+       0.386397
+      ],
+      "diff": 0.340888,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.001053,
+       0.036415
+      ],
+      "diff": 0.013535,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_C_coord-T3": {
+     "casualties": {
+      "ci95": [
+       0.226312,
+       0.343064
+      ],
+      "diff": 0.294303,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.276519,
+       0.372038
+      ],
+      "diff": 0.32515,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.010312,
+       0.069044
+      ],
+      "diff": 0.030847,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_C_coord-T4": {
+     "casualties": {
+      "ci95": [
+       0.265306,
+       0.371429
+      ],
+      "diff": 0.32515,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.286013,
+       0.385803
+      ],
+      "diff": 0.33837,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.002317,
+       0.03818
+      ],
+      "diff": 0.01322,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_C_coord-V1_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.176427,
+       -0.049386
+      ],
+      "diff": -0.116462,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.197848,
+       -0.076795
+      ],
+      "diff": -0.140699,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.059732,
+       -0.005232
+      ],
+      "diff": -0.024237,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_C_coord-V1_B_mask": {
+     "casualties": {
+      "ci95": [
+       -0.057106,
+       -0.013647
+      ],
+      "diff": -0.035568,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.063927,
+       -0.020699
+      ],
+      "diff": -0.04029,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.022437,
+       0.007092
+      ],
+      "diff": -0.004721,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "V1_C_coord-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.257521,
+       0.373422
+      ],
+      "diff": 0.326409,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.292614,
+       0.390446
+      ],
+      "diff": 0.345294,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.0003,
+       0.051357
+      ],
+      "diff": 0.018886,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    }
+   },
+   "families": 20,
+   "missing_pairs": [],
+   "policies": {
+    "BASE_A_raw": {
+     "blocked": 147184,
+     "blocked_rate": 46.327982,
+     "casualties": 2763,
+     "casualties_rate": 0.869688,
+     "collisions": 66988,
+     "collisions_rate": 21.085301,
+     "cu": 3088,
+     "cu_rate": 0.971986,
+     "evacuated": 89,
+     "evacuated_rate": 0.028014,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 325,
+     "unresolved_rate": 0.102298
+    },
+    "BASE_B_mask": {
+     "blocked": 101345,
+     "blocked_rate": 31.899591,
+     "casualties": 2662,
+     "casualties_rate": 0.837897,
+     "collisions": 101345,
+     "collisions_rate": 31.899591,
+     "cu": 2989,
+     "cu_rate": 0.940825,
+     "evacuated": 188,
+     "evacuated_rate": 0.059175,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 327,
+     "unresolved_rate": 0.102927
+    },
+    "BASE_C_coord": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 2613,
+     "casualties_rate": 0.822474,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 2883,
+     "cu_rate": 0.90746,
+     "evacuated": 294,
+     "evacuated_rate": 0.09254,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 270,
+     "unresolved_rate": 0.084986
+    },
+    "T0": {
+     "blocked": 27742,
+     "blocked_rate": 8.732137,
+     "casualties": 1239,
+     "casualties_rate": 0.389991,
+     "collisions": 27742,
+     "collisions_rate": 8.732137,
+     "cu": 1308,
+     "cu_rate": 0.411709,
+     "evacuated": 1869,
+     "evacuated_rate": 0.588291,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 69,
+     "unresolved_rate": 0.021719
+    },
+    "T1": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1001,
+     "casualties_rate": 0.315077,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1149,
+     "cu_rate": 0.361662,
+     "evacuated": 2028,
+     "evacuated_rate": 0.638338,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 148,
+     "unresolved_rate": 0.046585
+    },
+    "T2": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 997,
+     "casualties_rate": 0.313818,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1147,
+     "cu_rate": 0.361032,
+     "evacuated": 2030,
+     "evacuated_rate": 0.638968,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 150,
+     "unresolved_rate": 0.047214
+    },
+    "T3": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1102,
+     "casualties_rate": 0.346868,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1197,
+     "cu_rate": 0.376771,
+     "evacuated": 1980,
+     "evacuated_rate": 0.623229,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 95,
+     "unresolved_rate": 0.029902
+    },
+    "T4": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1004,
+     "casualties_rate": 0.316021,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1155,
+     "cu_rate": 0.363551,
+     "evacuated": 2022,
+     "evacuated_rate": 0.636449,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 151,
+     "unresolved_rate": 0.047529
+    },
+    "V1_A_raw": {
+     "blocked": 88032,
+     "blocked_rate": 27.70916,
+     "casualties": 2407,
+     "casualties_rate": 0.757633,
+     "collisions": 49997,
+     "collisions_rate": 15.737173,
+     "cu": 2677,
+     "cu_rate": 0.842619,
+     "evacuated": 500,
+     "evacuated_rate": 0.157381,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 270,
+     "unresolved_rate": 0.084986
+    },
+    "V1_B_mask": {
+     "blocked": 49359,
+     "blocked_rate": 15.536355,
+     "casualties": 2150,
+     "casualties_rate": 0.676739,
+     "collisions": 49359,
+     "collisions_rate": 15.536355,
+     "cu": 2358,
+     "cu_rate": 0.74221,
+     "evacuated": 819,
+     "evacuated_rate": 0.25779,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 208,
+     "unresolved_rate": 0.065471
+    },
+    "V1_C_coord": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 2037,
+     "casualties_rate": 0.641171,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 2230,
+     "cu_rate": 0.70192,
+     "evacuated": 947,
+     "evacuated_rate": 0.29808,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 193,
+     "unresolved_rate": 0.060749
+    },
+    "best_T1-T4": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1000,
+     "casualties_rate": 0.314762,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1133,
+     "cu_rate": 0.356626,
+     "evacuated": 2044,
+     "evacuated_rate": 0.643374,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 133,
+     "unresolved_rate": 0.041863
+    }
+   },
+   "scenarios": 80
+  },
+  "p1-18-expand@1/val/stress": {
+   "contrasts": {
+    "BASE_A_raw-BASE_B_mask": {
+     "casualties": {
+      "ci95": [
+       0.009458,
+       0.025787
+      ],
+      "diff": 0.017241,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.009229,
+       0.017894
+      ],
+      "diff": 0.014182,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.008415,
+       0.0
+      ],
+      "diff": -0.003059,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_A_raw-BASE_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.037832,
+       0.124494
+      ],
+      "diff": 0.073415,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.037832,
+       0.126518
+      ],
+      "diff": 0.073693,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.00075,
+       0.001966
+      ],
+      "diff": 0.000278,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_A_raw-T0": {
+     "casualties": {
+      "ci95": [
+       0.3355,
+       0.432957
+      ],
+      "diff": 0.378754,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.384908,
+       0.764387
+      ],
+      "diff": 0.542269,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.414495
+      ],
+      "diff": 0.163515,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_A_raw-T1": {
+     "casualties": {
+      "ci95": [
+       0.392237,
+       0.529903
+      ],
+      "diff": 0.445495,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.441462,
+       0.810803
+      ],
+      "diff": 0.60901,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.414495
+      ],
+      "diff": 0.163515,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_A_raw-T2": {
+     "casualties": {
+      "ci95": [
+       0.39225,
+       0.530598
+      ],
+      "diff": 0.446329,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.442725,
+       0.810803
+      ],
+      "diff": 0.609844,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.414495
+      ],
+      "diff": 0.163515,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_A_raw-T3": {
+     "casualties": {
+      "ci95": [
+       0.35375,
+       0.462719
+      ],
+      "diff": 0.40267,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.400651,
+       0.786645
+      ],
+      "diff": 0.566185,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.414495
+      ],
+      "diff": 0.163515,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_A_raw-T4": {
+     "casualties": {
+      "ci95": [
+       0.38575,
+       0.511404
+      ],
+      "diff": 0.438543,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.425869,
+       0.817047
+      ],
+      "diff": 0.599555,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.412052
+      ],
+      "diff": 0.161012,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_A_raw-V1_A_raw": {
+     "casualties": {
+      "ci95": [
+       0.0,
+       0.100716
+      ],
+      "diff": 0.052836,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.051065,
+       0.11875
+      ],
+      "diff": 0.088154,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.000523,
+       0.097177
+      ],
+      "diff": 0.035317,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_A_raw-V1_B_mask": {
+     "casualties": {
+      "ci95": [
+       0.049499,
+       0.13975
+      ],
+      "diff": 0.101224,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.066103,
+       0.26683
+      ],
+      "diff": 0.159622,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.000523,
+       0.164224
+      ],
+      "diff": 0.058398,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_A_raw-V1_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.055668,
+       0.15175
+      ],
+      "diff": 0.112903,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.06309,
+       0.302932
+      ],
+      "diff": 0.173526,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.000523,
+       0.174539
+      ],
+      "diff": 0.060623,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_A_raw-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.39825,
+       0.543275
+      ],
+      "diff": 0.454394,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.44683,
+       0.817047
+      ],
+      "diff": 0.615406,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.412052
+      ],
+      "diff": 0.161012,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_B_mask-BASE_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.025787,
+       -0.009458
+      ],
+      "diff": -0.017241,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.017894,
+       -0.009229
+      ],
+      "diff": -0.014182,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.0,
+       0.008415
+      ],
+      "diff": 0.003059,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_B_mask-BASE_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.02525,
+       0.107962
+      ],
+      "diff": 0.056174,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.026329,
+       0.110999
+      ],
+      "diff": 0.059511,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.0,
+       0.008143
+      ],
+      "diff": 0.003337,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_B_mask-T0": {
+     "casualties": {
+      "ci95": [
+       0.31175,
+       0.418546
+      ],
+      "diff": 0.361513,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.37215,
+       0.749186
+      ],
+      "diff": 0.528087,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.42291
+      ],
+      "diff": 0.166574,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_B_mask-T1": {
+     "casualties": {
+      "ci95": [
+       0.367,
+       0.510819
+      ],
+      "diff": 0.428254,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.429959,
+       0.795603
+      ],
+      "diff": 0.594828,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.42291
+      ],
+      "diff": 0.166574,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_B_mask-T2": {
+     "casualties": {
+      "ci95": [
+       0.37075,
+       0.509649
+      ],
+      "diff": 0.429088,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.430982,
+       0.795603
+      ],
+      "diff": 0.595662,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.42291
+      ],
+      "diff": 0.166574,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_B_mask-T3": {
+     "casualties": {
+      "ci95": [
+       0.333,
+       0.448308
+      ],
+      "diff": 0.385428,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.387894,
+       0.771444
+      ],
+      "diff": 0.552002,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.42291
+      ],
+      "diff": 0.166574,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_B_mask-T4": {
+     "casualties": {
+      "ci95": [
+       0.36625,
+       0.494152
+      ],
+      "diff": 0.421301,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.414366,
+       0.801846
+      ],
+      "diff": 0.585373,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.420467
+      ],
+      "diff": 0.164071,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_B_mask-V1_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.026412,
+       0.089213
+      ],
+      "diff": 0.035595,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.036437,
+       0.1035
+      ],
+      "diff": 0.073971,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.000523,
+       0.105592
+      ],
+      "diff": 0.038376,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_B_mask-V1_B_mask": {
+     "casualties": {
+      "ci95": [
+       0.028509,
+       0.12825
+      ],
+      "diff": 0.083982,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.049812,
+       0.249457
+      ],
+      "diff": 0.145439,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.000523,
+       0.172638
+      ],
+      "diff": 0.061457,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_B_mask-V1_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.039136,
+       0.136
+      ],
+      "diff": 0.095662,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.05027,
+       0.285559
+      ],
+      "diff": 0.159344,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.000523,
+       0.182953
+      ],
+      "diff": 0.063682,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_B_mask-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.37595,
+       0.522222
+      ],
+      "diff": 0.437152,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.435327,
+       0.801846
+      ],
+      "diff": 0.601224,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.420467
+      ],
+      "diff": 0.164071,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_C_coord-BASE_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.124494,
+       -0.037832
+      ],
+      "diff": -0.073415,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.126518,
+       -0.037832
+      ],
+      "diff": -0.073693,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.001966,
+       0.00075
+      ],
+      "diff": -0.000278,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_C_coord-BASE_B_mask": {
+     "casualties": {
+      "ci95": [
+       -0.107962,
+       -0.02525
+      ],
+      "diff": -0.056174,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.110999,
+       -0.026329
+      ],
+      "diff": -0.059511,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.008143,
+       0.0
+      ],
+      "diff": -0.003337,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_C_coord-T0": {
+     "casualties": {
+      "ci95": [
+       0.249406,
+       0.355188
+      ],
+      "diff": 0.305339,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.329533,
+       0.68051
+      ],
+      "diff": 0.468576,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.414767
+      ],
+      "diff": 0.163237,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_C_coord-T1": {
+     "casualties": {
+      "ci95": [
+       0.299287,
+       0.44834
+      ],
+      "diff": 0.37208,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.392508,
+       0.726927
+      ],
+      "diff": 0.535317,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.414767
+      ],
+      "diff": 0.163237,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_C_coord-T2": {
+     "casualties": {
+      "ci95": [
+       0.30196,
+       0.448538
+      ],
+      "diff": 0.372914,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.39468,
+       0.726927
+      ],
+      "diff": 0.536151,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.414767
+      ],
+      "diff": 0.163237,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_C_coord-T3": {
+     "casualties": {
+      "ci95": [
+       0.268705,
+       0.387313
+      ],
+      "diff": 0.329255,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.349555,
+       0.702769
+      ],
+      "diff": 0.492492,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.414767
+      ],
+      "diff": 0.163237,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_C_coord-T4": {
+     "casualties": {
+      "ci95": [
+       0.304038,
+       0.430407
+      ],
+      "diff": 0.365128,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.38355,
+       0.73317
+      ],
+      "diff": 0.525862,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.412324
+      ],
+      "diff": 0.160734,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_C_coord-V1_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.114401,
+       0.062883
+      ],
+      "diff": -0.020578,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.0722,
+       0.07475
+      ],
+      "diff": 0.014461,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.000523,
+       0.097448
+      ],
+      "diff": 0.035039,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_C_coord-V1_B_mask": {
+     "casualties": {
+      "ci95": [
+       -0.074561,
+       0.103
+      ],
+      "diff": 0.027809,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.052221,
+       0.190184
+      ],
+      "diff": 0.085929,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.000523,
+       0.164495
+      ],
+      "diff": 0.05812,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_C_coord-V1_C_coord": {
+     "casualties": {
+      "ci95": [
+       -0.068826,
+       0.109663
+      ],
+      "diff": 0.039488,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.045618,
+       0.225204
+      ],
+      "diff": 0.099833,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.000523,
+       0.17481
+      ],
+      "diff": 0.060345,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "BASE_C_coord-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.311461,
+       0.459357
+      ],
+      "diff": 0.380979,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.397123,
+       0.73317
+      ],
+      "diff": 0.541713,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000256,
+       0.412324
+      ],
+      "diff": 0.160734,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_A_raw-BASE_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.100716,
+       0.0
+      ],
+      "diff": -0.052836,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.11875,
+       -0.051065
+      ],
+      "diff": -0.088154,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.097177,
+       0.000523
+      ],
+      "diff": -0.035317,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_A_raw-BASE_B_mask": {
+     "casualties": {
+      "ci95": [
+       -0.089213,
+       0.026412
+      ],
+      "diff": -0.035595,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.1035,
+       -0.036437
+      ],
+      "diff": -0.073971,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.105592,
+       0.000523
+      ],
+      "diff": -0.038376,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_A_raw-BASE_C_coord": {
+     "casualties": {
+      "ci95": [
+       -0.062883,
+       0.114401
+      ],
+      "diff": 0.020578,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.07475,
+       0.0722
+      ],
+      "diff": -0.014461,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.097448,
+       0.000523
+      ],
+      "diff": -0.035039,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_A_raw-T0": {
+     "casualties": {
+      "ci95": [
+       0.250543,
+       0.404762
+      ],
+      "diff": 0.325918,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.278773,
+       0.668598
+      ],
+      "diff": 0.454116,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.317318
+      ],
+      "diff": 0.128198,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_A_raw-T1": {
+     "casualties": {
+      "ci95": [
+       0.3055,
+       0.492168
+      ],
+      "diff": 0.392659,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.340934,
+       0.735366
+      ],
+      "diff": 0.520857,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.317318
+      ],
+      "diff": 0.128198,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_A_raw-T2": {
+     "casualties": {
+      "ci95": [
+       0.30875,
+       0.492168
+      ],
+      "diff": 0.393493,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.342025,
+       0.735976
+      ],
+      "diff": 0.521691,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.317318
+      ],
+      "diff": 0.128198,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_A_raw-T3": {
+     "casualties": {
+      "ci95": [
+       0.266287,
+       0.433198
+      ],
+      "diff": 0.349833,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.296524,
+       0.694512
+      ],
+      "diff": 0.478031,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.317318
+      ],
+      "diff": 0.128198,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_A_raw-T4": {
+     "casualties": {
+      "ci95": [
+       0.297802,
+       0.481908
+      ],
+      "diff": 0.385706,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.325409,
+       0.733232
+      ],
+      "diff": 0.511402,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.314875
+      ],
+      "diff": 0.125695,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_A_raw-V1_B_mask": {
+     "casualties": {
+      "ci95": [
+       0.009398,
+       0.09575
+      ],
+      "diff": 0.048387,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.010025,
+       0.160734
+      ],
+      "diff": 0.071468,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.0,
+       0.067047
+      ],
+      "diff": 0.023081,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_A_raw-V1_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.016604,
+       0.11875
+      ],
+      "diff": 0.060067,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.012845,
+       0.19772
+      ],
+      "diff": 0.085373,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.005898,
+       0.077362
+      ],
+      "diff": 0.025306,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_A_raw-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.312161,
+       0.505952
+      ],
+      "diff": 0.401557,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.345548,
+       0.742988
+      ],
+      "diff": 0.527253,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.314875
+      ],
+      "diff": 0.125695,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_B_mask-BASE_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.13975,
+       -0.049499
+      ],
+      "diff": -0.101224,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.26683,
+       -0.066103
+      ],
+      "diff": -0.159622,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.164224,
+       0.000523
+      ],
+      "diff": -0.058398,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_B_mask-BASE_B_mask": {
+     "casualties": {
+      "ci95": [
+       -0.12825,
+       -0.028509
+      ],
+      "diff": -0.083982,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.249457,
+       -0.049812
+      ],
+      "diff": -0.145439,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.172638,
+       0.000523
+      ],
+      "diff": -0.061457,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_B_mask-BASE_C_coord": {
+     "casualties": {
+      "ci95": [
+       -0.103,
+       0.074561
+      ],
+      "diff": -0.027809,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.190184,
+       0.052221
+      ],
+      "diff": -0.085929,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.164495,
+       0.000523
+      ],
+      "diff": -0.05812,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_B_mask-T0": {
+     "casualties": {
+      "ci95": [
+       0.2025,
+       0.371554
+      ],
+      "diff": 0.277531,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.253529,
+       0.536429
+      ],
+      "diff": 0.382647,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.250271
+      ],
+      "diff": 0.105117,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_B_mask-T1": {
+     "casualties": {
+      "ci95": [
+       0.25675,
+       0.47076
+      ],
+      "diff": 0.344271,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.30836,
+       0.614743
+      ],
+      "diff": 0.449388,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.250271
+      ],
+      "diff": 0.105117,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_B_mask-T2": {
+     "casualties": {
+      "ci95": [
+       0.259,
+       0.470175
+      ],
+      "diff": 0.345106,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.310327,
+       0.615438
+      ],
+      "diff": 0.450222,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.250271
+      ],
+      "diff": 0.105117,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_B_mask-T3": {
+     "casualties": {
+      "ci95": [
+       0.22175,
+       0.401316
+      ],
+      "diff": 0.301446,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.269273,
+       0.563126
+      ],
+      "diff": 0.406563,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.250271
+      ],
+      "diff": 0.105117,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_B_mask-T4": {
+     "casualties": {
+      "ci95": [
+       0.24925,
+       0.447682
+      ],
+      "diff": 0.337319,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.293712,
+       0.606785
+      ],
+      "diff": 0.439933,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.247828
+      ],
+      "diff": 0.102614,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_B_mask-V1_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.09575,
+       -0.009398
+      ],
+      "diff": -0.048387,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.160734,
+       -0.010025
+      ],
+      "diff": -0.071468,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.067047,
+       0.0
+      ],
+      "diff": -0.023081,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_B_mask-V1_C_coord": {
+     "casualties": {
+      "ci95": [
+       0.000731,
+       0.025787
+      ],
+      "diff": 0.01168,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.002744,
+       0.0365
+      ],
+      "diff": 0.013904,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.006881,
+       0.01125
+      ],
+      "diff": 0.002225,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_B_mask-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.26175,
+       0.481871
+      ],
+      "diff": 0.35317,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.312975,
+       0.62274
+      ],
+      "diff": 0.455784,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.247828
+      ],
+      "diff": 0.102614,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_C_coord-BASE_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.15175,
+       -0.055668
+      ],
+      "diff": -0.112903,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.302932,
+       -0.06309
+      ],
+      "diff": -0.173526,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.174539,
+       0.000523
+      ],
+      "diff": -0.060623,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_C_coord-BASE_B_mask": {
+     "casualties": {
+      "ci95": [
+       -0.136,
+       -0.039136
+      ],
+      "diff": -0.095662,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.285559,
+       -0.05027
+      ],
+      "diff": -0.159344,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.182953,
+       0.000523
+      ],
+      "diff": -0.063682,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_C_coord-BASE_C_coord": {
+     "casualties": {
+      "ci95": [
+       -0.109663,
+       0.068826
+      ],
+      "diff": -0.039488,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.225204,
+       0.045618
+      ],
+      "diff": -0.099833,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.17481,
+       0.000523
+      ],
+      "diff": -0.060345,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_C_coord-T0": {
+     "casualties": {
+      "ci95": [
+       0.185,
+       0.367168
+      ],
+      "diff": 0.265851,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.24925,
+       0.52439
+      ],
+      "diff": 0.368743,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.239957
+      ],
+      "diff": 0.102892,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_C_coord-T1": {
+     "casualties": {
+      "ci95": [
+       0.24175,
+       0.459942
+      ],
+      "diff": 0.332592,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.304959,
+       0.591159
+      ],
+      "diff": 0.435484,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.239957
+      ],
+      "diff": 0.102892,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_C_coord-T2": {
+     "casualties": {
+      "ci95": [
+       0.24375,
+       0.458772
+      ],
+      "diff": 0.333426,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.307818,
+       0.591768
+      ],
+      "diff": 0.436318,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.239957
+      ],
+      "diff": 0.102892,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_C_coord-T3": {
+     "casualties": {
+      "ci95": [
+       0.20425,
+       0.39693
+      ],
+      "diff": 0.289766,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.265744,
+       0.550305
+      ],
+      "diff": 0.392659,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.239957
+      ],
+      "diff": 0.102892,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_C_coord-T4": {
+     "casualties": {
+      "ci95": [
+       0.23525,
+       0.43891
+      ],
+      "diff": 0.32564,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.289366,
+       0.589024
+      ],
+      "diff": 0.426029,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.237514
+      ],
+      "diff": 0.100389,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_C_coord-V1_A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.11875,
+       -0.016604
+      ],
+      "diff": -0.060067,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.19772,
+       -0.012845
+      ],
+      "diff": -0.085373,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.077362,
+       0.005898
+      ],
+      "diff": -0.025306,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_C_coord-V1_B_mask": {
+     "casualties": {
+      "ci95": [
+       -0.025787,
+       -0.000731
+      ],
+      "diff": -0.01168,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.0365,
+       0.002744
+      ],
+      "diff": -0.013904,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.01125,
+       0.006881
+      ],
+      "diff": -0.002225,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "V1_C_coord-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.24775,
+       0.471345
+      ],
+      "diff": 0.341491,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.310327,
+       0.598997
+      ],
+      "diff": 0.44188,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.237514
+      ],
+      "diff": 0.100389,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    }
+   },
+   "families": 5,
+   "missing_pairs": [],
+   "policies": {
+    "BASE_A_raw": {
+     "blocked": 202617,
+     "blocked_rate": 56.345106,
+     "casualties": 2933,
+     "casualties_rate": 0.815628,
+     "collisions": 116470,
+     "collisions_rate": 32.388765,
+     "cu": 3521,
+     "cu_rate": 0.979143,
+     "evacuated": 75,
+     "evacuated_rate": 0.020857,
+     "failed": 1,
+     "people": 3596,
+     "unresolved": 588,
+     "unresolved_rate": 0.163515
+    },
+    "BASE_B_mask": {
+     "blocked": 163354,
+     "blocked_rate": 45.426585,
+     "casualties": 2871,
+     "casualties_rate": 0.798387,
+     "collisions": 163354,
+     "collisions_rate": 45.426585,
+     "cu": 3470,
+     "cu_rate": 0.964961,
+     "evacuated": 126,
+     "evacuated_rate": 0.035039,
+     "failed": 1,
+     "people": 3596,
+     "unresolved": 599,
+     "unresolved_rate": 0.166574
+    },
+    "BASE_C_coord": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 2669,
+     "casualties_rate": 0.742214,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 3256,
+     "cu_rate": 0.905451,
+     "evacuated": 340,
+     "evacuated_rate": 0.094549,
+     "failed": 1,
+     "people": 3596,
+     "unresolved": 587,
+     "unresolved_rate": 0.163237
+    },
+    "T0": {
+     "blocked": 55356,
+     "blocked_rate": 15.393771,
+     "casualties": 1571,
+     "casualties_rate": 0.436874,
+     "collisions": 55356,
+     "collisions_rate": 15.393771,
+     "cu": 1571,
+     "cu_rate": 0.436874,
+     "evacuated": 2025,
+     "evacuated_rate": 0.563126,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 0,
+     "unresolved_rate": 0.0
+    },
+    "T1": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1331,
+     "casualties_rate": 0.370133,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1331,
+     "cu_rate": 0.370133,
+     "evacuated": 2265,
+     "evacuated_rate": 0.629867,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 0,
+     "unresolved_rate": 0.0
+    },
+    "T2": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1328,
+     "casualties_rate": 0.369299,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1328,
+     "cu_rate": 0.369299,
+     "evacuated": 2268,
+     "evacuated_rate": 0.630701,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 0,
+     "unresolved_rate": 0.0
+    },
+    "T3": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1485,
+     "casualties_rate": 0.412959,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1485,
+     "cu_rate": 0.412959,
+     "evacuated": 2111,
+     "evacuated_rate": 0.587041,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 0,
+     "unresolved_rate": 0.0
+    },
+    "T4": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1356,
+     "casualties_rate": 0.377086,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1365,
+     "cu_rate": 0.379588,
+     "evacuated": 2231,
+     "evacuated_rate": 0.620412,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 9,
+     "unresolved_rate": 0.002503
+    },
+    "V1_A_raw": {
+     "blocked": 119588,
+     "blocked_rate": 33.25584,
+     "casualties": 2743,
+     "casualties_rate": 0.762792,
+     "collisions": 72218,
+     "collisions_rate": 20.08287,
+     "cu": 3204,
+     "cu_rate": 0.89099,
+     "evacuated": 392,
+     "evacuated_rate": 0.10901,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 461,
+     "unresolved_rate": 0.128198
+    },
+    "V1_B_mask": {
+     "blocked": 69796,
+     "blocked_rate": 19.409344,
+     "casualties": 2569,
+     "casualties_rate": 0.714405,
+     "collisions": 69796,
+     "collisions_rate": 19.409344,
+     "cu": 2947,
+     "cu_rate": 0.819522,
+     "evacuated": 649,
+     "evacuated_rate": 0.180478,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 378,
+     "unresolved_rate": 0.105117
+    },
+    "V1_C_coord": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 2527,
+     "casualties_rate": 0.702725,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 2897,
+     "cu_rate": 0.805617,
+     "evacuated": 699,
+     "evacuated_rate": 0.194383,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 370,
+     "unresolved_rate": 0.102892
+    },
+    "best_T1-T4": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1299,
+     "casualties_rate": 0.361235,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1308,
+     "cu_rate": 0.363737,
+     "evacuated": 2288,
+     "evacuated_rate": 0.636263,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 9,
+     "unresolved_rate": 0.002503
+    }
+   },
+   "scenarios": 20
+  }
+ },
+ "students": {
+  "BASE_A_raw": "/home/darshith/ember-ws/runs/r19-base-control@1/run/rollouts-A_raw.jsonl",
+  "BASE_B_mask": "/home/darshith/ember-ws/runs/r19-base-control@1/run/rollouts-B_static_mask.jsonl",
+  "BASE_C_coord": "/home/darshith/ember-ws/runs/r19-base-control@1/run/rollouts-C_joint_coord.jsonl",
+  "V1_A_raw": "/home/darshith/ember-ws/runs/r19-v1-arms@1/attempt-1/final/rollouts-A_raw.jsonl",
+  "V1_B_mask": "/home/darshith/ember-ws/runs/r19-v1-arms@1/attempt-1/final/rollouts-B_static_mask.jsonl",
+  "V1_C_coord": "/home/darshith/ember-ws/runs/r19-v1-arms@1/attempt-1/final/rollouts-C_joint_coord.jsonl"
+ },
+ "unit": "family",
+ "version": "p1-18-compare@1.0.0"
+}

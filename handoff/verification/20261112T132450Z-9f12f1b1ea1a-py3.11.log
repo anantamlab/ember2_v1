@@ -1,0 +1,53 @@
+# ember-local-verify run 20261112T132450Z
+# command: /home/darshith/ember-ws/cpu-tests/bin/python -m pytest -q
+# cwd: /mnt/c/Users/Admin/Documents/Test/ember_v1
+# head: 9f12f1b1ea1a0190c3a59caf302e88ac9e9466d7  tree_clean: True  tree_digest: sha256:aa6d818671f3b50bac619de5b3195e52c2324a87fdc06ff401c8ea6f06ba08ee
+# python: 3.11.13 CPython /home/darshith/ember-ws/cpu-tests/bin/python
+# pytest: 9.2.0  ember_v1: /mnt/c/Users/Admin/Documents/Test/ember_v1/src/ember_v1/__init__.py
+# platform: Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39
+
+........................................................................ [  4%]
+........................................................................ [  8%]
+........................................................................ [ 13%]
+........................s............................................... [ 17%]
+........................................................................ [ 22%]
+........................................................................ [ 26%]
+........................................................................ [ 31%]
+...................................................................s.... [ 35%]
+........................................................................ [ 40%]
+........................................................................ [ 44%]
+........................................................................ [ 49%]
+........................................................................ [ 53%]
+........................................................................ [ 57%]
+........................................................................ [ 62%]
+........................................................................ [ 66%]
+........................................................................ [ 71%]
+........................................................................ [ 75%]
+........................................................................ [ 80%]
+........................................................................ [ 84%]
+...........................................x.x.x.x.x.x.x.x.x.x.......... [ 89%]
+........................................................................ [ 93%]
+.............F.......................................................... [ 98%]
+..............................                                           [100%]
+=================================== FAILURES ===================================
+__________________ test_storage_root_is_outside_the_checkout ___________________
+
+live = {'collection_version': 'p1-17-train-full@1.0.0', 'namespace': 'p1-17-train-full@1', 'salt': 'p1-17-train-full@1', 'attempt': 1, ...}
+
+    def test_storage_root_is_outside_the_checkout(live):
+        root = Path(live["storage"]["root"])
+        assert live["storage"]["in_git"] is False
+>       assert REPO.resolve() not in root.resolve().parents and root.resolve() != REPO.resolve()
+E       AssertionError: assert (PosixPath('/mnt/c/Users/Admin/Documents/Test/ember_v1') not in <PosixPath.parents>)
+E        +  where PosixPath('/mnt/c/Users/Admin/Documents/Test/ember_v1') = resolve()
+E        +    where resolve = PosixPath('/mnt/c/Users/Admin/Documents/Test/ember_v1').resolve
+E        +  and   <PosixPath.parents> = PosixPath('/mnt/c/Users/Admin/Documents/Test/ember_v1/D:/Coding/ember-evidence/p1-17-train-full@1').parents
+E        +    where PosixPath('/mnt/c/Users/Admin/Documents/Test/ember_v1/D:/Coding/ember-evidence/p1-17-train-full@1') = resolve()
+E        +      where resolve = PosixPath('D:/Coding/ember-evidence/p1-17-train-full@1').resolve
+
+tests/test_train_collect.py:71: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_train_collect.py::test_storage_root_is_outside_the_checkout
+1 failed, 1601 passed, 2 skipped, 10 xfailed in 446.93s (0:07:26)
+
+# exit_code: 1

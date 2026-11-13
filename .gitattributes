@@ -2,3 +2,5 @@
 scripts/git-hooks/* text eol=lf
 # The workstation wrapper runs in Linux / WSL2 bash.
 ops/workstation/*.sh text eol=lf
+# Preserve exact archival bytes for the handoff SHA-256 inventory.
+handoff/** -text
