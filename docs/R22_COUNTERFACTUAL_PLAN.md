@@ -108,3 +108,16 @@ sources remain unchanged. The optional optimizer hook defaults off, preserving P
 Run the two arms in matched update rounds by swapping only trainable tensors/critic/Adam/RNG
 on the single GPU; shared frozen base weights do not need repeated loading. This ensures
 equal update counts if the wall budget ends early.
+
+Fresh-context review found two Important gaps before launch: paired uncertainty needed
+to include behavior/latency/family metrics, and resumed runs needed to audit prior attempt
+traces rather than only the final attempt. Both were reproduced with failing tests, then
+fixed. `rl_cf_evidence.py` now recomputes paired intervals from matching reporting IDs;
+the independent verifier and reporter compare those results. Resume checkpoint hashes,
+config/parent identity, every carried raw update and episode, contiguous update counts,
+all model-used ancestral transition/GAE targets, and actual CF source visits are reconciled
+and replayed. Abandoned partial attempts remain separate from committed model experience.
+The PPO-only control is checked for zero auxiliary-gradient leakage. Focused CPU checks:
+23 passed; explicit Torch joint/PPO/CF math checks: 5 passed. Default T0–T4 are exercised
+on a hand-built fire-chain fixture; it produces a verified positive coordinated-action
+pair. No real Phase 3 TRAIN teacher calls or GPU collection have run yet.

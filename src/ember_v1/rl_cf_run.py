@@ -263,8 +263,9 @@ def run(args):
                     ep, groups = collect(actor, critic, chosen, cfg, pool, folder, f"train-{update}", train=True)
                     newly_collected[arm] += len(ep)
                     collect_seconds = time.monotonic()-t0
-                    objective, study_index = None, []
+                    objective, study_index, cf_seconds = None, [], 0.0
                     if arm == "cf":
+                        cf_started = time.monotonic()
                         with (folder/"transitions.jsonl").open() as f:
                             f.seek(offset)
                             visits = [json.loads(line) for line in f]
@@ -280,6 +281,7 @@ def run(args):
                             append(out/"counterfactual_index.jsonl", entry)
                             study_index.append(entry)
                         objective = CounterfactualObjective(studies)
+                        cf_seconds = time.monotonic()-cf_started
                     t1 = time.monotonic()
                     optimization = optimize(actor, critic, optimizer, groups, cfg, auxiliary=objective)
                     for g in groups:
@@ -290,8 +292,10 @@ def run(args):
                     old_history = state["episodes"]
                     history = old_history+ep
                     state["episodes_in_stage"] += len(ep)
-                    rep = {"update": update+1, "stage": stage, "rollout": summarize(ep), "collect_seconds": collect_seconds,
-                           "optimize_seconds": time.monotonic()-t1, "counterfactual_studies": study_index,
+                    rep = {"update": update+1, "stage": stage, "evidence_root": str(out),
+                           "episode_ids": [e["scenario_id"] for e in ep], "rollout": summarize(ep), "collect_seconds": collect_seconds,
+                           "optimize_seconds": time.monotonic()-t1, "counterfactual_seconds": cf_seconds,
+                           "counterfactual_studies": study_index,
                            "counterfactual_pairs": len(objective.pairs) if objective else 0, **optimization}
                     append(folder/"updates.jsonl", rep)
                     trained = capture(actor, critic, optimizer)
