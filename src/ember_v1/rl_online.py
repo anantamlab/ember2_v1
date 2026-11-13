@@ -6,6 +6,7 @@ import gc
 import hashlib
 import json
 import multiprocessing
+import signal
 import subprocess
 import sys
 import threading
@@ -73,6 +74,9 @@ def run(args):
     previous = [json.loads(p.read_text()) for p in base.glob("attempt-*/failure.json")]
     if any(base.glob("attempt-*/summary.json")):
         raise RuntimeError("experiment already completed")
+    for old in base.glob("attempt-*/execution.json"):
+        if not (old.parent / "failure.json").exists():
+            raise RuntimeError("prior attempt has no durable end record; reconcile before resume")
     spent = sum(p["elapsed_seconds"] for p in previous)
     budget = cfg["wall_cap_seconds"]-spent
     previous_train_episodes = sum(1 for p in base.glob("attempt-*/episodes.jsonl") for line in p.open()
@@ -85,6 +89,12 @@ def run(args):
     stop = threading.Event()
     monitor = threading.Thread(target=telemetry, args=(out, stop), daemon=True)
     monitor.start()
+    def deadline(signum, frame):
+        raise TimeoutError("aggregate six-hour experiment deadline reached")
+    # WSL/Linux execution: interrupt even a slow update/evaluation, leaving the last
+    # complete hash-verified checkpoint resumable. External timeout is a second guard.
+    signal.signal(signal.SIGALRM, deadline)
+    signal.setitimer(signal.ITIMER_REAL, max(1, budget-15))
     try:
         if subprocess.check_output(["git", "status", "--porcelain"], cwd=REPO, text=True).strip():
             raise RuntimeError("commit source before GPU execution")
@@ -259,6 +269,7 @@ def run(args):
               "traceback": traceback.format_exc(), "attempt": args.attempt})
         raise
     finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
         stop.set()
         monitor.join(timeout=10)
 

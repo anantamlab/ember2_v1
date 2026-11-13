@@ -39,6 +39,10 @@ def build_scenarios(namespace, split, count, max_steps):
             walls.update((r, c) for r in (row, row+2) for c in range(w) if c not in doors)
         if stratum == "pillars":
             walls.update((r, c) for r in range(1, h-1, 3) for c in range(1, w-1, 3))
+        # Give each family independent geometry even in regular structural strata.
+        # This prevents symmetric pillar/door templates coinciding across splits.
+        interior = [p for p in cells if p not in walls and 0 < p[0] < h-1 and 0 < p[1] < w-1]
+        walls.update(rng.sample(interior, min(len(interior), rng.randint(3, 8))))
         # Random transpose/reflections remove a fixed doorway/exit orientation.
         flip_r, flip_c, transpose = rng.randrange(2), rng.randrange(2), rng.randrange(2)
         def transform(p):

@@ -51,3 +51,11 @@ isolated component. Full 1,024-family regression reproduced it. Corrected popula
 capacity by placing one exit in the largest boundary-connected public component only
 when fewer than seven non-exit cells are reachable. No outcome rejection or reward change.
 Attempt 2 uses its own fresh TRAIN namespace and the same fixed DEV geometry generator.
+
+Attempt 2: also stopped before GPU load/rollouts. D4 isolation caught two repeated pillar
+geometries, including a TRAIN/selection collision. Added independently sampled interior
+obstacles to every structural stratum and a full namespace/cross-split regression for all
+four authorized attempts. No collided scenario was used for training or evaluation.
+Fresh-context review found a soft-only deadline: added a process alarm and refusal to
+resume attempts with missing durable end records. External launcher also enforces remaining
+aggregate time. Both findings fixed before actual TRAIN collection.

@@ -51,3 +51,17 @@ def test_resume_rejects_changed_configuration_and_checkpoint(tmp_path):
 def test_full_frozen_namespace_has_population_capacity():
     rows = build_scenarios("ember-r21-independent-online-20261113-v1", "train", 1024, 48)
     assert all(4 <= len(s.people) <= 20 for s, _ in rows)
+
+
+def test_all_authorized_attempts_have_disjoint_dev_topologies():
+    ns = "ember-r21-independent-online-20261113-v1"
+    dev = build_scenarios(ns, "select", 32, 48)+build_scenarios(ns, "report", 32, 48)
+    def h(s):
+        return topology_hash(s.height, s.width, s.obstacles, [p for _, p in s.exits])
+    dev_hashes = {h(s) for s, _ in dev}
+    assert len(dev_hashes) == 64
+    for attempt in range(1, 5):
+        rows = build_scenarios(ns if attempt == 1 else ns+f"-attempt-{attempt}", "train", 1024, 48)
+        hashes = [h(s) for s, _ in rows]
+        assert len(set(hashes)) == 1024
+        assert not set(hashes) & dev_hashes
