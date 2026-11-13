@@ -152,7 +152,7 @@ def verify_parent(root):
     if not best["exact_reload_digest_equal"]:
         raise ValueError("Phase 2 selected actor did not exactly reload")
     selected = Path(best["actor"]).parent
-    for p in [root/name for name in required] + [root/"best_checkpoint.json", selected/"identity.json", selected/"trainer.pt"] + list((selected/"actor").iterdir()):
+    for p in [root/name for name in required] + [root/"best_checkpoint.json", root/"selection.json", selected/"identity.json", selected/"trainer.pt"] + list((selected/"actor").iterdir()):
         if p.is_file() and (str(p.relative_to(root)) not in pinned or hash_path(p) != pinned[str(p.relative_to(root))]["sha256"]):
             raise ValueError(f"Phase 2 input differs from its verified manifest: {p.name}")
     selection = json.loads((root/"selection.json").read_text())

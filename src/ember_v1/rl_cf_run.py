@@ -208,6 +208,33 @@ def run(args):
         torch.cuda.set_rng_state_all([v.cpu() for v in parent_state["cuda_rng"]])
         parent_steps = sorted({int(v["step"]) for v in parent_state["optimizer"]["state"].values()})
         del parent_state
+        # Capacity test on a fresh largest TRAIN state, with no optimizer step. Exact
+        # weights/RNG are preserved; this is not an SFT or RL training update.
+        from .rl_env import EvacuationEnv
+        largest = max((s for s, _ in pools[4]), key=lambda s: (len(s.people), s.height*s.width))
+        probe_rng, probe_cuda_rng = torch.get_rng_state(), torch.cuda.get_rng_state_all()
+        probe_batch = actor.prepare([EvacuationEnv(largest).reset()[0]])
+        with torch.enable_grad():
+            _, _, probe_logp, _, _ = actor.sample(probe_batch, greedy=True)
+            (-probe_logp.mean()).backward()
+        probe_norms = {}
+        for name, predicate in (("lora", lambda n: "lora_" in n), ("head", lambda n: n.startswith("head."))):
+            grads = [p.grad for n, p in actor.model.named_parameters() if predicate(n) and p.grad is not None]
+            if not grads or any(not torch.isfinite(g).all() for g in grads):
+                raise FloatingPointError("largest-state preflight gradient is missing/nonfinite")
+            probe_norms[name] = sum(float(g.float().square().sum()) for g in grads)**.5
+            if probe_norms[name] <= 0:
+                raise FloatingPointError("largest-state preflight has zero gradient")
+        optimizer.zero_grad(set_to_none=True)
+        torch.set_rng_state(probe_rng)
+        torch.cuda.set_rng_state_all(probe_cuda_rng)
+        if actor.ad.weights_digest() != binding["actor_digest"]:
+            raise ValueError("memory preflight changed the frozen parent")
+        write(out/"largest_state_preflight.json", {"people": len(largest.people), "grid": [largest.height, largest.width],
+              "gradient_norms": probe_norms, "peak_allocated_bytes": torch.cuda.max_memory_allocated(),
+              "weights_unchanged": True, "optimizer_steps": 0})
+        del probe_batch, probe_logp, grads
+        torch.cuda.empty_cache()
         initial = capture(actor, critic, optimizer)
         initial["actor_digest"] = actor.ad.weights_digest()
         states = {arm: {**cpu_copy(initial), "episodes": [], "updates": [], "selections": [],
@@ -346,7 +373,6 @@ def run(args):
                     raise ValueError("selected arm reload differs")
                 actor.set_trainable(False)
                 probe_observation = dev_report[0]
-                from .rl_env import EvacuationEnv
                 probe_observation = EvacuationEnv(probe_observation).reset()[0]
                 with torch.no_grad():
                     probe_before = actor.logits(actor.prepare([probe_observation]))[0].cpu()

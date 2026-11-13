@@ -161,8 +161,12 @@ def test_trainer_loss_equals_the_exact_sft_objective(rows, prepared, small_cfg, 
 
 # ----- training loop (from #44) ------------------------------------------------------------------------------
 def test_s0_overfit_reaches_full_accuracy(rows, small_cfg, tmp_path):
+    # The mock fixture can finish within one Windows monotonic-clock tick. Supply
+    # an advancing clock to test throughput arithmetic; retain all learning assertions.
+    from itertools import count
+    ticks = count(0)
     m = st.MockDecisionAdapter(0)
-    rep = st.train(m, rows, {**small_cfg, "head_lr": 20.0}, guards=_guards(), out_dir=tmp_path / "s0",
+    rep = st.train(m, rows, {**small_cfg, "head_lr": 20.0}, guards=_guards(clock=lambda: next(ticks)/1000), out_dir=tmp_path / "s0",
                    mode="s0_fixture", epochs=40)
     assert rep["status"] == "COMPLETED"
     acc = sum(m.predict(r)[i] == r["gold"][i] for r in rows for i in r["gold"]) / sum(len(r["gold"]) for r in rows)

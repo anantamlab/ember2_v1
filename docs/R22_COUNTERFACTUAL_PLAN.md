@@ -67,8 +67,11 @@ populations and irregular geometry. Advance using a trailing TRAIN-only evacuati
 threshold .55 and casualty rate at most .30, after at least 16 episodes per stage; force
 coverage of the next stage after 32 TRAIN episodes so a weak stage cannot consume the run.
 Both arms share the curriculum selected from PPO-only TRAIN performance, so CF learning
-does not also change training difficulty exposure. Keep at most
-20 active people for memory-safe untruncated inference; larger than the simple stage.
+does not also change training difficulty exposure. Stage 3 uses up to 24 people and
+stage 4 uses 24–32, extending Phase 2's 20-person cap while retaining untruncated original
+chunk_k=100 inference. Before training, test a largest TRAIN state with a real differentiable
+forward/backward, no optimizer step, and exact weight/RNG preservation. Record its memory
+and finite gradients; fail before collection if the hardware cannot support it.
 
 Fix 32 selection DEV and 32 further reporting DEV families before training. Include all
 stages and structural strata, with additional unseen geometry families. Selection every
@@ -121,3 +124,12 @@ The PPO-only control is checked for zero auxiliary-gradient leakage. Focused CPU
 23 passed; explicit Torch joint/PPO/CF math checks: 5 passed. Default T0–T4 are exercised
 on a hand-built fire-chain fixture; it produces a verified positive coordinated-action
 pair. No real Phase 3 TRAIN teacher calls or GPU collection have run yet.
+
+Capacity refinement before any Phase 3 data: stages 3/4 now reach 24/32 people and every
+eight-scenario block contains a prescribed maximum-population case. The largest-state
+gradient/memory preflight preserves the verified parent weights and RNG and performs zero
+optimizer steps. Independent branch verification uses four CPU processes and is tested
+under spawn. A full-suite run also exposed an existing mock-training throughput test that
+finished inside one Windows clock tick; it now uses the already-supported injected clock,
+retaining every accuracy, loss, token and throughput assertion. Production SFT code and
+all trained V1 weights remain unchanged; no actual SFT run was performed.

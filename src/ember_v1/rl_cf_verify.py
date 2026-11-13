@@ -4,6 +4,8 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import multiprocessing
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 from .rl_cf_training import CounterfactualObjective, verify_parent
@@ -17,6 +19,11 @@ from .sim import Scenario, Simulator
 
 def rows(path):
     return [json.loads(s) for s in path.open()] if path.exists() else []
+
+
+def verify_study_path(path):
+    study = json.loads(Path(path).read_text())
+    return study["study_hash"], verify_study(study, continuation=fixed_t1)
 
 
 def verify(root):
@@ -64,10 +71,13 @@ def verify(root):
                              "code_fingerprint": code_fingerprint(T1CongestionAware)}
     visits_cache, totals, teacher = {}, {"studies": 0, "branches": 0, "transitions": 0, "eligible_pairs": 0}, {}
     actual_pairs = {}
-    for entry in indices:
+    with ProcessPoolExecutor(max_workers=execution["config"]["cpu_workers"],
+                             mp_context=multiprocessing.get_context("spawn")) as pool:
+        branch_proofs = list(pool.map(verify_study_path, [e["path"] for e in indices]))
+    for entry, (verified_hash, branch_proof) in zip(indices, branch_proofs):
         path = Path(entry["path"])
         study = json.loads(path.read_text())
-        if study["study_hash"] != entry["study_hash"]:
+        if study["study_hash"] != entry["study_hash"] or verified_hash != study["study_hash"]:
             raise ValueError("CF index and actual study differ")
         if study["continuation"] != expected_continuation:
             raise ValueError("counterfactual continuation identity is not the frozen T1")
@@ -81,7 +91,7 @@ def verify(root):
             raise ValueError("counterfactual source is outside the committed model training history")
         if visits_cache[factual_root].get(key) != study["factual_visit"]:
             raise ValueError("CF state is not found in the real on-policy rollout")
-        proof = verify_study(study, continuation=fixed_t1)
+        proof = branch_proof
         if not proof["visited_source_verified"] or not proof["continuation_recomputed"]:
             raise ValueError("incomplete causal source/continuation proof")
         totals["studies"] += 1

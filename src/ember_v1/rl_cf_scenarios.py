@@ -41,7 +41,7 @@ def scenarios(namespace, split, count, *, stage=None, max_steps=48):
         stub = {"map": {"height": h, "width": w, "obstacles": [list(p) for p in walls],
                         "exits": [{"position": list(p)} for p in exits]}, "burning": []}
         accessible = sorted(set(safe_distances(stub))-set(exits))
-        lo, hi = ((4, 6), (8, 12), (8, 16), (10, 20), (16, 20))[level]
+        lo, hi = ((4, 6), (8, 12), (8, 16), (12, 24), (24, 32))[level]
         if len(accessible) < hi+3:
             components, unseen = [], set(free)
             while unseen:
@@ -57,7 +57,9 @@ def scenarios(namespace, split, count, *, stage=None, max_steps=48):
             stub["map"]["exits"] = [{"position": list(p)} for p in exits]
             accessible = sorted(set(safe_distances(stub))-set(exits))
         rng.shuffle(accessible)
-        n = min(rng.randint(lo, hi), len(accessible)-3)
+        # Prespecified density coverage: each eight-episode block includes its
+        # largest population, including in the small fixed DEV panels.
+        n = min(hi if index % 8 == 0 else rng.randint(lo, hi), len(accessible)-3)
         if n < lo:
             raise RuntimeError("insufficient public curriculum capacity")
         people = accessible[:n]

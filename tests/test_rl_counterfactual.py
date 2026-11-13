@@ -61,7 +61,7 @@ def test_curriculum_scenarios_cover_stages_and_have_disjoint_topologies():
     sets += [scenarios("ember-r22-counterfactual-20261113-v1", split, 32) for split in ("select", "report")]
     for rows in sets:
         assert {m["stage"] for _, m in rows} == set(range(5))
-        assert max(len(s.people) for s, _ in rows) == 20
+        assert max(len(s.people) for s, _ in rows) == 32
         for s, _ in rows:
             hashes.append(topology_hash(s.height, s.width, s.obstacles, [p for _, p in s.exits]))
     assert len(set(hashes)) == len(hashes)
@@ -87,7 +87,7 @@ def test_both_arms_use_identical_train_controlled_curriculum():
     assert states["cf"]["episodes_in_stage"] == states["ppo"]["episodes_in_stage"] == 0
 
 
-def test_full_teacher_candidate_job_on_hand_built_fire_chain():
+def test_full_teacher_candidate_job_on_hand_built_fire_chain(tmp_path):
     import math
     from ember_v1.sim import Scenario
     from ember_v1.rl_counterfactual import evaluate_job, fixed_t1
@@ -114,3 +114,12 @@ def test_full_teacher_candidate_job_on_hand_built_fire_chain():
     assert all(v["status"] != "failed" for v in study["teacher_diagnostics"].values())
     assert verify_study(study, continuation=fixed_t1)["status"] == "PASS"
     assert CounterfactualObjective([study]).pairs
+    import json
+    import multiprocessing
+    from concurrent.futures import ProcessPoolExecutor
+    from ember_v1.rl_cf_verify import verify_study_path
+    path = tmp_path/"study.json"
+    path.write_text(json.dumps(study))
+    with ProcessPoolExecutor(max_workers=2, mp_context=multiprocessing.get_context("spawn")) as pool:
+        proofs = list(pool.map(verify_study_path, [str(path), str(path)]))
+    assert all(h == study["study_hash"] and p["status"] == "PASS" for h, p in proofs)
