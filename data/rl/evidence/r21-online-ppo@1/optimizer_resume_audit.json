@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "restored_parent_optimizer_steps": [
+    141
+  ],
+  "selected_optimizer_state_steps": [
+    1996
+  ],
+  "selected_update": 96,
+  "state_keys": [
+    "completed_updates",
+    "critic",
+    "cuda_rng",
+    "episodes",
+    "optimizer",
+    "selections",
+    "torch_rng",
+    "updates"
+  ],
+  "rng_present": true,
+  "selected_tensor_l2_from_phase1": {
+    "adapter_model.safetensors": 0.6092986961837084,
+    "joint_head.safetensors": 2.3305469267390952
+  }
+}

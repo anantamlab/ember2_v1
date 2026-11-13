@@ -1,0 +1,6 @@
+{
+  "attempt": 2,
+  "elapsed_seconds": 7.244033947004937,
+  "status": "FAILED",
+  "traceback": "Traceback (most recent call last):\n  File \"/mnt/c/Users/Admin/Documents/Test/ember_v1/src/ember_v1/rl_online.py\", line 113, in run\n    raise RuntimeError(\"geometry family isolation failed\")\nRuntimeError: geometry family isolation failed\n"
+}

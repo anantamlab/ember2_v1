@@ -1,0 +1,51 @@
+{
+  "matched_initial_public_states": true,
+  "metrics": {
+    "v1": {
+      "states": 32,
+      "people": 358,
+      "person_entropy_nats": 0.6477484546575945,
+      "stay_probability": 0.038618919985180765,
+      "static_legal_probability": 0.8939179830852573,
+      "distance_decrease_probability": 0.6432930495903278,
+      "kl_to_sft_per_person": 0.0,
+      "argmax_south": 144,
+      "argmax_changed_from_sft": 0,
+      "argmax_north": 111,
+      "argmax_west": 54,
+      "argmax_east": 45,
+      "argmax_stay": 4
+    },
+    "phase1": {
+      "states": 32,
+      "people": 358,
+      "person_entropy_nats": 0.5899631697610384,
+      "stay_probability": 0.0345902180993278,
+      "static_legal_probability": 0.8924246712984155,
+      "distance_decrease_probability": 0.6508040356444643,
+      "kl_to_sft_per_person": 0.006381402595360921,
+      "argmax_south": 148,
+      "argmax_changed_from_sft": 9,
+      "argmax_north": 108,
+      "argmax_west": 55,
+      "argmax_east": 43,
+      "argmax_stay": 4
+    },
+    "ppo": {
+      "states": 32,
+      "people": 358,
+      "person_entropy_nats": 0.7211521714991379,
+      "stay_probability": 0.04632924238018087,
+      "static_legal_probability": 0.8925952816527759,
+      "distance_decrease_probability": 0.6294141959914323,
+      "kl_to_sft_per_person": 0.06663353463729253,
+      "argmax_south": 151,
+      "argmax_changed_from_sft": 37,
+      "argmax_east": 57,
+      "argmax_north": 94,
+      "argmax_west": 54,
+      "argmax_stay": 2
+    }
+  },
+  "note": "Public-distance and legality measurements are diagnostics only, never training rewards."
+}

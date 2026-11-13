@@ -4,7 +4,7 @@ Package `ember_v1`, CLI `ember-v1`, Modal app `ember-v1`. Formerly "evac-decisio
 
 A standalone evacuation decision policy using Qwen3.5 and Unsloth FastDecisionModel, with an independent CPU simulator. It contains no official benchmark or hidden evaluation data.
 
-The current Phase 1 work adds an RL environment and joint-action PPO initialized from the actual trained V1 checkpoint, with a frozen baseline and fresh TRAIN-only scenarios. See the [PPO experiment report](docs/R20_PPO_PHASE1_REPORT.md) for results, exact checkpoint references, failure diagnoses and reproduction commands. The [High-Level Design](docs/HLD.md) and earlier phase reports retain the project's research history.
+The [Phase 2 online PPO experiment](docs/R21_PPO_PHASE2_REPORT.md) completed 1,024 on-policy episodes from the verified Phase 1 checkpoint. On fresh reporting DEV, the selected PPO actor tied raw V1 at 48.60% evacuation. The report records the casualty uncertainty, persistent movement failures, exact checkpoint identity and reproduction commands. The [Phase 1 pilot report](docs/R20_PPO_PHASE1_REPORT.md) and [High-Level Design](docs/HLD.md) retain the project's research history.
 
 ## Run locally
 
@@ -39,7 +39,7 @@ The `prepare` subcommand emits Unsloth-compatible `state`, `questions`, `gold` r
 
 ## Data sources
 
-All training data enters through `ember-v1 ingest` and is registered in `data/sources.json` with a quality tier and SHA-256 (HLD v3.1 §7.1). Only `teacher_verified` data is training-eligible.
+Supervised training data enters through `ember-v1 ingest` and is registered in `data/sources.json` with a quality tier and SHA-256 (HLD v3.1 §7.1). Only `teacher_verified` data is eligible for supervised training. PPO uses independently generated TRAIN scenarios and simulator outcomes recorded in its own evidence archive.
 
 ```bash
 ember-v1 ingest data/raw/evac-decision-p0a-padding-gate.zip \

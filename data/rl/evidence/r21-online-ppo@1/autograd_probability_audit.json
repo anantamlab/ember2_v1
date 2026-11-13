@@ -1,0 +1,9 @@
+{
+  "autograd_behavior_replay_max_error": 0.0,
+  "finite_nonzero_gradient_norms": {
+    "head": 10.307628344874221,
+    "lora": 204.4646387574422
+  },
+  "groups": 369,
+  "transitions": 369
+}
