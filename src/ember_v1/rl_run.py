@@ -53,8 +53,10 @@ def summarize(episodes):
             "mean_terminal_reward": sum(e["terminal_reward"] for e in episodes)/len(episodes)}
 
 
-def collect(actor, critic, scenarios, cfg, pool, out, label, *, greedy=False, train=False):
+def collect(actor, critic, scenarios, cfg, pool, out, label, *, greedy=False, train=False, postprocess=None):
     import torch
+    if postprocess and (train or not greedy):
+        raise ValueError("heuristic arms are greedy evaluation only")
     reward = RewardConfig(cfg["gamma"], cfg["shaping_eta"], cfg["evacuated_weight"],
                           cfg["casualty_weight"], cfg["unresolved_weight"])
     episodes, groups = [], []
@@ -63,17 +65,34 @@ def collect(actor, critic, scenarios, cfg, pool, out, label, *, greedy=False, tr
         observations = [e.reset()[0] for e in envs]
         histories = [[] for _ in envs]
         counters = [Counter() for _ in envs]
+        previous = [{} for _ in envs]
         live = list(range(len(envs)))
         while live:
             batch = actor.prepare([observations[i] for i in live])
+            if cfg.get("measure_latency"):
+                torch.cuda.synchronize()
+            inference_start = time.monotonic()
             # bf16 kernels can differ between no_grad and autograd, even in eval mode.
             # TRAIN behavior must use the same forward path as differentiable PPO replay.
             with torch.set_grad_enabled(train):
                 maps, indices, logps, entropy, old_lp = actor.sample(batch, greedy)
             logps, entropy = logps.detach(), entropy.detach()
+            if cfg.get("measure_latency"):
+                torch.cuda.synchronize()
+            inference_seconds = time.monotonic()-inference_start
+            raw_maps = maps
+            if postprocess:
+                from .policy_arms import static_mask, coordinate
+                from .student_train import ACTION_ORDER
+                maps = []
+                for i, ids, lp in zip(live, batch["ids"], old_lp):
+                    scores = {pid: dict(zip(ACTION_ORDER, z)) for pid, z in zip(ids, lp.cpu().tolist())}
+                    maps.append(static_mask(observations[i], scores) if postprocess == "mask"
+                                else coordinate(observations[i], scores)[0])
             with torch.no_grad():
                 values = critic(batch["features"]).squeeze(-1) if critic is not None else torch.zeros(len(live), device="cuda")
-            group = {"batch": batch, "actions": indices, "old_joint": logps.detach(), "old_lp": old_lp}
+            group = {"batch": batch, "actions": indices, "old_joint": logps.detach(), "old_lp": old_lp,
+                     "transition_keys": [(envs[i].scenario.scenario_id, observations[i]["step"]) for i in live]}
             group_rows = []
             # Workers receive only simulator objects/actions, never CUDA tensors or model objects.
             transitions = list(pool.map(_step, [(envs[i], a) for i, a in zip(live, maps)])) if pool else [
@@ -86,6 +105,19 @@ def collect(actor, critic, scenarios, cfg, pool, out, label, *, greedy=False, tr
                 counters[i].update(steps=1, person_steps=len(actions), stay=sum(a == "stay" for a in actions.values()),
                                    attempted=sum(a != "stay" for a in actions.values()),
                                    blocked=sum(m["outcome"].startswith("blocked_") for m in info["record"]["movements"].values()))
+                counters[i].update({"action_"+a: list(actions.values()).count(a) for a in ("east", "north", "south", "west", "stay")})
+                counters[i]["postprocess_changes"] += sum(actions[p] != raw_maps[row][p] for p in actions)
+                counters[i]["inference_seconds"] += inference_seconds/len(live)
+                positions = {p["id"]: p["position"] for p in observations[i]["people"] if p["status"] == "active"}
+                next_positions = {p["id"]: p["position"] for p in nxt["people"] if p["status"] == "active"}
+                current = {}
+                for pid, action in actions.items():
+                    key = (tuple(positions[pid]), action)
+                    if action != "stay" and next_positions.get(pid) == positions[pid]:
+                        counters[i]["ineffective_moves"] += 1
+                        counters[i]["repeated_ineffective_moves"] += int(previous[i].get(pid) == key)
+                        current[pid] = key
+                previous[i] = current
                 for movement in info["record"]["movements"].values():
                     counters[i][movement["outcome"]] += 1
                 item = {"reward": reward_value, "value": float(values[row]), "done": done,
@@ -93,7 +125,8 @@ def collect(actor, critic, scenarios, cfg, pool, out, label, *, greedy=False, tr
                 histories[i].append(item)
                 group_rows.append(item)
                 append(out / "transitions.jsonl", {"label": label, "scenario_id": envs[i].scenario.scenario_id,
-                       "observation": observations[i], "sampled_actions": actions, "executed_actions": info["record"]["actions"],
+                       "observation": observations[i], "sampled_actions": raw_maps[row], "executed_actions": info["record"]["actions"],
+                       "postprocess": postprocess, "inference_seconds": inference_seconds, "inference_batch_states": len(live),
                        "old_joint_logprob": float(logps[row]), "person_logprobs": old_lp[row].cpu().tolist(),
                        "value": item["value"], "reward": reward_value, "terminal_reward": info["terminal_reward"],
                        "shaping_reward": info["shaping_reward"], "done": done, "record": info["record"]})

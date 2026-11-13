@@ -15,7 +15,8 @@ from .student_train import ACTION_ORDER
 def verify(root: Path):
     cfg = json.loads((root / "execution.json").read_text())["config"]
     scenarios = json.loads((root / "scenarios.json").read_text())
-    scenarios = {s["scenario_id"]: Scenario.from_dict(s) for split in ("train", "dev") for s in scenarios[split]}
+    scenarios = {s["scenario_id"]: Scenario.from_dict(s) for split in ("train", "dev", "select", "report")
+                 for s in scenarios.get(split, [])}
     envs, histories = {}, defaultdict(list)
     errors, probability_error, normalization_error, transitions = [], 0.0, 0.0, 0
     rc = RewardConfig(cfg["gamma"], cfg["shaping_eta"], cfg["evacuated_weight"],
@@ -27,10 +28,20 @@ def verify(root: Path):
             envs[key] = EvacuationEnv(scenarios[key[1]], rc)
             envs[key].reset()
         env = envs[key]
-        if row["observation"] != env.sim.observe() or row["sampled_actions"] != row["executed_actions"]:
+        if row["observation"] != env.sim.observe():
             errors.append(f"{key}: observation/action mismatch")
         ids = env.sim.active_ids()
         distributions = row["person_logprobs"]
+        expected = row["sampled_actions"]
+        if row.get("postprocess"):
+            if key[0].startswith("train-") or row["postprocess"] not in {"mask", "coordinate"}:
+                raise ValueError("unexpected training action postprocessing")
+            from .policy_arms import static_mask, coordinate
+            scores = {pid: dict(zip(ACTION_ORDER, lp)) for pid, lp in zip(ids, distributions)}
+            expected = (static_mask(row["observation"], scores) if row["postprocess"] == "mask"
+                        else coordinate(row["observation"], scores)[0])
+        if expected != row["executed_actions"]:
+            errors.append(f"{key}: sampled/executed distribution mismatch")
         if len(distributions) != len(ids) or any(len(lp) != 5 for lp in distributions):
             raise ValueError("action distribution does not match active people")
         selected = sum(lp[ACTION_ORDER.index(row["sampled_actions"][pid])] for pid, lp in zip(ids, distributions))
@@ -56,9 +67,24 @@ def verify(root: Path):
         errors.append("action probability audit failed")
     if any(not math.isfinite(r[k]) for r in advantages for k in ("advantage", "return")):
         errors.append("nonfinite advantages/returns")
+    target_error = 0.0
+    if (root / "ppo_targets.jsonl").exists():
+        targets = {(r["label"], r["scenario_id"], r["step"]): r for r in
+                   (json.loads(line) for line in (root / "ppo_targets.jsonl").open())}
+        if len(targets) != len(advantages):
+            errors.append("PPO target count mismatch")
+        for r in advantages:
+            t = targets.get((r["label"], r["scenario_id"], r["step"]))
+            if t is None:
+                errors.append("missing PPO target")
+                continue
+            target_error = max(target_error, *(abs(r[k]-t[k]) for k in ("advantage", "return")))
+        if target_error > 1e-9:
+            errors.append("PPO target recomputation differs")
     result = {"status": "PASS" if not errors else "FAIL", "episodes_replayed": len(envs),
               "transitions_replayed": transitions, "training_advantages_recomputed": len(advantages),
               "max_joint_sum_error": probability_error, "max_distribution_normalization_error": normalization_error,
+              "max_ppo_target_error": target_error,
               "errors": errors}
     (root / "advantages.jsonl").write_text("".join(json.dumps(a, sort_keys=True)+"\n" for a in advantages))
     (root / "independent_replay.json").write_text(json.dumps(result, indent=2)+"\n")
