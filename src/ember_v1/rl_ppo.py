@@ -118,7 +118,18 @@ def make_value_head():
                                torch.nn.Linear(64, 1)).cuda()
 
 
-def optimize(actor, critic, optimizer, groups, cfg):
+def counterfactual_pair_loss(logits, chosen, rejected, reference_margin, weight):
+    """Offline measured-outcome pair, distinct from the on-policy PPO likelihood ratio."""
+    positive = joint_statistics(logits, chosen)[0]
+    negative = joint_statistics(logits, rejected)[0]
+    margin = positive-negative-reference_margin
+    loss = torch.nn.functional.softplus(-margin)*min(1.0, max(0.0, weight))
+    if not torch.isfinite(loss):
+        raise FloatingPointError("nonfinite counterfactual pair loss")
+    return loss
+
+
+def optimize(actor, critic, optimizer, groups, cfg, auxiliary=None):
     """Replay original inference batches, keeping padding/precision identical at ratio=1.
 
     A group contains several JOINT transitions. Accumulate groups to limit GPU memory.
@@ -126,7 +137,7 @@ def optimize(actor, critic, optimizer, groups, cfg):
     """
     advantages = torch.tensor([a for g in groups for a in g["advantages"]], device="cuda")
     mean, std = advantages.mean(), advantages.std(unbiased=False).clamp_min(1e-8)
-    results, max_replay_error, steps = [], 0.0, 0
+    results, max_replay_error, steps, auxiliary_steps = [], 0.0, 0, 0
     # Fundamental on-policy audit before the first update, not confounded by changed weights.
     with torch.enable_grad():
         for g in groups:
@@ -169,6 +180,13 @@ def optimize(actor, critic, optimizer, groups, cfg):
                                 "person_entropy": float(sum(s[1].detach() for s in stats)/sum(g["batch"]["lengths"])),
                                 "clip_fraction": float(((ratio-1).abs() > cfg["clip"]).float().mean()),
                                 "epoch": epoch})
+            auxiliary_used = False
+            if auxiliary is not None:
+                pair_loss, evidence = auxiliary(actor)
+                if pair_loss is not None:
+                    (cfg["counterfactual_coef"]*pair_loss).backward()
+                    results[-1].update(counterfactual_loss=float(pair_loss.detach()), counterfactual=evidence)
+                    auxiliary_used = True
             norms = {}
             for pg in optimizer.param_groups:
                 grads = [p.grad for p in pg["params"] if p.grad is not None]
@@ -187,8 +205,10 @@ def optimize(actor, critic, optimizer, groups, cfg):
                 break
             optimizer.step()
             steps += 1
+            auxiliary_steps += int(auxiliary_used)
             results[-1].update(gradient_norms=norms, total_grad_norm=float(norm))
         if stop:
             break
-    return {"optimizer_steps": steps, "max_probability_replay_error": max_replay_error,
+    return {"optimizer_steps": steps, "auxiliary_optimizer_steps": auxiliary_steps,
+            "max_probability_replay_error": max_replay_error,
             "kl_early_stop": stop, "minibatches": results}
