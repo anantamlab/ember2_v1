@@ -142,20 +142,27 @@ class CounterfactualObjective:
         from .rl_ppo import counterfactual_pair_loss
         pair = self.pairs[self.cursor % len(self.pairs)]
         self.cursor += 1
-        z = actor.logits(actor.prepare([pair["public"]]))[0]
-        loss = counterfactual_pair_loss(z, torch.tensor(pair["positive"], device="cuda"),
-            torch.tensor(pair["negative"], device="cuda"), pair["reference_margin"], pair["weight"])
+        batch = actor.prepare([pair["public"]])
+        positive = torch.tensor(pair["positive"], device="cuda")
+        negative = torch.tensor(pair["negative"], device="cuda")
+
+        def forward_loss():
+            z = actor.logits(batch)[0]
+            return counterfactual_pair_loss(z, positive, negative, pair["reference_margin"], pair["weight"])
+
         evidence = {k: pair[k] for k in ("study_hash", "chosen", "weight", "reference_margin")}
         evidence["kind"] = "offline_measured_joint_counterfactual"
         if not self.gradient_checked:
             params = [p for n, p in actor.model.named_parameters() if n.startswith("head.") and p.requires_grad]
-            grads = torch.autograd.grad(loss, params, retain_graph=True, allow_unused=True)
+            # Compiled Clef backward can donate buffers. Consume the diagnostic graph
+            # once, and build a fresh graph for the actual PPO accumulation.
+            grads = torch.autograd.grad(forward_loss(), params, allow_unused=True)
             norm2 = sum(float(g.detach().float().square().sum()) for g in grads if g is not None)
             if norm2 <= 0 or any(not torch.isfinite(g).all() for g in grads if g is not None):
                 raise FloatingPointError("counterfactual objective has no finite nonzero head gradient")
             evidence["independent_auxiliary_head_gradient_norm"] = norm2**.5
             self.gradient_checked = True
-        return loss, evidence
+        return forward_loss(), evidence
 
 
 def cpu_copy(value):
