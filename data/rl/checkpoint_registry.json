@@ -1,0 +1,134 @@
+{
+  "registry_version": 1,
+  "updated_utc": "2026-11-13",
+  "purpose": "Identity and location of every EMBER V1 checkpoint. Weights are NOT in Git. Each identity record below is tracked compact evidence; scripts/verify_checkpoint.py hashes a local copy against it.",
+  "base_model": {
+    "repo_id": "unsloth/Qwen3.5-2B",
+    "revision": "fffbc0d8711cf87df6d1f97938c5e50ef94aadc7",
+    "access": "public Hugging Face model; revision confirmed to exist on 2026-11-13",
+    "note": "Every checkpoint is a LoRA adapter plus a float32 Clef joint head on this frozen base. The tokenizer files ship inside each actor directory."
+  },
+  "evidence_roots": {
+    "workstation_wsl": "/home/darshith/ember-ws/rl-evidence",
+    "windows_mirror": "C:/Users/Admin/Documents/ember-evidence",
+    "note": "Historical RTX 5090 workstation paths. They are not reachable from a fresh clone. Copy the needed directories to a local evidence root and verify them before use."
+  },
+  "checkpoints": [
+    {
+      "id": "v1",
+      "name": "p1-18-v1-train@1",
+      "role": "Original SFT-trained V1 student; frozen parent of every RL run",
+      "parent": null,
+      "parameter_digest": "sha256:c31cae7011dbee64304d091bd744f39ab5a90be35df72a7206477748b98822d3",
+      "storage": {
+        "kind": "huggingface",
+        "repo_id": "sankalphs/ember-v1-models",
+        "repo_type": "model",
+        "path": "v1/p1-18-v1-train@1",
+        "revision": "1fc405f723718e308c8a22b137fee4a025086fde",
+        "manifest_sha256": "sha256:fb7573a93f9630b8486eeaa6d3e2bfce58ad1e2e8e7db74ff3f39651949d0952"
+      },
+      "identity_record": {"file": "data/hf/registry.json", "pointer": ["artifacts", "p1-18-v1-train@1"]},
+      "verify": "env -u HF_TOKEN PYTHONPATH=src python -m ember_v1.hfstore verify p1-18-v1-train@1",
+      "fetch": "env -u HF_TOKEN PYTHONPATH=src python -m ember_v1.hfstore fetch p1-18-v1-train@1 --dest <empty-dir>",
+      "load": "Pass the fetched directory as --model-root to ember_v1.rl_run / rl_online / rl_cf_run, or as checkpoint= to ember_v1.rl_ppo.V1Actor.",
+      "availability": {
+        "status": "AVAILABLE_PRIVATE_HF",
+        "checked_utc": "2026-11-13",
+        "evidence": "hfstore verify: 14 files at revision 1fc405f7, 4 LFS sha256 + 10 git sha1 metadata checks, 13 content checks, 0 problems",
+        "access": "Read access to the private Hugging Face repo sankalphs/ember-v1-models (hf auth login as an account with access)."
+      }
+    },
+    {
+      "id": "r20",
+      "name": "r20-ppo-pilot@1 attempt 6",
+      "role": "Phase 1 PPO pilot; final iterate after 8 updates",
+      "parent": "v1",
+      "actor_digest": "sha256:f6b56137acc791bd1ed0862547a1dd3ca2ef81f336af6c969947840b46c66374",
+      "storage": {
+        "kind": "workstation",
+        "actor": "r20-ppo-pilot@1/attempt-6/checkpoint",
+        "trainer": "r20-ppo-pilot@1/attempt-6/trainer.pt",
+        "windows_mirror": "r20-ppo-pilot@1/attempt-6"
+      },
+      "identity_record": {"file": "data/rl/evidence/r20-ppo-pilot@1/checkpoint_identity.json", "digest_key": ["rl_digest"], "files_key": ["files"]},
+      "verify": "python scripts/verify_checkpoint.py r20 <local-copy-of>/r20-ppo-pilot@1/attempt-6/checkpoint",
+      "load": "ember_v1.rl_ppo.V1Actor(cfg, checkpoint=<actor dir>) with the pinned base cached. trainer.pt holds critic, AdamW and RNG state.",
+      "report": "docs/R20_PPO_PHASE1_REPORT.md",
+      "availability": {
+        "status": "WORKSTATION_ONLY_UNVERIFIED_HERE",
+        "checked_utc": "2026-11-13",
+        "evidence": "Not on any Hugging Face repo (models, experiments and datasets repos listed 2026-11-13). Workstation and Windows mirror paths are not reachable from this machine.",
+        "access": "Shell or file access to the RTX 5090 workstation (WSL user darshith) or the Windows mirror account."
+      }
+    },
+    {
+      "id": "r21-u96",
+      "name": "r21-online-ppo@1 attempt 3 update 96",
+      "role": "Phase 2 online PPO; DEV-selected checkpoint",
+      "parent": "r20",
+      "actor_digest": "sha256:901e22e8be0af3f4ff7002b9041d16e4a0dacd8c602a79b66121429507275120",
+      "storage": {
+        "kind": "workstation",
+        "checkpoint": "r21-online-ppo@1/attempt-3/checkpoints/update-0096",
+        "windows_mirror": "r21-online-ppo@1/attempt-3/selected_checkpoint"
+      },
+      "identity_record": {"file": "data/rl/evidence/r21-online-ppo@1/best_checkpoint.json", "digest_key": ["identity", "actor_digest"], "files_key": ["identity", "files"]},
+      "verify": "python scripts/verify_checkpoint.py r21-u96 <local-copy-of>/r21-online-ppo@1/attempt-3/checkpoints/update-0096",
+      "load": "Actor: <checkpoint>/actor via ember_v1.rl_ppo.V1Actor. Resume: --resume <checkpoint> restores actor, critic, Adam, RNG and counters (docs/R21_PPO_PHASE2_REPORT.md).",
+      "report": "docs/R21_PPO_PHASE2_REPORT.md",
+      "availability": {
+        "status": "WORKSTATION_ONLY_UNVERIFIED_HERE",
+        "checked_utc": "2026-11-13",
+        "evidence": "Not on any Hugging Face repo. The Windows mirror copy was rehashed on the workstation (data/rl/evidence/r21-online-ppo@1/publication_verification.json).",
+        "access": "Shell or file access to the RTX 5090 workstation (WSL user darshith) or the Windows mirror account."
+      }
+    },
+    {
+      "id": "r22-ppo-u16",
+      "name": "r22-counterfactual-ppo@1 attempt 2, PPO-only update 16",
+      "role": "Phase 3 PPO-only arm; frozen DEV-selected candidate",
+      "parent": "r21-u96",
+      "actor_digest": "sha256:df5afa5a6d09031f5375503a8816eeeec26ee4faeaf4ee0ed040df821524154d",
+      "storage": {
+        "kind": "workstation",
+        "checkpoint": "r22-counterfactual-ppo@1/attempt-2/ppo/checkpoints/update-0016",
+        "windows_mirror": "r22-counterfactual-ppo@1/attempt-2/ppo/selected_checkpoint"
+      },
+      "identity_record": {"file": "data/rl/evidence/r22-counterfactual-ppo@1/best_checkpoint.json", "digest_key": ["trained_arms", "ppo", "identity", "actor_digest"], "files_key": ["trained_arms", "ppo", "identity", "files"]},
+      "verify": "python scripts/verify_checkpoint.py r22-ppo-u16 <local-copy-of>/r22-counterfactual-ppo@1/attempt-2/ppo/checkpoints/update-0016",
+      "load": "Actor: <checkpoint>/actor. Paired resume uses rl_cf_run --resume <paired-round-directory> (docs/R22_COUNTERFACTUAL_REPORT.md).",
+      "report": "docs/R22_COUNTERFACTUAL_REPORT.md",
+      "frozen_candidate": true,
+      "availability": {
+        "status": "WORKSTATION_ONLY_UNVERIFIED_HERE",
+        "checked_utc": "2026-11-13",
+        "evidence": "Not on any Hugging Face repo. The Windows mirror copy was rehashed on the workstation (data/rl/evidence/r22-counterfactual-ppo@1/publication_verification.json).",
+        "access": "Shell or file access to the RTX 5090 workstation (WSL user darshith) or the Windows mirror account."
+      }
+    },
+    {
+      "id": "r22-cf-u24",
+      "name": "r22-counterfactual-ppo@1 attempt 2, PPO+CF update 24",
+      "role": "Phase 3 counterfactual-assisted arm; best CF checkpoint, not selected",
+      "parent": "r21-u96",
+      "actor_digest": "sha256:05d665f4f7acedee57e2fa2acd9faa390df3f65b11de2719058cfb4ab8a00c72",
+      "storage": {
+        "kind": "workstation",
+        "checkpoint": "r22-counterfactual-ppo@1/attempt-2/cf/checkpoints/update-0024",
+        "windows_mirror": "r22-counterfactual-ppo@1/attempt-2/cf/selected_checkpoint"
+      },
+      "identity_record": {"file": "data/rl/evidence/r22-counterfactual-ppo@1/best_checkpoint.json", "digest_key": ["trained_arms", "cf", "identity", "actor_digest"], "files_key": ["trained_arms", "cf", "identity", "files"]},
+      "verify": "python scripts/verify_checkpoint.py r22-cf-u24 <local-copy-of>/r22-counterfactual-ppo@1/attempt-2/cf/checkpoints/update-0024",
+      "load": "Actor: <checkpoint>/actor. Paired resume uses rl_cf_run --resume <paired-round-directory> (docs/R22_COUNTERFACTUAL_REPORT.md).",
+      "report": "docs/R22_COUNTERFACTUAL_REPORT.md",
+      "frozen_candidate": false,
+      "availability": {
+        "status": "WORKSTATION_ONLY_UNVERIFIED_HERE",
+        "checked_utc": "2026-11-13",
+        "evidence": "Not on any Hugging Face repo. The Windows mirror copy was rehashed on the workstation (data/rl/evidence/r22-counterfactual-ppo@1/publication_verification.json).",
+        "access": "Shell or file access to the RTX 5090 workstation (WSL user darshith) or the Windows mirror account."
+      }
+    }
+  ]
+}

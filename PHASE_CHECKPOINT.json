@@ -1,4 +1,5 @@
 {
+  "historical_notice": "HISTORICAL P0A-era record, kept unchanged below this key. It is NOT the current state: V1 was trained and R20-R22 RL ran afterwards. See docs/CURRENT_STATE.md.",
   "project": "ember_v1",
   "phase": "P0A",
   "status": "PASS_LOCAL",

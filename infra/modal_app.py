@@ -15,6 +15,8 @@ Later tasks need their own written authorization (docs/P0B_GPU_INSPECT.md):
   modal run infra/modal_app.py --task smoke --gpu L4 --authorize smoke
   modal run infra/modal_app.py --task padding --gpu L4 --ns 1,10,50,200 --authorize padding
   modal run infra/modal_app.py --task throughput --gpu L40S --batch-sizes 1,4,8,16,32,64 --authorize throughput
+P1-11 chunk smoke (NOT RUN; needs its own written authorization, docs/P1_CHUNK_SMOKE.md):
+  modal run infra/modal_app.py --task chunk_smoke --gpu A10 --repeats 5 --authorize chunk_smoke
 
 Serving (CPU simulator/agent locally or in CPU containers, GPU inference here):
   modal deploy infra/modal_app.py
@@ -128,6 +130,22 @@ class P0BHarness:
         return {"metadata": self.metadata,
                 **p0b.task_throughput(self.model, self.tokenizer, batch_sizes, ns, repeats, question_style)}
 
+    @modal.method()
+    def chunk_smoke(self, repeats: int) -> dict:
+        """P1-11 R3/R4/R7: kernel provenance, compact+verbose N=1/10/50/100, N=200 refusal, chunked N=200.
+        Inference only, batch 1 (docs/P1_CHUNK_SMOKE.md)."""
+        import torch
+
+        from ember_v1 import p0b
+        from ember_v1.p0b_chunk_smoke import chunk_smoke
+
+        torch.cuda.reset_peak_memory_stats()
+        return {"metadata": self.metadata,
+                **chunk_smoke(self.model, self.tokenizer, encode_one=p0b.encode_one,
+                              predict_answers=p0b.predict_answers, synthetic_row=p0b.synthetic_row,
+                              timed=p0b._timed, repeats=repeats,
+                              peak_memory_gb=lambda: round(torch.cuda.max_memory_allocated() / 2**30, 3))}
+
 
 @app.cls(image=image, gpu="L4", volumes=VOLUMES, timeout=3600, scaledown_window=300)
 class DecisionPolicy:
@@ -167,6 +185,53 @@ class DecisionPolicy:
 
         return p0b.decide_batch(self.model, self.tokenizer, requests, metadata=self.metadata,
                                 batched_forward=self.batched_forward, batched_evidence=self.batched_evidence)
+
+
+@app.cls(image=image, gpu="A10", volumes=VOLUMES, timeout=3600, startup_timeout=STARTUP_TIMEOUT_S,
+         scaledown_window=SCALEDOWN_WINDOW_S, retries=RETRIES, max_containers=MAX_CONTAINERS, cpu=4.0, memory=32768)
+class StudentTrainer:
+    """P1-18 student phases (pilot / train / eval) of the FROZEN p1-14-student-train protocol.
+    Data and outputs live on the `ember-v1-checkpoints` volume (/ckpt); the volume is committed at every
+    checkpoint, so a stopped train run resumes from its last checkpoint (student_run.gpu_phase)."""
+    code_commit: str = modal.parameter(default="")
+
+    @modal.method()
+    def run(self, phase: str, protocol_json: str, spec_json: str) -> dict:
+        from ember_v1 import student_run as sr
+        from ember_v1 import student_train as st
+
+        checkpoints.reload()
+        spec = {**json.loads(spec_json), "code_commit": self.code_commit}
+        return sr.gpu_phase(phase, json.loads(protocol_json), spec,
+                            adapter_factory=lambda cfg, checkpoint=None: st.ClefLoraAdapter(cfg, checkpoint=checkpoint),
+                            persist=checkpoints.commit, image_lock_sha256=os.environ.get("EMBER_IMAGE_LOCK_SHA256"))
+
+
+@app.local_entrypoint()
+def student(phase: str, spec: str, authorize: str = "", out: str = "", protocol: str = "", spawn: bool = False):
+    """modal run [--detach] infra/modal_app.py::student --phase pilot --spec <spec.json> --authorize pilot
+    [--protocol data/protocols/p1-18-student-v2.json] (default: the V1 protocol p1-14-student-train.json)
+    [--spawn]: with --detach, start the call and return at once (results on the volume), so a later local
+    network error cannot tear the app down."""
+    from ember_v1 import student_train as st
+    from ember_v1.run_report import write_json_atomic
+
+    protocol = st.load_protocol(protocol) if protocol else st.load_protocol()
+    try:
+        plan = st.gpu_train_plan(phase, protocol, authorize=authorize, code_commit=_code_commit())
+    except (ValueError, PermissionError) as exc:
+        raise SystemExit(f"refused: {exc}")
+    print(json.dumps({"plan": plan}))
+    trainer = StudentTrainer.with_options(gpu=plan["gpu"], timeout=plan["timeout_s"], retries=plan["retries"],
+                                          max_containers=plan["max_containers"])(code_commit=plan["code_commit"])
+    if spawn:
+        call = trainer.run.spawn(phase, json.dumps(protocol), Path(spec).read_text(encoding="utf-8"))
+        print(json.dumps({"spawned": call.object_id}))
+        return
+    result = trainer.run.remote(phase, json.dumps(protocol), Path(spec).read_text(encoding="utf-8"))
+    if out:
+        write_json_atomic(Path(out), result)
+    print(json.dumps({k: result.get(k) for k in ("phase", "elapsed_s", "go", "reload")}, default=str))
 
 
 def _ints(text: str) -> list[int]:
@@ -211,7 +276,8 @@ def main(task: str = "inspect", gpu: str = "L4", model: str = DEFAULT_MODEL, pre
     submits = {"inspect": lambda: harness.inspect.spawn(question_style),
                "smoke": lambda: harness.smoke.spawn(_ints(ns), repeats, question_style),
                "throughput": lambda: harness.throughput.spawn(_ints(batch_sizes), _ints(ns), repeats, question_style),
-               "padding": lambda: harness.padding.spawn(_ints(ns), question_style)}
+               "padding": lambda: harness.padding.spawn(_ints(ns), question_style),
+               "chunk_smoke": lambda: harness.chunk_smoke.spawn(repeats)}
     # One spawn(), then bounded get(timeout=) polls with get_current_stats() snapshots of this
     # variant (public Modal 1.6.3 APIs). A confirmed queue wait over 300 s, or the overall client
     # deadline, cancels the call explicitly (terminate_containers=True). Load errors, remote

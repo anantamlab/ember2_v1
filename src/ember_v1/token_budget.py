@@ -22,6 +22,7 @@ from typing import Any
 from .contract import validate_actions, validate_observation
 from .dataset import decision_questions
 from .encoding import encode_observation
+from .sim.movement import DELTAS
 
 CLEF_SHA256 = "0e304cf7c6500e8bb59bef7e2afd2c6373f82596dfb3b57d1aa93c175e2dc3a3"   # = p0b.AUDITED_CLEF_SHA256
 UNSLOTH_WHEEL = ("unsloth-2026.10.11-py3-none-any.whl",
@@ -87,14 +88,45 @@ def classify(fixed: int, total: int, limit: int) -> str:
     return "OK"
 
 
+RESERVATION_HEADER = "\n\nRESERVED TARGETS (decided earlier this step, person:row,col):\n"
+
+
+def reserved_target(obs: Mapping[str, Any], pid: str, action: str) -> tuple[int, int]:
+    """The cell a decided person will hold after this step if its own move is not blocked by another person:
+    the target cell of a move into an in-grid, non-wall, non-burning cell; otherwise its current cell."""
+    pos = next(tuple(p["position"]) for p in obs["people"] if p["id"] == pid)
+    dr, dc = DELTAS[action]
+    t = (pos[0] + dr, pos[1] + dc)
+    m = obs["map"]
+    walls = {tuple(x) for x in m["obstacles"]}
+    burning = {tuple(x) for x in obs["burning"]}
+    if not (0 <= t[0] < m["height"] and 0 <= t[1] < m["width"]) or t in walls or t in burning:
+        return pos
+    return t
+
+
+def reservation_block(obs: Mapping[str, Any], decided: Mapping[str, str]) -> str:
+    """Text appended to the state of a later chunk row: every person decided by an earlier chunk of the SAME
+    step and its reserved cell, in ID order. Empty for the first chunk. Training (teacher forcing: the target
+    joint map) and inference (the model's own earlier chunk outputs) use this one function."""
+    if not decided:
+        return ""
+    return RESERVATION_HEADER + ";".join(f"{pid}:{r},{c}" for pid in sorted(decided)
+                                         for r, c in [reserved_target(obs, pid, decided[pid])])
+
+
 def chunk_rows(observation: Mapping[str, Any], actions: Mapping[str, str], *, k: int, group_id: str,
                source: str, encoding: str = "ascii", question_style: str = "compact",
-               local_neighbors: bool = False) -> list[dict[str, Any]]:
+               local_neighbors: bool = False, chunks: Sequence[Sequence[str]] | None = None,
+               reservations: bool = False) -> list[dict[str, Any]]:
     """Per-chunk rows: the FULL shared global state, and the questions of at most `k` people per row.
 
-    Every active person is in exactly one row, in ID order; nothing is dropped. Chunks decide jointly only
-    within a chunk; cross-chunk coordination comes from the shared state alone. This is an inference-protocol
-    change to be evaluated, not a parity claim.
+    Every active person is in exactly one row; nothing is dropped. Default membership: ID order. `chunks`
+    gives another membership (a partition of the active IDs, each part at most `k`), for example an
+    exit-allocation grouping. Without `reservations`, chunks decide jointly only within a chunk and
+    cross-chunk coordination comes from the shared state alone. With `reservations`, row j's state is the full
+    state plus `reservation_block` of the `actions` of rows < j (sequential conditioning). This is an
+    inference-protocol change to be evaluated, not a parity claim.
     """
     if type(k) is not int or k < 1:
         raise ValueError("k must be a positive integer")
@@ -103,14 +135,22 @@ def chunk_rows(observation: Mapping[str, Any], actions: Mapping[str, str], *, k:
     state = encode_observation(obs, mode=encoding, local_neighbors=local_neighbors)
     qs = decision_questions(obs, style=question_style)
     ids = list(qs)
-    rows = []
-    for c, start in enumerate(range(0, len(ids), k)):
-        part = ids[start:start + k]
-        rows.append({"state": state, "questions": {i: qs[i] for i in part}, "gold": {i: gold[i] for i in part},
-                     "group_id": group_id, "source": source, "chunk": {"index": c, "of": -(-len(ids) // k),
-                                                                       "ids": part}})
-    for r in rows:
-        r["chunk"]["of"] = len(rows)
+    if chunks is None:
+        parts = [ids[s:s + k] for s in range(0, len(ids), k)]
+    else:
+        parts = [list(c) for c in chunks]
+        flat = [i for c in parts for i in c]
+        if sorted(flat) != sorted(ids) or len(flat) != len(set(flat)) or any(not c or len(c) > k for c in parts):
+            raise ValueError("chunks must partition the active people into non-empty parts of at most k")
+        parts = [[i for i in ids if i in set(c)] for c in parts]       # question order inside a chunk
+    rows, decided = [], {}
+    for c, part in enumerate(parts):
+        block = reservation_block(obs, decided) if reservations else ""
+        rows.append({"state": state + block, "questions": {i: qs[i] for i in part}, "gold": {i: gold[i] for i in part},
+                     "group_id": group_id, "source": source,
+                     "chunk": {"index": c, "of": len(parts), "ids": part, "reserved_ids": sorted(decided)
+                               if reservations else []}})
+        decided.update({i: gold[i] for i in part})
     assert sorted(i for r in rows for i in r["questions"]) == sorted(ids)
     return rows
 

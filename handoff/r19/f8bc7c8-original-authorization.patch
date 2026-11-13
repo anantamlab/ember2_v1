@@ -1,0 +1,92 @@
+From f8bc7c873406cacdfa9fa97376d1657807b731bd Mon Sep 17 00:00:00 2001
+From: EMBER execution agent <agent@ember.local>
+Date: Thu, 12 Nov 2026 05:02:53 +0000
+Subject: [PATCH] Run 19: authorize the bounded V1 A/B/C policy comparison
+ (Milestone 2)
+
+Sets data/runs/r19-v1-arms@1.json authorization.status to AUTHORIZED under
+the owner instruction in the Milestone 2 prompt. Only the authorization block
+changes: checkpoint, records, scenario sets (48 DEV + 80 core + 20 stress),
+arms, block size, result path, comparison command and wall cap are unchanged
+from b91654c1.
+
+Scope limits recorded in the config: no V2 training, no new data collection,
+no additional teacher collection, no benchmark changes, no other experiment.
+
+This commit was created in the workstation's local mirror because no
+development-laptop agent was reachable; it is not pushed to GitHub.
+---
+ data/runs/r19-v1-arms@1.json | 41 +++++++++++++++++++-----------------
+ 1 file changed, 22 insertions(+), 19 deletions(-)
+
+diff --git a/data/runs/r19-v1-arms@1.json b/data/runs/r19-v1-arms@1.json
+index 10b538e..9de4fa4 100644
+--- a/data/runs/r19-v1-arms@1.json
++++ b/data/runs/r19-v1-arms@1.json
+@@ -1,41 +1,44 @@
+ {
+- "config_version": "ember-run-config@1",
+- "run_id": "r19-v1-arms@1",
+- "kind": "v1-policy-ablation",
+  "authorization": {
+-  "status": "NOT_AUTHORIZED",
+-  "note": "Phase 8 prepares this run only. The owner must authorize it; the laptop then commits status AUTHORIZED (a new commit) before prepare-run accepts it."
++  "by": "owner, EMBER v1 Milestone 2 prompt (bounded V1 A/B/C policy comparison after Milestone 1)",
++  "date": "2026-11-12",
++  "note": "Bounded authorization: arms A_raw / B_static_mask / C_joint_coord on the frozen p1-18-v1-train@1 checkpoint and the existing 148 matched scenarios only. It does not authorize V2 training, new data collection, additional teacher collection, GPU training, benchmark changes, or any other experiment. The scenarios, sets, seeds, block size, thresholds and result path are unchanged from b91654c1.",
++  "recorded_by": "execution agent on the college workstation (no laptop agent reachable); identical patch handed back to the laptop",
++  "status": "AUTHORIZED"
+  },
+- "purpose": "Arms A_raw / B_static_mask / C_joint_coord of ONE V1 checkpoint on matched held-out scenarios (DEV 48 + expansion val 100); identical scenario seeds, hence identical fire; raw model argmax and executed actions recorded separately",
++ "comparison": "laptop: python -m ember_v1.p1_18_compare --list <scenarios.jsonl from the result> --student A_raw=outputs/rollouts-A_raw.jsonl --student B_static_mask=... --student C_joint_coord=... --teachers <p1-18-dev-teachers@1> --teachers <p1-18-expand@1> --out arms_compare.json",
++ "config_version": "ember-run-config@1",
+  "inputs": {
+   "model": {
+-   "repo": "models",
+    "artifact_id": "p1-18-v1-train@1",
++   "manifest_sha256": "sha256:fb7573a93f9630b8486eeaa6d3e2bfce58ad1e2e8e7db74ff3f39651949d0952",
+    "path": "v1/p1-18-v1-train@1",
+-   "manifest_sha256": "sha256:fb7573a93f9630b8486eeaa6d3e2bfce58ad1e2e8e7db74ff3f39651949d0952"
++   "repo": "models"
+   },
+   "records": {
+-   "repo": "experiments",
+    "artifact_id": "p1-18-v1-records@1",
++   "manifest_sha256": "sha256:49598d1d796925db0564b5a265278061b2dcb92eb348e7c3908eda22ef9eb6ed",
+    "path": "v1-evaluation/p1-18-v1-records@1",
+-   "manifest_sha256": "sha256:49598d1d796925db0564b5a265278061b2dcb92eb348e7c3908eda22ef9eb6ed"
++   "repo": "experiments"
+   }
+  },
++ "kind": "v1-policy-ablation",
++ "max_wall_s": 172800,
+  "params": {
+-  "scenarios": "rollouts/v2-eval.jsonl",
+-  "sets": [
+-   "p1-02-v1/dev",
+-   "p1-18-expand@1/val/core",
+-   "p1-18-expand@1/val/stress"
+-  ],
+   "arms": [
+    "A_raw",
+    "B_static_mask",
+    "C_joint_coord"
+   ],
+-  "block": 4
++  "block": 4,
++  "scenarios": "rollouts/v2-eval.jsonl",
++  "sets": [
++   "p1-02-v1/dev",
++   "p1-18-expand@1/val/core",
++   "p1-18-expand@1/val/stress"
++  ]
+  },
+- "comparison": "laptop: python -m ember_v1.p1_18_compare --list <scenarios.jsonl from the result> --student A_raw=outputs/rollouts-A_raw.jsonl --student B_static_mask=... --student C_joint_coord=... --teachers <p1-18-dev-teachers@1> --teachers <p1-18-expand@1> --out arms_compare.json",
++ "purpose": "Arms A_raw / B_static_mask / C_joint_coord of ONE V1 checkpoint on matched held-out scenarios (DEV 48 + expansion val 100); identical scenario seeds, hence identical fire; raw model argmax and executed actions recorded separately",
+  "result_path": "v1-policy-ablation/r19-v1-arms@1",
+- "max_wall_s": 172800
++ "run_id": "r19-v1-arms@1"
+ }
+-- 
+2.43.0
+

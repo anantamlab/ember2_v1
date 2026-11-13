@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "actual_exit_codes": {
+    "r22-train.exit": 0,
+    "r22-cpu-audit.exit": 0,
+    "r22-gpu-audit.exit": 0,
+    "r22-completion.exit": 0
+  },
+  "manifest_sha256": "c88ff645362a96366ad5f386d7e48211b5f32cc8df37c476424c73b0b07d7e17",
+  "manifest_files": 286,
+  "manifest_bytes": 8980296320,
+  "ancestry_manifest_sha256": "c047db6f56331616f2efa66a81c882c58bc17762530e9b13f3170cd0463d04c2",
+  "ancestry_files_rehashed": 47,
+  "copy_files_rehashed": 211,
+  "copy_bytes_rehashed": 2002637005,
+  "copy_verification_sha256": "05ab21a4223e6e91078694f616d9b85242e6a2b885864da8c6f4c76ff45e981f",
+  "selected_identity_sha256": {
+    "ppo": "6003ea46ca46aebfc37fb557925fa58e88724b650de226ddb641621cad611472",
+    "cf": "bf83e80138493210f959d65e278003c1a45406ef23d8fea51faf0f4ff4958e9e"
+  }
+}

@@ -1,0 +1,89 @@
+{
+ "arms": {
+  "A_raw": {
+   "failures": {
+    "policy_error:TrainError": 1
+   },
+   "finished": 148,
+   "planned": 148,
+   "ran_this_container": 4,
+   "rows_scored": 1549,
+   "stopped": null,
+   "totals": {
+    "blocked": 419691,
+    "casualties": 7239,
+    "collisions": 209276,
+    "decisions": 12410,
+    "evacuated": 216,
+    "people": 8507,
+    "unresolved": 1052
+   }
+  },
+  "B_static_mask": {
+   "failures": {
+    "policy_error:TrainError": 1
+   },
+   "finished": 148,
+   "planned": 148,
+   "ran_this_container": 4,
+   "rows_scored": 1535,
+   "stopped": null,
+   "totals": {
+    "blocked": 308463,
+    "casualties": 7024,
+    "collisions": 308463,
+    "decisions": 12634,
+    "evacuated": 410,
+    "people": 8507,
+    "unresolved": 1073
+   }
+  },
+  "C_joint_coord": {
+   "failures": {
+    "policy_error:TrainError": 1
+   },
+   "finished": 148,
+   "planned": 148,
+   "ran_this_container": 4,
+   "rows_scored": 1544,
+   "stopped": null,
+   "totals": {
+    "blocked": 0,
+    "casualties": 6730,
+    "collisions": 0,
+    "decisions": 12677,
+    "evacuated": 785,
+    "people": 8507,
+    "unresolved": 992
+   }
+  }
+ },
+ "elapsed_s": 6045.5,
+ "kind": "base-control",
+ "scenarios": 148,
+ "stopped": null,
+ "untrained": {
+  "base_model": "unsloth/Qwen3.5-2B@fffbc0d8711cf87df6d1f97938c5e50ef94aadc7",
+  "chunk_k": 100,
+  "definition": "base encoder = pinned public weights (unchanged); LoRA r16 created fresh; head created fresh with protocol seed; zero training steps",
+  "encoding": "ascii",
+  "head_init_sha256_a10_in_identity": "0f31b5311331e30daef25d4d6c61dccc636fa17c2b0e134c338b39a997467630",
+  "head_matches_a10_init": true,
+  "head_sha256_now": "0f31b5311331e30daef25d4d6c61dccc636fa17c2b0e134c338b39a997467630",
+  "load_s": 19.1,
+  "lora_tensors": 372,
+  "lora_tensors_all_zero": 186,
+  "max_len": 16384,
+  "peak_memory_gb": 4.306,
+  "precision": "bf16",
+  "question_style": "compact",
+  "seed": 20261121,
+  "trainable": {
+   "head_params": 30472708,
+   "head_tensors": 122,
+   "lora_params": 16819200,
+   "lora_tensors": 372
+  }
+ },
+ "verdict": "COMPLETE"
+}

@@ -76,7 +76,8 @@ GPU_DEVICE_NAMES = {"L4": ("NVIDIA L4",), "A10": ("NVIDIA A10G", "NVIDIA A10"), 
 # Modal limits per attempt: container start (download + load) and the method call are timed
 # separately, so with retries=0 the configured container time is STARTUP_TIMEOUT_S + TASK_TIMEOUT_S.
 STARTUP_TIMEOUT_S = 900
-TASK_TIMEOUT_S = {"inspect": 600, "smoke": 1800, "padding": 1800, "throughput": 3600}
+TASK_TIMEOUT_S = {"inspect": 600, "smoke": 1800, "padding": 1800, "throughput": 3600,
+                  "chunk_smoke": 1800}  # P1-11 R3/R4/R7, p0b_chunk_smoke (inference only)
 RETRIES = 0
 MAX_CONTAINERS = 1
 SCALEDOWN_WINDOW_S = 2

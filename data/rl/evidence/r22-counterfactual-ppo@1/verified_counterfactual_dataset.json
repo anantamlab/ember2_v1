@@ -1,0 +1,655 @@
+{
+  "kind": "fresh-TRAIN-visited-state-counterfactuals",
+  "on_policy_episodes": false,
+  "studies": [
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1/counterfactual/update-0001-state-00.json",
+      "study_hash": "sha256:9ec85576fabc1555181a34ae5fa2f7579d76a1db91d67083889177cd3294dbc7",
+      "update": 1
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1/counterfactual/update-0001-state-01.json",
+      "study_hash": "sha256:a9dac306f845b6d0990f3b54fa3bd29b0f81c16e4c480503b3fa08e6fe99e1b5",
+      "update": 1
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1/counterfactual/update-0001-state-02.json",
+      "study_hash": "sha256:79c83fe91e599f01c89a75e041a32738145f800e0340fed9ba3011da2be5025b",
+      "update": 1
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1/counterfactual/update-0001-state-03.json",
+      "study_hash": "sha256:220296b1c36432736e2676cda6fe6f980c843bb1357ac7c4dfad22f4cbebfb72",
+      "update": 1
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1/counterfactual/update-0002-state-00.json",
+      "study_hash": "sha256:7b65029eded2998b812161b9c0c5158a6e7cd26766e4393095480b4f662f7845",
+      "update": 2
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1/counterfactual/update-0002-state-01.json",
+      "study_hash": "sha256:ddcf3ba867b809a31aa37fbd47497dc927af90a70b29b04a6b03cddccc7824f6",
+      "update": 2
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1/counterfactual/update-0002-state-02.json",
+      "study_hash": "sha256:aafbcfd7bd87615154dbb8aa2b90fce4a870f0e8eff523b12655a8d8125fca3f",
+      "update": 2
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1/counterfactual/update-0002-state-03.json",
+      "study_hash": "sha256:4ecee5d3187bd46f48b330a3bd6a97c22cb1fa37e6f438d728fc4ee66bd1f7bc",
+      "update": 2
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1/counterfactual/update-0003-state-00.json",
+      "study_hash": "sha256:8e63969f7e7a708f82b668eba2a13f3dc17204a6e3884a517559844ddfac9192",
+      "update": 3
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1/counterfactual/update-0003-state-01.json",
+      "study_hash": "sha256:c36a3d62d3d55e27987fa89d36aaceacd0cc835068c5440d06bef5f524e39d9d",
+      "update": 3
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1/counterfactual/update-0003-state-02.json",
+      "study_hash": "sha256:37ef80acbbaf471c09482fd37667e75168ffc2699a60a02ff2afb5d03a0f4d7f",
+      "update": 3
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1/counterfactual/update-0003-state-03.json",
+      "study_hash": "sha256:d76925bfe57d1f3660330c15cb4d5bbb05c170f680b0c3f11e222349c2e1fb45",
+      "update": 3
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1/counterfactual/update-0004-state-00.json",
+      "study_hash": "sha256:04644d67a3673bf75dd6e2e687e613780351f9c7a0c1d1e421c34910636ba0b3",
+      "update": 4
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1/counterfactual/update-0004-state-01.json",
+      "study_hash": "sha256:15373d386e1f93f89abcb63a188b97b2a0ed912c7a49a805c36c1a0fe34b2902",
+      "update": 4
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1/counterfactual/update-0004-state-02.json",
+      "study_hash": "sha256:1456ae412bc0c8286df254db4d118529404989dc756e530bf6b33b06926f2406",
+      "update": 4
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1/counterfactual/update-0004-state-03.json",
+      "study_hash": "sha256:70e6ccbbdee3fc257c02b2e89910e8b0245fe21e98198b46b36948d32d2b34af",
+      "update": 4
+    },
+    {
+      "eligible_pairs": 2,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0005-state-00.json",
+      "study_hash": "sha256:954e3a3983942d1d42e22d9a9344e83da7ab4cbc578e0d5c94641ac73a894510",
+      "update": 5
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0005-state-01.json",
+      "study_hash": "sha256:f96e37aae14f4007d59eb269960fecf09a9c257d2856691a1604a8942f399152",
+      "update": 5
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0005-state-02.json",
+      "study_hash": "sha256:862c6b63935e1c3037fe0f174a70d492b90f71a426c388dd14b6a86bcb953e77",
+      "update": 5
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0005-state-03.json",
+      "study_hash": "sha256:35c65a8d9f7e616ef56ea51a1603982642c5d919dd25cb240f776f8b4b446c72",
+      "update": 5
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0006-state-00.json",
+      "study_hash": "sha256:33ea23353ff6555561292412f18f570da535f1e434bd1dbc913f9db376395cf0",
+      "update": 6
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0006-state-01.json",
+      "study_hash": "sha256:fdd2f8ea3d1dfa6da3186e5c9518960b06c6b00a630725a5921893ddd9d8b519",
+      "update": 6
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0006-state-02.json",
+      "study_hash": "sha256:38aafaf0657874eca5c01e7c169da827f2e32f8e4184582ce63ca77032bca849",
+      "update": 6
+    },
+    {
+      "eligible_pairs": 1,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0006-state-03.json",
+      "study_hash": "sha256:bb7c5f3f930f7afd9e996d3af91eb84b86e26a7b4c70d4c68b6e21c8665e1c67",
+      "update": 6
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0007-state-00.json",
+      "study_hash": "sha256:914df081873eefdc9b168cd28d4e500d2c0fec91cfcb32be81a686063d4b32af",
+      "update": 7
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0007-state-01.json",
+      "study_hash": "sha256:55cbb480e307f7a813f15469b94a2dfaf7f57e03a8e8e99f717b0aace4ce9c0b",
+      "update": 7
+    },
+    {
+      "eligible_pairs": 3,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0007-state-02.json",
+      "study_hash": "sha256:9f39dcab6f0f328514464bc28302e331758c41ea7f8a7476d4fb0831318771bf",
+      "update": 7
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0007-state-03.json",
+      "study_hash": "sha256:8cb4e1397a923cf6ef9f792268f1af9e15bd62e635a2d79be11740ea7d3babe7",
+      "update": 7
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0008-state-00.json",
+      "study_hash": "sha256:958bee0139425cf6a01c816ef76b669ea3caf22ba8f2cfdeb9633f6f1979270c",
+      "update": 8
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0008-state-01.json",
+      "study_hash": "sha256:e84271eb8d57847d759f751eb7d251067650643f57ac70d6f4e20e6a8c0d450d",
+      "update": 8
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0008-state-02.json",
+      "study_hash": "sha256:98aabf21da2378e62e71879c0208548e3675803174ca8c84d9b03ddb5d5e591a",
+      "update": 8
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0008-state-03.json",
+      "study_hash": "sha256:18c5cd7dbec71ff4cac6b0f012439fd2e05457ae8545284587fe216a50d9986d",
+      "update": 8
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0009-state-00.json",
+      "study_hash": "sha256:34755b79e5dd2288ce1f0c88a6d7fb0a7303a6d666a972745c26d2866b65c0d9",
+      "update": 9
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0009-state-01.json",
+      "study_hash": "sha256:40a7ebe1c5564a7a879d4667848f6a794b2b9a3ae572777d16cbbee36a5acfd2",
+      "update": 9
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0009-state-02.json",
+      "study_hash": "sha256:a900adf47b6114cdab409d3b6628fb9876a94823c5628ea76215393e9a953e37",
+      "update": 9
+    },
+    {
+      "eligible_pairs": 3,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0009-state-03.json",
+      "study_hash": "sha256:78802e11a828409d9725298ef5440d8e0f4b4e0da6b6e00b29075b1e47981314",
+      "update": 9
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0010-state-00.json",
+      "study_hash": "sha256:8f13c38ebf5b595ba25229e4c705c351d72130dbaced595c7ae15a4a6e54ae7e",
+      "update": 10
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0010-state-01.json",
+      "study_hash": "sha256:7c2a5a5d88be59049a3c9b91de73526bd75dcc3eb8488f200e297e5f1c0bd640",
+      "update": 10
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0010-state-02.json",
+      "study_hash": "sha256:a5dc15a1063499f7a215a26f3476d7f91ece23a05816a935f482d631a1fa5d5a",
+      "update": 10
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0010-state-03.json",
+      "study_hash": "sha256:b7ab3bf7f2dff25fa941496995f8cce4bd904b444705a975e8a7efb473790555",
+      "update": 10
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0011-state-00.json",
+      "study_hash": "sha256:3e09b2f571fa25387e4a802b35eb08d4cf1c7baf94fb3ab13c87968f56d371fa",
+      "update": 11
+    },
+    {
+      "eligible_pairs": 4,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0011-state-01.json",
+      "study_hash": "sha256:603ff07bf7b42ce69a4fc1d015083200a4ea1f550c27ca64fa4d27923959b024",
+      "update": 11
+    },
+    {
+      "eligible_pairs": 4,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0011-state-02.json",
+      "study_hash": "sha256:42e0ec48a4bbf745e53bf492d5f3ad3a3e4c38554bbf9e0cb732f87c4be8ae43",
+      "update": 11
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0011-state-03.json",
+      "study_hash": "sha256:751c19629a3f681ac5eca0ea84fc4300d288d92453081c4620c5617a7999f049",
+      "update": 11
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0012-state-00.json",
+      "study_hash": "sha256:d2c017a641e0f46d14855cfa3bdc511875b38595c4a3c709296724019c6f7a06",
+      "update": 12
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0012-state-01.json",
+      "study_hash": "sha256:faadc9dda0aeb756fe57e8017149f69b03104c71a1045f420f1a04242150c47c",
+      "update": 12
+    },
+    {
+      "eligible_pairs": 2,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0012-state-02.json",
+      "study_hash": "sha256:c941d86ad584d9ebaa61a1d38ae490fda03778eed8c92569dcabaf41e8442883",
+      "update": 12
+    },
+    {
+      "eligible_pairs": 3,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0012-state-03.json",
+      "study_hash": "sha256:7eb801ad8435ad8f48a1faf8c1267aefd32733073d2613ae4db078f120907071",
+      "update": 12
+    },
+    {
+      "eligible_pairs": 3,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0013-state-00.json",
+      "study_hash": "sha256:a299435124dac8578204424a9eaf1719c72faefd7d103cae9d7bb4ca6717dcdc",
+      "update": 13
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0013-state-01.json",
+      "study_hash": "sha256:a46ec099210a42ef891248e2ac94333dea7db4656967b157b7f4ed0682e1c963",
+      "update": 13
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0013-state-02.json",
+      "study_hash": "sha256:2669e864e20c3488f8b07b42552c339660b9299d610752d3fb8730d94158c1b4",
+      "update": 13
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0013-state-03.json",
+      "study_hash": "sha256:7da5d0b2d4d05699cb73cc5e419b7c70733198266a4a4aa232bfdf5be8cf0851",
+      "update": 13
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0014-state-00.json",
+      "study_hash": "sha256:93aedaf1679e4dd06c42c867eb95470a431a5c230da0908dfdd8fcebe7b5228c",
+      "update": 14
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0014-state-01.json",
+      "study_hash": "sha256:4e6ae0449bea4d56efce8d4571711fe6871794adb35f711fc1fab4b66a8d89d7",
+      "update": 14
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0014-state-02.json",
+      "study_hash": "sha256:a3c7ab9e82be6c974b15905b2d793a54be91d54c65a1cc41179e2cc00d1dd8f4",
+      "update": 14
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0014-state-03.json",
+      "study_hash": "sha256:5172e1bedf91452835a385a058aac02e9878c2e5a9c968157c87da301dce9cf2",
+      "update": 14
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0015-state-00.json",
+      "study_hash": "sha256:295168a94218ae44d1fc801bd78b82a5c26818abde988cf0dabeebbbd3f59f1d",
+      "update": 15
+    },
+    {
+      "eligible_pairs": 4,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0015-state-01.json",
+      "study_hash": "sha256:b59ad138f7b13b5ffd7fbf0c98dc5cc5e979c25e7927c2f6c0f403b4869957c6",
+      "update": 15
+    },
+    {
+      "eligible_pairs": 3,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0015-state-02.json",
+      "study_hash": "sha256:8821e297d28deda9f1be83ab56101e911b92bd5ca88532d2c808708a9948b276",
+      "update": 15
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0015-state-03.json",
+      "study_hash": "sha256:a4f4eee0591c4754e11147a1471384f14998093122f7835eb50d2f24fd9d1793",
+      "update": 15
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0016-state-00.json",
+      "study_hash": "sha256:2a1299d7b607484b8670d0135be21bb8404925aef9c3c7aedfb9fe4c49eeec78",
+      "update": 16
+    },
+    {
+      "eligible_pairs": 3,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0016-state-01.json",
+      "study_hash": "sha256:c8e8c8e5563258763a944f976452631a237542f9f0e26ec3c57bf22b6f1dd588",
+      "update": 16
+    },
+    {
+      "eligible_pairs": 1,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0016-state-02.json",
+      "study_hash": "sha256:bb46589395150f2757d4d8d250e985d6fd6664a9ad25511f5c8f3e49ca5f15f2",
+      "update": 16
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0016-state-03.json",
+      "study_hash": "sha256:81086def0b7f7e07c3109b05d26e9a132156de459c283154f115171799e16279",
+      "update": 16
+    },
+    {
+      "eligible_pairs": 3,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0017-state-00.json",
+      "study_hash": "sha256:11fe7ddea6f1817259986d6bb95feda7a20d03ce015fbe4b1783623a42ea1def",
+      "update": 17
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0017-state-01.json",
+      "study_hash": "sha256:2be781f6a1c8c836920c8b3f716acf3819ab4e3171ea620647f4b02381d3407f",
+      "update": 17
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0017-state-02.json",
+      "study_hash": "sha256:a72efa89ecb5f9991660603f96a69c06e63b766a634e6d29e7f6565fa17b8727",
+      "update": 17
+    },
+    {
+      "eligible_pairs": 4,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0017-state-03.json",
+      "study_hash": "sha256:571984049bbf62f5c62e866d6b0c888348ca7442b1a878c9d9d68d1d921075b8",
+      "update": 17
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0018-state-00.json",
+      "study_hash": "sha256:8f0d1d34965d67366140d8766461a214e2a40f5f02e9d0c42230884df7540313",
+      "update": 18
+    },
+    {
+      "eligible_pairs": 2,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0018-state-01.json",
+      "study_hash": "sha256:741b8d890c8fe102fdb2a234d9cade66fef8880a97685c2b40955867423cb7bd",
+      "update": 18
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0018-state-02.json",
+      "study_hash": "sha256:73406c4607b9f77ec939c6f9702f9f98fe8a85d011ee81e08129ab2e33fa9aa1",
+      "update": 18
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0018-state-03.json",
+      "study_hash": "sha256:cae29f87d5465948fe9feb177bb9710b8a87e863c5ef9355e48130f75acdd0ac",
+      "update": 18
+    },
+    {
+      "eligible_pairs": 5,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0019-state-00.json",
+      "study_hash": "sha256:0e1676864a80bc74fd6b62f2f3bcfe1931477f8d5513d14fcb428148f905956d",
+      "update": 19
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0019-state-01.json",
+      "study_hash": "sha256:8cdb132b621d31818e33eaeba018608f93b9c8c1cad8f335123e189eea6d2db8",
+      "update": 19
+    },
+    {
+      "eligible_pairs": 4,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0019-state-02.json",
+      "study_hash": "sha256:e454fd3818fa21088c6a81076a381020237a70932ea4e85931e1d24ce293d3da",
+      "update": 19
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0019-state-03.json",
+      "study_hash": "sha256:9f7899dbef9ef131401c79130bab36c60a1994f6b5bf71fcc0406953d71890d0",
+      "update": 19
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0020-state-00.json",
+      "study_hash": "sha256:3d0c31e21d46378cb4749cd293a47bea9df2f2601318aec65f2fe0484212ef23",
+      "update": 20
+    },
+    {
+      "eligible_pairs": 1,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0020-state-01.json",
+      "study_hash": "sha256:07c8377ecb34ca4abaeabb6596ceed9fe47882951e47d4f5c487c2ef5a87a2ef",
+      "update": 20
+    },
+    {
+      "eligible_pairs": 4,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0020-state-02.json",
+      "study_hash": "sha256:4524dc8ac1fadc0b68711306d18bda924a44faf918689fe89d39509e2d5b28b3",
+      "update": 20
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0020-state-03.json",
+      "study_hash": "sha256:014380b51268a66ba6877ca3f65a2b8c8c2e75b78fd8200a5c85fc78a8a8e60b",
+      "update": 20
+    },
+    {
+      "eligible_pairs": 5,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0021-state-00.json",
+      "study_hash": "sha256:605389d66a394329dde907fc1097b77f5c8f0fb32225643aefd4f47c37734bd6",
+      "update": 21
+    },
+    {
+      "eligible_pairs": 2,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0021-state-01.json",
+      "study_hash": "sha256:146397210e1f107b97a6261f6f9122d65080e08edcc9f681ac990a9890418e47",
+      "update": 21
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0021-state-02.json",
+      "study_hash": "sha256:7f2eb6bb61d7dc35102989bf76b03e258ebd7fd731112bbbe8ca7e3680eead25",
+      "update": 21
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0021-state-03.json",
+      "study_hash": "sha256:85caaa47f003157b73867f07ebe14165b8b2f9c73808ce275996c7d797be8998",
+      "update": 21
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0022-state-00.json",
+      "study_hash": "sha256:43fd9683a710d8abcde324b869d8482e091ffe9ca672d9acd1c3df8fa88dc8e8",
+      "update": 22
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0022-state-01.json",
+      "study_hash": "sha256:b20e1bbdf414db21c33e8c335239c4beefe95ee97f6d792446b1f7777f909252",
+      "update": 22
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0022-state-02.json",
+      "study_hash": "sha256:2f6c3738eb45555a1b432a2ec521da8c33f2999bedb4d2eba58672ff57164868",
+      "update": 22
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0022-state-03.json",
+      "study_hash": "sha256:fbfd0ecffe56069373fbfa4b6b0abc1b7ae6d03e5e003e3f8ae148978136a7d3",
+      "update": 22
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0023-state-00.json",
+      "study_hash": "sha256:0cbc9675c69cec619c09fb9e2d35a03ae572f209c2b9e3340989d7ae44b899a7",
+      "update": 23
+    },
+    {
+      "eligible_pairs": 3,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0023-state-01.json",
+      "study_hash": "sha256:be1b248291f9a71e290a4cbc97a6d136b8d46cde2ba0b601b52f8ebaae512fd7",
+      "update": 23
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0023-state-02.json",
+      "study_hash": "sha256:b099aab6db7c510b63d40e11053c30b6c22805a0e7131d43e54c699a039682da",
+      "update": 23
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0023-state-03.json",
+      "study_hash": "sha256:e811276a2e7001506478ad1bcdac08e7bd7d049d5cf32d51382d3f0b6bf7faaf",
+      "update": 23
+    },
+    {
+      "eligible_pairs": 1,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0024-state-00.json",
+      "study_hash": "sha256:dd3f28210ec97cdaec740a70b5b7a244c8dae36816c1bcf991cbd5e675f62dcd",
+      "update": 24
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0024-state-01.json",
+      "study_hash": "sha256:14274b3568c2c6699a227934cdeb2023741489f5cf962fedeb29e3812b532fb7",
+      "update": 24
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0024-state-02.json",
+      "study_hash": "sha256:8d139a361721a0162484081f12377cffbe48e26c65023b93c569de800b60b5ef",
+      "update": 24
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0024-state-03.json",
+      "study_hash": "sha256:eca64b425ab45e82b97413fbc73efdb8923244f1d7fae1058e26eef457b3e9a8",
+      "update": 24
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0025-state-00.json",
+      "study_hash": "sha256:4050440624bfd7c1dfee9343da85b731a593c19ba85ada6f6ad81fc83b0fac54",
+      "update": 25
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0025-state-01.json",
+      "study_hash": "sha256:3b0be076ff16ffe4b4efb463e295092b39db30e7f60517c45e0fef2ffc7eb42c",
+      "update": 25
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0025-state-02.json",
+      "study_hash": "sha256:2c87d1283ade1da72cbcd9ec4723341e992b31fa70fbf49aaa5d4d76f13e43fa",
+      "update": 25
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0025-state-03.json",
+      "study_hash": "sha256:5e359fe2483e6e23f60c74711e6702a4e1b6001869dbb201a264f7c1a6d50898",
+      "update": 25
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0026-state-00.json",
+      "study_hash": "sha256:184ac14ffd08472e47a2a70b286c12a0d7c0b043f6d496bdffad915892af969a",
+      "update": 26
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0026-state-01.json",
+      "study_hash": "sha256:88229a0e3fa7e80ba1b2f798e3b3911ed0e906dc5c78ec2b143ef95c85f7d519",
+      "update": 26
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0026-state-02.json",
+      "study_hash": "sha256:1d4012777b7d4854930c3e94b9a9be4eb62955d5d0b3f5c377e4ddbed5ca1794",
+      "update": 26
+    },
+    {
+      "eligible_pairs": 3,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0026-state-03.json",
+      "study_hash": "sha256:697b5f1c842d1d0c0079b527652cb10be461089020eea9a3a41e269e86fbadac",
+      "update": 26
+    },
+    {
+      "eligible_pairs": 3,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0027-state-00.json",
+      "study_hash": "sha256:055fd78cdef0ed93e6796eb5d526d33c11f64e459986341bc670f7abc286c127",
+      "update": 27
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0027-state-01.json",
+      "study_hash": "sha256:b3facd2f8d7807e0626b60b082ca4bdf133e8c94e19063ffbf2c62eaf71b1e86",
+      "update": 27
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0027-state-02.json",
+      "study_hash": "sha256:2dadd6323371b823159cca0d2c19eda22e7c6520f33020fcfa0a482ab718d927",
+      "update": 27
+    },
+    {
+      "eligible_pairs": 0,
+      "path": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-2/counterfactual/update-0027-state-03.json",
+      "study_hash": "sha256:00ac242bb83e7bc910e05cd39627dc0a8d4aa10b638b7cbdc6201031fe6cbd5e",
+      "update": 27
+    }
+  ],
+  "verified": true
+}

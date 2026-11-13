@@ -1,0 +1,629 @@
+{
+  "phase2": {
+    "competing-exits": {
+      "people": 122,
+      "evacuated": 50,
+      "casualties": 26,
+      "unresolved": 46,
+      "stay": 104,
+      "attempted": 2919,
+      "blocked": 2409,
+      "person_steps": 3023,
+      "families": 6
+    },
+    "congestion": {
+      "people": 72,
+      "evacuated": 42,
+      "casualties": 19,
+      "unresolved": 11,
+      "stay": 191,
+      "attempted": 1058,
+      "blocked": 804,
+      "person_steps": 1249,
+      "families": 7
+    },
+    "dynamic-fire": {
+      "people": 67,
+      "evacuated": 19,
+      "casualties": 34,
+      "unresolved": 14,
+      "stay": 157,
+      "attempted": 1427,
+      "blocked": 1100,
+      "person_steps": 1584,
+      "families": 6
+    },
+    "large-unseen": {
+      "people": 176,
+      "evacuated": 65,
+      "casualties": 27,
+      "unresolved": 84,
+      "stay": 126,
+      "attempted": 5106,
+      "blocked": 4407,
+      "person_steps": 5232,
+      "families": 6
+    },
+    "navigation": {
+      "people": 36,
+      "evacuated": 11,
+      "casualties": 5,
+      "unresolved": 20,
+      "stay": 63,
+      "attempted": 1081,
+      "blocked": 908,
+      "person_steps": 1144,
+      "families": 7
+    }
+  },
+  "v1": {
+    "competing-exits": {
+      "people": 122,
+      "evacuated": 55,
+      "casualties": 22,
+      "unresolved": 45,
+      "stay": 175,
+      "attempted": 2925,
+      "blocked": 2350,
+      "person_steps": 3100,
+      "families": 6
+    },
+    "congestion": {
+      "people": 72,
+      "evacuated": 42,
+      "casualties": 19,
+      "unresolved": 11,
+      "stay": 113,
+      "attempted": 1161,
+      "blocked": 860,
+      "person_steps": 1274,
+      "families": 7
+    },
+    "dynamic-fire": {
+      "people": 67,
+      "evacuated": 23,
+      "casualties": 37,
+      "unresolved": 7,
+      "stay": 201,
+      "attempted": 1114,
+      "blocked": 734,
+      "person_steps": 1315,
+      "families": 6
+    },
+    "large-unseen": {
+      "people": 176,
+      "evacuated": 69,
+      "casualties": 28,
+      "unresolved": 79,
+      "stay": 243,
+      "attempted": 4784,
+      "blocked": 4101,
+      "person_steps": 5027,
+      "families": 6
+    },
+    "navigation": {
+      "people": 36,
+      "evacuated": 8,
+      "casualties": 8,
+      "unresolved": 20,
+      "stay": 65,
+      "attempted": 1186,
+      "blocked": 1025,
+      "person_steps": 1251,
+      "families": 7
+    }
+  },
+  "v1-mask": {
+    "competing-exits": {
+      "people": 122,
+      "evacuated": 66,
+      "casualties": 18,
+      "unresolved": 38,
+      "stay": 523,
+      "attempted": 2212,
+      "blocked": 1278,
+      "person_steps": 2735,
+      "families": 6
+    },
+    "congestion": {
+      "people": 72,
+      "evacuated": 51,
+      "casualties": 12,
+      "unresolved": 9,
+      "stay": 252,
+      "attempted": 847,
+      "blocked": 464,
+      "person_steps": 1099,
+      "families": 7
+    },
+    "dynamic-fire": {
+      "people": 67,
+      "evacuated": 41,
+      "casualties": 24,
+      "unresolved": 2,
+      "stay": 197,
+      "attempted": 776,
+      "blocked": 234,
+      "person_steps": 973,
+      "families": 6
+    },
+    "large-unseen": {
+      "people": 176,
+      "evacuated": 78,
+      "casualties": 21,
+      "unresolved": 77,
+      "stay": 822,
+      "attempted": 4064,
+      "blocked": 2483,
+      "person_steps": 4886,
+      "families": 6
+    },
+    "navigation": {
+      "people": 36,
+      "evacuated": 20,
+      "casualties": 5,
+      "unresolved": 11,
+      "stay": 308,
+      "attempted": 522,
+      "blocked": 272,
+      "person_steps": 830,
+      "families": 7
+    }
+  },
+  "v1-coordinate": {
+    "competing-exits": {
+      "people": 122,
+      "evacuated": 81,
+      "casualties": 16,
+      "unresolved": 25,
+      "stay": 1144,
+      "attempted": 1229,
+      "blocked": 0,
+      "person_steps": 2373,
+      "families": 6
+    },
+    "congestion": {
+      "people": 72,
+      "evacuated": 59,
+      "casualties": 8,
+      "unresolved": 5,
+      "stay": 264,
+      "attempted": 553,
+      "blocked": 0,
+      "person_steps": 817,
+      "families": 7
+    },
+    "dynamic-fire": {
+      "people": 67,
+      "evacuated": 44,
+      "casualties": 23,
+      "unresolved": 0,
+      "stay": 275,
+      "attempted": 623,
+      "blocked": 0,
+      "person_steps": 898,
+      "families": 6
+    },
+    "large-unseen": {
+      "people": 176,
+      "evacuated": 82,
+      "casualties": 21,
+      "unresolved": 73,
+      "stay": 2258,
+      "attempted": 2403,
+      "blocked": 0,
+      "person_steps": 4661,
+      "families": 6
+    },
+    "navigation": {
+      "people": 36,
+      "evacuated": 21,
+      "casualties": 4,
+      "unresolved": 11,
+      "stay": 536,
+      "attempted": 277,
+      "blocked": 0,
+      "person_steps": 813,
+      "families": 7
+    }
+  },
+  "ppo": {
+    "competing-exits": {
+      "people": 122,
+      "evacuated": 51,
+      "casualties": 27,
+      "unresolved": 44,
+      "stay": 68,
+      "attempted": 2915,
+      "blocked": 2376,
+      "person_steps": 2983,
+      "families": 6
+    },
+    "congestion": {
+      "people": 72,
+      "evacuated": 41,
+      "casualties": 20,
+      "unresolved": 11,
+      "stay": 89,
+      "attempted": 1164,
+      "blocked": 907,
+      "person_steps": 1253,
+      "families": 7
+    },
+    "dynamic-fire": {
+      "people": 67,
+      "evacuated": 24,
+      "casualties": 35,
+      "unresolved": 8,
+      "stay": 159,
+      "attempted": 1331,
+      "blocked": 985,
+      "person_steps": 1490,
+      "families": 6
+    },
+    "large-unseen": {
+      "people": 176,
+      "evacuated": 66,
+      "casualties": 27,
+      "unresolved": 83,
+      "stay": 174,
+      "attempted": 5075,
+      "blocked": 4377,
+      "person_steps": 5249,
+      "families": 6
+    },
+    "navigation": {
+      "people": 36,
+      "evacuated": 11,
+      "casualties": 5,
+      "unresolved": 20,
+      "stay": 71,
+      "attempted": 1068,
+      "blocked": 899,
+      "person_steps": 1139,
+      "families": 7
+    }
+  },
+  "cf": {
+    "competing-exits": {
+      "people": 122,
+      "evacuated": 51,
+      "casualties": 23,
+      "unresolved": 48,
+      "stay": 82,
+      "attempted": 2963,
+      "blocked": 2325,
+      "person_steps": 3045,
+      "families": 6
+    },
+    "congestion": {
+      "people": 72,
+      "evacuated": 43,
+      "casualties": 17,
+      "unresolved": 12,
+      "stay": 120,
+      "attempted": 1124,
+      "blocked": 863,
+      "person_steps": 1244,
+      "families": 7
+    },
+    "dynamic-fire": {
+      "people": 67,
+      "evacuated": 24,
+      "casualties": 33,
+      "unresolved": 10,
+      "stay": 196,
+      "attempted": 1340,
+      "blocked": 990,
+      "person_steps": 1536,
+      "families": 6
+    },
+    "large-unseen": {
+      "people": 176,
+      "evacuated": 67,
+      "casualties": 26,
+      "unresolved": 83,
+      "stay": 124,
+      "attempted": 5055,
+      "blocked": 4386,
+      "person_steps": 5179,
+      "families": 6
+    },
+    "navigation": {
+      "people": 36,
+      "evacuated": 12,
+      "casualties": 5,
+      "unresolved": 19,
+      "stay": 71,
+      "attempted": 1066,
+      "blocked": 886,
+      "person_steps": 1137,
+      "families": 7
+    }
+  },
+  "T0": {
+    "competing-exits": {
+      "people": 122,
+      "evacuated": 120,
+      "casualties": 2,
+      "unresolved": 0,
+      "stay": 0,
+      "attempted": 1282,
+      "blocked": 178,
+      "person_steps": 1282,
+      "families": 6
+    },
+    "congestion": {
+      "people": 72,
+      "evacuated": 67,
+      "casualties": 5,
+      "unresolved": 0,
+      "stay": 3,
+      "attempted": 502,
+      "blocked": 26,
+      "person_steps": 505,
+      "families": 7
+    },
+    "dynamic-fire": {
+      "people": 67,
+      "evacuated": 52,
+      "casualties": 14,
+      "unresolved": 1,
+      "stay": 315,
+      "attempted": 552,
+      "blocked": 25,
+      "person_steps": 867,
+      "families": 6
+    },
+    "large-unseen": {
+      "people": 176,
+      "evacuated": 140,
+      "casualties": 17,
+      "unresolved": 19,
+      "stay": 1071,
+      "attempted": 1513,
+      "blocked": 54,
+      "person_steps": 2584,
+      "families": 6
+    },
+    "navigation": {
+      "people": 36,
+      "evacuated": 36,
+      "casualties": 0,
+      "unresolved": 0,
+      "stay": 0,
+      "attempted": 255,
+      "blocked": 7,
+      "person_steps": 255,
+      "families": 7
+    }
+  },
+  "T1": {
+    "competing-exits": {
+      "people": 122,
+      "evacuated": 122,
+      "casualties": 0,
+      "unresolved": 0,
+      "stay": 124,
+      "attempted": 1135,
+      "blocked": 0,
+      "person_steps": 1259,
+      "families": 6
+    },
+    "congestion": {
+      "people": 72,
+      "evacuated": 68,
+      "casualties": 4,
+      "unresolved": 0,
+      "stay": 89,
+      "attempted": 490,
+      "blocked": 0,
+      "person_steps": 579,
+      "families": 7
+    },
+    "dynamic-fire": {
+      "people": 67,
+      "evacuated": 54,
+      "casualties": 0,
+      "unresolved": 13,
+      "stay": 403,
+      "attempted": 707,
+      "blocked": 0,
+      "person_steps": 1110,
+      "families": 6
+    },
+    "large-unseen": {
+      "people": 176,
+      "evacuated": 141,
+      "casualties": 3,
+      "unresolved": 32,
+      "stay": 1002,
+      "attempted": 1894,
+      "blocked": 0,
+      "person_steps": 2896,
+      "families": 6
+    },
+    "navigation": {
+      "people": 36,
+      "evacuated": 36,
+      "casualties": 0,
+      "unresolved": 0,
+      "stay": 7,
+      "attempted": 248,
+      "blocked": 0,
+      "person_steps": 255,
+      "families": 7
+    }
+  },
+  "T2": {
+    "competing-exits": {
+      "people": 122,
+      "evacuated": 122,
+      "casualties": 0,
+      "unresolved": 0,
+      "stay": 107,
+      "attempted": 1149,
+      "blocked": 0,
+      "person_steps": 1256,
+      "families": 6
+    },
+    "congestion": {
+      "people": 72,
+      "evacuated": 68,
+      "casualties": 4,
+      "unresolved": 0,
+      "stay": 89,
+      "attempted": 490,
+      "blocked": 0,
+      "person_steps": 579,
+      "families": 7
+    },
+    "dynamic-fire": {
+      "people": 67,
+      "evacuated": 54,
+      "casualties": 0,
+      "unresolved": 13,
+      "stay": 399,
+      "attempted": 708,
+      "blocked": 0,
+      "person_steps": 1107,
+      "families": 6
+    },
+    "large-unseen": {
+      "people": 176,
+      "evacuated": 141,
+      "casualties": 3,
+      "unresolved": 32,
+      "stay": 995,
+      "attempted": 1903,
+      "blocked": 0,
+      "person_steps": 2898,
+      "families": 6
+    },
+    "navigation": {
+      "people": 36,
+      "evacuated": 36,
+      "casualties": 0,
+      "unresolved": 0,
+      "stay": 7,
+      "attempted": 248,
+      "blocked": 0,
+      "person_steps": 255,
+      "families": 7
+    }
+  },
+  "T3": {
+    "competing-exits": {
+      "people": 122,
+      "evacuated": 122,
+      "casualties": 0,
+      "unresolved": 0,
+      "stay": 28,
+      "attempted": 1264,
+      "blocked": 0,
+      "person_steps": 1292,
+      "families": 6
+    },
+    "congestion": {
+      "people": 72,
+      "evacuated": 68,
+      "casualties": 4,
+      "unresolved": 0,
+      "stay": 106,
+      "attempted": 483,
+      "blocked": 0,
+      "person_steps": 589,
+      "families": 7
+    },
+    "dynamic-fire": {
+      "people": 67,
+      "evacuated": 55,
+      "casualties": 1,
+      "unresolved": 11,
+      "stay": 524,
+      "attempted": 566,
+      "blocked": 0,
+      "person_steps": 1090,
+      "families": 6
+    },
+    "large-unseen": {
+      "people": 176,
+      "evacuated": 141,
+      "casualties": 4,
+      "unresolved": 31,
+      "stay": 1426,
+      "attempted": 1423,
+      "blocked": 0,
+      "person_steps": 2849,
+      "families": 6
+    },
+    "navigation": {
+      "people": 36,
+      "evacuated": 36,
+      "casualties": 0,
+      "unresolved": 0,
+      "stay": 3,
+      "attempted": 256,
+      "blocked": 0,
+      "person_steps": 259,
+      "families": 7
+    }
+  },
+  "T4": {
+    "competing-exits": {
+      "people": 122,
+      "evacuated": 122,
+      "casualties": 0,
+      "unresolved": 0,
+      "stay": 93,
+      "attempted": 1210,
+      "blocked": 0,
+      "person_steps": 1303,
+      "families": 6
+    },
+    "congestion": {
+      "people": 72,
+      "evacuated": 68,
+      "casualties": 4,
+      "unresolved": 0,
+      "stay": 73,
+      "attempted": 506,
+      "blocked": 0,
+      "person_steps": 579,
+      "families": 7
+    },
+    "dynamic-fire": {
+      "people": 67,
+      "evacuated": 55,
+      "casualties": 0,
+      "unresolved": 12,
+      "stay": 557,
+      "attempted": 521,
+      "blocked": 0,
+      "person_steps": 1078,
+      "families": 6
+    },
+    "large-unseen": {
+      "people": 176,
+      "evacuated": 141,
+      "casualties": 3,
+      "unresolved": 32,
+      "stay": 1577,
+      "attempted": 1319,
+      "blocked": 0,
+      "person_steps": 2896,
+      "families": 6
+    },
+    "navigation": {
+      "people": 36,
+      "evacuated": 36,
+      "casualties": 0,
+      "unresolved": 0,
+      "stay": 7,
+      "attempted": 248,
+      "blocked": 0,
+      "person_steps": 255,
+      "families": 7
+    }
+  }
+}

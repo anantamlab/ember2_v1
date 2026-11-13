@@ -6,6 +6,13 @@ GitHub Actions workflow `P0A contract tests` (`.github/workflows/p0a-tests.yml`)
 
 Permanent rule: **Implement → full local test → verify PASS → push. Never push untested code.**
 
+## Canonical repository and current state
+
+`anantamlab/ember_v1` is the only development repository. Do not push to `anantamlab/ember-v1-research-handoff`
+(read-only backup). Read [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md) first; `PHASE_CHECKPOINT.json` is a
+historical P0A record. Scripts under `handoff/` are archived evidence: never run them unchanged, and never edit
+files listed in `handoff/FILES.sha256`.
+
 ## Mandatory rules
 
 1. Read this file, the PR you continue and its latest resume notes before you change anything. Check the
@@ -13,12 +20,25 @@ Permanent rule: **Implement → full local test → verify PASS → push. Never 
 2. Work in Python 3.11 (owner decision, runs 13-17: 3.11 only) with the test dependencies installed with the test dependencies installed:
    `python -m pip install -e ".[test]"`.
 3. Run focused tests during development (one file, `-k`, one test).
-4. Before EVERY push, execute the COMPLETE CPU test suite locally (`python -m pytest -q`), through
-   `scripts/verify_local.py run`, on Python 3.11 (push with `EMBER_VERIFY_REQUIRE=3.11`). 3.12 runs only if the
-   owner asks.
+4. Before EVERY push, execute the CPU test suite locally through `scripts/verify_local.py run` on Python 3.11
+   (push with `EMBER_VERIFY_REQUIRE=3.11`). 3.12 runs only if the owner asks. See "Test tiers" for when the full
+   tier (`run --with-slow`) is required.
 5. Never skip, deselect, weaken or silently mark failing tests as expected failures. Do not edit a test only to
    get a green result. A test may change only when the behaviour it pins changes on purpose; say why in the
-   commit message.
+   commit message. The only sanctioned skip is the owner-approved `slow` tier below; add a file to it only
+   with owner approval.
+
+## Test tiers (owner decision 2026-11-13)
+
+Seven end-to-end files are marked `pytestmark = pytest.mark.slow`: `test_s1_pipeline`, `test_selection_confirmation`,
+`test_train_collect`, `test_train_pilot`, `test_pilot_preflight`, `test_s1_gate`, `test_expand`. They took 518 s of
+a 912 s suite. `tests/conftest.py` skips them (reported as skipped) unless pytest gets `--run-slow`.
+
+- **Default tier** (`verify_local.py run`, ~6.5 min): enough for a push whose change does not touch the code below.
+- **Full tier** (`verify_local.py run --with-slow`): required when a change touches `s1.py`, `s1_pipeline.py`,
+  `train_collect.py`, `train_pilot.py`, `pilot_supervisor.py`, `expand*.py`, `multiteacher.py`, `gen/`, `sim/`,
+  `teacher/` or `scripts/pilot_preflight.py`, and before any release tag. The receipt records `"tier"`.
+- Report the tier with the counts in the PR. Never call a default-tier run "the complete suite".
 6. Preserve the full test output and record the Python version, Git SHA, test counts (passed, failed, errors,
    skipped, xfailed, xpassed) and exit code. `scripts/verify_local.py` does this for you.
 7. Never push after a failed full-suite run.
@@ -46,7 +66,8 @@ python scripts/verify_local.py status          # receipts for HEAD
 
 What `run` does for each interpreter:
 
-- runs exactly `python -m pytest -q` from the repository root; it accepts no selection arguments and removes
+- runs exactly `python -m pytest -q` (plus `--run-slow` with `--with-slow`) from the repository root; it accepts
+  no other selection arguments and removes
   `PYTEST_ADDOPTS` and `PYTEST_PLUGINS` from the test environment;
 - puts this checkout's `src/` first on `PYTHONPATH` and refuses PASS if `ember_v1` is imported from anywhere
   else (an editable install can point at another worktree);

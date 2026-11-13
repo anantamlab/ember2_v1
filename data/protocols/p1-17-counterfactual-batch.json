@@ -1,0 +1,72 @@
+{
+ "protocol_id": "p1-17-counterfactual-batch",
+ "version": "1.0.0",
+ "status": "FROZEN",
+ "issue": 46,
+ "authorizes": "one bounded CPU batch of step-0 counterfactual studies on verified p1-17-train-full@1 groups; no training, no GPU, no Modal, no preference approval, no DEV/EMBERBench/locked-test data",
+ "owner_instruction": "run 17 prompt, Phase 7: real counterfactuals, a bounded batch first, T1/T4 continuations",
+ "frozen_before": "no study of this batch existed when this file was committed",
+ "source": {
+  "scope": "p1-17-train-full@1",
+  "plan_hash": "sha256:bff49b473c82d89c041a1aa5e279bff612aec80148f088228cad644bfe07c341",
+  "verification_hash": "sha256:4aeb92936e87fd9dbf8f5c4c0d304e8db09a0cb5e53c526066a1dad33fa776f1"
+ },
+ "state": "step 0, the matched initial state of each group; interventions = the distinct STORED step-0 joint maps of the five teachers (counterfactual.step0_study); no live teacher call",
+ "selection": {
+  "rule": "the per_bin lowest-rank scenarios of each people bin of the collection plan (rank = the plan's preregistered salted hash)",
+  "per_bin": 4,
+  "scenario_ids": [
+   "g-0821b9cfcfbdc9a9",
+   "g-f3ed186eb2bd001d",
+   "g-8f02b88396e08267",
+   "g-b2d7abd72ac48121",
+   "g-c92b6cdf6d8ae760",
+   "g-7490c1432df58c70",
+   "g-35cca9f1d42320be",
+   "g-438849247e97074c",
+   "g-525081107b864f7d",
+   "g-e5bdfae1ec8e1b79",
+   "g-ef23bf878e504b03",
+   "g-750bb4b60fc963d4",
+   "g-9655b53de725243e",
+   "g-96d986d2052d1417",
+   "g-e902a986217e9a2f",
+   "g-8714431651ae3324"
+  ]
+ },
+ "continuations": [
+  {
+   "name": "T1",
+   "version": "1.0.0"
+  },
+  {
+   "name": "T4",
+   "version": "1.2.0"
+  }
+ ],
+ "replicates": {
+  "stochastic": 3,
+  "deterministic": 1
+ },
+ "horizon": "the scenario's max_steps (run to termination); a branch still active at the horizon is censored",
+ "verdict_rule": "counterfactual.VERDICT_RULE (unchanged)",
+ "cpu_ms_per_branch_cap": 600000,
+ "concurrency": 6,
+ "budget": {
+  "branch_rollouts_max": "sum over studies of alternatives (<= 5) x replicates; the verifier re-runs each once more",
+  "expected_cpu_s": "about 1,000-5,000",
+  "cpu_s_cap_total": 20000,
+  "usd": 0
+ },
+ "storage": {
+  "root": "D:/Coding/ember-evidence/p1-17-cf-batch@1",
+  "in_git": false,
+  "write_once": true
+ },
+ "failure_policy": "no retry; a failed or unverified study is recorded, counted and reported",
+ "verification": "verify_shared_state_study: probe = the group's stored step-0 proposals, alternatives exact, every outcome/delta/censoring/verdict re-derived by replay, continuation RE-RUN",
+ "dataset": "multiteacher_dataset.preferences -> class C/D records; preference approval stays disabled, so every class C is candidate_not_approved with weight 0",
+ "continuation_caveat": "T4 has an internal CPU budget (2 s per decision); a budget-limited continuation decision can fail the re-run check; such studies are reported as unverified, not hidden",
+ "next": "report only; a larger batch or other states need a new preregistration",
+ "spec_hash": "sha256:ba333f5e3302844f0fd15f66f7e37b39278782489061892e1fcdf8f6db0771c4"
+}

@@ -1,0 +1,40 @@
+{
+  "kind": "ember-local-verify@1",
+  "status": "FAIL",
+  "reasons": [
+    "pytest exit code 1",
+    "1 failed, 0 errors"
+  ],
+  "head": "9f12f1b1ea1a0190c3a59caf302e88ac9e9466d7",
+  "tree_clean": true,
+  "tree_digest": "sha256:aa6d818671f3b50bac619de5b3195e52c2324a87fdc06ff401c8ea6f06ba08ee",
+  "tree_unchanged": true,
+  "branch": "research/p1-15-student-evaluation",
+  "python_minor": "3.11",
+  "python": {
+    "version": "3.11.13",
+    "implementation": "CPython",
+    "executable": "/home/darshith/ember-ws/cpu-tests/bin/python",
+    "pytest": "9.2.0",
+    "ember_v1_file": "/mnt/c/Users/Admin/Documents/Test/ember_v1/src/ember_v1/__init__.py",
+    "import_ok": true
+  },
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "command": "python -m pytest -q",
+  "stripped_env": [],
+  "exit_code": 1,
+  "counts": {
+    "passed": 1601,
+    "failed": 1,
+    "errors": 0,
+    "skipped": 2,
+    "xfailed": 10,
+    "xpassed": 0,
+    "warnings": 0,
+    "deselected": 0
+  },
+  "seconds": 482.4,
+  "started_utc": "20261112T132450Z",
+  "log": "/mnt/c/Users/Admin/Documents/Test/ember_v1/.local-test-logs/20261112T132450Z-9f12f1b1ea1a-py3.11.log",
+  "log_sha256": "sha256:7ea7cbc3ab692f15dc30b7d8bbc40260d43d0fba14ed820187295847850b22e9"
+}

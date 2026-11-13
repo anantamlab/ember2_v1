@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "episodes_replayed": 1472,
+  "transitions_replayed": 56775,
+  "training_advantages_recomputed": 38950,
+  "max_joint_sum_error": 0.0,
+  "max_distribution_normalization_error": 1.9345584478802635e-07,
+  "max_ppo_target_error": 0.0,
+  "errors": []
+}

@@ -1,0 +1,6 @@
+{
+  "gpu_retry_seconds": 254,
+  "prior_retry_verification_reserve_seconds": 40,
+  "first_completion_and_reload_diagnostic_budgeted_seconds": 360,
+  "retry_process_cap_seconds": 3200
+}

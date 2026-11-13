@@ -1,0 +1,1570 @@
+{
+  "cf_minus_ppo_paired_family_95": {
+    "casualties": {
+      "bootstrap_replicates": 5000,
+      "difference": -0.02114164904862581,
+      "families": 32,
+      "lower_95": -0.03960396039603964,
+      "unit": "proportion",
+      "upper_95": -0.0039215686274509665
+    },
+    "evacuated": {
+      "bootstrap_replicates": 5000,
+      "difference": 0.008456659619450302,
+      "families": 32,
+      "lower_95": -0.018617021276595758,
+      "unit": "proportion",
+      "upper_95": 0.034764826175869123
+    },
+    "unresolved": {
+      "bootstrap_replicates": 5000,
+      "difference": 0.012684989429175508,
+      "families": 32,
+      "lower_95": -0.012722646310432573,
+      "unit": "proportion",
+      "upper_95": 0.03984063745019917
+    }
+  },
+  "credible_cf_benefit": false,
+  "latency": {
+    "T0": {
+      "p50_joint_ms": 0.143009,
+      "p95_joint_ms": 0.24999
+    },
+    "T1": {
+      "p50_joint_ms": 0.516954,
+      "p95_joint_ms": 1.579664
+    },
+    "T2": {
+      "p50_joint_ms": 32.0125555,
+      "p95_joint_ms": 208.871074
+    },
+    "T3": {
+      "p50_joint_ms": 1.383446,
+      "p95_joint_ms": 10.061128
+    },
+    "T4": {
+      "p50_joint_ms": 0.9329019999999999,
+      "p95_joint_ms": 3.851501
+    },
+    "cf": {
+      "p50_joint_ms": 57.64930149598513,
+      "p95_joint_ms": 79.09773600113112
+    },
+    "phase2": {
+      "p50_joint_ms": 56.509172994992696,
+      "p95_joint_ms": 78.34064899361692
+    },
+    "ppo": {
+      "p50_joint_ms": 57.222825998906046,
+      "p95_joint_ms": 78.71810199867468
+    },
+    "v1": {
+      "p50_joint_ms": 56.999559004907496,
+      "p95_joint_ms": 79.36179100943264
+    },
+    "v1-coordinate": {
+      "p50_joint_ms": 57.41528299404308,
+      "p95_joint_ms": 85.54567999090068
+    },
+    "v1-mask": {
+      "p50_joint_ms": 57.61833100405056,
+      "p95_joint_ms": 85.89540699904319
+    }
+  },
+  "matched_teacher_panel": {
+    "T0": {
+      "attempted": 4104,
+      "blocked": 290,
+      "blocked_per_attempt": 0.07066276803118908,
+      "casualties": 38,
+      "casualties_rate": 0.080338266384778,
+      "episodes": 32,
+      "evacuated": 415,
+      "evacuated_rate": 0.8773784355179705,
+      "mean_reward": 0.7508273952609889,
+      "mean_terminal_reward": 0.7508273952609889,
+      "people": 473,
+      "person_steps": 5493,
+      "stay": 1389,
+      "stay_rate": 0.2528672856362643,
+      "steps": 660,
+      "unresolved": 20,
+      "unresolved_rate": 0.042283298097251586
+    },
+    "T1": {
+      "attempted": 4474,
+      "blocked": 0,
+      "blocked_per_attempt": 0.0,
+      "casualties": 7,
+      "casualties_rate": 0.014799154334038054,
+      "episodes": 32,
+      "evacuated": 421,
+      "evacuated_rate": 0.8900634249471459,
+      "mean_reward": 0.8364472441620879,
+      "mean_terminal_reward": 0.8364472441620879,
+      "people": 473,
+      "person_steps": 6099,
+      "stay": 1625,
+      "stay_rate": 0.2664371208394819,
+      "steps": 706,
+      "unresolved": 45,
+      "unresolved_rate": 0.09513742071881606
+    },
+    "T2": {
+      "attempted": 4498,
+      "blocked": 0,
+      "blocked_per_attempt": 0.0,
+      "casualties": 7,
+      "casualties_rate": 0.014799154334038054,
+      "episodes": 32,
+      "evacuated": 421,
+      "evacuated_rate": 0.8900634249471459,
+      "mean_reward": 0.8364472441620879,
+      "mean_terminal_reward": 0.8364472441620879,
+      "people": 473,
+      "person_steps": 6095,
+      "stay": 1597,
+      "stay_rate": 0.2620180475799836,
+      "steps": 706,
+      "unresolved": 45,
+      "unresolved_rate": 0.09513742071881606
+    },
+    "T3": {
+      "attempted": 3992,
+      "blocked": 0,
+      "blocked_per_attempt": 0.0,
+      "casualties": 9,
+      "casualties_rate": 0.019027484143763214,
+      "episodes": 32,
+      "evacuated": 422,
+      "evacuated_rate": 0.8921775898520085,
+      "mean_reward": 0.8354653159340659,
+      "mean_terminal_reward": 0.8354653159340659,
+      "people": 473,
+      "person_steps": 6079,
+      "stay": 2087,
+      "stay_rate": 0.34331304490870207,
+      "steps": 701,
+      "unresolved": 42,
+      "unresolved_rate": 0.08879492600422834
+    },
+    "T4": {
+      "attempted": 3804,
+      "blocked": 0,
+      "blocked_per_attempt": 0.0,
+      "casualties": 7,
+      "casualties_rate": 0.014799154334038054,
+      "episodes": 32,
+      "evacuated": 422,
+      "evacuated_rate": 0.8921775898520085,
+      "mean_reward": 0.8398652129120879,
+      "mean_terminal_reward": 0.8398652129120879,
+      "people": 473,
+      "person_steps": 6111,
+      "stay": 2307,
+      "stay_rate": 0.37751595483554246,
+      "steps": 680,
+      "unresolved": 44,
+      "unresolved_rate": 0.09302325581395349
+    },
+    "cf": {
+      "attempted": 11548,
+      "blocked": 9450,
+      "blocked_per_attempt": 0.8183235192241081,
+      "casualties": 104,
+      "casualties_rate": 0.21987315010570824,
+      "episodes": 32,
+      "evacuated": 197,
+      "evacuated_rate": 0.4164904862579281,
+      "mean_reward": -0.312121610047075,
+      "mean_terminal_reward": -0.3178529538238625,
+      "people": 473,
+      "person_steps": 12141,
+      "stay": 593,
+      "stay_rate": 0.048842764187463965,
+      "steps": 1376,
+      "unresolved": 172,
+      "unresolved_rate": 0.36363636363636365
+    },
+    "phase2": {
+      "attempted": 11591,
+      "blocked": 9628,
+      "blocked_per_attempt": 0.8306444655336036,
+      "casualties": 111,
+      "casualties_rate": 0.2346723044397463,
+      "episodes": 32,
+      "evacuated": 187,
+      "evacuated_rate": 0.3953488372093023,
+      "mean_reward": -0.3884086756176521,
+      "mean_terminal_reward": -0.39414001939443966,
+      "people": 473,
+      "person_steps": 12232,
+      "stay": 641,
+      "stay_rate": 0.05240353172007848,
+      "steps": 1391,
+      "unresolved": 175,
+      "unresolved_rate": 0.3699788583509514
+    },
+    "ppo": {
+      "attempted": 11553,
+      "blocked": 9544,
+      "blocked_per_attempt": 0.8261057733921925,
+      "casualties": 114,
+      "casualties_rate": 0.24101479915433405,
+      "episodes": 32,
+      "evacuated": 193,
+      "evacuated_rate": 0.4080338266384778,
+      "mean_reward": -0.3573226221426184,
+      "mean_terminal_reward": -0.3630539659194059,
+      "people": 473,
+      "person_steps": 12114,
+      "stay": 561,
+      "stay_rate": 0.04631005448241704,
+      "steps": 1383,
+      "unresolved": 166,
+      "unresolved_rate": 0.35095137420718814
+    },
+    "v1": {
+      "attempted": 11170,
+      "blocked": 9070,
+      "blocked_per_attempt": 0.8119964189794091,
+      "casualties": 114,
+      "casualties_rate": 0.24101479915433405,
+      "episodes": 32,
+      "evacuated": 197,
+      "evacuated_rate": 0.4164904862579281,
+      "mean_reward": -0.38418178100732825,
+      "mean_terminal_reward": -0.38991312478411577,
+      "people": 473,
+      "person_steps": 11967,
+      "stay": 797,
+      "stay_rate": 0.06659981616110972,
+      "steps": 1371,
+      "unresolved": 162,
+      "unresolved_rate": 0.34249471458773784
+    },
+    "v1-coordinate": {
+      "attempted": 5085,
+      "blocked": 0,
+      "blocked_per_attempt": 0.0,
+      "casualties": 72,
+      "casualties_rate": 0.1522198731501057,
+      "episodes": 32,
+      "evacuated": 287,
+      "evacuated_rate": 0.6067653276955602,
+      "mean_reward": 0.18924663804711883,
+      "mean_terminal_reward": 0.1835152942703312,
+      "people": 473,
+      "person_steps": 9562,
+      "stay": 4477,
+      "stay_rate": 0.46820748797322737,
+      "steps": 1223,
+      "unresolved": 114,
+      "unresolved_rate": 0.24101479915433405
+    },
+    "v1-mask": {
+      "attempted": 8421,
+      "blocked": 4731,
+      "blocked_per_attempt": 0.5618097613110082,
+      "casualties": 80,
+      "casualties_rate": 0.16913319238900634,
+      "episodes": 32,
+      "evacuated": 256,
+      "evacuated_rate": 0.5412262156448203,
+      "mean_reward": 0.052079134326880674,
+      "mean_terminal_reward": 0.04634779055009319,
+      "people": 473,
+      "person_steps": 10523,
+      "stay": 2102,
+      "stay_rate": 0.1997529221704837,
+      "steps": 1253,
+      "unresolved": 137,
+      "unresolved_rate": 0.28964059196617337
+    }
+  },
+  "matched_teacher_panel_families": 32,
+  "movement": {
+    "cf": {
+      "attempted": 11548,
+      "blocked_boundary": 205,
+      "blocked_conflict": 193,
+      "blocked_cycle": 278,
+      "blocked_occupied": 2850,
+      "blocked_wall": 5652,
+      "postprocess_changes": 0,
+      "repeated_ineffective_moves": 8596
+    },
+    "phase2": {
+      "attempted": 11591,
+      "blocked_boundary": 123,
+      "blocked_conflict": 182,
+      "blocked_cycle": 286,
+      "blocked_occupied": 2587,
+      "blocked_wall": 6200,
+      "postprocess_changes": 0,
+      "repeated_ineffective_moves": 8870
+    },
+    "ppo": {
+      "attempted": 11553,
+      "blocked_boundary": 161,
+      "blocked_conflict": 249,
+      "blocked_cycle": 306,
+      "blocked_occupied": 2884,
+      "blocked_wall": 5692,
+      "postprocess_changes": 0,
+      "repeated_ineffective_moves": 8759
+    },
+    "v1": {
+      "attempted": 11170,
+      "blocked_boundary": 129,
+      "blocked_conflict": 209,
+      "blocked_cycle": 296,
+      "blocked_occupied": 2414,
+      "blocked_wall": 5731,
+      "postprocess_changes": 0,
+      "repeated_ineffective_moves": 8325
+    },
+    "v1-coordinate": {
+      "attempted": 5085,
+      "blocked_boundary": 0,
+      "blocked_conflict": 0,
+      "blocked_cycle": 0,
+      "blocked_occupied": 0,
+      "blocked_wall": 0,
+      "postprocess_changes": 5177,
+      "repeated_ineffective_moves": 0
+    },
+    "v1-mask": {
+      "attempted": 8421,
+      "blocked_boundary": 0,
+      "blocked_conflict": 997,
+      "blocked_cycle": 1394,
+      "blocked_occupied": 2340,
+      "blocked_wall": 0,
+      "postprocess_changes": 3377,
+      "repeated_ineffective_moves": 4204
+    }
+  },
+  "optimization_means": {
+    "cf": {
+      "actor_loss": -0.03296192351257421,
+      "clip_fraction": 0.205471659081506,
+      "critic_loss": 0.03863934243944584,
+      "joint_kl": 0.012981804950103551,
+      "person_entropy": 0.8022181765046886
+    },
+    "ppo": {
+      "actor_loss": -0.03148617018993038,
+      "clip_fraction": 0.21755525295904474,
+      "critic_loss": 0.04222719907067963,
+      "joint_kl": 0.013745606100059244,
+      "person_entropy": 0.7583737740744604
+    }
+  },
+  "paired_behavior_and_family_uncertainty": {
+    "by_family": {
+      "competing-exits": {
+        "blocked_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.030416648093785636,
+          "families": 6,
+          "lower_95": -0.10166855581943623,
+          "unit": "proportion",
+          "upper_95": 0.038809845746835436
+        },
+        "casualties": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.03278688524590165,
+          "families": 6,
+          "lower_95": -0.05737704918032788,
+          "unit": "proportion",
+          "upper_95": -0.008547008547008551
+        },
+        "coordination_conflict_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.01834263521105639,
+          "families": 6,
+          "lower_95": -0.0931250488166836,
+          "unit": "proportion",
+          "upper_95": 0.09820658361582024
+        },
+        "evacuated": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.0,
+          "families": 6,
+          "lower_95": -0.04464285714285715,
+          "unit": "proportion",
+          "upper_95": 0.046511627906976716
+        },
+        "mean_joint_latency_ms": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.12836767034146845,
+          "families": 6,
+          "lower_95": -2.253588487090177,
+          "unit": "milliseconds",
+          "upper_95": 1.6411531674650561
+        },
+        "repeated_ineffective_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.03856760538349191,
+          "families": 6,
+          "lower_95": -0.1196577309094855,
+          "unit": "proportion",
+          "upper_95": 0.04570882851405045
+        },
+        "restricted_episode_steps": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.6666666666666643,
+          "families": 6,
+          "lower_95": -2.0,
+          "unit": "steps",
+          "upper_95": 0.0
+        },
+        "stay_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.004133549335671709,
+          "families": 6,
+          "lower_95": -0.005413181254873998,
+          "unit": "proportion",
+          "upper_95": 0.011905717634591612
+        },
+        "unresolved": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.03278688524590162,
+          "families": 6,
+          "lower_95": -0.01538461538461533,
+          "unit": "proportion",
+          "upper_95": 0.08396946564885499
+        },
+        "wall_boundary_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.04838693804492106,
+          "families": 6,
+          "lower_95": -0.10337373234441255,
+          "unit": "proportion",
+          "upper_95": 0.026119341855931344
+        }
+      },
+      "congestion": {
+        "blocked_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.01141602768707728,
+          "families": 7,
+          "lower_95": -0.026169361912365408,
+          "unit": "proportion",
+          "upper_95": 0.008802160235998335
+        },
+        "casualties": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.041666666666666685,
+          "families": 7,
+          "lower_95": -0.09459459459459463,
+          "unit": "proportion",
+          "upper_95": 0.0
+        },
+        "coordination_conflict_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.03773954091303766,
+          "families": 7,
+          "lower_95": -0.11526877096413524,
+          "unit": "proportion",
+          "upper_95": 0.031776128628094424
+        },
+        "evacuated": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.02777777777777779,
+          "families": 7,
+          "lower_95": 0.0,
+          "unit": "proportion",
+          "upper_95": 0.08108108108108103
+        },
+        "mean_joint_latency_ms": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.6102856754717791,
+          "families": 7,
+          "lower_95": -2.8945831749792603,
+          "unit": "milliseconds",
+          "upper_95": 2.194727873817712
+        },
+        "repeated_ineffective_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.010456029643761244,
+          "families": 7,
+          "lower_95": -0.03452481076534908,
+          "unit": "proportion",
+          "upper_95": 0.013559322033898313
+        },
+        "restricted_episode_steps": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.4285714285714306,
+          "families": 7,
+          "lower_95": 0.0,
+          "unit": "steps",
+          "upper_95": 1.2857142857142883
+        },
+        "stay_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.025433493377950783,
+          "families": 7,
+          "lower_95": -0.011794364515281389,
+          "unit": "proportion",
+          "upper_95": 0.09042868033164791
+        },
+        "unresolved": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.013888888888888867,
+          "families": 7,
+          "lower_95": 0.0,
+          "unit": "proportion",
+          "upper_95": 0.04545454545454544
+        },
+        "wall_boundary_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.022673074806471794,
+          "families": 7,
+          "lower_95": -0.041543231959258686,
+          "unit": "proportion",
+          "upper_95": 0.08804307078043205
+        }
+      },
+      "dynamic-fire": {
+        "blocked_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.0012391087388002875,
+          "families": 6,
+          "lower_95": -0.08551668762403986,
+          "unit": "proportion",
+          "upper_95": 0.06446410628462129
+        },
+        "casualties": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.02985074626865669,
+          "families": 6,
+          "lower_95": -0.10606060606060602,
+          "unit": "proportion",
+          "upper_95": 0.06153846153846154
+        },
+        "coordination_conflict_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.06588021575069808,
+          "families": 6,
+          "lower_95": -0.11719097788989463,
+          "unit": "proportion",
+          "upper_95": -0.005904967528301108
+        },
+        "evacuated": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.0,
+          "families": 6,
+          "lower_95": -0.12307692307692308,
+          "unit": "proportion",
+          "upper_95": 0.09090909090909088
+        },
+        "mean_joint_latency_ms": {
+          "bootstrap_replicates": 2000,
+          "difference": 2.6911607884351767,
+          "families": 6,
+          "lower_95": 1.0328272821516364,
+          "unit": "milliseconds",
+          "upper_95": 4.121814474176233
+        },
+        "repeated_ineffective_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.005771667582448403,
+          "families": 6,
+          "lower_95": -0.09385506750007144,
+          "unit": "proportion",
+          "upper_95": 0.06099216294204646
+        },
+        "restricted_episode_steps": {
+          "bootstrap_replicates": 2000,
+          "difference": -1.0,
+          "families": 6,
+          "lower_95": -4.166666666666664,
+          "unit": "steps",
+          "upper_95": 1.3333333333333357
+        },
+        "stay_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.020892757270693507,
+          "families": 6,
+          "lower_95": -0.01658191051997089,
+          "unit": "proportion",
+          "upper_95": 0.0940882352485038
+        },
+        "unresolved": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.029850746268656705,
+          "families": 6,
+          "lower_95": -0.0704225352112676,
+          "unit": "proportion",
+          "upper_95": 0.14285714285714288
+        },
+        "wall_boundary_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.06282113100911668,
+          "families": 6,
+          "lower_95": 0.003808343426945693,
+          "unit": "proportion",
+          "upper_95": 0.1045887565389022
+        }
+      },
+      "large-unseen": {
+        "blocked_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.005192732162956237,
+          "families": 6,
+          "lower_95": -0.014232045783756808,
+          "unit": "proportion",
+          "upper_95": 0.04586662695202315
+        },
+        "casualties": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.005681818181818177,
+          "families": 6,
+          "lower_95": -0.017441860465116282,
+          "unit": "proportion",
+          "upper_95": 0.0
+        },
+        "coordination_conflict_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.01086511428473974,
+          "families": 6,
+          "lower_95": -0.059867321357680525,
+          "unit": "proportion",
+          "upper_95": 0.04268858913186413
+        },
+        "evacuated": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.005681818181818177,
+          "families": 6,
+          "lower_95": -0.02777777777777779,
+          "unit": "proportion",
+          "upper_95": 0.03977272727272729
+        },
+        "mean_joint_latency_ms": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.5063386252509758,
+          "families": 6,
+          "lower_95": -2.815751263875029,
+          "unit": "milliseconds",
+          "upper_95": 1.6746622805436004
+        },
+        "repeated_ineffective_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.0012118908752490887,
+          "families": 6,
+          "lower_95": -0.02002213666116015,
+          "unit": "proportion",
+          "upper_95": 0.0419256412217236
+        },
+        "restricted_episode_steps": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.0,
+          "families": 6,
+          "lower_95": 0.0,
+          "unit": "steps",
+          "upper_95": 0.0
+        },
+        "stay_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.009206325161430724,
+          "families": 6,
+          "lower_95": -0.022130342562040377,
+          "unit": "proportion",
+          "upper_95": 0.0018869335187638274
+        },
+        "unresolved": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.0,
+          "families": 6,
+          "lower_95": -0.034883720930232565,
+          "unit": "proportion",
+          "upper_95": 0.03260869565217389
+        },
+        "wall_boundary_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.014838159555237262,
+          "families": 6,
+          "lower_95": -0.015237086545799028,
+          "unit": "proportion",
+          "upper_95": 0.048313489783405106
+        }
+      },
+      "navigation": {
+        "blocked_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.0106158343346614,
+          "families": 7,
+          "lower_95": -0.08334361692443082,
+          "unit": "proportion",
+          "upper_95": 0.03056313180812642
+        },
+        "casualties": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.0,
+          "families": 7,
+          "lower_95": 0.0,
+          "unit": "proportion",
+          "upper_95": 0.0
+        },
+        "coordination_conflict_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.013565360372704838,
+          "families": 7,
+          "lower_95": -0.11705813911594973,
+          "unit": "proportion",
+          "upper_95": 0.13303621732074233
+        },
+        "evacuated": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.027777777777777735,
+          "families": 7,
+          "lower_95": -0.08333333333333331,
+          "unit": "proportion",
+          "upper_95": 0.15384615384615385
+        },
+        "mean_joint_latency_ms": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.27717648156664865,
+          "families": 7,
+          "lower_95": -4.303560712937077,
+          "unit": "milliseconds",
+          "upper_95": 3.604248500864962
+        },
+        "repeated_ineffective_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.018192550119105255,
+          "families": 7,
+          "lower_95": -0.09447146524251171,
+          "unit": "proportion",
+          "upper_95": 0.03587515235016692
+        },
+        "restricted_episode_steps": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.0,
+          "families": 7,
+          "lower_95": 0.0,
+          "unit": "steps",
+          "upper_95": 0.0
+        },
+        "stay_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": 0.00010964886880204111,
+          "families": 7,
+          "lower_95": -0.015818711775716712,
+          "unit": "proportion",
+          "upper_95": 0.014664931503015545
+        },
+        "unresolved": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.02777777777777779,
+          "families": 7,
+          "lower_95": -0.15384615384615385,
+          "unit": "proportion",
+          "upper_95": 0.08333333333333337
+        },
+        "wall_boundary_rate": {
+          "bootstrap_replicates": 2000,
+          "difference": -0.030847931642669968,
+          "families": 7,
+          "lower_95": -0.15232738287461522,
+          "unit": "proportion",
+          "upper_95": 0.09096649100129262
+        }
+      }
+    },
+    "interpretation": "Paired bootstrap over independently generated topology families; conditional on one training seed per arm.",
+    "overall": {
+      "blocked_rate": {
+        "bootstrap_replicates": 5000,
+        "difference": -0.007782254168084424,
+        "families": 32,
+        "lower_95": -0.033180813733202696,
+        "unit": "proportion",
+        "upper_95": 0.017048214611516954
+      },
+      "casualties": {
+        "bootstrap_replicates": 5000,
+        "difference": -0.02114164904862581,
+        "families": 32,
+        "lower_95": -0.03960396039603964,
+        "unit": "proportion",
+        "upper_95": -0.0039215686274509665
+      },
+      "coordination_conflict_rate": {
+        "bootstrap_replicates": 5000,
+        "difference": -0.01008933512277016,
+        "families": 32,
+        "lower_95": -0.04811183995022256,
+        "unit": "proportion",
+        "upper_95": 0.025627233874022437
+      },
+      "evacuated": {
+        "bootstrap_replicates": 5000,
+        "difference": 0.008456659619450302,
+        "families": 32,
+        "lower_95": -0.018617021276595758,
+        "unit": "proportion",
+        "upper_95": 0.034764826175869123
+      },
+      "mean_joint_latency_ms": {
+        "bootstrap_replicates": 5000,
+        "difference": 0.20446712642128517,
+        "families": 32,
+        "lower_95": -1.1403962299409187,
+        "unit": "milliseconds",
+        "upper_95": 1.5061564368841829
+      },
+      "repeated_ineffective_rate": {
+        "bootstrap_replicates": 5000,
+        "difference": -0.013786734476019524,
+        "families": 32,
+        "lower_95": -0.04192651330005659,
+        "unit": "proportion",
+        "upper_95": 0.013926901585129436
+      },
+      "restricted_episode_steps": {
+        "bootstrap_replicates": 5000,
+        "difference": -0.21875,
+        "families": 32,
+        "lower_95": -0.875,
+        "unit": "steps",
+        "upper_95": 0.3125
+      },
+      "stay_rate": {
+        "bootstrap_replicates": 5000,
+        "difference": 0.0025327097050469247,
+        "families": 32,
+        "lower_95": -0.007983875267684036,
+        "unit": "proportion",
+        "upper_95": 0.01625696331310121
+      },
+      "unresolved": {
+        "bootstrap_replicates": 5000,
+        "difference": 0.012684989429175508,
+        "families": 32,
+        "lower_95": -0.012722646310432573,
+        "unit": "proportion",
+        "upper_95": 0.03984063745019917
+      },
+      "wall_boundary_rate": {
+        "bootstrap_replicates": 5000,
+        "difference": 0.0005657350436060193,
+        "families": 32,
+        "lower_95": -0.029045363370224564,
+        "unit": "proportion",
+        "upper_95": 0.031179757005323383
+      }
+    }
+  },
+  "per_family": {
+    "cf": {
+      "competing-exits": {
+        "attempted": 2963,
+        "blocked": 2325,
+        "blocked_per_attempt": 0.7846776915288559,
+        "casualties": 23,
+        "casualties_rate": 0.1885245901639344,
+        "episodes": 6,
+        "evacuated": 51,
+        "evacuated_rate": 0.4180327868852459,
+        "mean_reward": -0.2452494113507976,
+        "mean_terminal_reward": -0.24948830409356726,
+        "people": 122,
+        "person_steps": 3045,
+        "stay": 82,
+        "stay_rate": 0.026929392446633827,
+        "steps": 264,
+        "unresolved": 48,
+        "unresolved_rate": 0.39344262295081966
+      },
+      "congestion": {
+        "attempted": 1124,
+        "blocked": 863,
+        "blocked_per_attempt": 0.7677935943060499,
+        "casualties": 17,
+        "casualties_rate": 0.2361111111111111,
+        "episodes": 7,
+        "evacuated": 43,
+        "evacuated_rate": 0.5972222222222222,
+        "mean_reward": -0.051824303642485435,
+        "mean_terminal_reward": -0.05773809523809522,
+        "people": 72,
+        "person_steps": 1244,
+        "stay": 120,
+        "stay_rate": 0.09646302250803858,
+        "steps": 236,
+        "unresolved": 12,
+        "unresolved_rate": 0.16666666666666666
+      },
+      "dynamic-fire": {
+        "attempted": 1340,
+        "blocked": 990,
+        "blocked_per_attempt": 0.7388059701492538,
+        "casualties": 33,
+        "casualties_rate": 0.4925373134328358,
+        "episodes": 6,
+        "evacuated": 24,
+        "evacuated_rate": 0.3582089552238806,
+        "mean_reward": -0.6603661976378323,
+        "mean_terminal_reward": -0.6657051282051283,
+        "people": 67,
+        "person_steps": 1536,
+        "stay": 196,
+        "stay_rate": 0.12760416666666666,
+        "steps": 252,
+        "unresolved": 10,
+        "unresolved_rate": 0.14925373134328357
+      },
+      "large-unseen": {
+        "attempted": 5055,
+        "blocked": 4386,
+        "blocked_per_attempt": 0.8676557863501484,
+        "casualties": 26,
+        "casualties_rate": 0.14772727272727273,
+        "episodes": 6,
+        "evacuated": 67,
+        "evacuated_rate": 0.3806818181818182,
+        "mean_reward": -0.26165196164250015,
+        "mean_terminal_reward": -0.2654389880952381,
+        "people": 176,
+        "person_steps": 5179,
+        "stay": 124,
+        "stay_rate": 0.023942846109287506,
+        "steps": 288,
+        "unresolved": 83,
+        "unresolved_rate": 0.4715909090909091
+      },
+      "navigation": {
+        "attempted": 1066,
+        "blocked": 886,
+        "blocked_per_attempt": 0.8311444652908068,
+        "casualties": 5,
+        "casualties_rate": 0.1388888888888889,
+        "episodes": 7,
+        "evacuated": 12,
+        "evacuated_rate": 0.3333333333333333,
+        "mean_reward": -0.3745022817460317,
+        "mean_terminal_reward": -0.3833333333333333,
+        "people": 36,
+        "person_steps": 1137,
+        "stay": 71,
+        "stay_rate": 0.06244503078276165,
+        "steps": 336,
+        "unresolved": 19,
+        "unresolved_rate": 0.5277777777777778
+      }
+    },
+    "phase2": {
+      "competing-exits": {
+        "attempted": 2919,
+        "blocked": 2409,
+        "blocked_per_attempt": 0.8252826310380267,
+        "casualties": 26,
+        "casualties_rate": 0.21311475409836064,
+        "episodes": 6,
+        "evacuated": 50,
+        "evacuated_rate": 0.4098360655737705,
+        "mean_reward": -0.2819818674911485,
+        "mean_terminal_reward": -0.28622076023391807,
+        "people": 122,
+        "person_steps": 3023,
+        "stay": 104,
+        "stay_rate": 0.03440291101554747,
+        "steps": 264,
+        "unresolved": 46,
+        "unresolved_rate": 0.3770491803278688
+      },
+      "congestion": {
+        "attempted": 1058,
+        "blocked": 804,
+        "blocked_per_attempt": 0.7599243856332704,
+        "casualties": 19,
+        "casualties_rate": 0.2638888888888889,
+        "episodes": 7,
+        "evacuated": 42,
+        "evacuated_rate": 0.5833333333333334,
+        "mean_reward": -0.10737985919804098,
+        "mean_terminal_reward": -0.11329365079365077,
+        "people": 72,
+        "person_steps": 1249,
+        "stay": 191,
+        "stay_rate": 0.15292233787029624,
+        "steps": 236,
+        "unresolved": 11,
+        "unresolved_rate": 0.1527777777777778
+      },
+      "dynamic-fire": {
+        "attempted": 1427,
+        "blocked": 1100,
+        "blocked_per_attempt": 0.7708479327259986,
+        "casualties": 34,
+        "casualties_rate": 0.5074626865671642,
+        "episodes": 6,
+        "evacuated": 19,
+        "evacuated_rate": 0.2835820895522388,
+        "mean_reward": -0.8861941890908236,
+        "mean_terminal_reward": -0.8915331196581197,
+        "people": 67,
+        "person_steps": 1584,
+        "stay": 157,
+        "stay_rate": 0.09911616161616162,
+        "steps": 267,
+        "unresolved": 14,
+        "unresolved_rate": 0.208955223880597
+      },
+      "large-unseen": {
+        "attempted": 5106,
+        "blocked": 4407,
+        "blocked_per_attempt": 0.86310223266745,
+        "casualties": 27,
+        "casualties_rate": 0.1534090909090909,
+        "episodes": 6,
+        "evacuated": 65,
+        "evacuated_rate": 0.3693181818181818,
+        "mean_reward": -0.2925299378329763,
+        "mean_terminal_reward": -0.29631696428571425,
+        "people": 176,
+        "person_steps": 5232,
+        "stay": 126,
+        "stay_rate": 0.02408256880733945,
+        "steps": 288,
+        "unresolved": 84,
+        "unresolved_rate": 0.4772727272727273
+      },
+      "navigation": {
+        "attempted": 1081,
+        "blocked": 908,
+        "blocked_per_attempt": 0.8399629972247918,
+        "casualties": 5,
+        "casualties_rate": 0.1388888888888889,
+        "episodes": 7,
+        "evacuated": 11,
+        "evacuated_rate": 0.3055555555555556,
+        "mean_reward": -0.4161689484126984,
+        "mean_terminal_reward": -0.425,
+        "people": 36,
+        "person_steps": 1144,
+        "stay": 63,
+        "stay_rate": 0.05506993006993007,
+        "steps": 336,
+        "unresolved": 20,
+        "unresolved_rate": 0.5555555555555556
+      }
+    },
+    "ppo": {
+      "competing-exits": {
+        "attempted": 2915,
+        "blocked": 2376,
+        "blocked_per_attempt": 0.8150943396226416,
+        "casualties": 27,
+        "casualties_rate": 0.22131147540983606,
+        "episodes": 6,
+        "evacuated": 51,
+        "evacuated_rate": 0.4180327868852459,
+        "mean_reward": -0.2744160780174643,
+        "mean_terminal_reward": -0.2786549707602339,
+        "people": 122,
+        "person_steps": 2983,
+        "stay": 68,
+        "stay_rate": 0.022795843110962118,
+        "steps": 268,
+        "unresolved": 44,
+        "unresolved_rate": 0.36065573770491804
+      },
+      "congestion": {
+        "attempted": 1164,
+        "blocked": 907,
+        "blocked_per_attempt": 0.7792096219931272,
+        "casualties": 20,
+        "casualties_rate": 0.2777777777777778,
+        "episodes": 7,
+        "evacuated": 41,
+        "evacuated_rate": 0.5694444444444444,
+        "mean_reward": -0.1430941449123267,
+        "mean_terminal_reward": -0.14900793650793648,
+        "people": 72,
+        "person_steps": 1253,
+        "stay": 89,
+        "stay_rate": 0.0710295291300878,
+        "steps": 233,
+        "unresolved": 11,
+        "unresolved_rate": 0.1527777777777778
+      },
+      "dynamic-fire": {
+        "attempted": 1331,
+        "blocked": 985,
+        "blocked_per_attempt": 0.740045078888054,
+        "casualties": 35,
+        "casualties_rate": 0.5223880597014925,
+        "episodes": 6,
+        "evacuated": 24,
+        "evacuated_rate": 0.3582089552238806,
+        "mean_reward": -0.7064399155865502,
+        "mean_terminal_reward": -0.7117788461538462,
+        "people": 67,
+        "person_steps": 1490,
+        "stay": 159,
+        "stay_rate": 0.10671140939597315,
+        "steps": 258,
+        "unresolved": 8,
+        "unresolved_rate": 0.11940298507462686
+      },
+      "large-unseen": {
+        "attempted": 5075,
+        "blocked": 4377,
+        "blocked_per_attempt": 0.8624630541871922,
+        "casualties": 27,
+        "casualties_rate": 0.1534090909090909,
+        "episodes": 6,
+        "evacuated": 66,
+        "evacuated_rate": 0.375,
+        "mean_reward": -0.2821132711663097,
+        "mean_terminal_reward": -0.2859002976190476,
+        "people": 176,
+        "person_steps": 5249,
+        "stay": 174,
+        "stay_rate": 0.03314917127071823,
+        "steps": 288,
+        "unresolved": 83,
+        "unresolved_rate": 0.4715909090909091
+      },
+      "navigation": {
+        "attempted": 1068,
+        "blocked": 899,
+        "blocked_per_attempt": 0.8417602996254682,
+        "casualties": 5,
+        "casualties_rate": 0.1388888888888889,
+        "episodes": 7,
+        "evacuated": 11,
+        "evacuated_rate": 0.3055555555555556,
+        "mean_reward": -0.4078356150793651,
+        "mean_terminal_reward": -0.41666666666666663,
+        "people": 36,
+        "person_steps": 1139,
+        "stay": 71,
+        "stay_rate": 0.06233538191395961,
+        "steps": 336,
+        "unresolved": 20,
+        "unresolved_rate": 0.5555555555555556
+      }
+    },
+    "v1": {
+      "competing-exits": {
+        "attempted": 2925,
+        "blocked": 2350,
+        "blocked_per_attempt": 0.8034188034188035,
+        "casualties": 22,
+        "casualties_rate": 0.18032786885245902,
+        "episodes": 6,
+        "evacuated": 55,
+        "evacuated_rate": 0.45081967213114754,
+        "mean_reward": -0.16407251076600232,
+        "mean_terminal_reward": -0.1683114035087719,
+        "people": 122,
+        "person_steps": 3100,
+        "stay": 175,
+        "stay_rate": 0.056451612903225805,
+        "steps": 268,
+        "unresolved": 45,
+        "unresolved_rate": 0.36885245901639346
+      },
+      "congestion": {
+        "attempted": 1161,
+        "blocked": 860,
+        "blocked_per_attempt": 0.7407407407407407,
+        "casualties": 19,
+        "casualties_rate": 0.2638888888888889,
+        "episodes": 7,
+        "evacuated": 42,
+        "evacuated_rate": 0.5833333333333334,
+        "mean_reward": -0.10737985919804098,
+        "mean_terminal_reward": -0.11329365079365077,
+        "people": 72,
+        "person_steps": 1274,
+        "stay": 113,
+        "stay_rate": 0.08869701726844584,
+        "steps": 245,
+        "unresolved": 11,
+        "unresolved_rate": 0.1527777777777778
+      },
+      "dynamic-fire": {
+        "attempted": 1114,
+        "blocked": 734,
+        "blocked_per_attempt": 0.6588868940754039,
+        "casualties": 37,
+        "casualties_rate": 0.5522388059701493,
+        "episodes": 6,
+        "evacuated": 23,
+        "evacuated_rate": 0.34328358208955223,
+        "mean_reward": -0.7612476078942425,
+        "mean_terminal_reward": -0.7665865384615383,
+        "people": 67,
+        "person_steps": 1315,
+        "stay": 201,
+        "stay_rate": 0.15285171102661596,
+        "steps": 234,
+        "unresolved": 7,
+        "unresolved_rate": 0.1044776119402985
+      },
+      "large-unseen": {
+        "attempted": 4784,
+        "blocked": 4101,
+        "blocked_per_attempt": 0.857232441471572,
+        "casualties": 28,
+        "casualties_rate": 0.1590909090909091,
+        "episodes": 6,
+        "evacuated": 69,
+        "evacuated_rate": 0.39204545454545453,
+        "mean_reward": -0.25867577116630963,
+        "mean_terminal_reward": -0.26246279761904756,
+        "people": 176,
+        "person_steps": 5027,
+        "stay": 243,
+        "stay_rate": 0.0483389695643525,
+        "steps": 288,
+        "unresolved": 79,
+        "unresolved_rate": 0.44886363636363635
+      },
+      "navigation": {
+        "attempted": 1186,
+        "blocked": 1025,
+        "blocked_per_attempt": 0.8642495784148398,
+        "casualties": 8,
+        "casualties_rate": 0.2222222222222222,
+        "episodes": 7,
+        "evacuated": 8,
+        "evacuated_rate": 0.2222222222222222,
+        "mean_reward": -0.6340260912698413,
+        "mean_terminal_reward": -0.6428571428571429,
+        "people": 36,
+        "person_steps": 1251,
+        "stay": 65,
+        "stay_rate": 0.05195843325339728,
+        "steps": 336,
+        "unresolved": 20,
+        "unresolved_rate": 0.5555555555555556
+      }
+    },
+    "v1-coordinate": {
+      "competing-exits": {
+        "attempted": 1229,
+        "blocked": 0,
+        "blocked_per_attempt": 0.0,
+        "casualties": 16,
+        "casualties_rate": 0.13114754098360656,
+        "episodes": 6,
+        "evacuated": 81,
+        "evacuated_rate": 0.6639344262295082,
+        "mean_reward": 0.2653134541462784,
+        "mean_terminal_reward": 0.26107456140350876,
+        "people": 122,
+        "person_steps": 2373,
+        "stay": 1144,
+        "stay_rate": 0.48209018120522545,
+        "steps": 244,
+        "unresolved": 25,
+        "unresolved_rate": 0.20491803278688525
+      },
+      "congestion": {
+        "attempted": 553,
+        "blocked": 0,
+        "blocked_per_attempt": 0.0,
+        "casualties": 8,
+        "casualties_rate": 0.1111111111111111,
+        "episodes": 7,
+        "evacuated": 59,
+        "evacuated_rate": 0.8194444444444444,
+        "mean_reward": 0.5239693471511654,
+        "mean_terminal_reward": 0.5180555555555555,
+        "people": 72,
+        "person_steps": 817,
+        "stay": 264,
+        "stay_rate": 0.32313341493268055,
+        "steps": 236,
+        "unresolved": 5,
+        "unresolved_rate": 0.06944444444444445
+      },
+      "dynamic-fire": {
+        "attempted": 623,
+        "blocked": 0,
+        "blocked_per_attempt": 0.0,
+        "casualties": 23,
+        "casualties_rate": 0.34328358208955223,
+        "episodes": 6,
+        "evacuated": 44,
+        "evacuated_rate": 0.6567164179104478,
+        "mean_reward": 0.04796713569550106,
+        "mean_terminal_reward": 0.04262820512820512,
+        "people": 67,
+        "person_steps": 898,
+        "stay": 275,
+        "stay_rate": 0.3062360801781737,
+        "steps": 191,
+        "unresolved": 0,
+        "unresolved_rate": 0.0
+      },
+      "large-unseen": {
+        "attempted": 2403,
+        "blocked": 0,
+        "blocked_per_attempt": 0.0,
+        "casualties": 21,
+        "casualties_rate": 0.11931818181818182,
+        "episodes": 6,
+        "evacuated": 82,
+        "evacuated_rate": 0.4659090909090909,
+        "mean_reward": -0.0797323187853573,
+        "mean_terminal_reward": -0.08351934523809523,
+        "people": 176,
+        "person_steps": 4661,
+        "stay": 2258,
+        "stay_rate": 0.4844453979832654,
+        "steps": 288,
+        "unresolved": 73,
+        "unresolved_rate": 0.4147727272727273
+      },
+      "navigation": {
+        "attempted": 277,
+        "blocked": 0,
+        "blocked_per_attempt": 0.0,
+        "casualties": 4,
+        "casualties_rate": 0.1111111111111111,
+        "episodes": 7,
+        "evacuated": 21,
+        "evacuated_rate": 0.5833333333333334,
+        "mean_reward": 0.1409739087301587,
+        "mean_terminal_reward": 0.13214285714285715,
+        "people": 36,
+        "person_steps": 813,
+        "stay": 536,
+        "stay_rate": 0.6592865928659286,
+        "steps": 264,
+        "unresolved": 11,
+        "unresolved_rate": 0.3055555555555556
+      }
+    },
+    "v1-mask": {
+      "competing-exits": {
+        "attempted": 2212,
+        "blocked": 1278,
+        "blocked_per_attempt": 0.5777576853526221,
+        "casualties": 18,
+        "casualties_rate": 0.14754098360655737,
+        "episodes": 6,
+        "evacuated": 66,
+        "evacuated_rate": 0.5409836065573771,
+        "mean_reward": 0.06045234303516731,
+        "mean_terminal_reward": 0.05621345029239768,
+        "people": 122,
+        "person_steps": 2735,
+        "stay": 523,
+        "stay_rate": 0.19122486288848264,
+        "steps": 261,
+        "unresolved": 38,
+        "unresolved_rate": 0.3114754098360656
+      },
+      "congestion": {
+        "attempted": 847,
+        "blocked": 464,
+        "blocked_per_attempt": 0.5478158205430933,
+        "casualties": 12,
+        "casualties_rate": 0.16666666666666666,
+        "episodes": 7,
+        "evacuated": 51,
+        "evacuated_rate": 0.7083333333333334,
+        "mean_reward": 0.2531360138178321,
+        "mean_terminal_reward": 0.24722222222222223,
+        "people": 72,
+        "person_steps": 1099,
+        "stay": 252,
+        "stay_rate": 0.22929936305732485,
+        "steps": 237,
+        "unresolved": 9,
+        "unresolved_rate": 0.125
+      },
+      "dynamic-fire": {
+        "attempted": 776,
+        "blocked": 234,
+        "blocked_per_attempt": 0.3015463917525773,
+        "casualties": 24,
+        "casualties_rate": 0.3582089552238806,
+        "episodes": 6,
+        "evacuated": 41,
+        "evacuated_rate": 0.6119402985074627,
+        "mean_reward": -0.03397730874894341,
+        "mean_terminal_reward": -0.03931623931623932,
+        "people": 67,
+        "person_steps": 973,
+        "stay": 197,
+        "stay_rate": 0.20246659815005139,
+        "steps": 201,
+        "unresolved": 2,
+        "unresolved_rate": 0.029850746268656716
+      },
+      "large-unseen": {
+        "attempted": 4064,
+        "blocked": 2483,
+        "blocked_per_attempt": 0.6109744094488189,
+        "casualties": 21,
+        "casualties_rate": 0.11931818181818182,
+        "episodes": 6,
+        "evacuated": 78,
+        "evacuated_rate": 0.4431818181818182,
+        "mean_reward": -0.11823678307107155,
+        "mean_terminal_reward": -0.12202380952380955,
+        "people": 176,
+        "person_steps": 4886,
+        "stay": 822,
+        "stay_rate": 0.16823577568563242,
+        "steps": 288,
+        "unresolved": 77,
+        "unresolved_rate": 0.4375
+      },
+      "navigation": {
+        "attempted": 522,
+        "blocked": 272,
+        "blocked_per_attempt": 0.5210727969348659,
+        "casualties": 5,
+        "casualties_rate": 0.1388888888888889,
+        "episodes": 7,
+        "evacuated": 20,
+        "evacuated_rate": 0.5555555555555556,
+        "mean_reward": 0.06359295634920634,
+        "mean_terminal_reward": 0.054761904761904734,
+        "people": 36,
+        "person_steps": 830,
+        "stay": 308,
+        "stay_rate": 0.3710843373493976,
+        "steps": 266,
+        "unresolved": 11,
+        "unresolved_rate": 0.3055555555555556
+      }
+    }
+  },
+  "preupdate_probability_replay_max": {
+    "cf": 0.0,
+    "ppo": 0.0
+  },
+  "public_priority_study_counts": {
+    "bottleneck": 14,
+    "coordination_conflict": 75,
+    "delayed_escape": 2,
+    "repeated_ineffective": 108,
+    "wall_or_boundary": 107
+  },
+  "teacher_alternative_effects": {
+    "T0": {
+      "eligible": 23,
+      "harmed": 1,
+      "helped": 24,
+      "inconclusive_nonzero": 1,
+      "mean_utility_delta": 0.01483394179048856,
+      "states": 108,
+      "tied": 83,
+      "utility_sum": 1.6020657133727645
+    },
+    "T1": {
+      "eligible": 25,
+      "harmed": 0,
+      "helped": 27,
+      "inconclusive_nonzero": 1,
+      "mean_utility_delta": 0.01718894436250502,
+      "states": 108,
+      "tied": 81,
+      "utility_sum": 1.8564059911505422
+    },
+    "T2": {
+      "eligible": 25,
+      "harmed": 0,
+      "helped": 27,
+      "inconclusive_nonzero": 1,
+      "mean_utility_delta": 0.01718894436250502,
+      "states": 108,
+      "tied": 81,
+      "utility_sum": 1.8564059911505422
+    },
+    "T3": {
+      "eligible": 24,
+      "harmed": 0,
+      "helped": 26,
+      "inconclusive_nonzero": 0,
+      "mean_utility_delta": 0.01670669127608527,
+      "states": 108,
+      "tied": 82,
+      "utility_sum": 1.8043226578172091
+    },
+    "T4": {
+      "eligible": 26,
+      "harmed": 0,
+      "helped": 28,
+      "inconclusive_nonzero": 1,
+      "mean_utility_delta": 0.017671197448924775,
+      "states": 108,
+      "tied": 80,
+      "utility_sum": 1.9084893244838756
+    },
+    "local-0": {
+      "eligible": 5,
+      "harmed": 2,
+      "helped": 6,
+      "inconclusive_nonzero": 2,
+      "mean_utility_delta": 0.0026494984567901232,
+      "states": 108,
+      "tied": 100,
+      "utility_sum": 0.2861458333333333
+    },
+    "local-1": {
+      "eligible": 3,
+      "harmed": 2,
+      "helped": 4,
+      "inconclusive_nonzero": 1,
+      "mean_utility_delta": 0.0006920954052170457,
+      "states": 108,
+      "tied": 102,
+      "utility_sum": 0.07474630376344094
+    },
+    "local-2": {
+      "eligible": 4,
+      "harmed": 1,
+      "helped": 4,
+      "inconclusive_nonzero": 0,
+      "mean_utility_delta": 0.002075555057745919,
+      "states": 108,
+      "tied": 103,
+      "utility_sum": 0.22415994623655924
+    },
+    "local-3": {
+      "eligible": 3,
+      "harmed": 2,
+      "helped": 3,
+      "inconclusive_nonzero": 0,
+      "mean_utility_delta": 0.00025737476258309584,
+      "states": 108,
+      "tied": 103,
+      "utility_sum": 0.027796474358974352
+    },
+    "student": {
+      "eligible": 0,
+      "harmed": 0,
+      "helped": 0,
+      "inconclusive_nonzero": 0,
+      "mean_utility_delta": 0.0,
+      "states": 108,
+      "tied": 108,
+      "utility_sum": 0.0
+    },
+    "student-greedy": {
+      "eligible": 1,
+      "harmed": 0,
+      "helped": 1,
+      "inconclusive_nonzero": 0,
+      "mean_utility_delta": 0.0006481481481481482,
+      "states": 108,
+      "tied": 107,
+      "utility_sum": 0.07
+    }
+  },
+  "verdict": "A statistically credible evacuation benefit beyond PPO-only without casualty regression was not established on reporting DEV."
+}

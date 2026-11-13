@@ -1,0 +1,15 @@
+{
+ "config_version": "ember-run-config@1",
+ "run_id": "r19-env-check@1",
+ "kind": "env-check",
+ "authorization": {
+  "status": "AUTHORIZED",
+  "by": "owner, run-19 prompt Phase 7 (transfer test: GPU smoke + reproduce a few recorded V1 predictions)",
+  "date": "2026-11-11"
+ },
+ "purpose": "RTX 5090 / driver / CUDA 12.8 / PyTorch 2.8.0 sm_120 checks, triton JIT, pinned install audit (p0b verify-install)",
+ "inputs": {},
+ "params": {},
+ "result_path": "student-rollouts/r19-env-check@1",
+ "max_wall_s": 1800
+}

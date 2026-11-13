@@ -1,0 +1,43 @@
+From a3a9bf32763b98486a2ab95467ae4599ab787349 Mon Sep 17 00:00:00 2001
+From: EMBER execution agent <agent@ember.local>
+Date: Thu, 12 Nov 2026 05:03:46 +0000
+Subject: [PATCH] Run 19: authorize the bounded V1 A/B/C policy comparison
+ (Milestone 2)
+
+Sets data/runs/r19-v1-arms@1.json authorization.status to AUTHORIZED under the
+owner instruction in the Milestone 2 prompt. Minimal diff: only the
+authorization block changes. Checkpoint, records, scenario sets (48 DEV +
+80 core + 20 stress), arms, block size, comparison command, result path and
+wall cap are byte-identical to b91654c1.
+
+Scope limits recorded in the config: no V2 training, no new data collection,
+no additional teacher collection, no benchmark changes, no other experiment.
+
+Created in the workstation's local mirror because no development-laptop agent
+was reachable; not pushed to GitHub. The identical patch is handed back to the
+laptop so it can create the same authorized commit on the branch.
+---
+ data/runs/r19-v1-arms@1.json | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/data/runs/r19-v1-arms@1.json b/data/runs/r19-v1-arms@1.json
+index 10b538e..85937f9 100644
+--- a/data/runs/r19-v1-arms@1.json
++++ b/data/runs/r19-v1-arms@1.json
+@@ -3,8 +3,11 @@
+  "run_id": "r19-v1-arms@1",
+  "kind": "v1-policy-ablation",
+  "authorization": {
+-  "status": "NOT_AUTHORIZED",
+-  "note": "Phase 8 prepares this run only. The owner must authorize it; the laptop then commits status AUTHORIZED (a new commit) before prepare-run accepts it."
++  "status": "AUTHORIZED",
++  "by": "owner, EMBER v1 Milestone 2 prompt (bounded V1 A/B/C policy comparison after Milestone 1)",
++  "date": "2026-11-12",
++  "note": "Bounded authorization: arms A_raw / B_static_mask / C_joint_coord on the frozen p1-18-v1-train@1 checkpoint and the existing 148 matched scenarios only. It does not authorize V2 training, new data collection, additional teacher collection, GPU training, benchmark changes or any other experiment. Scenarios, sets, seeds, block size, thresholds, comparison command and result path are unchanged from b91654c1.",
++  "recorded_by": "execution agent on the college workstation (no laptop agent reachable); identical patch handed back to the laptop"
+  },
+  "purpose": "Arms A_raw / B_static_mask / C_joint_coord of ONE V1 checkpoint on matched held-out scenarios (DEV 48 + expansion val 100); identical scenario seeds, hence identical fire; raw model argmax and executed actions recorded separately",
+  "inputs": {
+-- 
+2.43.0
+

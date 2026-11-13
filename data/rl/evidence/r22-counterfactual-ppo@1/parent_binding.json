@@ -1,0 +1,31 @@
+{
+  "actor_digest": "sha256:901e22e8be0af3f4ff7002b9041d16e4a0dacd8c602a79b66121429507275120",
+  "checkpoint": "/home/darshith/ember-ws/rl-evidence/r21-online-ppo@1/attempt-3/checkpoints/update-0096",
+  "phase2_manifest_sha256": "04c3b6f35f54f968da142221947882fbe9722974c79e987f9c4dfd8de322d452",
+  "selected_update": 96,
+  "selection": {
+    "checkpoint": "/home/darshith/ember-ws/rl-evidence/r21-online-ppo@1/attempt-3/checkpoints/update-0096",
+    "safety_eligible": true,
+    "selection": {
+      "attempted": 5986,
+      "blocked": 4430,
+      "blocked_per_attempt": 0.7400601403274307,
+      "casualties": 131,
+      "casualties_rate": 0.36901408450704226,
+      "episodes": 32,
+      "evacuated": 161,
+      "evacuated_rate": 0.4535211267605634,
+      "mean_reward": -0.3302024570360583,
+      "mean_terminal_reward": -0.3429409297984545,
+      "people": 355,
+      "person_steps": 6530,
+      "stay": 544,
+      "stay_rate": 0.08330781010719755,
+      "steps": 1302,
+      "unresolved": 63,
+      "unresolved_rate": 0.17746478873239438
+    },
+    "selection_utility": -0.4176056338028169,
+    "update": 96
+  }
+}

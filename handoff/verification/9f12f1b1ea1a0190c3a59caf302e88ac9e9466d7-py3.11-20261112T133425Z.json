@@ -1,0 +1,37 @@
+{
+  "kind": "ember-local-verify@1",
+  "status": "PASS",
+  "reasons": [],
+  "head": "9f12f1b1ea1a0190c3a59caf302e88ac9e9466d7",
+  "tree_clean": true,
+  "tree_digest": "sha256:aa6d818671f3b50bac619de5b3195e52c2324a87fdc06ff401c8ea6f06ba08ee",
+  "tree_unchanged": true,
+  "branch": "research/p1-15-student-evaluation",
+  "python_minor": "3.11",
+  "python": {
+    "version": "3.11.13",
+    "implementation": "CPython",
+    "executable": "C:\\Users\\Admin\\Documents\\ember-evidence\\cpu-tests311\\Scripts\\python.exe",
+    "pytest": "9.2.0",
+    "ember_v1_file": "C:\\Users\\Admin\\Documents\\Test\\ember_v1\\src\\ember_v1\\__init__.py",
+    "import_ok": true
+  },
+  "platform": "Windows-10-10.0.26200-SP0",
+  "command": "python -m pytest -q",
+  "stripped_env": [],
+  "exit_code": 0,
+  "counts": {
+    "passed": 1602,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 2,
+    "xfailed": 10,
+    "xpassed": 0,
+    "warnings": 0,
+    "deselected": 0
+  },
+  "seconds": 380.2,
+  "started_utc": "20261112T133425Z",
+  "log": "C:\\Users\\Admin\\Documents\\Test\\ember_v1\\.local-test-logs\\20261112T133425Z-9f12f1b1ea1a-py3.11.log",
+  "log_sha256": "sha256:d4b8800c8958a5f38690120c81f7ebbe70d98d4e3a8bb0c954d50c621710212d"
+}

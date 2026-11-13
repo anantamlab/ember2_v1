@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "actual_exit_codes": {
+    "r21-audit-3.exit": 0,
+    "r21-autograd.exit": 0,
+    "r21-archive.exit": 0
+  },
+  "canonical_manifest_sha256": "04c3b6f35f54f968da142221947882fbe9722974c79e987f9c4dfd8de322d452",
+  "canonical_manifest_files": 1565,
+  "canonical_manifest_bytes": 76342664199,
+  "windows_copy_files_verified": 42,
+  "windows_copy_bytes_verified": 821844776,
+  "windows_copy_verification_sha256": "9d8c06b8bad5daad48cec5d7bc0516a0e654f45e198a50e81bf35d04b868ca87",
+  "selected_identity_sha256": "176bdd603657f5ecbf21ff0d51a2aa3c152c406a6ec112fdb62d60ba772aaca9",
+  "scenario_counts": {
+    "train": 1024,
+    "select": 32,
+    "report": 32
+  },
+  "phase1_topology_overlap": 0,
+  "within_phase2_topology_overlap": 0,
+  "finite_nonzero_applied_gradient_checks": 2489,
+  "selected_episodes": 768,
+  "selected_env_steps": 29108,
+  "selected_optimizer_steps": 1855
+}

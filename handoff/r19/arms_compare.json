@@ -1,0 +1,2778 @@
+{
+ "bootstrap": {
+  "n": 2000,
+  "seed": 20261110
+ },
+ "sets": {
+  "p1-02-v1/dev": {
+   "contrasts": {
+    "A_raw-B_static_mask": {
+     "casualties": {
+      "ci95": [
+       0.032555,
+       0.117079
+      ],
+      "diff": 0.074971,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.03696,
+       0.116739
+      ],
+      "diff": 0.074971,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.005017,
+       0.006275
+      ],
+      "diff": 0.0,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "A_raw-C_joint_coord": {
+     "casualties": {
+      "ci95": [
+       0.076811,
+       0.235984
+      ],
+      "diff": 0.153403,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.084619,
+       0.248943
+      ],
+      "diff": 0.163783,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.002876,
+       0.01992
+      ],
+      "diff": 0.010381,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "A_raw-T0": {
+     "casualties": {
+      "ci95": [
+       0.299784,
+       0.499399
+      ],
+      "diff": 0.404268,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.356902,
+       0.579933
+      ],
+      "diff": 0.468281,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.013776,
+       0.130165
+      ],
+      "diff": 0.064014,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "A_raw-T1": {
+     "casualties": {
+      "ci95": [
+       0.429533,
+       0.566077
+      ],
+      "diff": 0.497693,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.416728,
+       0.632261
+      ],
+      "diff": 0.528258,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.029772,
+       0.090629
+      ],
+      "diff": 0.030565,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "A_raw-T2": {
+     "casualties": {
+      "ci95": [
+       0.4347,
+       0.571261
+      ],
+      "diff": 0.504614,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.420577,
+       0.635456
+      ],
+      "diff": 0.530565,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.0299,
+       0.081761
+      ],
+      "diff": 0.025952,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "A_raw-T3": {
+     "casualties": {
+      "ci95": [
+       0.369844,
+       0.551724
+      ],
+      "diff": 0.464245,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.408922,
+       0.63474
+      ],
+      "diff": 0.524221,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.013066,
+       0.114224
+      ],
+      "diff": 0.059977,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "A_raw-T4": {
+     "casualties": {
+      "ci95": [
+       0.427394,
+       0.56836
+      ],
+      "diff": 0.499423,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.42133,
+       0.634181
+      ],
+      "diff": 0.531142,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.020775,
+       0.084231
+      ],
+      "diff": 0.031719,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "A_raw-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.436375,
+       0.571353
+      ],
+      "diff": 0.50346,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.424586,
+       0.638982
+      ],
+      "diff": 0.534602,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.029772,
+       0.091767
+      ],
+      "diff": 0.031142,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "B_static_mask-A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.117079,
+       -0.032555
+      ],
+      "diff": -0.074971,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.116739,
+       -0.03696
+      ],
+      "diff": -0.074971,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.006275,
+       0.005017
+      ],
+      "diff": 0.0,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "B_static_mask-C_joint_coord": {
+     "casualties": {
+      "ci95": [
+       0.030385,
+       0.131463
+      ],
+      "diff": 0.078431,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.039452,
+       0.143141
+      ],
+      "diff": 0.088812,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.001628,
+       0.021674
+      ],
+      "diff": 0.010381,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "B_static_mask-T0": {
+     "casualties": {
+      "ci95": [
+       0.233195,
+       0.408072
+      ],
+      "diff": 0.329296,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.285971,
+       0.491217
+      ],
+      "diff": 0.39331,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.010107,
+       0.131715
+      ],
+      "diff": 0.064014,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "B_static_mask-T1": {
+     "casualties": {
+      "ci95": [
+       0.360264,
+       0.478614
+      ],
+      "diff": 0.422722,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.346882,
+       0.545646
+      ],
+      "diff": 0.453287,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.032322,
+       0.094011
+      ],
+      "diff": 0.030565,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "B_static_mask-T2": {
+     "casualties": {
+      "ci95": [
+       0.366513,
+       0.482974
+      ],
+      "diff": 0.429642,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.349132,
+       0.548358
+      ],
+      "diff": 0.455594,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.032533,
+       0.084722
+      ],
+      "diff": 0.025952,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "B_static_mask-T3": {
+     "casualties": {
+      "ci95": [
+       0.301663,
+       0.464402
+      ],
+      "diff": 0.389273,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.335781,
+       0.547929
+      ],
+      "diff": 0.44925,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.010083,
+       0.116022
+      ],
+      "diff": 0.059977,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "B_static_mask-T4": {
+     "casualties": {
+      "ci95": [
+       0.35723,
+       0.480934
+      ],
+      "diff": 0.424452,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.349921,
+       0.547044
+      ],
+      "diff": 0.456171,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.021985,
+       0.087876
+      ],
+      "diff": 0.031719,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "B_static_mask-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.366359,
+       0.482743
+      ],
+      "diff": 0.428489,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.35247,
+       0.55148
+      ],
+      "diff": 0.459631,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.032322,
+       0.09512
+      ],
+      "diff": 0.031142,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "C_joint_coord-A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.235984,
+       -0.076811
+      ],
+      "diff": -0.153403,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.248943,
+       -0.084619
+      ],
+      "diff": -0.163783,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.01992,
+       -0.002876
+      ],
+      "diff": -0.010381,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "C_joint_coord-B_static_mask": {
+     "casualties": {
+      "ci95": [
+       -0.131463,
+       -0.030385
+      ],
+      "diff": -0.078431,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       -0.143141,
+       -0.039452
+      ],
+      "diff": -0.088812,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.021674,
+       -0.001628
+      ],
+      "diff": -0.010381,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "C_joint_coord-T0": {
+     "casualties": {
+      "ci95": [
+       0.154568,
+       0.347167
+      ],
+      "diff": 0.250865,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.201661,
+       0.416122
+      ],
+      "diff": 0.304498,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.005978,
+       0.11651
+      ],
+      "diff": 0.053633,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "C_joint_coord-T1": {
+     "casualties": {
+      "ci95": [
+       0.26725,
+       0.419098
+      ],
+      "diff": 0.344291,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.264404,
+       0.459097
+      ],
+      "diff": 0.364475,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.038287,
+       0.073584
+      ],
+      "diff": 0.020185,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "C_joint_coord-T2": {
+     "casualties": {
+      "ci95": [
+       0.274298,
+       0.422033
+      ],
+      "diff": 0.351211,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.266176,
+       0.460438
+      ],
+      "diff": 0.366782,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.038287,
+       0.064481
+      ],
+      "diff": 0.015571,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "C_joint_coord-T3": {
+     "casualties": {
+      "ci95": [
+       0.224311,
+       0.393898
+      ],
+      "diff": 0.310842,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.256654,
+       0.456753
+      ],
+      "diff": 0.360438,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       0.005978,
+       0.098175
+      ],
+      "diff": 0.049596,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "C_joint_coord-T4": {
+     "casualties": {
+      "ci95": [
+       0.269006,
+       0.41786
+      ],
+      "diff": 0.346021,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.266623,
+       0.460849
+      ],
+      "diff": 0.367359,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.027864,
+       0.067526
+      ],
+      "diff": 0.021338,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    },
+    "C_joint_coord-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.273215,
+       0.425295
+      ],
+      "diff": 0.350058,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "cu": {
+      "ci95": [
+       0.270164,
+       0.463567
+      ],
+      "diff": 0.370819,
+      "excludes_zero": true,
+      "families": 16,
+      "scenarios": 48
+     },
+     "unresolved": {
+      "ci95": [
+       -0.038284,
+       0.074742
+      ],
+      "diff": 0.020761,
+      "excludes_zero": false,
+      "families": 16,
+      "scenarios": 48
+     }
+    }
+   },
+   "families": 16,
+   "missing_pairs": [],
+   "policies": {
+    "A_raw": {
+     "blocked": 50619,
+     "blocked_rate": 29.192042,
+     "casualties": 1208,
+     "casualties_rate": 0.696655,
+     "collisions": 27269,
+     "collisions_rate": 15.726067,
+     "cu": 1336,
+     "cu_rate": 0.770473,
+     "evacuated": 398,
+     "evacuated_rate": 0.229527,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 128,
+     "unresolved_rate": 0.073818
+    },
+    "B_static_mask": {
+     "blocked": 29301,
+     "blocked_rate": 16.897924,
+     "casualties": 1078,
+     "casualties_rate": 0.621684,
+     "collisions": 29301,
+     "collisions_rate": 16.897924,
+     "cu": 1206,
+     "cu_rate": 0.695502,
+     "evacuated": 528,
+     "evacuated_rate": 0.304498,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 128,
+     "unresolved_rate": 0.073818
+    },
+    "C_joint_coord": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 942,
+     "casualties_rate": 0.543253,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1052,
+     "cu_rate": 0.60669,
+     "evacuated": 682,
+     "evacuated_rate": 0.39331,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 110,
+     "unresolved_rate": 0.063437
+    },
+    "T0": {
+     "blocked": 14294,
+     "blocked_rate": 8.243368,
+     "casualties": 507,
+     "casualties_rate": 0.292388,
+     "collisions": 14294,
+     "collisions_rate": 8.243368,
+     "cu": 524,
+     "cu_rate": 0.302191,
+     "evacuated": 1210,
+     "evacuated_rate": 0.697809,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 17,
+     "unresolved_rate": 0.009804
+    },
+    "T1": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 345,
+     "casualties_rate": 0.198962,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 420,
+     "cu_rate": 0.242215,
+     "evacuated": 1314,
+     "evacuated_rate": 0.757785,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 75,
+     "unresolved_rate": 0.043253
+    },
+    "T2": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 333,
+     "casualties_rate": 0.192042,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 416,
+     "cu_rate": 0.239908,
+     "evacuated": 1318,
+     "evacuated_rate": 0.760092,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 83,
+     "unresolved_rate": 0.047866
+    },
+    "T3": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 403,
+     "casualties_rate": 0.232411,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 427,
+     "cu_rate": 0.246251,
+     "evacuated": 1307,
+     "evacuated_rate": 0.753749,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 24,
+     "unresolved_rate": 0.013841
+    },
+    "T4": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 342,
+     "casualties_rate": 0.197232,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 415,
+     "cu_rate": 0.239331,
+     "evacuated": 1319,
+     "evacuated_rate": 0.760669,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 73,
+     "unresolved_rate": 0.042099
+    },
+    "best_T1-T4": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 335,
+     "casualties_rate": 0.193195,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 409,
+     "cu_rate": 0.235871,
+     "evacuated": 1325,
+     "evacuated_rate": 0.764129,
+     "failed": 0,
+     "people": 1734,
+     "unresolved": 74,
+     "unresolved_rate": 0.042676
+    }
+   },
+   "scenarios": 48
+  },
+  "p1-18-expand@1/val/core": {
+   "contrasts": {
+    "A_raw-B_static_mask": {
+     "casualties": {
+      "ci95": [
+       0.020521,
+       0.132878
+      ],
+      "diff": 0.080894,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.045,
+       0.149014
+      ],
+      "diff": 0.100409,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.006466,
+       0.039292
+      ],
+      "diff": 0.019515,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "A_raw-C_joint_coord": {
+     "casualties": {
+      "ci95": [
+       0.049386,
+       0.176427
+      ],
+      "diff": 0.116462,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.076795,
+       0.197848
+      ],
+      "diff": 0.140699,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.005232,
+       0.059732
+      ],
+      "diff": 0.024237,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "A_raw-T0": {
+     "casualties": {
+      "ci95": [
+       0.268266,
+       0.436184
+      ],
+      "diff": 0.367642,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.369518,
+       0.486747
+      ],
+      "diff": 0.43091,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.026398,
+       0.122689
+      ],
+      "diff": 0.063267,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "A_raw-T1": {
+     "casualties": {
+      "ci95": [
+       0.356375,
+       0.505582
+      ],
+      "diff": 0.442556,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.408444,
+       0.542601
+      ],
+      "diff": 0.480957,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.01339,
+       0.082335
+      ],
+      "diff": 0.038401,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "A_raw-T2": {
+     "casualties": {
+      "ci95": [
+       0.357143,
+       0.50671
+      ],
+      "diff": 0.443815,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.408903,
+       0.543367
+      ],
+      "diff": 0.481586,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.012649,
+       0.082552
+      ],
+      "diff": 0.037771,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "A_raw-T3": {
+     "casualties": {
+      "ci95": [
+       0.318235,
+       0.476769
+      ],
+      "diff": 0.410765,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.403612,
+       0.520764
+      ],
+      "diff": 0.465848,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.022766,
+       0.110665
+      ],
+      "diff": 0.055083,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "A_raw-T4": {
+     "casualties": {
+      "ci95": [
+       0.355358,
+       0.505963
+      ],
+      "diff": 0.441612,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.408041,
+       0.539228
+      ],
+      "diff": 0.479068,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.01137,
+       0.08536
+      ],
+      "diff": 0.037457,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "A_raw-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.348145,
+       0.510944
+      ],
+      "diff": 0.442871,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.412575,
+       0.547982
+      ],
+      "diff": 0.485993,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.013456,
+       0.096119
+      ],
+      "diff": 0.043122,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "B_static_mask-A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.132878,
+       -0.020521
+      ],
+      "diff": -0.080894,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.149014,
+       -0.045
+      ],
+      "diff": -0.100409,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.039292,
+       -0.006466
+      ],
+      "diff": -0.019515,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "B_static_mask-C_joint_coord": {
+     "casualties": {
+      "ci95": [
+       0.013647,
+       0.057106
+      ],
+      "diff": 0.035568,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.020699,
+       0.063927
+      ],
+      "diff": 0.04029,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.007092,
+       0.022437
+      ],
+      "diff": 0.004721,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "B_static_mask-T0": {
+     "casualties": {
+      "ci95": [
+       0.219224,
+       0.339389
+      ],
+      "diff": 0.286749,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.287901,
+       0.374897
+      ],
+      "diff": 0.3305,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.014999,
+       0.090535
+      ],
+      "diff": 0.043752,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "B_static_mask-T1": {
+     "casualties": {
+      "ci95": [
+       0.311025,
+       0.404025
+      ],
+      "diff": 0.361662,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.338158,
+       0.421076
+      ],
+      "diff": 0.380548,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.00305,
+       0.047813
+      ],
+      "diff": 0.018886,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "B_static_mask-T2": {
+     "casualties": {
+      "ci95": [
+       0.311454,
+       0.405605
+      ],
+      "diff": 0.362921,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.339039,
+       0.421131
+      ],
+      "diff": 0.381177,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.002053,
+       0.047813
+      ],
+      "diff": 0.018256,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "B_static_mask-T3": {
+     "casualties": {
+      "ci95": [
+       0.266041,
+       0.376258
+      ],
+      "diff": 0.329871,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.327052,
+       0.405903
+      ],
+      "diff": 0.365439,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.011816,
+       0.079075
+      ],
+      "diff": 0.035568,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "B_static_mask-T4": {
+     "casualties": {
+      "ci95": [
+       0.304933,
+       0.406624
+      ],
+      "diff": 0.360718,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.336854,
+       0.419933
+      ],
+      "diff": 0.378659,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.000617,
+       0.050484
+      ],
+      "diff": 0.017941,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "B_static_mask-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.297786,
+       0.41044
+      ],
+      "diff": 0.361977,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.343835,
+       0.425857
+      ],
+      "diff": 0.385584,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.00093,
+       0.061879
+      ],
+      "diff": 0.023607,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "C_joint_coord-A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.176427,
+       -0.049386
+      ],
+      "diff": -0.116462,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.197848,
+       -0.076795
+      ],
+      "diff": -0.140699,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.059732,
+       -0.005232
+      ],
+      "diff": -0.024237,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "C_joint_coord-B_static_mask": {
+     "casualties": {
+      "ci95": [
+       -0.057106,
+       -0.013647
+      ],
+      "diff": -0.035568,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       -0.063927,
+       -0.020699
+      ],
+      "diff": -0.04029,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.022437,
+       0.007092
+      ],
+      "diff": -0.004721,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "C_joint_coord-T0": {
+     "casualties": {
+      "ci95": [
+       0.180248,
+       0.302313
+      ],
+      "diff": 0.25118,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.235358,
+       0.344121
+      ],
+      "diff": 0.290211,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.01444,
+       0.07983
+      ],
+      "diff": 0.039031,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "C_joint_coord-T1": {
+     "casualties": {
+      "ci95": [
+       0.271097,
+       0.365534
+      ],
+      "diff": 0.326094,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.28757,
+       0.386355
+      ],
+      "diff": 0.340258,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.000683,
+       0.036525
+      ],
+      "diff": 0.014164,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "C_joint_coord-T2": {
+     "casualties": {
+      "ci95": [
+       0.271363,
+       0.367272
+      ],
+      "diff": 0.327353,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.287973,
+       0.386397
+      ],
+      "diff": 0.340888,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.001053,
+       0.036415
+      ],
+      "diff": 0.013535,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "C_joint_coord-T3": {
+     "casualties": {
+      "ci95": [
+       0.226312,
+       0.343064
+      ],
+      "diff": 0.294303,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.276519,
+       0.372038
+      ],
+      "diff": 0.32515,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.010312,
+       0.069044
+      ],
+      "diff": 0.030847,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "C_joint_coord-T4": {
+     "casualties": {
+      "ci95": [
+       0.265306,
+       0.371429
+      ],
+      "diff": 0.32515,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.286013,
+       0.385803
+      ],
+      "diff": 0.33837,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       -0.002317,
+       0.03818
+      ],
+      "diff": 0.01322,
+      "excludes_zero": false,
+      "families": 20,
+      "scenarios": 80
+     }
+    },
+    "C_joint_coord-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.257521,
+       0.373422
+      ],
+      "diff": 0.326409,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "cu": {
+      "ci95": [
+       0.292614,
+       0.390446
+      ],
+      "diff": 0.345294,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     },
+     "unresolved": {
+      "ci95": [
+       0.0003,
+       0.051357
+      ],
+      "diff": 0.018886,
+      "excludes_zero": true,
+      "families": 20,
+      "scenarios": 80
+     }
+    }
+   },
+   "families": 20,
+   "missing_pairs": [],
+   "policies": {
+    "A_raw": {
+     "blocked": 88032,
+     "blocked_rate": 27.70916,
+     "casualties": 2407,
+     "casualties_rate": 0.757633,
+     "collisions": 49997,
+     "collisions_rate": 15.737173,
+     "cu": 2677,
+     "cu_rate": 0.842619,
+     "evacuated": 500,
+     "evacuated_rate": 0.157381,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 270,
+     "unresolved_rate": 0.084986
+    },
+    "B_static_mask": {
+     "blocked": 49359,
+     "blocked_rate": 15.536355,
+     "casualties": 2150,
+     "casualties_rate": 0.676739,
+     "collisions": 49359,
+     "collisions_rate": 15.536355,
+     "cu": 2358,
+     "cu_rate": 0.74221,
+     "evacuated": 819,
+     "evacuated_rate": 0.25779,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 208,
+     "unresolved_rate": 0.065471
+    },
+    "C_joint_coord": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 2037,
+     "casualties_rate": 0.641171,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 2230,
+     "cu_rate": 0.70192,
+     "evacuated": 947,
+     "evacuated_rate": 0.29808,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 193,
+     "unresolved_rate": 0.060749
+    },
+    "T0": {
+     "blocked": 27742,
+     "blocked_rate": 8.732137,
+     "casualties": 1239,
+     "casualties_rate": 0.389991,
+     "collisions": 27742,
+     "collisions_rate": 8.732137,
+     "cu": 1308,
+     "cu_rate": 0.411709,
+     "evacuated": 1869,
+     "evacuated_rate": 0.588291,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 69,
+     "unresolved_rate": 0.021719
+    },
+    "T1": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1001,
+     "casualties_rate": 0.315077,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1149,
+     "cu_rate": 0.361662,
+     "evacuated": 2028,
+     "evacuated_rate": 0.638338,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 148,
+     "unresolved_rate": 0.046585
+    },
+    "T2": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 997,
+     "casualties_rate": 0.313818,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1147,
+     "cu_rate": 0.361032,
+     "evacuated": 2030,
+     "evacuated_rate": 0.638968,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 150,
+     "unresolved_rate": 0.047214
+    },
+    "T3": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1102,
+     "casualties_rate": 0.346868,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1197,
+     "cu_rate": 0.376771,
+     "evacuated": 1980,
+     "evacuated_rate": 0.623229,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 95,
+     "unresolved_rate": 0.029902
+    },
+    "T4": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1004,
+     "casualties_rate": 0.316021,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1155,
+     "cu_rate": 0.363551,
+     "evacuated": 2022,
+     "evacuated_rate": 0.636449,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 151,
+     "unresolved_rate": 0.047529
+    },
+    "best_T1-T4": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1000,
+     "casualties_rate": 0.314762,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1133,
+     "cu_rate": 0.356626,
+     "evacuated": 2044,
+     "evacuated_rate": 0.643374,
+     "failed": 0,
+     "people": 3177,
+     "unresolved": 133,
+     "unresolved_rate": 0.041863
+    }
+   },
+   "scenarios": 80
+  },
+  "p1-18-expand@1/val/stress": {
+   "contrasts": {
+    "A_raw-B_static_mask": {
+     "casualties": {
+      "ci95": [
+       0.009398,
+       0.09575
+      ],
+      "diff": 0.048387,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.010025,
+       0.160734
+      ],
+      "diff": 0.071468,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.0,
+       0.067047
+      ],
+      "diff": 0.023081,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "A_raw-C_joint_coord": {
+     "casualties": {
+      "ci95": [
+       0.016604,
+       0.11875
+      ],
+      "diff": 0.060067,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.012845,
+       0.19772
+      ],
+      "diff": 0.085373,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.005898,
+       0.077362
+      ],
+      "diff": 0.025306,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "A_raw-T0": {
+     "casualties": {
+      "ci95": [
+       0.250543,
+       0.404762
+      ],
+      "diff": 0.325918,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.278773,
+       0.668598
+      ],
+      "diff": 0.454116,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.317318
+      ],
+      "diff": 0.128198,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "A_raw-T1": {
+     "casualties": {
+      "ci95": [
+       0.3055,
+       0.492168
+      ],
+      "diff": 0.392659,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.340934,
+       0.735366
+      ],
+      "diff": 0.520857,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.317318
+      ],
+      "diff": 0.128198,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "A_raw-T2": {
+     "casualties": {
+      "ci95": [
+       0.30875,
+       0.492168
+      ],
+      "diff": 0.393493,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.342025,
+       0.735976
+      ],
+      "diff": 0.521691,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.317318
+      ],
+      "diff": 0.128198,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "A_raw-T3": {
+     "casualties": {
+      "ci95": [
+       0.266287,
+       0.433198
+      ],
+      "diff": 0.349833,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.296524,
+       0.694512
+      ],
+      "diff": 0.478031,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.317318
+      ],
+      "diff": 0.128198,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "A_raw-T4": {
+     "casualties": {
+      "ci95": [
+       0.297802,
+       0.481908
+      ],
+      "diff": 0.385706,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.325409,
+       0.733232
+      ],
+      "diff": 0.511402,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.314875
+      ],
+      "diff": 0.125695,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "A_raw-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.312161,
+       0.505952
+      ],
+      "diff": 0.401557,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.345548,
+       0.742988
+      ],
+      "diff": 0.527253,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.314875
+      ],
+      "diff": 0.125695,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "B_static_mask-A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.09575,
+       -0.009398
+      ],
+      "diff": -0.048387,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.160734,
+       -0.010025
+      ],
+      "diff": -0.071468,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.067047,
+       0.0
+      ],
+      "diff": -0.023081,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "B_static_mask-C_joint_coord": {
+     "casualties": {
+      "ci95": [
+       0.000731,
+       0.025787
+      ],
+      "diff": 0.01168,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.002744,
+       0.0365
+      ],
+      "diff": 0.013904,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.006881,
+       0.01125
+      ],
+      "diff": 0.002225,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "B_static_mask-T0": {
+     "casualties": {
+      "ci95": [
+       0.2025,
+       0.371554
+      ],
+      "diff": 0.277531,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.253529,
+       0.536429
+      ],
+      "diff": 0.382647,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.250271
+      ],
+      "diff": 0.105117,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "B_static_mask-T1": {
+     "casualties": {
+      "ci95": [
+       0.25675,
+       0.47076
+      ],
+      "diff": 0.344271,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.30836,
+       0.614743
+      ],
+      "diff": 0.449388,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.250271
+      ],
+      "diff": 0.105117,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "B_static_mask-T2": {
+     "casualties": {
+      "ci95": [
+       0.259,
+       0.470175
+      ],
+      "diff": 0.345106,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.310327,
+       0.615438
+      ],
+      "diff": 0.450222,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.250271
+      ],
+      "diff": 0.105117,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "B_static_mask-T3": {
+     "casualties": {
+      "ci95": [
+       0.22175,
+       0.401316
+      ],
+      "diff": 0.301446,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.269273,
+       0.563126
+      ],
+      "diff": 0.406563,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.250271
+      ],
+      "diff": 0.105117,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "B_static_mask-T4": {
+     "casualties": {
+      "ci95": [
+       0.24925,
+       0.447682
+      ],
+      "diff": 0.337319,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.293712,
+       0.606785
+      ],
+      "diff": 0.439933,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.247828
+      ],
+      "diff": 0.102614,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "B_static_mask-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.26175,
+       0.481871
+      ],
+      "diff": 0.35317,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.312975,
+       0.62274
+      ],
+      "diff": 0.455784,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.247828
+      ],
+      "diff": 0.102614,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "C_joint_coord-A_raw": {
+     "casualties": {
+      "ci95": [
+       -0.11875,
+       -0.016604
+      ],
+      "diff": -0.060067,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.19772,
+       -0.012845
+      ],
+      "diff": -0.085373,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.077362,
+       0.005898
+      ],
+      "diff": -0.025306,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "C_joint_coord-B_static_mask": {
+     "casualties": {
+      "ci95": [
+       -0.025787,
+       -0.000731
+      ],
+      "diff": -0.01168,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       -0.0365,
+       0.002744
+      ],
+      "diff": -0.013904,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       -0.01125,
+       0.006881
+      ],
+      "diff": -0.002225,
+      "excludes_zero": false,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "C_joint_coord-T0": {
+     "casualties": {
+      "ci95": [
+       0.185,
+       0.367168
+      ],
+      "diff": 0.265851,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.24925,
+       0.52439
+      ],
+      "diff": 0.368743,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.239957
+      ],
+      "diff": 0.102892,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "C_joint_coord-T1": {
+     "casualties": {
+      "ci95": [
+       0.24175,
+       0.459942
+      ],
+      "diff": 0.332592,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.304959,
+       0.591159
+      ],
+      "diff": 0.435484,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.239957
+      ],
+      "diff": 0.102892,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "C_joint_coord-T2": {
+     "casualties": {
+      "ci95": [
+       0.24375,
+       0.458772
+      ],
+      "diff": 0.333426,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.307818,
+       0.591768
+      ],
+      "diff": 0.436318,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.239957
+      ],
+      "diff": 0.102892,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "C_joint_coord-T3": {
+     "casualties": {
+      "ci95": [
+       0.20425,
+       0.39693
+      ],
+      "diff": 0.289766,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.265744,
+       0.550305
+      ],
+      "diff": 0.392659,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.239957
+      ],
+      "diff": 0.102892,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "C_joint_coord-T4": {
+     "casualties": {
+      "ci95": [
+       0.23525,
+       0.43891
+      ],
+      "diff": 0.32564,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.289366,
+       0.589024
+      ],
+      "diff": 0.426029,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.237514
+      ],
+      "diff": 0.100389,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    },
+    "C_joint_coord-best_T1-T4": {
+     "casualties": {
+      "ci95": [
+       0.24775,
+       0.471345
+      ],
+      "diff": 0.341491,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "cu": {
+      "ci95": [
+       0.310327,
+       0.598997
+      ],
+      "diff": 0.44188,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     },
+     "unresolved": {
+      "ci95": [
+       0.000511,
+       0.237514
+      ],
+      "diff": 0.100389,
+      "excludes_zero": true,
+      "families": 5,
+      "scenarios": 20
+     }
+    }
+   },
+   "families": 5,
+   "missing_pairs": [],
+   "policies": {
+    "A_raw": {
+     "blocked": 119588,
+     "blocked_rate": 33.25584,
+     "casualties": 2743,
+     "casualties_rate": 0.762792,
+     "collisions": 72218,
+     "collisions_rate": 20.08287,
+     "cu": 3204,
+     "cu_rate": 0.89099,
+     "evacuated": 392,
+     "evacuated_rate": 0.10901,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 461,
+     "unresolved_rate": 0.128198
+    },
+    "B_static_mask": {
+     "blocked": 69796,
+     "blocked_rate": 19.409344,
+     "casualties": 2569,
+     "casualties_rate": 0.714405,
+     "collisions": 69796,
+     "collisions_rate": 19.409344,
+     "cu": 2947,
+     "cu_rate": 0.819522,
+     "evacuated": 649,
+     "evacuated_rate": 0.180478,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 378,
+     "unresolved_rate": 0.105117
+    },
+    "C_joint_coord": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 2527,
+     "casualties_rate": 0.702725,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 2897,
+     "cu_rate": 0.805617,
+     "evacuated": 699,
+     "evacuated_rate": 0.194383,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 370,
+     "unresolved_rate": 0.102892
+    },
+    "T0": {
+     "blocked": 55356,
+     "blocked_rate": 15.393771,
+     "casualties": 1571,
+     "casualties_rate": 0.436874,
+     "collisions": 55356,
+     "collisions_rate": 15.393771,
+     "cu": 1571,
+     "cu_rate": 0.436874,
+     "evacuated": 2025,
+     "evacuated_rate": 0.563126,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 0,
+     "unresolved_rate": 0.0
+    },
+    "T1": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1331,
+     "casualties_rate": 0.370133,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1331,
+     "cu_rate": 0.370133,
+     "evacuated": 2265,
+     "evacuated_rate": 0.629867,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 0,
+     "unresolved_rate": 0.0
+    },
+    "T2": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1328,
+     "casualties_rate": 0.369299,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1328,
+     "cu_rate": 0.369299,
+     "evacuated": 2268,
+     "evacuated_rate": 0.630701,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 0,
+     "unresolved_rate": 0.0
+    },
+    "T3": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1485,
+     "casualties_rate": 0.412959,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1485,
+     "cu_rate": 0.412959,
+     "evacuated": 2111,
+     "evacuated_rate": 0.587041,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 0,
+     "unresolved_rate": 0.0
+    },
+    "T4": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1356,
+     "casualties_rate": 0.377086,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1365,
+     "cu_rate": 0.379588,
+     "evacuated": 2231,
+     "evacuated_rate": 0.620412,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 9,
+     "unresolved_rate": 0.002503
+    },
+    "best_T1-T4": {
+     "blocked": 0,
+     "blocked_rate": 0.0,
+     "casualties": 1299,
+     "casualties_rate": 0.361235,
+     "collisions": 0,
+     "collisions_rate": 0.0,
+     "cu": 1308,
+     "cu_rate": 0.363737,
+     "evacuated": 2288,
+     "evacuated_rate": 0.636263,
+     "failed": 0,
+     "people": 3596,
+     "unresolved": 9,
+     "unresolved_rate": 0.002503
+    }
+   },
+   "scenarios": 20
+  }
+ },
+ "students": {
+  "A_raw": "/home/darshith/ember-ws/runs/r19-v1-arms@1/attempt-1/final/rollouts-A_raw.jsonl",
+  "B_static_mask": "/home/darshith/ember-ws/runs/r19-v1-arms@1/attempt-1/final/rollouts-B_static_mask.jsonl",
+  "C_joint_coord": "/home/darshith/ember-ws/runs/r19-v1-arms@1/attempt-1/final/rollouts-C_joint_coord.jsonl"
+ },
+ "unit": "family",
+ "version": "p1-18-compare@1.0.0"
+}

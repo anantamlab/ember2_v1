@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "parent_optimizer_state_steps": [
+    1996
+  ],
+  "first_rollout_evidence": "/home/darshith/ember-ws/rl-evidence/r22-counterfactual-ppo@1/attempt-1",
+  "torch_num_threads": 4,
+  "arms": {
+    "cf": {
+      "optimizer_state_steps": [
+        2537
+      ],
+      "auxiliary_steps_in_selected_checkpoint": 372,
+      "selected_tensor_l2_from_phase2": {
+        "adapter_model.safetensors": 0.3121210257989167,
+        "joint_head.safetensors": 0.8468529128560545
+      },
+      "reporting_decisions_reproduced": 1376,
+      "saved_actor_max_probability_error": 0.0,
+      "loaded_digest": "sha256:05d665f4f7acedee57e2fa2acd9faa390df3f65b11de2719058cfb4ab8a00c72"
+    },
+    "ppo": {
+      "optimizer_state_steps": [
+        2352
+      ],
+      "auxiliary_steps_in_selected_checkpoint": 0,
+      "selected_tensor_l2_from_phase2": {
+        "adapter_model.safetensors": 0.2561873088698721,
+        "joint_head.safetensors": 0.7600250379636488
+      },
+      "reporting_decisions_reproduced": 1383,
+      "saved_actor_max_probability_error": 0.0,
+      "loaded_digest": "sha256:df5afa5a6d09031f5375503a8816eeeec26ee4faeaf4ee0ed040df821524154d"
+    }
+  },
+  "seconds": 236.63618776699877
+}

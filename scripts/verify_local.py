@@ -11,6 +11,10 @@ Commands
 
 Stdlib only. Selection arguments are not accepted: the run is always the complete suite. PYTEST_ADDOPTS and
 PYTEST_PLUGINS are removed from the test environment so that nothing can deselect tests silently.
+
+Tiers (owner decision 2026-11-13): tests marked `slow` are skipped (reported as skipped, never deselected) unless
+pytest gets `--run-slow`. `run` is the default tier; `run --with-slow` is the full tier. The receipt records the
+tier and the exact command.
 """
 from __future__ import annotations
 
@@ -30,6 +34,7 @@ RECEIPT_KIND = "ember-local-verify@1"
 LOG_DIR_NAME = ".local-test-logs"
 DEFAULT_REQUIRED = ("3.11", "3.12")
 PYTEST_CMD = ("-m", "pytest", "-q")
+SLOW_FLAG = "--run-slow"
 STRIPPED_ENV = ("PYTEST_ADDOPTS", "PYTEST_PLUGINS")
 ZERO_SHA = "0" * 40
 EXIT_SOURCE_CHANGED = 3
@@ -177,7 +182,11 @@ def _sha256_file(p: Path) -> str:
     return "sha256:" + h.hexdigest()
 
 
-def run_one(python: str, root: Path) -> dict[str, Any]:
+def pytest_args(with_slow: bool = False) -> list[str]:
+    return [*PYTEST_CMD, *([SLOW_FLAG] if with_slow else [])]
+
+
+def run_one(python: str, root: Path, with_slow: bool = False) -> dict[str, Any]:
     before = tree_state(root)
     stamp = _dt.datetime.now(_dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     try:
@@ -189,7 +198,7 @@ def run_one(python: str, root: Path) -> dict[str, Any]:
     log_dir = root / LOG_DIR_NAME
     log_dir.mkdir(exist_ok=True)
     log = log_dir / f"{stamp}-{before['head'][:12]}-py{minor}.log"
-    cmd = [python, *PYTEST_CMD]
+    cmd = [python, *pytest_args(with_slow)]
     header = [f"# ember-local-verify run {stamp}", f"# command: {' '.join(cmd)}", f"# cwd: {root}",
               f"# head: {before['head']}  tree_clean: {before['clean']}  tree_digest: {before['digest']}",
               f"# python: {info['version']} {info['implementation']} {info['executable']}",
@@ -219,7 +228,8 @@ def run_one(python: str, root: Path) -> dict[str, Any]:
                "tree_clean": before["clean"] and after["clean"], "tree_digest": before["digest"],
                "tree_unchanged": unchanged, "branch": _git(root, "rev-parse", "--abbrev-ref", "HEAD"),
                "python_minor": minor, "python": info, "platform": platform.platform(),
-               "command": " ".join(["python", *PYTEST_CMD]), "stripped_env": [k for k in STRIPPED_ENV if k in os.environ],
+               "tier": "full" if with_slow else "default",
+               "command": " ".join(["python", *pytest_args(with_slow)]), "stripped_env": [k for k in STRIPPED_ENV if k in os.environ],
                "exit_code": code, "counts": counts, "seconds": seconds, "started_utc": stamp,
                "log": str(log), "log_sha256": _sha256_file(log)}
     rdir = receipts_dir(root)
@@ -265,7 +275,7 @@ def cmd_run(args: argparse.Namespace) -> int:
     if not state["clean"]:
         print(f"[verify] WARNING: the working tree has {state['status_lines']} uncommitted change(s). "
               "A receipt for a dirty tree never allows a push.", file=sys.stderr)
-    results = [run_one(py, root) for py in pythons]
+    results = [run_one(py, root, with_slow=args.with_slow) for py in pythons]
     print("\n[verify] ===== summary =====")
     print(f"[verify] head {state['head']}  clean={state['clean']}")
     worst = 0
@@ -358,6 +368,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     rn = sub.add_parser("run", help="run the complete suite and write receipts")
     rn.add_argument("--python", action="append", help="interpreter to test with (repeatable); default: "
                     "$EMBER_VERIFY_PYTHONS (os.pathsep-separated) or the current interpreter")
+    rn.add_argument("--with-slow", action="store_true", help="full tier: also run tests marked slow")
     cp = sub.add_parser("check-push", help="pre-push gate (reads git pre-push lines on stdin)")
     cp.add_argument("hook_args", nargs="*", help="remote name and URL passed by git (unused)")
     ih = sub.add_parser("install-hook", help="install the pre-push hook")

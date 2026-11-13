@@ -1,0 +1,177 @@
+{
+ "audit_hash": "sha256:f023010e8b655694c3b0180814e1191e9cc69cfbf55637c7ce3dba646991b0b3",
+ "families": 300,
+ "family_partitions": {
+  "core/diagnostic": 40,
+  "core/train": 165,
+  "core/val": 20,
+  "stress/diagnostic": 15,
+  "stress/train": 55,
+  "stress/val": 5
+ },
+ "historical": {
+  "reference_families": 144,
+  "sets": {
+   "p1-02-v1/calibration": {
+    "manifest_hash": "sha256:20af10ddb371d7a34cfcc0588bb15f7562252724804f68526748d790d27736bd",
+    "source": "committed manifest"
+   },
+   "p1-02-v1/dev": {
+    "manifest_hash": "sha256:b08c2b134ead2fb25d59990ac82f186654879808105e08a9211f090e6b6d1347",
+    "source": "committed manifest"
+   },
+   "p1-02-v1/locked_test": {
+    "manifest_hash": "sha256:e1eb5d54ce8f8b6b5191d25d2f25d6b528085ad1977d5717b01e93742201c56a",
+    "source": "index commitment (sealed split)"
+   },
+   "p1-02-v1/train": {
+    "manifest_hash": "sha256:96a564819bdc6910708cb2891b043ae3fa6a3d9066d5927ba721aa61d44b442d",
+    "source": "committed manifest"
+   },
+   "p1-09-selection@1": {
+    "manifest_hash": "sha256:4e9283b206296d7251514140613f0f8cc234fe9e2dc68877f7a71e906dc5cf9e",
+    "source": "committed manifest"
+   },
+   "t2-pilot@1": {
+    "cells": 24,
+    "source": "regenerated from the committed pilot cell list"
+   },
+   "t3-pilot@1": {
+    "cells": 42,
+    "source": "regenerated from the committed pilot cell list"
+   },
+   "t4-explore@v12": {
+    "cells": 74,
+    "source": "regenerated from the committed pilot cell list"
+   },
+   "t4-pilot@1": {
+    "cells": 52,
+    "source": "regenerated from the committed pilot cell list"
+   },
+   "t4-pilot@2": {
+    "cells": 74,
+    "source": "regenerated from the committed pilot cell list"
+   },
+   "t4-pilot@3": {
+    "cells": 74,
+    "source": "regenerated from the committed pilot cell list"
+   }
+  }
+ },
+ "historical_sets": [
+  "p1-02-v1/calibration",
+  "p1-02-v1/dev",
+  "p1-02-v1/locked_test",
+  "p1-02-v1/train",
+  "p1-09-selection@1",
+  "t2-pilot@1",
+  "t3-pilot@1",
+  "t4-explore@v12",
+  "t4-pilot@1",
+  "t4-pilot@2",
+  "t4-pilot@3"
+ ],
+ "lineages_per_family": [
+  4
+ ],
+ "manifest_hash": "sha256:d15c80d09c06707e56cd2933c631f7dbb8e2107426d2ab3f8a8f0b4738a8cc9d",
+ "n_people_bins": {
+  "core/le120": 900,
+  "stress/121-200": 300
+ },
+ "namespace": "p1-18-expand@1",
+ "not_checked": [
+  "EMBERBench blind/hidden sets (not read; their seeds derive from another root)",
+  "geometry screen: coarse 16x16 wall-fraction grid (P1-09 limits apply)"
+ ],
+ "overlap": {
+  "p1-02-v1/calibration": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "p1-02-v1/dev": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "p1-02-v1/locked_test": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "p1-02-v1/train": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "p1-09-selection@1": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "t2-pilot@1": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "t3-pilot@1": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "t4-explore@v12": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "t4-pilot@1": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "t4-pilot@2": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  },
+  "t4-pilot@3": {
+   "core_hash": [],
+   "family_id": [],
+   "lineage_id": [],
+   "scenario_hash": [],
+   "scenario_seed": []
+  }
+ },
+ "pass": true,
+ "pilot_hits": [],
+ "pilot_maps": 340,
+ "scenarios": 1200,
+ "unique": {
+  "core_hash": true,
+  "lineage_id": true,
+  "scenario_hash": true,
+  "scenario_seed": true
+ },
+ "version": "p1-18-expand@1.0.0"
+}

@@ -1,0 +1,27 @@
+{
+ "config_version": "ember-run-config@1",
+ "run_id": "r19-trace-replay@1",
+ "kind": "trace-replay",
+ "authorization": {
+  "status": "AUTHORIZED",
+  "by": "owner, run-19 prompt Phase 7 (transfer test: GPU smoke + reproduce a few recorded V1 predictions)",
+  "date": "2026-11-11"
+ },
+ "purpose": "CPU: every recorded V1 eval trace (156) replayed through the simulator ends in its recorded outcome (simulator + data identity on the executing machine)",
+ "inputs": {
+  "records": {
+   "repo": "experiments",
+   "artifact_id": "p1-18-v1-records@1",
+   "path": "v1-evaluation/p1-18-v1-records@1",
+   "manifest_sha256": "sha256:49598d1d796925db0564b5a265278061b2dcb92eb348e7c3908eda22ef9eb6ed"
+  }
+ },
+ "params": {
+  "records": "eval-out/rollouts.jsonl",
+  "scenarios": "rollouts/v1-eval.jsonl",
+  "scenario_ids": "ALL",
+  "question_style": "compact"
+ },
+ "result_path": "student-rollouts/r19-trace-replay@1",
+ "max_wall_s": 7200
+}

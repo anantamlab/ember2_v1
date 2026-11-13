@@ -1,0 +1,92 @@
+{
+  "actor": "/home/darshith/ember-ws/rl-evidence/r21-online-ppo@1/attempt-3/checkpoints/update-0096/actor",
+  "checkpoint": "/home/darshith/ember-ws/rl-evidence/r21-online-ppo@1/attempt-3/checkpoints/update-0096",
+  "exact_reload_digest_equal": true,
+  "identity": {
+    "actor_digest": "sha256:901e22e8be0af3f4ff7002b9041d16e4a0dacd8c602a79b66121429507275120",
+    "code_commit": "90d8e672198733768d38f2960e9d7cb0c4e88af2",
+    "config_sha256": "f670ecf6aeab7a2ad1d10ae5e3e73ca7ab057b090001eb31c6a2d14788c632c6",
+    "files": [
+      {
+        "path": "actor/README.md",
+        "sha256": "4839c3850d0e52cafa33d37fa7a11983f5bbf5a4a689df90a3aa57a39f6cffe1",
+        "size": 5200
+      },
+      {
+        "path": "actor/adapter_config.json",
+        "sha256": "0db1fd12dcab6a7ac615622dca7c20a2bfab2a71315a6c58945f448d112e88a0",
+        "size": 1768
+      },
+      {
+        "path": "actor/adapter_model.safetensors",
+        "sha256": "7f5fcba8a78a3ad1ad4617e988bbb0775c6db0c25fd618e8ff0cb94b028413c2",
+        "size": 67332688
+      },
+      {
+        "path": "actor/chat_template.jinja",
+        "sha256": "ea210e5b4997b7b1d3af5ee3ad34e7677ffe38df7469e8d88089789b5a27fae5",
+        "size": 7991
+      },
+      {
+        "path": "actor/joint_head.safetensors",
+        "sha256": "4bf0cd37d1dbc3696b785b004183bca057f6be308a975ea1797a4e451601442e",
+        "size": 121902840
+      },
+      {
+        "path": "actor/joint_head_config.json",
+        "sha256": "9ec32207deca79a5ec809cb8306c8222d435163da3800e6fdb42e8789a69b8f8",
+        "size": 116
+      },
+      {
+        "path": "actor/processor_config.json",
+        "sha256": "14932921ca485d458a04dafd8069fbb0a4505622a48208d19ed247115801385b",
+        "size": 1300
+      },
+      {
+        "path": "actor/tokenizer.json",
+        "sha256": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+        "size": 19989343
+      },
+      {
+        "path": "actor/tokenizer_config.json",
+        "sha256": "1a71fa1e006db5fddc1903926f8d645a608a598504e630c1d82fb7057ee30978",
+        "size": 7160
+      },
+      {
+        "path": "actor/unsloth_decision_config.json",
+        "sha256": "38a82e265362e2e863d5108e78cfc9927f744b4befd3ceffab5be35c738fd31f",
+        "size": 240
+      },
+      {
+        "path": "trainer.pt",
+        "sha256": "874c4741d10ec17c9610f3677cf5947f6c3415bca952051f7e243ce322ef83e5",
+        "size": 387423539
+      }
+    ],
+    "parent": "/home/darshith/ember-ws/rl-evidence/r20-ppo-pilot@1/attempt-6",
+    "update": 96
+  },
+  "safety_eligible": true,
+  "selection": {
+    "attempted": 5986,
+    "blocked": 4430,
+    "blocked_per_attempt": 0.7400601403274307,
+    "casualties": 131,
+    "casualties_rate": 0.36901408450704226,
+    "episodes": 32,
+    "evacuated": 161,
+    "evacuated_rate": 0.4535211267605634,
+    "mean_reward": -0.3302024570360583,
+    "mean_terminal_reward": -0.3429409297984545,
+    "people": 355,
+    "person_steps": 6530,
+    "stay": 544,
+    "stay_rate": 0.08330781010719755,
+    "steps": 1302,
+    "unresolved": 63,
+    "unresolved_rate": 0.17746478873239438
+  },
+  "selection_utility": -0.4176056338028169,
+  "trainer": "/home/darshith/ember-ws/rl-evidence/r21-online-ppo@1/attempt-3/checkpoints/update-0096/trainer.pt",
+  "update": 96
+}

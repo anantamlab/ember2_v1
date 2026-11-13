@@ -14,6 +14,8 @@ import subprocess
 import zipfile
 
 import pytest
+# Slow tier (AGENTS.md): skipped unless --run-slow.
+pytestmark = pytest.mark.slow
 
 from ember_v1 import provenance as pv
 from ember_v1 import s1

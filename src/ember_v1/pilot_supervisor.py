@@ -302,6 +302,11 @@ def build_group(scenario: Scenario, run: Mapping[str, Any], identities: Mapping[
     for n in CANDIDATES:
         traj = mt.Trajectory(scenario, n, clock=CLOCK)
         steps = run["streams"][n]
+        # A fast rejected worker may finish and flush its queue before the parent
+        # notices its start fingerprint. None of that worker's decisions are trusted.
+        # Keep the raw supervision counts, but seal a zero-decision code-drift failure.
+        if run["failures"].get(n, {}).get("kind") == "code_drift":
+            steps = {}
         if sorted(steps) != list(range(len(steps))):
             raise GroupIntegrityError(f"{n}: streamed steps are not contiguous")
         for i in range(len(steps)):

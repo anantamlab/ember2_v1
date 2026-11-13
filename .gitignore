@@ -23,3 +23,4 @@ blind_private*.json
 
 # Local full-suite verification logs (scripts/verify_local.py; AGENTS.md).
 .local-test-logs/
+unsloth_compiled_cache/
