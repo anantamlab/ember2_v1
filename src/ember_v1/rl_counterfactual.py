@@ -134,6 +134,20 @@ def verify_study(study, *, continuation=None):
     saved = study["snapshot_evaluator_only"]
     if restore(saved).observe() != study["public_observation"] or study["source"].get("split") != "train":
         raise ValueError("counterfactual common state/source mismatch")
+    visited_source_verified = False
+    if "factual_visit" in study:
+        factual = Simulator(Scenario.from_dict(saved["scenario"]), saved["seed"])
+        for row in study["prefix_records"]:
+            if factual.step(row["actions"]) != row:
+                raise ValueError("counterfactual factual prefix does not replay")
+        visit = study["factual_visit"]
+        if snapshot(factual) != saved or factual.observe() != visit["observation"]:
+            raise ValueError("counterfactual snapshot is not the factual visited state")
+        if not visit["label"].startswith("train-") or visit["sampled_actions"] != visit["executed_actions"]:
+            raise ValueError("counterfactual source is not unmodified TRAIN experience")
+        if factual.step(visit["executed_actions"]) != visit["record"]:
+            raise ValueError("counterfactual factual transition differs")
+        visited_source_verified = True
     count = 0
     for name, runs in study["branches"].items():
         if len(runs) != len(study["fork_seeds_evaluator_only"]):
@@ -166,7 +180,7 @@ def verify_study(study, *, continuation=None):
     if estimates(study["branches"]) != study["estimates"]:
         raise ValueError("counterfactual paired advantages differ")
     return {"status": "PASS", "branches": sum(map(len, study["branches"].values())), "transitions": count,
-            "continuation_recomputed": continuation is not None}
+            "continuation_recomputed": continuation is not None, "visited_source_verified": visited_source_verified}
 
 
 def evaluate_job(job):

@@ -66,7 +66,8 @@ curriculum stages: small navigation; doors/crowds; dynamic fire; competing exits
 populations and irregular geometry. Advance using a trailing TRAIN-only evacuation rate
 threshold .55 and casualty rate at most .30, after at least 16 episodes per stage; force
 coverage of the next stage after 32 TRAIN episodes so a weak stage cannot consume the run.
-Both arms use the same rule, report any resulting curriculum difference. Keep at most
+Both arms share the curriculum selected from PPO-only TRAIN performance, so CF learning
+does not also change training difficulty exposure. Keep at most
 20 active people for memory-safe untruncated inference; larger than the simple stage.
 
 Fix 32 selection DEV and 32 further reporting DEV families before training. Include all

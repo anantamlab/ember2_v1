@@ -11,6 +11,19 @@ from .sim.canonical import digest
 from .student_train import ACTION_ORDER
 
 
+def advance_shared_curriculum(states):
+    """Use PPO-only TRAIN performance to keep both arms' curriculum exposure identical."""
+    from .rl_counterfactual import curriculum_stage
+    control = states["ppo"]
+    count = control["episodes_in_stage"]
+    previous = control["stage"]
+    level = curriculum_stage(previous, control["episodes"][-count:], count)
+    for state in states.values():
+        state["stage"] = level
+        if level != previous:
+            state["episodes_in_stage"] = 0
+
+
 def jobs_from_visits(rows, by_id, cfg, update, policy_digest):
     """Select deterministic visited-state indices, independent of their outcomes."""
     groups = {}
@@ -36,10 +49,11 @@ def jobs_from_visits(rows, by_id, cfg, update, policy_digest):
         ids = sim.active_ids()
         greedy = {pid: ACTION_ORDER[max(range(5), key=lambda j: (lp[j], -j))]
                   for pid, lp in zip(ids, visit["person_logprobs"])}
-        seed = int(digest([cfg["seed"], update, sid, step])[-16:], 16)
+        seed = int(digest(["public-candidate", cfg["seed"], update, digest(visit["observation"])])[-16:], 16)
         forks = [None]
         if by_id[sid].fire_model == "stochastic":
-            forks += [int(digest([seed, k])[-16:], 16) for k in range(1, cfg["cf_fire_replicates"])]
+            forks += [int(digest(["private-fire", cfg["seed"], update, sid, step, k])[-16:], 16)
+                      for k in range(1, cfg["cf_fire_replicates"])]
         jobs.append({"snapshot": snapshot(sim), "prefix_records": prefix, "student": visit["sampled_actions"],
                      "greedy": greedy, "seed": seed, "fork_seeds": forks,
                      "continuation_identity": continuation_identity, "teacher_limits": cfg["teacher_candidate_limits"],
@@ -122,6 +136,8 @@ def activate(state, actor, critic, optimizer):
     torch.set_rng_state(state["torch_rng"].cpu())
     torch.cuda.set_rng_state_all([s.cpu() for s in state["cuda_rng"]])
     actor.set_trainable(True)
+    if state.get("actor_digest") and actor.ad.weights_digest() != state["actor_digest"]:
+        raise ValueError("CPU/GPU arm swap changed the exact actor tensors")
 
 
 def verify_parent(root):

@@ -37,6 +37,8 @@ def test_matched_branches_are_public_only_and_replay_exactly():
     assert verify_study(study)["status"] == "PASS"
     corrupted = copy.deepcopy(study)
     corrupted["branches"]["variation"][0]["records"][0]["fire_draws"] += 1
+    from ember_v1.sim.canonical import digest
+    corrupted["study_hash"] = digest({k: v for k, v in corrupted.items() if k != "study_hash"})
     with pytest.raises(ValueError):
         verify_study(corrupted)
     with pytest.raises(ValueError, match="TRAIN"):
@@ -55,8 +57,9 @@ def test_curriculum_scenarios_cover_stages_and_have_disjoint_topologies():
     from ember_v1.rl_cf_scenarios import scenarios
     from ember_v1.gen.analysis import topology_hash
     hashes = []
-    for split, n in (("train", 256), ("select", 32), ("report", 32)):
-        rows = scenarios("ember-r22-counterfactual-20261113-v1", split, n)
+    sets = [[r for stage in range(5) for r in scenarios("ember-r22-counterfactual-20261113-v1", "train", 256, stage=stage)]]
+    sets += [scenarios("ember-r22-counterfactual-20261113-v1", split, 32) for split in ("select", "report")]
+    for rows in sets:
         assert {m["stage"] for _, m in rows} == set(range(5))
         assert max(len(s.people) for s, _ in rows) == 20
         for s, _ in rows:
@@ -68,3 +71,46 @@ def test_unfinished_phase2_cannot_be_used_as_counterfactual_parent(tmp_path):
     from ember_v1.rl_cf_training import verify_parent
     with pytest.raises(ValueError, match="not complete"):
         verify_parent(tmp_path)
+
+
+def test_both_arms_use_identical_train_controlled_curriculum():
+    from ember_v1.rl_cf_training import advance_shared_curriculum
+    bad = [{"people": 10, "evacuated": 1, "casualties": 5}]*16
+    good = [{"people": 10, "evacuated": 8, "casualties": 1}]*16
+    states = {"ppo": {"stage": 0, "episodes_in_stage": 16, "episodes": bad},
+              "cf": {"stage": 0, "episodes_in_stage": 16, "episodes": good}}
+    advance_shared_curriculum(states)
+    assert states["cf"]["stage"] == states["ppo"]["stage"] == 0
+    states["ppo"]["episodes"] = good
+    advance_shared_curriculum(states)
+    assert states["cf"]["stage"] == states["ppo"]["stage"] == 1
+    assert states["cf"]["episodes_in_stage"] == states["ppo"]["episodes_in_stage"] == 0
+
+
+def test_full_teacher_candidate_job_on_hand_built_fire_chain():
+    import math
+    from ember_v1.sim import Scenario
+    from ember_v1.rl_counterfactual import evaluate_job, fixed_t1
+    from ember_v1.rl_cf_training import CounterfactualObjective, jobs_from_visits
+    scenario = Scenario.from_dict({"schema_version": "1.0", "scenario_id": "cf-hand-fixture",
+        "grid": {"height": 3, "width": 6}, "obstacles": [],
+        "exits": [{"id": "E0", "position": [1, 5]}],
+        "people": [{"id": "P0", "position": [1, 4]}, {"id": "P1", "position": [1, 3]}],
+        "ignitions": [[1, 2]], "fire": {"model": "deterministic", "spread_interval": 1, "exits_flammable": True},
+        "movement": {"conflict_resolution": "lowest_id_wins", "enter_fire": "blocked"},
+        "termination": {"max_steps": 8}, "seed": 17})
+    sim = Simulator(scenario)
+    obs = sim.observe()
+    actions = {p: "stay" for p in sim.active_ids()}
+    visit = {"label": "train-0", "scenario_id": scenario.scenario_id, "observation": obs,
+             "sampled_actions": actions, "executed_actions": actions, "record": sim.step(actions),
+             "person_logprobs": [[math.log(.2)]*5 for _ in actions]}
+    cfg = {"seed": 17, "cf_states_per_update": 1, "cf_fire_replicates": 8,
+           "teacher_candidate_limits": {"T2": {"cpu_budget_ms": 500., "max_rollouts": 24},
+                                        "T3": {"cpu_budget_ms": 200., "max_ant_steps": 20000}}}
+    job = jobs_from_visits([visit], {scenario.scenario_id: scenario}, cfg, 0, "synthetic-fixture-not-a-model")[0]
+    study = evaluate_job(job)
+    assert set(study["teacher_diagnostics"]) == {"T0", "T1", "T2", "T3", "T4"}
+    assert all(v["status"] != "failed" for v in study["teacher_diagnostics"].values())
+    assert verify_study(study, continuation=fixed_t1)["status"] == "PASS"
+    assert CounterfactualObjective([study]).pairs

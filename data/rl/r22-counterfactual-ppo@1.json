@@ -26,8 +26,8 @@
   "target_joint_kl": 0.04,
   "entropy_coef": 0.005,
   "value_coef": 0.5,
-  "lora_lr": 0.000003,
-  "head_lr": 0.00001,
+  "lora_lr": 3E-06,
+  "head_lr": 1E-05,
   "value_lr": 0.0003,
   "accumulation_groups": 32,
   "max_grad_norm": 1,
@@ -61,5 +61,8 @@
   "curriculum_min_episodes": 16,
   "curriculum_force_after": 32,
   "parent": "Completed and independently verified DEV-selected r21-online-ppo@1 checkpoint, exact identity bound before any Phase3 training",
-  "policy": "PPO remains primary, unmasked complete joint actions; separately labeled offline measured-outcome pair loss only in CF arm. Fixed frozen T1 continuation, original and seven matched future-fire forks for stochastic TRAIN states."
+  "policy": "PPO remains primary, unmasked complete joint actions; separately labeled offline measured-outcome pair loss only in CF arm. Fixed frozen T1 continuation, original and seven matched future-fire forks for stochastic TRAIN states.",
+  "curriculum_control": "PPO-only TRAIN metrics choose one shared curriculum for both arms",
+  "checkpoint_retention": "Two latest complete paired resume states plus every DEV candidate; immutable selected actors and raw evidence retained",
+  "counterfactual_pair_rule": "Positive empirical paired utility lower interval and no casualty increase in any measured fire replicate; behavior-relative joint margin; explicitly offline"
 }
