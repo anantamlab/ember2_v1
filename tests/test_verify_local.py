@@ -95,3 +95,7 @@ def test_run_strips_selection_environment(monkeypatch):
     env = vl._env_for(REPO)
     assert "PYTEST_ADDOPTS" not in env and "PYTEST_PLUGINS" not in env
     assert env["PYTHONPATH"].split(os.pathsep)[0] == str(REPO / "src")
+
+def test_slow_tier_flag_is_explicit_and_recorded_in_command():
+    assert vl.pytest_args() == ["-m", "pytest", "-q"]
+    assert vl.pytest_args(with_slow=True) == ["-m", "pytest", "-q", "--run-slow"]

@@ -29,7 +29,7 @@ There is no GitHub CI. Before every push, run the complete CPU suite locally on 
 
 ```bash
 python -m pip install -e '.[test]'
-python scripts/verify_local.py run --python <path-to-python3.11>   # full gate on a clean committed tree
+python scripts/verify_local.py run --python <path-to-python3.11>   # default tier; add --with-slow for the full tier
 python -m pytest -q
 python -m ember_v1.cli encode examples/observation.json --mode ascii --local-neighbors
 python -m ember_v1.cli encode examples/observation.json --mode coords

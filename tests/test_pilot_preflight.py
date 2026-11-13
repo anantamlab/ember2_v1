@@ -8,6 +8,8 @@ import sys
 from pathlib import Path
 
 import pytest
+# Slow tier (AGENTS.md): skipped unless --run-slow.
+pytestmark = pytest.mark.slow
 
 REPO = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location("pilot_preflight", REPO / "scripts" / "pilot_preflight.py")

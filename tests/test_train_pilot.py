@@ -11,6 +11,8 @@ import subprocess
 from pathlib import Path
 
 import pytest
+# Slow tier (AGENTS.md): skipped unless --run-slow.
+pytestmark = pytest.mark.slow
 
 import pilot_fakes as fk
 from ember_v1 import multiteacher as mt

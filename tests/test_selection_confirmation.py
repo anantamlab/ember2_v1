@@ -7,6 +7,8 @@ from __future__ import annotations
 import json
 
 import pytest
+# Slow tier (AGENTS.md): skipped unless --run-slow.
+pytestmark = pytest.mark.slow
 
 from ember_v1.sim.canonical import digest
 from ember_v1.teacher import confirmation as C

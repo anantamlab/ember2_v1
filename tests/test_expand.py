@@ -5,6 +5,8 @@ import json
 from pathlib import Path
 
 import pytest
+# Slow tier (AGENTS.md): skipped unless --run-slow.
+pytestmark = pytest.mark.slow
 
 from ember_v1 import expand as E
 from ember_v1 import expand_collect as X

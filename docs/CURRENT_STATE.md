@@ -92,11 +92,13 @@ python scripts/verify_checkpoint.py r22-ppo-u16 <copy>/r22-counterfactual-ppo@1/
 
 ```bash
 python -m pip install -e ".[test]"                               # Python 3.11
-python scripts/verify_local.py run --python <path-to-python3.11>  # full CPU gate, clean committed tree
+python scripts/verify_local.py run --python <path-to-python3.11>              # default tier, clean committed tree
+python scripts/verify_local.py run --with-slow --python <path-to-python3.11>  # full tier (see AGENTS.md)
 python scripts/verify_local.py status
 ```
 
-- Reference result: R22 report head `1bccff4` had **1,620 passed, 2 skipped, 10 xfailed** on Python 3.11 ([receipt](../handoff/verification/20261113T153655Z-1bccff43aa25-py3.11.json)).
+- Test tiers: seven slow end-to-end files are skipped by default and run with `--with-slow` (`AGENTS.md`, "Test tiers").
+- Reference result (complete suite, before tiers): R22 report head `1bccff4` had **1,620 passed, 2 skipped, 10 xfailed** on Python 3.11 ([receipt](../handoff/verification/20261113T153655Z-1bccff43aa25-py3.11.json)).
 - GPU work used WSL Python 3.11 with Torch 2.8.0+cu128, Transformers 5.2.0, Unsloth 2026.10.11 and Triton 3.4.0. Set Torch CPU threads to 4 for R22 fresh-load replay.
 - CPU replay of existing evidence: `python -m ember_v1.rl_verify <run-copy>` (R20/R21), `python -m ember_v1.rl_cf_verify <run-copy>` (R22). Use scratch copies so derived files cannot change archived manifests.
 - Historical workstation scripts in `handoff/operations/` and `handoff/r19/` contain old paths and process IDs. **They are evidence only. Do not run them unchanged.** The two Run 19 authorization patches do not authorize any new experiment.

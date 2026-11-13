@@ -12,6 +12,8 @@ import zipfile
 from pathlib import Path
 
 import pytest
+# Slow tier (AGENTS.md): skipped unless --run-slow.
+pytestmark = pytest.mark.slow
 
 from ember_v1 import s1, sources
 from ember_v1 import s1_pipeline as sp
