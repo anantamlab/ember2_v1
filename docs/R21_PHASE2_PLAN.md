@@ -59,3 +59,15 @@ four authorized attempts. No collided scenario was used for training or evaluati
 Fresh-context review found a soft-only deadline: added a process alarm and refusal to
 resume attempts with missing durable end records. External launcher also enforces remaining
 aggregate time. Both findings fixed before actual TRAIN collection.
+
+CPU verification during training exposed an existing supervisor race: a worker with a
+rejected code fingerprint could flush its entire trajectory before the parent drained
+messages. The report then failed replay instead of recording the code-drift failure.
+A deterministic fixture regression failed before the fix and passed after rejecting that
+worker's untrusted decisions. Original test unchanged; no real teacher collection ran.
+This deliberately changes the supervisor and its importing code fingerprints. The frozen
+P1-17 plan remains byte-for-byte unchanged. Its rebuild test now pins both exact historical
+and corrected fingerprints, requires the live plan hash to differ, and compares every
+other plan field after substituting only those three explicit revisions. This preserves
+historical provenance and detects future unexpected drift rather than authorizing reuse
+of an old plan with changed code. The failed full-suite logs remain available.

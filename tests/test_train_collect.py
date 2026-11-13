@@ -71,10 +71,32 @@ def test_storage_root_is_outside_the_checkout(live):
     assert REPO.resolve() not in root.resolve().parents and root.resolve() != REPO.resolve()
 
 
-def test_committed_proposed_plan_matches_a_fresh_rebuild(live):
+def test_committed_proposed_plan_matches_rebuild_with_explicit_supervisor_revision(live):
     p = REPO / tc.PLAN_FILE
     committed = load(p)
     fresh = json.loads(json.dumps(live, sort_keys=True, default=sorted))
+    # The completed P1-17 plan stays immutable. The code-drift race fix deliberately
+    # changes the supervisor and its two importing fingerprints; it must invalidate
+    # reuse of the old authorization. Pin BOTH revisions, rather than ignoring code
+    # identity differences or rewriting the frozen historical experiment.
+    revisions = {
+        ("collector", "supervisor_fingerprint"): (
+            "sha256:eae6a705ad0d4417a48af9f85e3d446ada9e6b38f62c2536bc3c364723b565c9",
+            "sha256:b5a8e9d5d29f9f3981e7b0708a0d78a006e774a6161a6dfb0c82c982248503f5"),
+        ("collector", "runner_fingerprint"): (
+            "sha256:4494581159545a29978dee742492b3294788030ee6421d3e91ff8515437c0bcf",
+            "sha256:046f51dd77e8d64cff0ce01d08fbc26b1a9b63b7520deb208656dad365c07c5d"),
+        ("collection", "module_fingerprint"): (
+            "sha256:6c392bd78427b7f454d57728d81973d7b1383ce674b0175b3e8635f669f8a020",
+            "sha256:c23a65672c68e483ff8072609ca6d200ee867fe373942756a0cf533eb50b3001"),
+    }
+    assert committed["plan_hash"] != fresh["plan_hash"]
+    assert tc.check_plan(committed, frozen=False) == tc.check_plan(fresh, frozen=False) == []
+    for (section, key), (historical, corrected) in revisions.items():
+        assert committed["identities"][section][key] == historical
+        assert fresh["identities"][section][key] == corrected
+        fresh["identities"][section][key] = historical
+    fresh["plan_hash"] = digest({k: v for k, v in fresh.items() if k not in ("plan_hash", "status")})
     assert committed == fresh, sorted(k for k in fresh if committed.get(k) != fresh[k])
 
 
