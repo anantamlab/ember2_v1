@@ -1,4 +1,4 @@
-# AGENTS.md — rules for every coding agent in EMBER v1
+# AGENTS.md — rules for the full-view ember2_v1 project
 
 These rules are mandatory for every human or AI agent that changes this repository. They replace the
 GitHub Actions workflow `P0A contract tests` (`.github/workflows/p0a-tests.yml`), which was removed in run 10
@@ -8,15 +8,14 @@ Permanent rule: **Implement → full local test → verify PASS → push. Never 
 
 ## Canonical repository and current state
 
-`anantamlab/ember_v1` is the human-view (partial-view) project. The separate full-view project is
-`anantamlab/ember2_v1`, with its own checkout, evidence root and private HF repository.
-Human-view evidence stays under `/home/darshith/ember-ws/rl-evidence/human-pov/` and its HF location stays
-`sankalphs/ember-v1-models` (private). Full-view evidence belongs under
-`/home/darshith/ember-ws/ember2-evidence/`; full-view models belong in the HF_TOKEN account
-repository `ember2-v1-models` (private). Never mix these evidence roots or upload destinations. Do not push to `anantamlab/ember-v1-research-handoff`
-(read-only backup). Read [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md) first; `PHASE_CHECKPOINT.json` is a
-historical P0A record. Scripts under `handoff/` are archived evidence: never run them unchanged, and never edit
-files listed in `handoff/FILES.sha256`.
+`anantamlab/ember2_v1` is the full-view project. `anantamlab/ember_v1` is the separate human-view project.
+Human-view and R19–R22 results in docs/ are inherited history, not results of this project. Keep the Python
+package name `ember_v1`. The same local test, provenance and owner authorization rules below apply.
+Full-view evidence belongs outside every checkout at `/home/darshith/ember-ws/ember2-evidence/`.
+Full-view private HF destination is the HF_TOKEN account's `ember2-v1-models`; never upload new evidence
+to human-view `sankalphs/ember-v1-models` or its `/home/darshith/ember-ws/rl-evidence/human-pov/` root.
+The read-only `anantamlab/ember-v1-research-handoff` backup and files in `handoff/FILES.sha256` stay unchanged.
+Read `docs/CURRENT_STATE.md` first. All owner NOT AUTHORIZED rules remain in force.
 
 ## Mandatory rules
 
@@ -129,8 +128,16 @@ is refused until it contains this policy. **This file and the hook do not enforc
 - **Never bypass an attempt guard with a fresh clone.** Collection markers live in an evidence root outside every
   checkout, bound by the plan (P1-17 onward).
 - No EMBERBench evaluation, no hidden benchmark access; the final evaluation set stays sealed.
-- Large human-view evidence stays out of Git under `/home/darshith/ember-ws/rl-evidence/human-pov/`,
+- Large full-view evidence stays out of Git under `/home/darshith/ember-ws/ember2-evidence/`,
   with SHA256 manifests. Commit only compact summaries; historical Windows paths are archives.
 - Owner prompt authorization for `ember-v1-closeout@1` permits documentation, required CPU tests and a
   merge commit after all stated gates pass. It authorizes no new human-view experiment.
   Deferred phases in `docs/NEXT_STEPS.md` need a new frozen plan and owner authorization.
+
+## Full-view owner authorization
+
+The owner prompt authorizes `ember2-v1-full-view@1`: private repository creation, bounded local TRAIN
+collection/DAgger/small and LLM PPO, one frozen report invocation per arm, private HF upload, and a
+gated merge commit. The frozen external plan copies that authorization. No cloud compute or spend,
+sealed evaluation, reserved V1.1, simulator/generator/teacher changes, public resources or force push.
+Limits: 60 GPU hours, 16 CPU hours, 150 GiB evidence, one GPU job. Never restart an existing attempt.

@@ -1,34 +1,17 @@
-# ember_v1 — Human-view Evacuation Decision Model (Anantam Labs)
+# ember2_v1 — Full-view Evacuation Decision Model
 
-Package `ember_v1`, CLI `ember-v1`, Modal app `ember-v1`. Formerly "evac-decision" (HLD v2).
+Private project `anantamlab/ember2_v1`: every person sees the full public map, all people, fire and exits,
+plus their own last action/outcome and neighbour-cell statuses. One row and one decision per person.
+The Python package stays `ember_v1`.
 
-A standalone evacuation decision policy using Qwen3.5 and Unsloth FastDecisionModel, with an independent CPU simulator. It contains no official benchmark or hidden evaluation data.
+The separate human-view project is `anantamlab/ember_v1`. Human-view and R19–R22 documents inherited
+here are historical evidence; no full-view result exists yet. Read [CURRENT_STATE](docs/CURRENT_STATE.md).
+Full-view evidence root: `/home/darshith/ember-ws/ember2-evidence/`; private HF: `ember2-v1-models` under
+the account of environment `HF_TOKEN`. Human-view evidence and `sankalphs/ember-v1-models` stay separate.
 
-**This repository is the human-view (partial-view) project.** The full-view project lives in
-[`anantamlab/ember2_v1`](https://github.com/anantamlab/ember2_v1), in a separate checkout.
-Human-view evidence: `/home/darshith/ember-ws/rl-evidence/human-pov/`; private HF: `sankalphs/ember-v1-models`.
-Full-view evidence: `/home/darshith/ember-ws/ember2-evidence/`; private HF: the HF_TOKEN account
-repository `ember2-v1-models`. Each project owns its evidence and HF repository. `anantamlab/ember-v1-research-handoff` is a read-only backup; its commit is part of this history.
-
-## Start here
-
-Read **[docs/CURRENT_STATE.md](docs/CURRENT_STATE.md)**. It is the authoritative current state: code map, completed SFT and RL runs, verified findings, checkpoint locations, how to verify and what remains. The [research handoff](handoff/HANDOFF.md) keeps the Run 19 to Phase 3 archive with exact checkpoints and recovery notes. For RL work, read the [RL results handoff](docs/RL_RESULTS_HANDOFF.md): the RL system as built and all R19–R22 metrics.
-
-Current human-view candidate: frozen LLM PPO update 20 of `human-pov-ws-full-20261113t214243z`.
-Its 32-family report panel is spent. Read the [model card](docs/HUMAN_POV_MODEL_CARD.md),
-[report](docs/HUMAN_POV_REPORT.md) and [deferred work](docs/NEXT_STEPS.md). No new human-view run is authorized.
-
-Historical full-map results (2026-11-13):
-
-- **V1 (SFT, `p1-18-v1-train@1`)** is trained and stored on private Hugging Face at revision `1fc405f7`.
-- **[R20 Phase 1](docs/R20_PPO_PHASE1_REPORT.md)** verified real PPO weight updates on V1, with no DEV evacuation gain.
-- **[R21 Phase 2](docs/R21_PPO_PHASE2_REPORT.md)** online PPO update 96 tied raw V1 at 48.60% evacuation on its reporting panel.
-- **[R22 Phase 3](docs/R22_COUNTERFACTUAL_REPORT.md)** counterfactual PPO reduced casualties relative to PPO-only on reporting DEV (−2.11 pp [−3.96, −0.39]) but did not establish an evacuation gain (+0.85 pp [−1.86, +3.48]). The predefined DEV selector froze PPO-only update 16.
-- Rule-based masking and coordination still outperform the raw learned policies on the compared panels. The T0–T4 teachers are far stronger.
-- **Final held-out evaluation is sealed.** The 1,200-scenario expansion and `p1-18-dataset-v2` are reserved for V1.1.
-- Checkpoints: [data/rl/checkpoint_registry.json](data/rl/checkpoint_registry.json); verify with `python scripts/verify_checkpoint.py --list`. The R20–R22 weights are on the workstation only, not on Hugging Face.
-
-`PHASE_CHECKPOINT.json` and the P0B sections below are historical P0A/P0B records. They are not the current state.
+The inherited human-view branch could not merge: its full-tier Linux gate failed because a historical
+Windows evidence path resolves inside the checkout. This repository follows the owner-authorized
+fallback and preserves the complete `feat/human-pov` history. No failed gate was bypassed or merged.
 
 ## Run locally
 

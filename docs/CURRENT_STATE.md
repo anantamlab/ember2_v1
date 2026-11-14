@@ -1,3 +1,19 @@
+# ember2_v1 — current full-view state
+
+Status: implementation preparation; no full-view collection, fit or evaluation has run.
+Canonical repository: private `anantamlab/ember2_v1`. Human-view project: private `anantamlab/ember_v1`.
+Python 3.11 and all inherited test/authorization rules apply. New work is on `feat/full-view` and PR #1.
+Evidence root: `/home/darshith/ember-ws/ember2-evidence/`, outside every checkout. Its own private HF
+destination is environment HF_TOKEN account's `ember2-v1-models`; a missing token means upload pending.
+
+The inherited human-view closeout full-tier test failed on Linux path portability. Its PR remains open;
+the owner explicitly permits seeding this project from `feat/human-pov` when PART1 cannot merge.
+
+Everything below is inherited history, including human-view checkpoints and report numbers. It does
+not claim full-view training or grant authorization beyond the new frozen owner-authorized plan.
+
+---
+
 # EMBER V1 — current state (authoritative)
 
 Status date: 2026-11-14. This file is the single entry point for new developers and coding agents.
