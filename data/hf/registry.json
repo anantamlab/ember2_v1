@@ -1,5 +1,21 @@
 {
  "artifacts": {
+  "human-pov-ws-full-20261113t214243z@1": {
+   "artifact_id": "human-pov-ws-full-20261113t214243z@1",
+   "bytes": 2092776002,
+   "files": 269,
+   "files_digest": "sha256:0dfcbfd630b4446f9ae81c0a461e3213d28155314f9a60e7b8614fc48b4dfe65",
+   "kind": "human-pov-training-report-and-checkpoints",
+   "manifest_commit": "8243ec7242e2475f764cecb9debd14990afe84bb",
+   "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+   "path": "human-pov/human-pov-ws-full-20261113t214243z",
+   "repo_id": "sankalphs/ember-v1-models",
+   "repo_type": "model",
+   "source_commit": "df4b431892a7b1190b44df0353651daeeffbb001",
+   "status": "COMPLETE",
+   "verification": "PASS",
+   "verified_commit": "310f357782359eb07e27ac8e2d3064d2669bac68"
+  },
   "p1-12-train-pilot@1": {
    "artifact_id": "p1-12-train-pilot@1",
    "bytes": 159176012,
@@ -321,7 +337,7 @@
    "type": "dataset"
   },
   "models": {
-   "head": "50dfa3c43caead6c1b84cdfc91600cfe8e26ed8c",
+   "head": "310f357782359eb07e27ac8e2d3064d2669bac68",
    "id": "sankalphs/ember-v1-models",
    "private": true,
    "type": "model"

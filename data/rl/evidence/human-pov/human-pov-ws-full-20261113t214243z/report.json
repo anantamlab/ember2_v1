@@ -1,0 +1,130 @@
+{
+ "arms": {
+  "belief_teacher": {
+   "attempted": 3839,
+   "blocked": 798,
+   "blocked_per_attempt": 0.20786663193539984,
+   "casualties": 28,
+   "casualty_rate": 0.07954545454545454,
+   "episodes": 32,
+   "evacuated": 303,
+   "evacuated_rate": 0.8607954545454546,
+   "movements": {
+    "blocked_boundary": 0,
+    "blocked_conflict": 284,
+    "blocked_cycle": 144,
+    "blocked_fire": 0,
+    "blocked_occupied": 370,
+    "blocked_wall": 0,
+    "moved": 3041,
+    "stayed": 214
+   },
+   "people": 352,
+   "repeated_ineffective": 486,
+   "stay_rate": 0.05280039476930669,
+   "stayed": 214,
+   "unresolved": 21,
+   "unresolved_rate": 0.05965909090909091,
+   "utility": 0.6569602272727273
+  },
+  "random_masked": {
+   "attempted": 7921,
+   "blocked": 811,
+   "blocked_per_attempt": 0.1023860623658629,
+   "casualties": 132,
+   "casualty_rate": 0.375,
+   "episodes": 32,
+   "evacuated": 99,
+   "evacuated_rate": 0.28125,
+   "movements": {
+    "blocked_boundary": 0,
+    "blocked_conflict": 207,
+    "blocked_cycle": 288,
+    "blocked_fire": 0,
+    "blocked_occupied": 316,
+    "blocked_wall": 0,
+    "moved": 7110,
+    "stayed": 2721
+   },
+   "people": 352,
+   "repeated_ineffective": 47,
+   "stay_rate": 0.25568502161247886,
+   "stayed": 2721,
+   "unresolved": 121,
+   "unresolved_rate": 0.34375,
+   "utility": -0.7265625
+  },
+  "student_masked": {
+   "attempted": 3872,
+   "blocked": 821,
+   "blocked_per_attempt": 0.21203512396694216,
+   "casualties": 27,
+   "casualty_rate": 0.07670454545454546,
+   "episodes": 32,
+   "evacuated": 303,
+   "evacuated_rate": 0.8607954545454546,
+   "movements": {
+    "blocked_boundary": 0,
+    "blocked_conflict": 285,
+    "blocked_cycle": 150,
+    "blocked_fire": 0,
+    "blocked_occupied": 386,
+    "blocked_wall": 0,
+    "moved": 3051,
+    "stayed": 208
+   },
+   "people": 352,
+   "repeated_ineffective": 501,
+   "stay_rate": 0.050980392156862744,
+   "stayed": 208,
+   "unresolved": 22,
+   "unresolved_rate": 0.0625,
+   "utility": 0.6605113636363636
+  },
+  "student_raw": {
+   "attempted": 3872,
+   "blocked": 821,
+   "blocked_per_attempt": 0.21203512396694216,
+   "casualties": 27,
+   "casualty_rate": 0.07670454545454546,
+   "episodes": 32,
+   "evacuated": 303,
+   "evacuated_rate": 0.8607954545454546,
+   "movements": {
+    "blocked_boundary": 0,
+    "blocked_conflict": 285,
+    "blocked_cycle": 150,
+    "blocked_fire": 0,
+    "blocked_occupied": 386,
+    "blocked_wall": 0,
+    "moved": 3051,
+    "stayed": 208
+   },
+   "people": 352,
+   "repeated_ineffective": 501,
+   "stay_rate": 0.050980392156862744,
+   "stayed": 208,
+   "unresolved": 22,
+   "unresolved_rate": 0.0625,
+   "utility": 0.6605113636363636
+  }
+ },
+ "count": 32,
+ "dagger_version": "1.0",
+ "max_steps": 48,
+ "namespace": "human-pov-ws-full-20261113t214243z",
+ "split": "report",
+ "student": "/home/darshith/ember-ws/rl-evidence/human-pov/2026-11-13/full-20261113T214243Z-32c402/ppo-llm-repair-01/update-0020",
+ "train_data_checked": [
+  "/home/darshith/ember-ws/rl-evidence/human-pov/2026-11-13/full-20261113T214243Z-32c402/d0",
+  "/home/darshith/ember-ws/rl-evidence/human-pov/2026-11-13/full-20261113T214243Z-32c402/d1"
+ ],
+ "view": {
+  "exit_knowledge": "seen",
+  "fire_detour": 6,
+  "hints": true,
+  "line_of_sight": true,
+  "memory": true,
+  "radius": 4
+ }
+}

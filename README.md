@@ -1,16 +1,24 @@
-# ember_v1 — Evacuation Decision Model (Anantam Labs)
+# ember_v1 — Human-view Evacuation Decision Model (Anantam Labs)
 
 Package `ember_v1`, CLI `ember-v1`, Modal app `ember-v1`. Formerly "evac-decision" (HLD v2).
 
 A standalone evacuation decision policy using Qwen3.5 and Unsloth FastDecisionModel, with an independent CPU simulator. It contains no official benchmark or hidden evaluation data.
 
-**This repository is the only canonical EMBER V1 development repository.** `anantamlab/ember-v1-research-handoff` is a read-only backup; its commit is part of this history.
+**This repository is the human-view (partial-view) project.** The full-view project lives in
+[`anantamlab/ember2_v1`](https://github.com/anantamlab/ember2_v1), in a separate checkout.
+Human-view evidence: `/home/darshith/ember-ws/rl-evidence/human-pov/`; private HF: `sankalphs/ember-v1-models`.
+Full-view evidence: `/home/darshith/ember-ws/ember2-evidence/`; private HF: the HF_TOKEN account
+repository `ember2-v1-models`. Each project owns its evidence and HF repository. `anantamlab/ember-v1-research-handoff` is a read-only backup; its commit is part of this history.
 
 ## Start here
 
-Read **[docs/CURRENT_STATE.md](docs/CURRENT_STATE.md)**. It is the authoritative current state: code map, completed SFT and RL runs, verified findings, checkpoint locations, how to verify and what remains. The [research handoff](handoff/HANDOFF.md) keeps the Run 19 to Phase 3 archive with exact checkpoints and recovery notes.
+Read **[docs/CURRENT_STATE.md](docs/CURRENT_STATE.md)**. It is the authoritative current state: code map, completed SFT and RL runs, verified findings, checkpoint locations, how to verify and what remains. The [research handoff](handoff/HANDOFF.md) keeps the Run 19 to Phase 3 archive with exact checkpoints and recovery notes. For RL work, read the [RL results handoff](docs/RL_RESULTS_HANDOFF.md): the RL system as built and all R19–R22 metrics.
 
-Status on 2026-11-13:
+Current human-view candidate: frozen LLM PPO update 20 of `human-pov-ws-full-20261113t214243z`.
+Its 32-family report panel is spent. Read the [model card](docs/HUMAN_POV_MODEL_CARD.md),
+[report](docs/HUMAN_POV_REPORT.md) and [deferred work](docs/NEXT_STEPS.md). No new human-view run is authorized.
+
+Historical full-map results (2026-11-13):
 
 - **V1 (SFT, `p1-18-v1-train@1`)** is trained and stored on private Hugging Face at revision `1fc405f7`.
 - **[R20 Phase 1](docs/R20_PPO_PHASE1_REPORT.md)** verified real PPO weight updates on V1, with no DEV evacuation gain.

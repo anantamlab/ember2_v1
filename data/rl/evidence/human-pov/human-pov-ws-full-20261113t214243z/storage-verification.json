@@ -1,0 +1,71 @@
+{
+  "candidate_unchanged": true,
+  "elapsed_seconds": 313.19535504700616,
+  "entry": {
+    "artifact_id": "human-pov-ws-full-20261113t214243z@1",
+    "bytes": 2092776002,
+    "files": 269,
+    "files_digest": "sha256:0dfcbfd630b4446f9ae81c0a461e3213d28155314f9a60e7b8614fc48b4dfe65",
+    "kind": "human-pov-training-report-and-checkpoints",
+    "manifest_commit": "8243ec7242e2475f764cecb9debd14990afe84bb",
+    "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+    "path": "human-pov/human-pov-ws-full-20261113t214243z",
+    "repo_id": "sankalphs/ember-v1-models",
+    "repo_type": "model",
+    "source_commit": null,
+    "status": "COMPLETE",
+    "verification": "PASS",
+    "verified_commit": "310f357782359eb07e27ac8e2d3064d2669bac68"
+  },
+  "finished_utc": "2026-11-14T11:28:06.062840+00:00",
+  "independent_content_bytes": 2092776002,
+  "independent_content_files": 269,
+  "independent_content_mismatches": [],
+  "independent_full_audit_sha256": "f45daae2b076632f8ad1b168d3ce9e7d762cde177500e15e4128526726227dc1",
+  "independent_hash_table_sha256": "f13758c2365bd265e468eee0b60181face222eb2c4a3f4f3b14b56fe15cf3e0a",
+  "manifest_sha256": "994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+  "package_unchanged": true,
+  "payload_bytes": 2092776002,
+  "payload_files": 269,
+  "remote_verified_record": {
+    "content_checked": {
+      "bytes": 2092776002,
+      "checked": 269,
+      "mismatch": []
+    },
+    "files": 269,
+    "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+    "metadata_checked": {
+      "git_sha1": 221,
+      "lfs_sha256": 48
+    },
+    "problems": [],
+    "result": "PASS",
+    "revision": "8243ec7242e2475f764cecb9debd14990afe84bb",
+    "verified_utc": "2026-11-14T10:56:28Z",
+    "verifier": "ember-hfstore@1.0.0"
+  },
+  "repo_private": true,
+  "report_attempts": 1,
+  "report_sha256": "b31f6e36c6fb603b3fa8798dabe583ce530546a1bdee154269553fb2b85eb0df",
+  "reserved_v1_1_used": false,
+  "revisions_checked": [
+    {
+      "exact_file_set": true,
+      "payload_metadata_files": 269,
+      "revision": "8243ec7242e2475f764cecb9debd14990afe84bb"
+    },
+    {
+      "exact_file_set": true,
+      "payload_metadata_files": 269,
+      "revision": "310f357782359eb07e27ac8e2d3064d2669bac68"
+    }
+  ],
+  "sealed_final_opened": false,
+  "started_utc": "2026-11-14T11:22:35.281850+00:00",
+  "status": "PASS",
+  "storage_result_sha256": "6af5f6b48669ba504acae1ce2838454be4bf712d803e5db61ee23db2120ffd46",
+  "supervisor_result_sha256": "aea483bb757bd45944447961b6401ddfbce2a6286fa0168570364ba8b72c5f8e",
+  "training_source": "df4b431892a7b1190b44df0353651daeeffbb001",
+  "verified_json_sha256": "69c3f7eb93a0aee04da040edea3e52c83a218ac07851ff00ba452e3541ce3c32"
+}

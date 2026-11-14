@@ -1,0 +1,331 @@
+{
+  "artifact_path": {
+    "path": "human-pov/human-pov-ws-full-20261113t214243z",
+    "private": true,
+    "repo": "sankalphs/ember-v1-models",
+    "weights_and_raw_evidence": "outside Git"
+  },
+  "base_model": {
+    "access": "public Hugging Face model; revision confirmed to exist on 2026-11-13",
+    "note": "Every checkpoint is a LoRA adapter plus a float32 Clef joint head on this frozen base. The tokenizer files ship inside each actor directory.",
+    "repo_id": "unsloth/Qwen3.5-2B",
+    "revision": "fffbc0d8711cf87df6d1f97938c5e50ef94aadc7"
+  },
+  "checkpoints": [
+    {
+      "availability": "AVAILABLE_PRIVATE_HF",
+      "files": [
+        {
+          "git_sha1": "a2ce2ff46fbfd6d5642f2ef097af70f35ed1ff79",
+          "path": "README.md",
+          "sha256": "4839c3850d0e52cafa33d37fa7a11983f5bbf5a4a689df90a3aa57a39f6cffe1",
+          "size": 5200
+        },
+        {
+          "git_sha1": "562ec00e681dcf03190b9756f888880c89aa2fa1",
+          "path": "adapter_config.json",
+          "sha256": "0db1fd12dcab6a7ac615622dca7c20a2bfab2a71315a6c58945f448d112e88a0",
+          "size": 1768
+        },
+        {
+          "git_sha1": "9501ed118a9bca7fe25693f63ac76e1c79fa305d",
+          "path": "adapter_model.safetensors",
+          "sha256": "82d8751f0d42e527f4dad90be80f07d750659a750bfd7df8761a924fa429384f",
+          "size": 67332688
+        },
+        {
+          "git_sha1": "c7c8f996ef89234e681044289ef389a6694fc635",
+          "path": "chat_template.jinja",
+          "sha256": "ea210e5b4997b7b1d3af5ee3ad34e7677ffe38df7469e8d88089789b5a27fae5",
+          "size": 7991
+        },
+        {
+          "git_sha1": "c587d506c4ce5893e05dc13d2d57a34ecf50f6a0",
+          "path": "human_fit_report.json",
+          "sha256": "a809041c14f02ee83a1820f8cddf6a0124482e4e9fa24565f56eaee96a1cb559",
+          "size": 137300
+        },
+        {
+          "git_sha1": "d85ebf9907227f8930e7daca2d65f2ef4f2d4ba6",
+          "path": "joint_head.safetensors",
+          "sha256": "445bf99d857efe06fcf752ec7eece015ad6f067b6fca0e763fd1ef86495e7f11",
+          "size": 60957454
+        },
+        {
+          "git_sha1": "f3c2cb6bd617f9f5fff5ad27df2668423aedf312",
+          "path": "joint_head_config.json",
+          "sha256": "9ec32207deca79a5ec809cb8306c8222d435163da3800e6fdb42e8789a69b8f8",
+          "size": 116
+        },
+        {
+          "git_sha1": "0e30bc3d0f1e6a10a4992d6468a79033addf7955",
+          "path": "optimizer.pt",
+          "sha256": "046d5a3dea048b32b054ae7ce055667b0d291bc8ec105e10898466aba64f3838",
+          "size": 378750829
+        },
+        {
+          "git_sha1": "7ad6acdf4203f22b7b990e36ccc3a1fe38563d5e",
+          "path": "processor_config.json",
+          "sha256": "14932921ca485d458a04dafd8069fbb0a4505622a48208d19ed247115801385b",
+          "size": 1300
+        },
+        {
+          "git_sha1": "b561cafdcf4f484cc19fb9e8d403d2a223a782e6",
+          "path": "tokenizer.json",
+          "sha256": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+          "size": 19989343
+        },
+        {
+          "git_sha1": "702d49e15b1fe848c3f4962a0144b5b50f111c2d",
+          "path": "tokenizer_config.json",
+          "sha256": "50f7ac27a0406e04c3c7f9d9f3f1b628952d7f8449b365655e4ed89373f41c64",
+          "size": 7161
+        },
+        {
+          "git_sha1": "faa40db512ec14ba4afcf3ea17e40fe3ebaeb208",
+          "path": "unsloth_decision_config.json",
+          "sha256": "38a82e265362e2e863d5108e78cfc9927f744b4befd3ceffab5be35c738fd31f",
+          "size": 240
+        }
+      ],
+      "files_digest": "sha256:a99a8fcc96ed8663868b2bb650301ae0fef2620bd8b09701a6996cf8a02511ec",
+      "frozen_candidate": false,
+      "id": "human-pov-s0",
+      "identity_kind": "file_table_sha256",
+      "parent": null,
+      "relative_path": "s0",
+      "role": "DAgger round0 SFT parent",
+      "run_id": "human-pov-ws-full-20261113t214243z",
+      "storage": {
+        "elapsed_seconds": 3789.44994364999,
+        "entry": {
+          "artifact_id": "human-pov-ws-full-20261113t214243z@1",
+          "bytes": 2092776002,
+          "files": 269,
+          "files_digest": "sha256:0dfcbfd630b4446f9ae81c0a461e3213d28155314f9a60e7b8614fc48b4dfe65",
+          "kind": "human-pov-training-report-and-checkpoints",
+          "manifest_commit": "8243ec7242e2475f764cecb9debd14990afe84bb",
+          "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+          "path": "human-pov/human-pov-ws-full-20261113t214243z",
+          "repo_id": "sankalphs/ember-v1-models",
+          "repo_type": "model",
+          "source_commit": null,
+          "status": "COMPLETE",
+          "verification": "PASS",
+          "verified_commit": "310f357782359eb07e27ac8e2d3064d2669bac68"
+        },
+        "full_content_sha256_verification": true,
+        "independent_remote_check": {
+          "content_checked": {
+            "bytes": 1613194850,
+            "checked": 78,
+            "mismatch": []
+          },
+          "files": 269,
+          "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+          "metadata_checked": {
+            "git_sha1": 221,
+            "lfs_sha256": 48
+          },
+          "problems": [],
+          "result": "PASS",
+          "revision": "8243ec7242e2475f764cecb9debd14990afe84bb",
+          "verifier": "ember-hfstore@1.0.0"
+        },
+        "local_manifest_sha256": "994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+        "payload_bytes": 2092776002,
+        "payload_files": 269,
+        "repo_private": true,
+        "status": "PASS",
+        "utc": "2026-11-14T10:59:21.389420+00:00"
+      }
+    },
+    {
+      "availability": "AVAILABLE_PRIVATE_HF",
+      "files": [
+        {
+          "git_sha1": "8dbf867d7b36b7022af9cc8582fa524af9af54fd",
+          "path": "actor.json",
+          "sha256": "0b314ea0a45d417f82e4c7ec25ebc8147be758fbc9cca9ea7b1b4f089c6d1264",
+          "size": 45
+        },
+        {
+          "git_sha1": "c83e175fec6a6a59b668070748a01933939877da",
+          "path": "actor.pt",
+          "sha256": "c09a79a6fd40275b6882c29247c925c6203dc54ee1c0f7c2721b19b08ef8c1e8",
+          "size": 332989
+        }
+      ],
+      "files_digest": "sha256:1d2d3ec3b38406946b19936320e6e8482ea5ba9642447164a80b570b020863fc",
+      "frozen_candidate": false,
+      "id": "human-pov-ppo-small-u160",
+      "identity_kind": "file_table_sha256",
+      "parent": null,
+      "relative_path": "ppo-small/update-0160",
+      "role": "Small CPU PPO selection",
+      "run_id": "human-pov-ws-full-20261113t214243z",
+      "storage": {
+        "elapsed_seconds": 3789.44994364999,
+        "entry": {
+          "artifact_id": "human-pov-ws-full-20261113t214243z@1",
+          "bytes": 2092776002,
+          "files": 269,
+          "files_digest": "sha256:0dfcbfd630b4446f9ae81c0a461e3213d28155314f9a60e7b8614fc48b4dfe65",
+          "kind": "human-pov-training-report-and-checkpoints",
+          "manifest_commit": "8243ec7242e2475f764cecb9debd14990afe84bb",
+          "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+          "path": "human-pov/human-pov-ws-full-20261113t214243z",
+          "repo_id": "sankalphs/ember-v1-models",
+          "repo_type": "model",
+          "source_commit": null,
+          "status": "COMPLETE",
+          "verification": "PASS",
+          "verified_commit": "310f357782359eb07e27ac8e2d3064d2669bac68"
+        },
+        "full_content_sha256_verification": true,
+        "independent_remote_check": {
+          "content_checked": {
+            "bytes": 1613194850,
+            "checked": 78,
+            "mismatch": []
+          },
+          "files": 269,
+          "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+          "metadata_checked": {
+            "git_sha1": 221,
+            "lfs_sha256": 48
+          },
+          "problems": [],
+          "result": "PASS",
+          "revision": "8243ec7242e2475f764cecb9debd14990afe84bb",
+          "verifier": "ember-hfstore@1.0.0"
+        },
+        "local_manifest_sha256": "994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+        "payload_bytes": 2092776002,
+        "payload_files": 269,
+        "repo_private": true,
+        "status": "PASS",
+        "utc": "2026-11-14T10:59:21.389420+00:00"
+      }
+    },
+    {
+      "availability": "AVAILABLE_PRIVATE_HF",
+      "files": [
+        {
+          "git_sha1": "a2ce2ff46fbfd6d5642f2ef097af70f35ed1ff79",
+          "path": "README.md",
+          "sha256": "4839c3850d0e52cafa33d37fa7a11983f5bbf5a4a689df90a3aa57a39f6cffe1",
+          "size": 5200
+        },
+        {
+          "git_sha1": "562ec00e681dcf03190b9756f888880c89aa2fa1",
+          "path": "adapter_config.json",
+          "sha256": "0db1fd12dcab6a7ac615622dca7c20a2bfab2a71315a6c58945f448d112e88a0",
+          "size": 1768
+        },
+        {
+          "git_sha1": "3dce1ddc529e37ee3ffde86e2f4f9ad4ac6c497a",
+          "path": "adapter_model.safetensors",
+          "sha256": "12bdcf5af9161169b180f2cf2dc82015481ad4680553f3c38825e4ce17a2e0ba",
+          "size": 67332688
+        },
+        {
+          "git_sha1": "c7c8f996ef89234e681044289ef389a6694fc635",
+          "path": "chat_template.jinja",
+          "sha256": "ea210e5b4997b7b1d3af5ee3ad34e7677ffe38df7469e8d88089789b5a27fae5",
+          "size": 7991
+        },
+        {
+          "git_sha1": "70f1d18395797456a1bae7180e6716a84a022c1c",
+          "path": "joint_head.safetensors",
+          "sha256": "29c6c48b3912997a389e8d46cab87da6596b7f55d1435a30cc103b0fcab410c5",
+          "size": 121902840
+        },
+        {
+          "git_sha1": "f3c2cb6bd617f9f5fff5ad27df2668423aedf312",
+          "path": "joint_head_config.json",
+          "sha256": "9ec32207deca79a5ec809cb8306c8222d435163da3800e6fdb42e8789a69b8f8",
+          "size": 116
+        },
+        {
+          "git_sha1": "7ad6acdf4203f22b7b990e36ccc3a1fe38563d5e",
+          "path": "processor_config.json",
+          "sha256": "14932921ca485d458a04dafd8069fbb0a4505622a48208d19ed247115801385b",
+          "size": 1300
+        },
+        {
+          "git_sha1": "b561cafdcf4f484cc19fb9e8d403d2a223a782e6",
+          "path": "tokenizer.json",
+          "sha256": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+          "size": 19989343
+        },
+        {
+          "git_sha1": "35e403ec0858e4de70b75648e78121ad28278dc4",
+          "path": "tokenizer_config.json",
+          "sha256": "1a71fa1e006db5fddc1903926f8d645a608a598504e630c1d82fb7057ee30978",
+          "size": 7160
+        },
+        {
+          "git_sha1": "faa40db512ec14ba4afcf3ea17e40fe3ebaeb208",
+          "path": "unsloth_decision_config.json",
+          "sha256": "38a82e265362e2e863d5108e78cfc9927f744b4befd3ceffab5be35c738fd31f",
+          "size": 240
+        }
+      ],
+      "files_digest": "sha256:fa49b0d765ea545fde6ea72d63885fbbdf4639a1db5f0d5bd6e6dd8a7ba6d04f",
+      "frozen_candidate": true,
+      "id": "human-pov-ppo-llm-u20",
+      "identity_kind": "file_table_sha256",
+      "parent": "human-pov-s0",
+      "relative_path": "ppo-llm-repair-01/update-0020",
+      "role": "Frozen final candidate, selected before report",
+      "run_id": "human-pov-ws-full-20261113t214243z",
+      "storage": {
+        "elapsed_seconds": 3789.44994364999,
+        "entry": {
+          "artifact_id": "human-pov-ws-full-20261113t214243z@1",
+          "bytes": 2092776002,
+          "files": 269,
+          "files_digest": "sha256:0dfcbfd630b4446f9ae81c0a461e3213d28155314f9a60e7b8614fc48b4dfe65",
+          "kind": "human-pov-training-report-and-checkpoints",
+          "manifest_commit": "8243ec7242e2475f764cecb9debd14990afe84bb",
+          "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+          "path": "human-pov/human-pov-ws-full-20261113t214243z",
+          "repo_id": "sankalphs/ember-v1-models",
+          "repo_type": "model",
+          "source_commit": null,
+          "status": "COMPLETE",
+          "verification": "PASS",
+          "verified_commit": "310f357782359eb07e27ac8e2d3064d2669bac68"
+        },
+        "full_content_sha256_verification": true,
+        "independent_remote_check": {
+          "content_checked": {
+            "bytes": 1613194850,
+            "checked": 78,
+            "mismatch": []
+          },
+          "files": 269,
+          "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+          "metadata_checked": {
+            "git_sha1": 221,
+            "lfs_sha256": 48
+          },
+          "problems": [],
+          "result": "PASS",
+          "revision": "8243ec7242e2475f764cecb9debd14990afe84bb",
+          "verifier": "ember-hfstore@1.0.0"
+        },
+        "local_manifest_sha256": "994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+        "payload_bytes": 2092776002,
+        "payload_files": 269,
+        "repo_private": true,
+        "status": "PASS",
+        "utc": "2026-11-14T10:59:21.389420+00:00"
+      }
+    }
+  ],
+  "registry_version": 1,
+  "run_id": "human-pov-ws-full-20261113t214243z",
+  "updated_utc": "2026-11-14T11:28:21.684997+00:00"
+}

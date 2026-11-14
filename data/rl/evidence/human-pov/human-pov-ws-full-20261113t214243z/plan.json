@@ -1,0 +1,109 @@
+{
+  "artifact_storage": {
+    "path": "human-pov/human-pov-ws-full-20261113t214243z",
+    "private": true,
+    "repo": "sankalphs/ember-v1-models",
+    "weights_and_raw_evidence": "outside Git"
+  },
+  "authorization": {
+    "request": "No do all the steps in the book that's given and ask me for permissions just keep on doing",
+    "scope": "runbook steps 1-9, including DAgger fitting, CPU PPO, GPU PPO and the single selected reporting-DEV evaluation; sealed final stays sealed",
+    "source": "explicit user request in this task"
+  },
+  "budget": {
+    "cloud_spend_usd_max": 0,
+    "evidence_gib_max": 100,
+    "local_cpu_hours_max": 12,
+    "local_gpu_hours_max": 96,
+    "parallel_gpu_jobs": 1
+  },
+  "code_head": "f9e7868f5e25d3d43a70f9f134401c7519e982f4",
+  "dagger": {
+    "aggregation": "all previous rounds, exact duplicate state-label pairs removed",
+    "fit": {
+      "epochs": 1,
+      "grad_accum": 8,
+      "head_lr": 0.0001,
+      "lr": 0.0002,
+      "seed": 0,
+      "warmup_ratio": 0.03
+    },
+    "legal_rate_extra_epoch_threshold": 0.95,
+    "max_extra_epochs_per_round": 1,
+    "retain_best_on_selection_regression": true,
+    "rounds": [
+      {
+        "beta": 1.0,
+        "count": 256,
+        "index": 0,
+        "namespace": "human-pov-ws-full-20261113t214243z-r0"
+      },
+      {
+        "beta": 0.5,
+        "count": 256,
+        "index": 1,
+        "namespace": "human-pov-ws-full-20261113t214243z-r1"
+      },
+      {
+        "beta": 0.25,
+        "count": 256,
+        "index": 2,
+        "namespace": "human-pov-ws-full-20261113t214243z-r2"
+      },
+      {
+        "beta": 0.0,
+        "count": 256,
+        "index": 3,
+        "namespace": "human-pov-ws-full-20261113t214243z-r3"
+      }
+    ],
+    "stop_if_label_execution_agreement_at_least": 0.99
+  },
+  "guards": [
+    "never modify the original draft status/smoke_test",
+    "no reserved V1.1 datasets",
+    "no sealed final evaluation or EMBERBench",
+    "immutable attempt directories",
+    "no merge, main push or force-push",
+    "no automatic repeat of an interrupted training attempt; diagnose and start a fresh named repair attempt only within the same phase budget",
+    "PPO only after step-6 gate",
+    "stop on nondecreasing fit loss or option-order mapping failure"
+  ],
+  "max_steps": 48,
+  "namespace": "human-pov-ws-full-20261113t214243z",
+  "plan_id": "human-pov-ws-full-20261113t214243z@1",
+  "ppo": {
+    "llm_config": "/home/darshith/ember-ws/rl-evidence/human-pov/2026-11-13/full-20261113T214243Z-32c402/config/ppo-llm.json",
+    "selection_rule": "native casualty-guarded utility selection; compare the selected LLM PPO masked utility with the SFT parent on the identical selection panel, require no casualty increase beyond 0.02, earlier parent wins ties",
+    "small_config": "/home/darshith/ember-ws/rl-evidence/human-pov/2026-11-13/full-20261113T214243Z-32c402/config/ppo-small.json"
+  },
+  "report": {
+    "candidate": "selected LLM checkpoint, retaining the SFT parent if PPO does not improve guarded masked selection utility",
+    "check_ppo_train_topologies": true,
+    "count": 32,
+    "include_all_dagger_train_data": true,
+    "namespace": "human-pov-ws-full-20261113t214243z",
+    "once": true,
+    "split": "report"
+  },
+  "seed": 0,
+  "selection": {
+    "count": 32,
+    "namespace": "human-pov-ws-full-20261113t214243z",
+    "ppo_gate": {
+      "max_raw_utility_gap_to_belief_teacher": 0.05,
+      "max_wall_boundary_blocks": 0
+    },
+    "sft_rule": "highest raw utility, casualty rate at most round-0 rate+0.02; earlier checkpoint wins ties",
+    "split": "select"
+  },
+  "status": "frozen",
+  "view": {
+    "exit_knowledge": "seen",
+    "fire_detour": 6,
+    "hints": true,
+    "line_of_sight": true,
+    "memory": true,
+    "radius": 4
+  }
+}

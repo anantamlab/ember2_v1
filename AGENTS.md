@@ -8,7 +8,12 @@ Permanent rule: **Implement → full local test → verify PASS → push. Never 
 
 ## Canonical repository and current state
 
-`anantamlab/ember_v1` is the only development repository. Do not push to `anantamlab/ember-v1-research-handoff`
+`anantamlab/ember_v1` is the human-view (partial-view) project. The separate full-view project is
+`anantamlab/ember2_v1`, with its own checkout, evidence root and private HF repository.
+Human-view evidence stays under `/home/darshith/ember-ws/rl-evidence/human-pov/` and its HF location stays
+`sankalphs/ember-v1-models` (private). Full-view evidence belongs under
+`/home/darshith/ember-ws/ember2-evidence/`; full-view models belong in the HF_TOKEN account
+repository `ember2-v1-models` (private). Never mix these evidence roots or upload destinations. Do not push to `anantamlab/ember-v1-research-handoff`
 (read-only backup). Read [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md) first; `PHASE_CHECKPOINT.json` is a
 historical P0A record. Scripts under `handoff/` are archived evidence: never run them unchanged, and never edit
 files listed in `handoff/FILES.sha256`.
@@ -124,5 +129,8 @@ is refused until it contains this policy. **This file and the hook do not enforc
 - **Never bypass an attempt guard with a fresh clone.** Collection markers live in an evidence root outside every
   checkout, bound by the plan (P1-17 onward).
 - No EMBERBench evaluation, no hidden benchmark access; the final evaluation set stays sealed.
-- Large evidence stays out of Git: store it under `D:/Coding/ember-evidence/` with SHA256 manifests and commit
-  only compact summaries.
+- Large human-view evidence stays out of Git under `/home/darshith/ember-ws/rl-evidence/human-pov/`,
+  with SHA256 manifests. Commit only compact summaries; historical Windows paths are archives.
+- Owner prompt authorization for `ember-v1-closeout@1` permits documentation, required CPU tests and a
+  merge commit after all stated gates pass. It authorizes no new human-view experiment.
+  Deferred phases in `docs/NEXT_STEPS.md` need a new frozen plan and owner authorization.

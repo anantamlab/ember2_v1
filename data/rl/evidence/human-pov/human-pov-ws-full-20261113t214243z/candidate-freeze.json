@@ -1,0 +1,39 @@
+{
+  "all_ppo_train_topologies_checked": true,
+  "candidate": "/home/darshith/ember-ws/rl-evidence/human-pov/2026-11-13/full-20261113T214243Z-32c402/ppo-llm-repair-01/update-0020",
+  "candidate_kind": "llm_ppo",
+  "candidate_sha256": {
+    "README.md": "4839c3850d0e52cafa33d37fa7a11983f5bbf5a4a689df90a3aa57a39f6cffe1",
+    "adapter_config.json": "0db1fd12dcab6a7ac615622dca7c20a2bfab2a71315a6c58945f448d112e88a0",
+    "adapter_model.safetensors": "12bdcf5af9161169b180f2cf2dc82015481ad4680553f3c38825e4ce17a2e0ba",
+    "chat_template.jinja": "ea210e5b4997b7b1d3af5ee3ad34e7677ffe38df7469e8d88089789b5a27fae5",
+    "joint_head.safetensors": "29c6c48b3912997a389e8d46cab87da6596b7f55d1435a30cc103b0fcab410c5",
+    "joint_head_config.json": "9ec32207deca79a5ec809cb8306c8222d435163da3800e6fdb42e8789a69b8f8",
+    "processor_config.json": "14932921ca485d458a04dafd8069fbb0a4505622a48208d19ed247115801385b",
+    "tokenizer.json": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+    "tokenizer_config.json": "1a71fa1e006db5fddc1903926f8d645a608a598504e630c1d82fb7057ee30978",
+    "unsloth_decision_config.json": "38a82e265362e2e863d5108e78cfc9927f744b4befd3ceffab5be35c738fd31f"
+  },
+  "casualty_rate_delta": -0.008498583569405097,
+  "comparison_evidence_sha256": "35e32ae90505f8eaff9460f3891ba187afc3d65489ee7d3207d2825978adbc00",
+  "frozen_utc": "2026-11-14T09:30:55.397453+00:00",
+  "head": "df4b431892a7b1190b44df0353651daeeffbb001",
+  "masked_utility_gain": 0.015580736543909346,
+  "no_reporting_reselection": true,
+  "parent": "/home/darshith/ember-ws/rl-evidence/human-pov/2026-11-13/full-20261113T214243Z-32c402/s0",
+  "parent_utility": 0.6961756373937678,
+  "plan_sha256": "0b6d50e075069cf9db512ff143d46b6a4ee2962b5e00193a20f49721e10b9d11",
+  "report_count": 32,
+  "report_namespace": "human-pov-ws-full-20261113t214243z",
+  "report_outcomes_read": false,
+  "report_split": "report",
+  "report_topology_overlap": 0,
+  "selected_update": 20,
+  "selected_utility": 0.7117563739376771,
+  "selection_rule": "native casualty-guarded utility selection; compare the selected LLM PPO masked utility with the SFT parent on the identical selection panel, require no casualty increase beyond 0.02, earlier parent wins ties",
+  "status": "FROZEN_BEFORE_REPORT",
+  "train_data": [
+    "/home/darshith/ember-ws/rl-evidence/human-pov/2026-11-13/full-20261113T214243Z-32c402/d0",
+    "/home/darshith/ember-ws/rl-evidence/human-pov/2026-11-13/full-20261113T214243Z-32c402/d1"
+  ]
+}

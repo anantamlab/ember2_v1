@@ -1,0 +1,241 @@
+{
+  "budget": {
+    "accounted_utc": "2026-11-14T11:28:21.684997+00:00",
+    "cloud_spend_usd": 0,
+    "cpu_conservative_total_with_publication_reservation": 9870.328123651001,
+    "cpu_current_continuation_seconds_charged": 501.684997,
+    "cpu_current_continuation_start_utc": "2026-11-14T11:20:00+00:00",
+    "cpu_limit_seconds": 43200,
+    "cpu_publication_reservation_seconds": 600,
+    "cpu_seconds_before_upload": 4979.012126651001,
+    "cpu_seconds_used_through_package": 4395.115175651002,
+    "cpu_seconds_used_through_storage_and_publication_preparation": 9270.328123651001,
+    "cpu_upload_actual_seconds": 3789.631,
+    "gpu_limit_seconds": 345600,
+    "gpu_seconds_used": 20669.581,
+    "method": "Prephase CPU ledger + immutable upload actual duration exactly once + conservative current active wall since11:20UTC. Earlier continuation intervals overlapping upload and intervening idle time excluded. Publication reserve is separate from used time; final measured reconciliation stays in external supervisor records."
+  },
+  "candidate_freeze_sha256": "561f28f47d1b79a34aac3174cf7cf25209bcd322b13444d71ce7c861d2fbe711",
+  "dagger": {
+    "d0_rows": 43019,
+    "d1_rows": 40742,
+    "observed_student_agreement": 0.9986265083881095,
+    "reason": "Stop after round1 student-state agreement exceeds frozen0.99; retain s0.",
+    "rounds_fitted": [
+      0
+    ],
+    "sft_parent": "s0",
+    "stopping_rule": 0.99
+  },
+  "limitations": [
+    "One training seed; selection gain is not a generalization claim.",
+    "The partial-view task differs from R19-R22; their rates are not comparable.",
+    "student_masked, random_masked and belief_teacher use rules.",
+    "PPO actor checkpoints omit critic/optimizer state; resumable PPO trainer state was not produced."
+  ],
+  "plan_sha256": "0b6d50e075069cf9db512ff143d46b6a4ee2962b5e00193a20f49721e10b9d11",
+  "ppo": {
+    "casualty_rate_delta": -0.008498583569405097,
+    "episodes": 512,
+    "masked_utility_gain": 0.015580736543909346,
+    "max_replay_error": 0.0,
+    "optimizer_steps": 750,
+    "parent_counts": {
+      "casualties": 27,
+      "evacuated": 311,
+      "people": 353,
+      "unresolved": 15
+    },
+    "parent_utility": 0.6961756373937678,
+    "selected_counts": {
+      "casualties": 24,
+      "evacuated": 312,
+      "people": 353,
+      "unresolved": 17
+    },
+    "selected_update": 20,
+    "selected_utility": 0.7117563739376771,
+    "updates": 64
+  },
+  "report": {
+    "arms": {
+      "belief_teacher": {
+        "attempted": 3839,
+        "blocked": 798,
+        "blocked_per_attempt": 0.20786663193539984,
+        "casualties": 28,
+        "casualty_rate": 0.07954545454545454,
+        "episodes": 32,
+        "evacuated": 303,
+        "evacuated_rate": 0.8607954545454546,
+        "movements": {
+          "blocked_boundary": 0,
+          "blocked_conflict": 284,
+          "blocked_cycle": 144,
+          "blocked_fire": 0,
+          "blocked_occupied": 370,
+          "blocked_wall": 0,
+          "moved": 3041,
+          "stayed": 214
+        },
+        "people": 352,
+        "repeated_ineffective": 486,
+        "stay_rate": 0.05280039476930669,
+        "stayed": 214,
+        "unresolved": 21,
+        "unresolved_rate": 0.05965909090909091,
+        "utility": 0.6569602272727273
+      },
+      "random_masked": {
+        "attempted": 7921,
+        "blocked": 811,
+        "blocked_per_attempt": 0.1023860623658629,
+        "casualties": 132,
+        "casualty_rate": 0.375,
+        "episodes": 32,
+        "evacuated": 99,
+        "evacuated_rate": 0.28125,
+        "movements": {
+          "blocked_boundary": 0,
+          "blocked_conflict": 207,
+          "blocked_cycle": 288,
+          "blocked_fire": 0,
+          "blocked_occupied": 316,
+          "blocked_wall": 0,
+          "moved": 7110,
+          "stayed": 2721
+        },
+        "people": 352,
+        "repeated_ineffective": 47,
+        "stay_rate": 0.25568502161247886,
+        "stayed": 2721,
+        "unresolved": 121,
+        "unresolved_rate": 0.34375,
+        "utility": -0.7265625
+      },
+      "student_masked": {
+        "attempted": 3872,
+        "blocked": 821,
+        "blocked_per_attempt": 0.21203512396694216,
+        "casualties": 27,
+        "casualty_rate": 0.07670454545454546,
+        "episodes": 32,
+        "evacuated": 303,
+        "evacuated_rate": 0.8607954545454546,
+        "movements": {
+          "blocked_boundary": 0,
+          "blocked_conflict": 285,
+          "blocked_cycle": 150,
+          "blocked_fire": 0,
+          "blocked_occupied": 386,
+          "blocked_wall": 0,
+          "moved": 3051,
+          "stayed": 208
+        },
+        "people": 352,
+        "repeated_ineffective": 501,
+        "stay_rate": 0.050980392156862744,
+        "stayed": 208,
+        "unresolved": 22,
+        "unresolved_rate": 0.0625,
+        "utility": 0.6605113636363636
+      },
+      "student_raw": {
+        "attempted": 3872,
+        "blocked": 821,
+        "blocked_per_attempt": 0.21203512396694216,
+        "casualties": 27,
+        "casualty_rate": 0.07670454545454546,
+        "episodes": 32,
+        "evacuated": 303,
+        "evacuated_rate": 0.8607954545454546,
+        "movements": {
+          "blocked_boundary": 0,
+          "blocked_conflict": 285,
+          "blocked_cycle": 150,
+          "blocked_fire": 0,
+          "blocked_occupied": 386,
+          "blocked_wall": 0,
+          "moved": 3051,
+          "stayed": 208
+        },
+        "people": 352,
+        "repeated_ineffective": 501,
+        "stay_rate": 0.050980392156862744,
+        "stayed": 208,
+        "unresolved": 22,
+        "unresolved_rate": 0.0625,
+        "utility": 0.6605113636363636
+      }
+    },
+    "count": 32,
+    "dagger_version": "1.0",
+    "max_steps": 48,
+    "namespace": "human-pov-ws-full-20261113t214243z",
+    "split": "report",
+    "student": "/home/darshith/ember-ws/rl-evidence/human-pov/2026-11-13/full-20261113T214243Z-32c402/ppo-llm-repair-01/update-0020",
+    "train_data_checked": [
+      "/home/darshith/ember-ws/rl-evidence/human-pov/2026-11-13/full-20261113T214243Z-32c402/d0",
+      "/home/darshith/ember-ws/rl-evidence/human-pov/2026-11-13/full-20261113T214243Z-32c402/d1"
+    ],
+    "view": {
+      "exit_knowledge": "seen",
+      "fire_detour": 6,
+      "hints": true,
+      "line_of_sight": true,
+      "memory": true,
+      "radius": 4
+    }
+  },
+  "report_attempts": 1,
+  "report_sha256": "b31f6e36c6fb603b3fa8798dabe583ce530546a1bdee154269553fb2b85eb0df",
+  "reserved_v1_1_used": false,
+  "run_id": "human-pov-ws-full-20261113t214243z",
+  "sealed_final_opened": false,
+  "status": "COMPLETE",
+  "storage": {
+    "elapsed_seconds": 3789.44994364999,
+    "entry": {
+      "artifact_id": "human-pov-ws-full-20261113t214243z@1",
+      "bytes": 2092776002,
+      "files": 269,
+      "files_digest": "sha256:0dfcbfd630b4446f9ae81c0a461e3213d28155314f9a60e7b8614fc48b4dfe65",
+      "kind": "human-pov-training-report-and-checkpoints",
+      "manifest_commit": "8243ec7242e2475f764cecb9debd14990afe84bb",
+      "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+      "path": "human-pov/human-pov-ws-full-20261113t214243z",
+      "repo_id": "sankalphs/ember-v1-models",
+      "repo_type": "model",
+      "source_commit": null,
+      "status": "COMPLETE",
+      "verification": "PASS",
+      "verified_commit": "310f357782359eb07e27ac8e2d3064d2669bac68"
+    },
+    "full_content_sha256_verification": true,
+    "independent_remote_check": {
+      "content_checked": {
+        "bytes": 1613194850,
+        "checked": 78,
+        "mismatch": []
+      },
+      "files": 269,
+      "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+      "metadata_checked": {
+        "git_sha1": 221,
+        "lfs_sha256": 48
+      },
+      "problems": [],
+      "result": "PASS",
+      "revision": "8243ec7242e2475f764cecb9debd14990afe84bb",
+      "verifier": "ember-hfstore@1.0.0"
+    },
+    "local_manifest_sha256": "994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+    "payload_bytes": 2092776002,
+    "payload_files": 269,
+    "repo_private": true,
+    "status": "PASS",
+    "utc": "2026-11-14T10:59:21.389420+00:00"
+  },
+  "storage_verification": "storage-verification.json",
+  "training_source": "df4b431892a7b1190b44df0353651daeeffbb001"
+}
