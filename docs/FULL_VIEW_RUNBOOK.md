@@ -82,3 +82,27 @@ to write, keep the package local and state "upload pending". Never use a pasted 
 Write report, model card, checkpoint registry, CURRENT_STATE and deferred version-2 work to match exact
 evidence identities. Merge PR #1 with a merge commit only after every owner gate passes, with clean tree
 and no running process. No direct main development push, force push, release tag or public announcement.
+
+## Pre-report runtime repair
+
+The original-V1 control bridge must use `ArmPolicy.decide(observation).actions`. A control-only repair
+before any candidate freeze or report may use a frozen, append-only runtime source supplement to this
+same owner-authorized plan. The original plan and all learning code, panels, arms, seeds, configurations
+and budgets stay unchanged. The supplement cannot authorize a report retry.
+
+An independent, CPU-tested boundary monitor may hold only the old controller while its existing child
+finishes under the original source and deadline. It checks the real Linux exit status and the original
+completion gates, records the completed phase and then retires the held controller. Never stop or resume
+that child to repeat work. A failed administrative attachment stays preserved under its own name.
+
+After normal completion, verify and push the corrected clean head. Freeze the source supplement with
+the unchanged parent-plan hash, exact owner authorization, old/new source IDs, archive hash, controlled
+stop hash, every completed result/log/output hash, extra CPU charges and a new continuation name. Post
+its hash before starting another phase. Only controller, bookkeeping, tests and the exact original-policy
+API correction may differ; actor, observer, reward, teacher, generator and simulator code cannot change.
+
+The new controller validates that supplement, confirms the old controller is terminal and reconstructs
+selection state by reading declared PASS records. It re-verifies outputs without launching their commands
+or charging their phase time again. An undeclared started attempt, changed hash, failed gate or changed
+supplement stops the continuation. Every future phase keeps its actual source ID; the final evidence
+retains both archives and the controlled stop. Final full-tier and torch merge gates still apply.

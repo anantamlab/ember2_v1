@@ -15,6 +15,7 @@ import traceback
 
 from ember_v1.full_dagger import read_dataset,topology
 from ember_v1.full_evidence import assert_disjoint,file_table,paired_intervals,sha256,verify_table,write_once
+from ember_v1.full_resume import load_amendment,process_snapshot,reuse_completed
 from ember_v1.rl_online_scenarios import build_scenarios
 
 
@@ -23,7 +24,7 @@ def utc():return dt.datetime.now(dt.timezone.utc).isoformat()
 
 
 class Supervisor:
-    def __init__(self,repo,evidence):
+    def __init__(self,repo,evidence,amendment=None):
         self.repo=Path(repo).resolve();self.ev=Path(evidence).resolve();self.py=sys.executable
         assert self.ev.is_relative_to(Path('/home/darshith/ember-ws/ember2-evidence'))
         assert not self.ev.is_relative_to(self.repo)
@@ -35,12 +36,28 @@ class Supervisor:
         assert not subprocess.check_output(['git','status','--porcelain'],cwd=self.repo,text=True)
         receipts=[read(p) for p in (self.repo/'.git/ember-local-verify/receipts').glob(self.head+'*.json')]
         assert any(r['status']=='PASS' and r['tree_clean'] and sha256(r['log'])==r['log_sha256'].removeprefix('sha256:') for r in receipts)
+        self.amendment=None;self.amendment_sha256=None;self.amendment_path=None
+        if amendment is not None:
+            plan=read(self.ev/'config/plan.json');old=plan['source_head']
+            changed=subprocess.check_output(['git','diff','--name-only',old,self.head],cwd=self.repo,text=True).splitlines()
+            phase_texts=None
+            if 'experiments/full_view_phase.py' in changed:
+                phase_texts=tuple(subprocess.check_output(['git','show',head+':experiments/full_view_phase.py'],
+                                  cwd=self.repo,text=True) for head in (old,self.head))
+            self.amendment=load_amendment(amendment,self.ev,self.head,changed,phase_texts=phase_texts)
+            self.amendment_sha256=sha256(amendment)
+            self.amendment_path=Path(amendment)
+            old_pid=read(self.ev/'supervisor/run.started.json')['pid']
+            if (Path('/proc')/str(old_pid)).exists() and process_snapshot(old_pid)['state']!='Z':
+                raise RuntimeError('original controller is still live; boundary handoff must finish first')
         prior=list((self.ev/'attempts').glob('*.result.json'))
         initial=read(self.ev/'config/budget-initial.json') if (self.ev/'config/budget-initial.json').exists() else {}
         overhead=initial.get('cpu_overhead_seconds',0.)
         assert overhead>=0
         self.cpu=overhead+sum(read(p)['seconds'] for p in prior if read(p)['category']=='cpu')
         self.gpu=sum(read(p)['seconds'] for p in prior if read(p)['category']=='gpu')
+        if self.amendment is not None:self.cpu+=self.amendment['additional_cpu_seconds']
+        assert self.cpu<16*3600 and self.gpu<60*3600
         self.started=time.monotonic()
 
     def phase(self,name,args,category,verify,cap=None):
@@ -49,11 +66,18 @@ class Supervisor:
         assert not subprocess.check_output(['git','status','--porcelain'],cwd=self.repo,text=True)
         if sum(p.stat().st_size for p in self.ev.rglob('*') if p.is_file())>150*1024**3:
             raise RuntimeError('evidence budget exhausted')
+        if getattr(self,'amendment_path',None) is not None and sha256(self.amendment_path)!=self.amendment_sha256:
+            raise ValueError('runtime amendment hash mismatch')
+        command=[self.py]+list(map(str,args))
+        if getattr(self,'amendment',None) is not None:
+            reused,details=reuse_completed(self.ev,name,command,category,
+                sha256(self.ev/'config/plan.json'),self.amendment,verify)
+            if reused:return details
         # Leave five minutes for termination and completion verification inside the hard limit.
         timeout=(60*3600-self.gpu-300) if category=='gpu' else (16*3600-self.cpu-300)
         if cap is not None:timeout=min(timeout,cap)
         if timeout<=0:raise RuntimeError(category+' budget exhausted')
-        command=[self.py]+list(map(str,args));env=self.base_env.copy()
+        env=self.base_env.copy()
         if category=='cpu':env['CUDA_VISIBLE_DEVICES']=''
         cache=self.ev/'cache'/name;cache.mkdir(parents=True,exist_ok=False)
         env.update(TORCHINDUCTOR_CACHE_DIR=str(cache/'inductor'),UNSLOTH_COMPILE_LOCATION=str(cache/'unsloth'))
@@ -106,7 +130,8 @@ class Supervisor:
     def run(self):
         from runpy import run_path
         plan=read(self.ev/'config/plan.json');assert sha256(self.ev/'config/plan.json')==(self.ev/'config/plan.sha256').read_text().split()[0]
-        assert plan['status']=='frozen' and plan['source_head']==self.head
+        assert plan['status']=='frozen'
+        assert plan['source_head']==self.head or (self.amendment is not None and self.amendment['new_source_head']==self.head)
         for name,digest in plan['config_hashes'].items():assert sha256(self.ev/'config'/name)==digest
         panels=read(self.ev/'config/family-panels.json');assert_disjoint(panels)
         self.op('select-reference-01','reference',self.ev/'select-reference.json')
@@ -172,7 +197,14 @@ class Supervisor:
             intervals[left+'-minus-'+right]=paired_intervals(reports[left]['episodes'],reports[right]['episodes'],resamples=5000,seed=0)
         write_once(self.ev/'paired-intervals.json',intervals)
         freeze=read(self.ev/'candidate-freeze.json');verify_table(candidate,freeze['files']);verify_table(best,freeze['dagger_files'])
-        write_once(self.ev/'supervisor/run-complete.json',{'status':'PASS','utc':utc(),'source_head':self.head,'gpu_seconds':self.gpu,
+        phase_sources={p.name.removesuffix('.result.json'):read(p)['source_head'] for p in (self.ev/'attempts').glob('*.result.json')}
+        write_once(self.ev/'supervisor/run-complete.json',{'status':'PASS','utc':utc(),'source_head':self.head,
+            'source_heads_by_phase':phase_sources,
+            'training_source_heads':sorted({head for name,head in phase_sources.items() if name.startswith(('dagger-','ppo-'))}),
+            'runtime_amendment_sha256':self.amendment_sha256,
+            'continued_from_stop_sha256':self.amendment['controller_stop']['sha256'] if self.amendment else None,
+            'additional_cpu_seconds':self.amendment['additional_cpu_seconds'] if self.amendment else 0.,
+            'gpu_seconds':self.gpu,
             'cpu_seconds':self.cpu,'cloud_spend_usd':0,'evidence_bytes':sum(p.stat().st_size for p in self.ev.rglob('*') if p.is_file()),
             'report_arms':{k:v['summary'] for k,v in reports.items()},'candidate_freeze_sha256':sha256(self.ev/'candidate-freeze.json'),
             'plan_sha256':sha256(self.ev/'config/plan.json'),'intervals_sha256':sha256(self.ev/'paired-intervals.json'),
@@ -213,13 +245,17 @@ class Supervisor:
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--repo',required=True);ap.add_argument('--evidence',required=True)
-    ap.add_argument('--mode',choices=['prepare','run'],required=True);a=ap.parse_args()
-    supervisor=Supervisor(a.repo,a.evidence)
-    write_once(supervisor.ev/'supervisor'/f'{a.mode}.started.json',{'pid':os.getpid(),'utc':utc(),'head':supervisor.head})
+    ap.add_argument('--mode',choices=['prepare','run'],required=True)
+    ap.add_argument('--amendment',type=Path);a=ap.parse_args()
+    if a.amendment and a.mode!='run':raise ValueError('source continuation cannot repeat preparation')
+    supervisor=Supervisor(a.repo,a.evidence,a.amendment)
+    name=supervisor.amendment['run_name'] if supervisor.amendment else a.mode
+    write_once(supervisor.ev/'supervisor'/f'{name}.started.json',{'pid':os.getpid(),'utc':utc(),'head':supervisor.head,
+        'runtime_amendment_sha256':supervisor.amendment_sha256})
     try:
         supervisor.prepare() if a.mode=='prepare' else supervisor.run()
     except BaseException as error:
-        write_once(supervisor.ev/'supervisor'/f'{a.mode}.stopped.json',{'status':'STOPPED','utc':utc(),'error':str(error),
+        write_once(supervisor.ev/'supervisor'/f'{name}.stopped.json',{'status':'STOPPED','utc':utc(),'error':str(error),
             'traceback':traceback.format_exc(),'cpu_seconds':supervisor.cpu,'gpu_seconds':supervisor.gpu,'no_attempt_restarted':True})
         raise
 
