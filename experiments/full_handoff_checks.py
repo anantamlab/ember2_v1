@@ -33,6 +33,10 @@ def main():
                 held.kill_parent()
             assert parent.wait(timeout=5) == -9
             assert not (root/'advanced').exists()
+            deadline = time.monotonic() + 5
+            while (Path('/proc')/str(child)).exists():
+                assert time.monotonic() < deadline, 'finished child was not reaped'
+                time.sleep(.01)
         finally:
             if parent.poll() is None:
                 parent.kill()
