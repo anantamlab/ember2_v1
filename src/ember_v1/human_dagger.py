@@ -162,7 +162,8 @@ def aggregate(datasets: Sequence[Sequence[Mapping[str, Any]]]) -> tuple[list[dic
 
 
 # ----- training and metrics --------------------------------------------------------------------------
-def fit(adapter: Any, rows: Sequence[Mapping[str, Any]], cfg: Mapping[str, Any], *, seed: int = 0) -> dict[str, Any]:
+def fit(adapter: Any, rows: Sequence[Mapping[str, Any]], cfg: Mapping[str, Any], *, seed: int = 0,
+        progress: Callable | None = None) -> dict[str, Any]:
     """Cross-entropy on teacher labels. cfg: epochs, grad_accum_draws, lr, head_lr, warmup_ratio.
     Warmup + cosine schedule (`student_train.lr_at`). Stops on a non-finite loss."""
     sched = schedule(len(rows), cfg, cfg["epochs"])
@@ -181,6 +182,8 @@ def fit(adapter: Any, rows: Sequence[Mapping[str, Any]], cfg: Mapping[str, Any],
                 adapter.optimizer_step(lr_at(step, cfg["lr"], sched), lr_at(step, cfg["head_lr"], sched))
                 losses.append(run / pending)
                 pending, run, step = 0, 0.0, step + 1
+                if progress is not None:
+                    progress({"optimizer_steps": step, "epoch": epoch, "row": n + 1, "loss": losses[-1]})
     return {"rows": len(rows), "epochs": cfg["epochs"], "optimizer_steps": step, "schedule": sched,
             "first_loss": losses[0], "last_loss": losses[-1], "losses": losses}
 
