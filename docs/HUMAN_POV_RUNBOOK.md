@@ -3,9 +3,7 @@
 Status date: 2026-11-13. Audience: the person or agent who trains on the GPU workstation.
 Read [CURRENT_STATE.md](CURRENT_STATE.md) and [RL_RESULTS_HANDOFF.md](RL_RESULTS_HANDOFF.md) first.
 
-**This branch contains code and tests only. No model was trained, no checkpoint was made, no evaluation set
-was opened.** Every step in §6 that collects data or trains needs a frozen plan and owner authorization
-(`AGENTS.md`). The tracked PPO config is a draft; the trainer refuses it.
+The authorized workstation run completed DAgger, CPU PPO, LLM PPO and the single report evaluation on 2026-11-14. See [HUMAN_POV_REPORT.md](HUMAN_POV_REPORT.md) for results and storage status. The instructions below describe how to execute a newly authorized run; do not repeat the completed report. The tracked draft PPO config remains unchanged.
 
 ## 1. What changes and why
 
@@ -79,8 +77,8 @@ The gap between 74.9% and 87.0% is the price of the human view. It is not a defe
 | `src/ember_v1/human_env.py` | Per-person environment and rewards, episode statistics | Yes |
 | `src/ember_v1/human_dagger.py` | DAgger collection, datasets, training loop, evaluation, command line | Yes, with the mock student |
 | `src/ember_v1/human_ppo.py` | Per-person PPO, small actor, training loop | Yes, small actor, torch on CPU |
-| `human_ppo.HumanLLMActor`, `human_dagger.load_adapter("clef")` | The LLM on human views | **No. GPU only.** Run §6 step 3 first. |
-| `experiments/human_gpu_checks.py` | Workstation check of the LLM path | **No. GPU only.** |
+| `human_ppo.HumanLLMActor`, `human_dagger.load_adapter("clef")` | The LLM on human views | Verified on the workstation; see the report. |
+| `experiments/human_gpu_checks.py` | Workstation check of the LLM path | Verified on the workstation; see the report. |
 | `data/rl/human-pov-ppo.draft.json` | Draft PPO settings | Loaded by the tests |
 | `src/ember_v1/student_train.py` | One added method: `MockDecisionAdapter.scores` | Yes |
 
@@ -261,7 +259,7 @@ The reward and the critic may use the full public state. They are training signa
 
 ## 8. Limits and open ideas
 
-- The LLM path is not tested on this machine. Step 3 and step 8 exist for this reason.
+- The LLM path passed workstation GPU checks; each new environment still needs steps3 and8.
 - The belief teacher is a heuristic. It loses to T1 by about 12 points because of the view, and it queues poorly
   in dense crowds (about one third of its attempted moves are blocked by other people).
 - Not modelled yet: smoke that shortens sight, sound or speech between people, panic, different walking speeds.

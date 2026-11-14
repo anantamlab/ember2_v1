@@ -1,0 +1,137 @@
+{
+  "completed_phases": [
+    {
+      "elapsed_seconds": 2544.258,
+      "gpu": true,
+      "stage": "d1-collect-01",
+      "status": "PASS"
+    },
+    {
+      "elapsed_seconds": 235.391,
+      "gpu": true,
+      "stage": "ppo-llm-01",
+      "status": "FAIL"
+    },
+    {
+      "elapsed_seconds": 114.636,
+      "gpu": true,
+      "stage": "ppo-replay-check-01",
+      "status": "PASS"
+    },
+    {
+      "elapsed_seconds": 62.835,
+      "gpu": true,
+      "stage": "ppo-replay-diagnose-01",
+      "status": "PASS"
+    },
+    {
+      "elapsed_seconds": 323.125,
+      "gpu": false,
+      "stage": "ppo-small-01",
+      "status": "PASS"
+    },
+    {
+      "elapsed_seconds": 6852.016,
+      "gpu": true,
+      "stage": "s0-fit-01",
+      "status": "PASS"
+    },
+    {
+      "elapsed_seconds": 97.703,
+      "gpu": true,
+      "stage": "s0-gpu-check-01",
+      "status": "PASS"
+    },
+    {
+      "elapsed_seconds": 501.464,
+      "gpu": true,
+      "stage": "s0-select-01",
+      "status": "PASS"
+    }
+  ],
+  "cpu_accounting": "Prior1740.271524s plus this continuation wall from06:06Z; includes81.7s verification, CPU topology preflight, orchestration and GPU wait conservatively; no extra double charge.",
+  "cpu_seconds_remaining": 40938.987514098,
+  "cpu_seconds_used": 2261.0124859020007,
+  "diagnosis": {
+    "checkpoint": "/home/darshith/ember-ws/rl-evidence/human-pov/2026-11-13/full-20261113T214243Z-32c402/s0",
+    "diagnosis": "PPO regrouping changes bf16 padded forward context",
+    "optimizer_steps": 0,
+    "regrouped_replay_error": 0.31503868103027344,
+    "rows": 256,
+    "same_batch_replay_error": 0.0,
+    "status": "PASS"
+  },
+  "frozen_configs_and_s0_hashes_verified": true,
+  "gpu_regression": {
+    "checkpoint": "/home/darshith/ember-ws/rl-evidence/human-pov/2026-11-13/full-20261113T214243Z-32c402/s0",
+    "episodes": 8,
+    "forward_groups": 198,
+    "max_forward_batch": 8,
+    "optimizer_steps": 0,
+    "replay_tolerance": 0.001,
+    "stats": {
+      "actor_loss": 0.180048617376731,
+      "clip_fraction": 0.0,
+      "critic_loss": 0.6754308734375697,
+      "decisions": 699,
+      "entropy": 0.010266648073103117,
+      "imitation": 0.00513306794653101,
+      "kl_early_stop": true,
+      "optimizer_steps": 0,
+      "replay_error": 0.0
+    },
+    "status": "PASS",
+    "train_namespace": "human-pov-ws-full-20261113t214243z/u3"
+  },
+  "gpu_seconds_remaining": 335191.697,
+  "gpu_seconds_used": 10408.303,
+  "hashes": {
+    "ppo-llm-01.result.json": "6e9844c8e2b9ff0de6e1fbf1f6e4c8799b7548d06d4cbf6f17b1b53861b194a2",
+    "ppo-replay-check-01.json": "d5d40047278d88a719718edfb076bc1a0850129638c5319165ee88d9c653b718",
+    "ppo-replay-check-01.result.json": "f4cfafb934bfffb0a14ee201f36029cd48d37505c548bfc4c5f983854f47fbe6",
+    "ppo-replay-diagnose-01.result.json": "f267601cb8b571d212e49d1c00a23a4f5b34db956daefb78ccf037ef266b9358"
+  },
+  "head": "df4b431892a7b1190b44df0353651daeeffbb001",
+  "prior_failure_preserved": true,
+  "source_clean": true,
+  "status": "PASS",
+  "utc": "2026-11-14T06:14:40.740962+00:00",
+  "verification": {
+    "branch": "feat/human-pov",
+    "command": "python -m pytest -q",
+    "counts": {
+      "deselected": 0,
+      "errors": 0,
+      "failed": 0,
+      "passed": 1467,
+      "skipped": 197,
+      "warnings": 0,
+      "xfailed": 10,
+      "xpassed": 0
+    },
+    "exit_code": 0,
+    "head": "df4b431892a7b1190b44df0353651daeeffbb001",
+    "kind": "ember-local-verify@1",
+    "log": "/home/darshith/ember-ws/checkouts/canonical-main/.local-test-logs/20261114T061113Z-df4b431892a7-py3.11.log",
+    "log_sha256": "sha256:5ecee7a53bb7f3c2a01cc592382d50444a05a6483d9ad9a4465a9cfd5eaf56ab",
+    "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "python": {
+      "ember_v1_file": "/home/darshith/ember-ws/checkouts/canonical-main/src/ember_v1/__init__.py",
+      "executable": "/home/darshith/ember-ws/venvs/9613f929b53c0fed/bin/python",
+      "implementation": "CPython",
+      "import_ok": true,
+      "pytest": "9.2.0",
+      "version": "3.11.13"
+    },
+    "python_minor": "3.11",
+    "reasons": [],
+    "seconds": 81.7,
+    "started_utc": "20261114T061113Z",
+    "status": "PASS",
+    "stripped_env": [],
+    "tier": "default",
+    "tree_clean": true,
+    "tree_digest": "sha256:66631dd5fcc6a0cc455d1f745df93a99c359873476c2ed8d35f34abc7624be82",
+    "tree_unchanged": true
+  }
+}

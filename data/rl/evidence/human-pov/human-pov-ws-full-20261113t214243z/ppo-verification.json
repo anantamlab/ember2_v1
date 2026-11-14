@@ -1,0 +1,201 @@
+{
+  "active_processes": [],
+  "all_train_topologies": 3712,
+  "casualty_rate_delta": -0.008498583569405097,
+  "checkpoint_tensor_checks": [
+    {
+      "finite": true,
+      "tensor_elements": 47291908,
+      "update": 10
+    },
+    {
+      "finite": true,
+      "tensor_elements": 47291908,
+      "update": 20
+    },
+    {
+      "finite": true,
+      "tensor_elements": 47291908,
+      "update": 30
+    },
+    {
+      "finite": true,
+      "tensor_elements": 47291908,
+      "update": 40
+    },
+    {
+      "finite": true,
+      "tensor_elements": 47291908,
+      "update": 50
+    },
+    {
+      "finite": true,
+      "tensor_elements": 47291908,
+      "update": 60
+    },
+    {
+      "finite": true,
+      "tensor_elements": 47291908,
+      "update": 64
+    }
+  ],
+  "completed_phases": [
+    {
+      "elapsed_seconds": 2544.258,
+      "gpu": true,
+      "stage": "d1-collect-01",
+      "status": "PASS"
+    },
+    {
+      "elapsed_seconds": 235.391,
+      "gpu": true,
+      "stage": "ppo-llm-01",
+      "status": "FAIL"
+    },
+    {
+      "elapsed_seconds": 9696.596,
+      "gpu": true,
+      "stage": "ppo-llm-repair-01",
+      "status": "PASS"
+    },
+    {
+      "elapsed_seconds": 114.636,
+      "gpu": true,
+      "stage": "ppo-replay-check-01",
+      "status": "PASS"
+    },
+    {
+      "elapsed_seconds": 62.835,
+      "gpu": true,
+      "stage": "ppo-replay-diagnose-01",
+      "status": "PASS"
+    },
+    {
+      "elapsed_seconds": 323.125,
+      "gpu": false,
+      "stage": "ppo-small-01",
+      "status": "PASS"
+    },
+    {
+      "elapsed_seconds": 6852.016,
+      "gpu": true,
+      "stage": "s0-fit-01",
+      "status": "PASS"
+    },
+    {
+      "elapsed_seconds": 97.703,
+      "gpu": true,
+      "stage": "s0-gpu-check-01",
+      "status": "PASS"
+    },
+    {
+      "elapsed_seconds": 501.464,
+      "gpu": true,
+      "stage": "s0-select-01",
+      "status": "PASS"
+    }
+  ],
+  "cpu_accounting": "Prior3449.808077s plus conservative current continuation wall since09:28UTC, excluding idle gap; immutable phase durations charged once.",
+  "cpu_seconds_remaining": 39574.79446996699,
+  "cpu_seconds_used": 3625.2055300330126,
+  "datasets": {
+    "d0": {
+      "families": 256,
+      "manifest_sha256": "97db197dde67c86087d6f85a865e9b29de635441b4c3284dc71d579455ac5a5e",
+      "rows": 43019,
+      "rows_sha256": "86b3568a1af7b30fe202c1f0628eb7d1cac42dd5075dd1266c8bde99a6f3905f"
+    },
+    "d1": {
+      "families": 256,
+      "manifest_sha256": "66d1a0c027d18a1e57afa8f9724f18eb0e3e1460b745b1193a1367f3c9842d1a",
+      "rows": 40742,
+      "rows_sha256": "0b511b67ebf16ee8a023cc1a2bd8475a49652b23426bd23d378c63a685c6bf21"
+    }
+  },
+  "episodes": 512,
+  "gpu_seconds_remaining": 325495.101,
+  "gpu_seconds_used": 20104.898999999998,
+  "hashes": {
+    "ppo-llm-repair-01/log.jsonl": "788ef4eeb5fbe8e8a1d4cc18e1517441db0dbf0216bce303b3ef1e33cdb8eabb",
+    "ppo-llm-repair-01/summary.json": "ac655b7a102c5b4a8278309a19cb8cf81569e00786c27a3f20e9626e792eb751",
+    "supervisor/ppo-llm-repair-01.artifacts-sha256.json": "e93f0af31251f6091430b4ece7c08c90588d382228b070cd1131da533b2eaf41",
+    "supervisor/ppo-llm-repair-01.result.json": "bc06a7ca0172d6d3a5869e2608f9be96565c9f92d02f2abd667fe62f091c95ec"
+  },
+  "head": "df4b431892a7b1190b44df0353651daeeffbb001",
+  "masked_utility_gain": 0.015580736543909346,
+  "max_replay_error": 0.0,
+  "optimizer_steps": 750,
+  "parent_counts": {
+    "casualties": 27,
+    "evacuated": 311,
+    "people": 353,
+    "unresolved": 15
+  },
+  "parent_utility": 0.6961756373937678,
+  "ppo_train_schedules": [
+    {
+      "config": "ppo-small",
+      "episodes_per_update": 16,
+      "sha256": "9cc50b8e4dca24f55ebf938f8c558fa1742ff5183189ba43256cb64571614009",
+      "topologies": 3200,
+      "updates": 200
+    },
+    {
+      "config": "ppo-llm",
+      "episodes_per_update": 8,
+      "sha256": "1f2d42b03d1f43cdcc9b2fd287c9b3142bdd6cd5aeb53e9d0486f4e5e192b7d8",
+      "topologies": 512,
+      "updates": 64
+    }
+  ],
+  "report_topologies": [
+    "sha256:0d58dd4cfb6203ae4c6acfb134e4a8bbcc85220c44fff3b6d1ca6daeb406ec86",
+    "sha256:131df51b7417eef78eeec780b4a70915236f33ba0aa7ad079e97315d0897c222",
+    "sha256:16f766accfd7c3c953fb43f0be9a53882e8a537f173334da5a9003cc947926ed",
+    "sha256:1bb218ff23d52deea6fbfe3ffa5e8c228ee9e2446a4c37f918a0bf4bb57aed87",
+    "sha256:2abbc3f8e2e05aca868820279e4a5b9cd7af03a6e71763cbe49768883a0aa032",
+    "sha256:2bdbddddcc47b6949babd361e19d9635de11b8d6f191e85e916046b392707d01",
+    "sha256:2c47732a74fb5990e0913d51a21b7faf4492afa5ff7fbf4658ab15d3b3393cba",
+    "sha256:2d3049454f15fb880fcc12c59e80e46149615a240ba671e45f47bed73678ff8d",
+    "sha256:3db4dd4cd5ec654f9a24093c4f12ddaa82bb49d75b7cb455354d80f6e56c4bd7",
+    "sha256:3f25b4d38fe45225b81ad6796274af385c50987bec2107b13b088b7b45ce01d3",
+    "sha256:45427c80c37cc47d0ce2ff218b7498b7b45c4e58749233e53e11318125947f1b",
+    "sha256:46f5a63bd6be2f459cc8e6b2c2139df7415227700c590c601074ef8f8b674e3f",
+    "sha256:5f354d1b7d43307045609ae9780153576719e320a3958635cf4406c4d260a5d4",
+    "sha256:600fb26ac1a3116e0a8201d89d0ec0fd3d98344735f222c50d46f8d69bd222d7",
+    "sha256:622aff4304ad69829964d14741ec7066fea5952acd4467133c33e536d7db8491",
+    "sha256:66f1e6fa840894fde5111b8742bbce5ef4e4245347207931b1d39579bb638f5d",
+    "sha256:6aaac34842f9401a26b890a0232d56d02d31a73c0db4c4be3a59b5f2c6425693",
+    "sha256:7dad8f8815b63bd25535858c54877a132e417693267a3f96534f0958c30d531c",
+    "sha256:83a5714bb7bf2f103d855c99862579509752b5ad991735ca8d2b59df56c03c19",
+    "sha256:9256e86a57e276ce0f3775c77b0e70eee3fb0f7e2a168889704bcba452ac55b2",
+    "sha256:94843c7ea7105743199748b91926b1d8aef621c0844aa5b433438060c82cf2dd",
+    "sha256:a45371d7a74c733f2a5ca39d19c4169339a00593c81e5032f4d6318eee0b6e33",
+    "sha256:a52cf7e607a3932a0155c70e0b9008173addfd1c47fac918cf9fcf7e471c2b3c",
+    "sha256:b003c788efd2ae2dea877cdc0feb408e7f34074a98e3909d3a36198bee4661d5",
+    "sha256:b973932630e66c7be526d06dd57a7ecaa612e195499232d02c73a947f0e626e0",
+    "sha256:c12ea2f3baeb6c445df99abf28f0ed65ac44741360292e2d233c0731fe9f2e04",
+    "sha256:ce4bad6b2b817d3512950c27fc733d561b7fd1c3fa98ac21fcf3d868f6ced33c",
+    "sha256:d0510e48e3c5bbeede0acc3765be39e1f9f6898ff5ab39e092cd0cb778318622",
+    "sha256:d2b9137d15597436b701b65f910f98750311b729361ea8f0cd65a3eaa696db27",
+    "sha256:d859e9a89e67a773c75397094e26c3d319a7ca26b8e1b2d3a6c017180c5a39b6",
+    "sha256:e24a3c59d9b4df251e211313bdc276b2818ac65154b85c3c8f795656006bc0b3",
+    "sha256:f6268a0630c468e9277024f50f3b2b55ce2373952041ddacb3deceadb4ede2c1"
+  ],
+  "report_topology_overlap": 0,
+  "safety_eligible": true,
+  "selected_counts": {
+    "casualties": 24,
+    "evacuated": 312,
+    "people": 353,
+    "unresolved": 17
+  },
+  "selected_update": 20,
+  "selected_utility": 0.7117563739376771,
+  "selection_topology_overlap": 0,
+  "source_clean": true,
+  "status": "PASS",
+  "updates": 64,
+  "utc": "2026-11-14T09:30:55.397453+00:00",
+  "verification_seconds": 5.293335931986803
+}

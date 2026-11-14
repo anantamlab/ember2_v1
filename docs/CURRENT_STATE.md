@@ -1,6 +1,6 @@
 # EMBER V1 — current state (authoritative)
 
-Status date: 2026-11-13. This file is the single entry point for new developers and coding agents.
+Status date: 2026-11-14. This file is the single entry point for new developers and coding agents.
 If another file disagrees with this one about the current state, this file wins. Other files keep their historical value.
 
 ## 1. Canonical repository
@@ -107,7 +107,7 @@ python scripts/verify_local.py status
 
 - **Final held-out evaluation is sealed.** No run has opened it. Opening it needs a separate owner-authorized plan.
 - **V1.1 data is reserved.** The 1,200-scenario expansion (`p1-18-expand@1`) and `p1-18-dataset-v2` (with `p1-18-sft-v2*` and `p1-18-tokens-v2f@2`) are for V1.1 only. No RL phase used them. Do not use them for more V1 training.
-- No PPO, SFT, counterfactual run or final evaluation is authorized now. Each new run needs a frozen plan and owner authorization (see `AGENTS.md`).
+- The human-view run had its own frozen plan and explicit owner authorization. Every new run still needs a frozen plan and owner authorization (see `AGENTS.md`); sealed final evaluation remains prohibited.
 - EMBERBench private scenarios and its hidden simulator stay out of this repository.
 
 ## 8. Historical records
@@ -123,8 +123,6 @@ These files describe earlier phases. Do not read them as the current state.
 
 For RL work, read **[RL_RESULTS_HANDOFF.md](RL_RESULTS_HANDOFF.md)**: the RL system as built and every R19–R22 metric.
 
-A human point-of-view track (per-person partial views, an automatic belief teacher, DAgger and per-person PPO)
-is implemented and CPU-tested but **not trained**: see **[HUMAN_POV_RUNBOOK.md](HUMAN_POV_RUNBOOK.md)**.
-Its GPU path is unverified until `experiments/human_gpu_checks.py` passes on the workstation.
+The human point-of-view track completed authorized DAgger, CPU PPO, GPU checks and 64 LLM PPO updates. Update 20 was frozen before the single 32-family reporting evaluation. See [HUMAN_POV_REPORT.md](HUMAN_POV_REPORT.md) for the four-arm results, gates and current private-storage status; checkpoint hashes are in [the human-view registry](../data/rl/human-pov-checkpoint-registry.json).
 
 Diagnose the raw policy's movement failures before more PPO of the same kind. Target the wall/boundary blocks and repeated ineffective moves (R21/R22 diagnostics). Test whether a representation or objective change fixes them on selection DEV, under a new frozen plan. Before that, upload the R20–R22 selected checkpoints to private HF so they no longer depend on one workstation.
