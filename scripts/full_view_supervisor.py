@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
-import fcntl
 import hashlib
 import json
 import os
@@ -64,6 +63,7 @@ class Supervisor:
         lock=None;start=time.monotonic();code=None;status='FAIL'
         try:
             if category=='gpu':
+                import fcntl
                 lock=open(self.ev.parent.parent/'.gpu.lock','a');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
                 active=subprocess.check_output(['nvidia-smi','--query-compute-apps=pid','--format=csv,noheader'],text=True).strip()
                 if active:raise RuntimeError('another GPU compute process is active')
@@ -83,7 +83,9 @@ class Supervisor:
             duration=time.monotonic()-start
             if category=='gpu':self.gpu+=duration
             else:self.cpu+=duration
-            if lock:fcntl.flock(lock,fcntl.LOCK_UN);lock.close()
+            if lock:
+                import fcntl
+                fcntl.flock(lock,fcntl.LOCK_UN);lock.close()
             write_once(self.ev/'attempts'/f'{name}.result.json',{**record,'completed_utc':utc(),'status':status,
                 'exit_code':code,'seconds':duration,'log_sha256':sha256(self.ev/'logs'/f'{name}.log') if (self.ev/'logs'/f'{name}.log').exists() else None,
                 'gpu_seconds_total':self.gpu,'cpu_seconds_total':self.cpu})
