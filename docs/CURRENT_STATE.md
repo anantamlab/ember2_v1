@@ -5,13 +5,13 @@ If another file disagrees with this one about the current state, this file wins.
 
 ## 1. Canonical repository
 
-- **`https://github.com/anantamlab/ember_v1` is the only development repository.** All code, experiments, research PRs, documentation and registry updates start here.
+- **`https://github.com/anantamlab/ember_v1` is the human-view (partial-view) project.** The full-view project lives in `anantamlab/ember2_v1`, with its own checkout. Human-view evidence remains at `/home/darshith/ember-ws/rl-evidence/human-pov/` and private HF `sankalphs/ember-v1-models`. Full-view evidence uses `/home/darshith/ember-ws/ember2-evidence/` and its own private HF `ember2-v1-models` under the HF_TOKEN account.
 - `anantamlab/ember-v1-research-handoff` is a read-only historical backup. Its only commit, `41821c917b63956a4760a6842dcd35bbc604500f`, is part of this repository's history. It was a fast-forward from PR #53 head `1bccff43aa25569d32d319fab3a12517fd4bb5d4`. Do not push to it.
 - Do not use old workstation scratch directories as a source of code. Large weights and raw evidence stay in external storage (§5).
 
 ## 2. What EMBER V1 is
 
-EMBER V1 is a standalone fire-evacuation decision policy. One model decides a move for every active person at each simulator step.
+EMBER V1 now means the human-view fire-evacuation decision policy: one row per person, partial sight and memory, last action/outcome, neighbour status and a route hint. The frozen candidate is LLM PPO update 20 of `human-pov-ws-full-20261113t214243z`; its 32-family report panel is spent. The [model card](HUMAN_POV_MODEL_CARD.md) records identities and limits. The full-map SFT/R19–R22 sections below are historical context.
 
 - **Student model:** frozen `unsloth/Qwen3.5-2B` backbone with a LoRA adapter and a float32 Clef joint decision head (five actions per person).
 - **Supervised V1:** trained by SFT on traces from five rule-based teachers (T0–T4), collected in an independent CPU simulator. Artifact `p1-18-v1-train@1`.
