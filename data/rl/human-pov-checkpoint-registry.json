@@ -13,7 +13,7 @@
   },
   "checkpoints": [
     {
-      "availability": "LOCAL_VERIFIED_UPLOAD_PENDING",
+      "availability": "AVAILABLE_PRIVATE_HF",
       "files": [
         {
           "git_sha1": "a2ce2ff46fbfd6d5642f2ef097af70f35ed1ff79",
@@ -97,22 +97,51 @@
       "role": "DAgger round0 SFT parent",
       "run_id": "human-pov-ws-full-20261113t214243z",
       "storage": {
-        "bytes": 2092776002,
-        "files": 269,
-        "files_digest": "sha256:0dfcbfd630b4446f9ae81c0a461e3213d28155314f9a60e7b8614fc48b4dfe65",
-        "local_verification": "PASS",
-        "manifest_sha256": "994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
-        "remote_verification": "PENDING_CREDENTIAL",
-        "repo": {
-          "id": "sankalphs/ember-v1-models",
+        "elapsed_seconds": 3789.44994364999,
+        "entry": {
+          "artifact_id": "human-pov-ws-full-20261113t214243z@1",
+          "bytes": 2092776002,
+          "files": 269,
+          "files_digest": "sha256:0dfcbfd630b4446f9ae81c0a461e3213d28155314f9a60e7b8614fc48b4dfe65",
+          "kind": "human-pov-training-report-and-checkpoints",
+          "manifest_commit": "8243ec7242e2475f764cecb9debd14990afe84bb",
+          "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
           "path": "human-pov/human-pov-ws-full-20261113t214243z",
-          "type": "model"
+          "repo_id": "sankalphs/ember-v1-models",
+          "repo_type": "model",
+          "source_commit": null,
+          "status": "COMPLETE",
+          "verification": "PASS",
+          "verified_commit": "310f357782359eb07e27ac8e2d3064d2669bac68"
         },
-        "status": "PREPARED_NOT_UPLOADED"
+        "full_content_sha256_verification": true,
+        "independent_remote_check": {
+          "content_checked": {
+            "bytes": 1613194850,
+            "checked": 78,
+            "mismatch": []
+          },
+          "files": 269,
+          "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+          "metadata_checked": {
+            "git_sha1": 221,
+            "lfs_sha256": 48
+          },
+          "problems": [],
+          "result": "PASS",
+          "revision": "8243ec7242e2475f764cecb9debd14990afe84bb",
+          "verifier": "ember-hfstore@1.0.0"
+        },
+        "local_manifest_sha256": "994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+        "payload_bytes": 2092776002,
+        "payload_files": 269,
+        "repo_private": true,
+        "status": "PASS",
+        "utc": "2026-11-14T10:59:21.389420+00:00"
       }
     },
     {
-      "availability": "LOCAL_VERIFIED_UPLOAD_PENDING",
+      "availability": "AVAILABLE_PRIVATE_HF",
       "files": [
         {
           "git_sha1": "8dbf867d7b36b7022af9cc8582fa524af9af54fd",
@@ -136,22 +165,51 @@
       "role": "Small CPU PPO selection",
       "run_id": "human-pov-ws-full-20261113t214243z",
       "storage": {
-        "bytes": 2092776002,
-        "files": 269,
-        "files_digest": "sha256:0dfcbfd630b4446f9ae81c0a461e3213d28155314f9a60e7b8614fc48b4dfe65",
-        "local_verification": "PASS",
-        "manifest_sha256": "994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
-        "remote_verification": "PENDING_CREDENTIAL",
-        "repo": {
-          "id": "sankalphs/ember-v1-models",
+        "elapsed_seconds": 3789.44994364999,
+        "entry": {
+          "artifact_id": "human-pov-ws-full-20261113t214243z@1",
+          "bytes": 2092776002,
+          "files": 269,
+          "files_digest": "sha256:0dfcbfd630b4446f9ae81c0a461e3213d28155314f9a60e7b8614fc48b4dfe65",
+          "kind": "human-pov-training-report-and-checkpoints",
+          "manifest_commit": "8243ec7242e2475f764cecb9debd14990afe84bb",
+          "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
           "path": "human-pov/human-pov-ws-full-20261113t214243z",
-          "type": "model"
+          "repo_id": "sankalphs/ember-v1-models",
+          "repo_type": "model",
+          "source_commit": null,
+          "status": "COMPLETE",
+          "verification": "PASS",
+          "verified_commit": "310f357782359eb07e27ac8e2d3064d2669bac68"
         },
-        "status": "PREPARED_NOT_UPLOADED"
+        "full_content_sha256_verification": true,
+        "independent_remote_check": {
+          "content_checked": {
+            "bytes": 1613194850,
+            "checked": 78,
+            "mismatch": []
+          },
+          "files": 269,
+          "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+          "metadata_checked": {
+            "git_sha1": 221,
+            "lfs_sha256": 48
+          },
+          "problems": [],
+          "result": "PASS",
+          "revision": "8243ec7242e2475f764cecb9debd14990afe84bb",
+          "verifier": "ember-hfstore@1.0.0"
+        },
+        "local_manifest_sha256": "994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+        "payload_bytes": 2092776002,
+        "payload_files": 269,
+        "repo_private": true,
+        "status": "PASS",
+        "utc": "2026-11-14T10:59:21.389420+00:00"
       }
     },
     {
-      "availability": "LOCAL_VERIFIED_UPLOAD_PENDING",
+      "availability": "AVAILABLE_PRIVATE_HF",
       "files": [
         {
           "git_sha1": "a2ce2ff46fbfd6d5642f2ef097af70f35ed1ff79",
@@ -223,22 +281,51 @@
       "role": "Frozen final candidate, selected before report",
       "run_id": "human-pov-ws-full-20261113t214243z",
       "storage": {
-        "bytes": 2092776002,
-        "files": 269,
-        "files_digest": "sha256:0dfcbfd630b4446f9ae81c0a461e3213d28155314f9a60e7b8614fc48b4dfe65",
-        "local_verification": "PASS",
-        "manifest_sha256": "994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
-        "remote_verification": "PENDING_CREDENTIAL",
-        "repo": {
-          "id": "sankalphs/ember-v1-models",
+        "elapsed_seconds": 3789.44994364999,
+        "entry": {
+          "artifact_id": "human-pov-ws-full-20261113t214243z@1",
+          "bytes": 2092776002,
+          "files": 269,
+          "files_digest": "sha256:0dfcbfd630b4446f9ae81c0a461e3213d28155314f9a60e7b8614fc48b4dfe65",
+          "kind": "human-pov-training-report-and-checkpoints",
+          "manifest_commit": "8243ec7242e2475f764cecb9debd14990afe84bb",
+          "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
           "path": "human-pov/human-pov-ws-full-20261113t214243z",
-          "type": "model"
+          "repo_id": "sankalphs/ember-v1-models",
+          "repo_type": "model",
+          "source_commit": null,
+          "status": "COMPLETE",
+          "verification": "PASS",
+          "verified_commit": "310f357782359eb07e27ac8e2d3064d2669bac68"
         },
-        "status": "PREPARED_NOT_UPLOADED"
+        "full_content_sha256_verification": true,
+        "independent_remote_check": {
+          "content_checked": {
+            "bytes": 1613194850,
+            "checked": 78,
+            "mismatch": []
+          },
+          "files": 269,
+          "manifest_sha256": "sha256:994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+          "metadata_checked": {
+            "git_sha1": 221,
+            "lfs_sha256": 48
+          },
+          "problems": [],
+          "result": "PASS",
+          "revision": "8243ec7242e2475f764cecb9debd14990afe84bb",
+          "verifier": "ember-hfstore@1.0.0"
+        },
+        "local_manifest_sha256": "994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98",
+        "payload_bytes": 2092776002,
+        "payload_files": 269,
+        "repo_private": true,
+        "status": "PASS",
+        "utc": "2026-11-14T10:59:21.389420+00:00"
       }
     }
   ],
   "registry_version": 1,
   "run_id": "human-pov-ws-full-20261113t214243z",
-  "updated_utc": "2026-11-14T09:44:31.791833+00:00"
+  "updated_utc": "2026-11-14T11:28:21.684997+00:00"
 }

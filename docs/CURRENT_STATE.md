@@ -74,6 +74,7 @@ Git holds code and compact evidence only. Weights, trainer states, raw trajector
 
 - Workstation paths are relative to `/home/darshith/ember-ws/rl-evidence` (WSL). The verified Windows mirror is `C:/Users/Admin/Documents/ember-evidence`, with each R21/R22 selection under `selected_checkpoint/`.
 - **The R20–R22 checkpoints are not on Hugging Face.** They are reachable only through the RTX 5090 workstation or its Windows mirror. A fresh clone cannot replay them on GPU without that access. Uploading them to `sankalphs/ember-v1-models` (with `hfstore publish`) is an open task that needs workstation access.
+- **Human-view checkpoints are available on private HF.** The [human-view registry](../data/rl/human-pov-checkpoint-registry.json) records s0, CPU PPO update 160 and frozen LLM PPO update 20 inside `human-pov/human-pov-ws-full-20261113t214243z` in `sankalphs/ember-v1-models`. All 269 package files passed full remote content verification and an independent repeat at manifest revision `8243ec7242e2475f764cecb9debd14990afe84bb`. [Storage evidence](../data/rl/evidence/human-pov/human-pov-ws-full-20261113t214243z/storage-verification.json) records both revisions and the unchanged manifest.
 - Base model: `unsloth/Qwen3.5-2B@fffbc0d8711cf87df6d1f97938c5e50ef94aadc7` (public). Tokenizer files ship in each actor directory.
 - Access: V1 needs read access to the private `sankalphs` HF repos (`hf auth login`). Run HF commands with `env -u HF_TOKEN` when a stale `HF_TOKEN` is set.
 
@@ -123,6 +124,6 @@ These files describe earlier phases. Do not read them as the current state.
 
 For RL work, read **[RL_RESULTS_HANDOFF.md](RL_RESULTS_HANDOFF.md)**: the RL system as built and every R19–R22 metric.
 
-The human point-of-view track completed authorized DAgger, CPU PPO, GPU checks and 64 LLM PPO updates. Update 20 was frozen before the single 32-family reporting evaluation. See [HUMAN_POV_REPORT.md](HUMAN_POV_REPORT.md) for the four-arm results, gates and current private-storage status; checkpoint hashes are in [the human-view registry](../data/rl/human-pov-checkpoint-registry.json).
+The human point-of-view track completed authorized DAgger, CPU PPO, GPU checks and 64 LLM PPO updates. Update 20 was frozen before the single 32-family reporting evaluation. See [HUMAN_POV_REPORT.md](HUMAN_POV_REPORT.md) for the four-arm results, gates and verified private storage; checkpoint hashes are in [the human-view registry](../data/rl/human-pov-checkpoint-registry.json).
 
 Diagnose the raw policy's movement failures before more PPO of the same kind. Target the wall/boundary blocks and repeated ineffective moves (R21/R22 diagnostics). Test whether a representation or objective change fixes them on selection DEV, under a new frozen plan. Before that, upload the R20–R22 selected checkpoints to private HF so they no longer depend on one workstation.

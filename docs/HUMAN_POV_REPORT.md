@@ -1,6 +1,6 @@
 # Human point-of-view training and report
 
-The human-view LLM completed supervised training and 64 PPO updates. The frozen selection rule chose PPO update 20 before the single 32-family report evaluation. Reporting results below describe that checkpoint; they did not change the choice. Private storage is pending upload.
+The human-view LLM completed supervised training and 64 PPO updates. The frozen selection rule chose PPO update 20 before the single 32-family report evaluation. Reporting results below describe that checkpoint; they did not change the choice. Private storage is verified.
 
 ## Reporting panel
 
@@ -40,10 +40,12 @@ python -m ember_v1.human_dagger eval --namespace human-pov-ws-full-20261113t2142
 
 ## Storage and budgets
 
-The local package is hash-verified: 269 files, 2,092,776,002 bytes. Private upload and remote hash verification remain pending because no HF write credential is available. The intended private target is `sankalphs/ember-v1-models/human-pov/human-pov-ws-full-20261113t214243z`. Completion is not claimed.
+The private package is available at [`sankalphs/ember-v1-models/human-pov/human-pov-ws-full-20261113t214243z`](https://huggingface.co/sankalphs/ember-v1-models/tree/310f357782359eb07e27ac8e2d3064d2669bac68/human-pov/human-pov-ws-full-20261113t214243z): 269 payload files, 2,092,776,002 bytes. Manifest commit: `8243ec7242e2475f764cecb9debd14990afe84bb`. Verification commit: `310f357782359eb07e27ac8e2d3064d2669bac68`. Manifest SHA256: `994e02f3bc68457bfc3aedabdf091ac6f7bd728d12d3a44cc869e86a0a55dd98`.
+
+The upload verified every payload content hash before publishing `VERIFIED.json`, then repeated metadata and critical-file checks (78 files / 1,613,194,850 bytes). A separate completion audit downloaded and hashed all 269 payload files again at the exact manifest revision, checked both revisions and the remote verification record, and found zero mismatches. The local package is unchanged. Compact results are in [`storage-verification.json`](../data/rl/evidence/human-pov/human-pov-ws-full-20261113t214243z/storage-verification.json).
 
 Weights, tokenizer files, s0 optimizer state, all produced PPO actor checkpoints, dataset rows and raw logs remain outside Git. The package also retains the failed attempt, diagnostics, immutable phase records, source archive and test receipt. PPO critic/optimizer state was not saved by this runner, so its actor checkpoints support inference rather than exact training continuation.
 
-Completed GPU phase durations total20669.581seconds (5.742hours) of 96 hours, including the failed attempt and diagnostics. CPU used through packaging was4395.115seconds of 43,200; further publication checks are charged separately. Accounting sums each immutable phase once and excludes idle gaps. Cloud spend was $0; the package is below 100 GiB.
+Completed GPU phase durations total 20,669.581 seconds (5.742 hours) of 96 hours, including the failed attempt and diagnostics. CPU charged through storage verification and publication preparation was 9,270.328 seconds of 43,200. This includes the upload's immutable 3,789.631-second duration exactly once and conservative active orchestration; idle gaps and overlapping reservations are excluded. A separate 600-second reserve covers the final local gate and publication; final reconciliation is retained in the external supervisor ledger. Cloud spend was $0; the package is below 100 GiB.
 
 This is one training seed and 32 report families. There is no training-seed variance estimate. Partial views change the task, so these rates cannot be compared directly with R19–R22. The selection gain against s0 does not establish a reporting gain against s0, which was not evaluated again on report.
