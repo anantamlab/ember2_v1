@@ -108,6 +108,8 @@ class SmallActor(torch.nn.Module):
 class HumanLLMActor:  # pragma: no cover - GPU only; check it with experiments/human_gpu_checks.py first
     """The Clef/LoRA student on human views: one short row per person (own view, one question)."""
 
+    preserve_forward_batches = True  # bf16 padded forwards must replay the sampling context
+
     def __init__(self, cfg: Mapping[str, Any], checkpoint: str | Path) -> None:
         from .rl_ppo import V1Actor
         self.inner = V1Actor(cfg, checkpoint)
@@ -146,6 +148,9 @@ def collect(scenarios: Sequence[Any], actor, critic, cfg: Mapping[str, Any], vie
     batch: dict[str, list] = {k: [] for k in ("views", "masks", "actions", "old", "values", "features",
                                                "teacher", "advantages", "returns")}
     episodes = []
+    preserve = getattr(actor, "preserve_forward_batches", False)
+    forward_groups: dict[int, list[int]] = {}
+    next_group = 0
     for scenario in scenarios:
         env = HumanEvacuationEnv(scenario, view, reward)
         views, info = env.reset()
@@ -160,7 +165,12 @@ def collect(scenarios: Sequence[Any], actor, critic, cfg: Mapping[str, Any], vie
             # Optional grad-enabled forward: R20 found that a no-grad bf16 forward differs from the
             # autograd forward that PPO replays. Stored values are detached either way.
             with torch.set_grad_enabled(bool(cfg.get("collect_with_grad", False))):
-                lp = masked_log_probs(actor.logits(vs), mask).detach()
+                if preserve:
+                    size = cfg["minibatch"]
+                    lp = torch.cat([masked_log_probs(actor.logits(vs[j:j + size]), mask[j:j + size]).detach()
+                                    for j in range(0, len(vs), size)])
+                else:
+                    lp = masked_log_probs(actor.logits(vs), mask).detach()
                 value = critic(torch.tensor(feats, dtype=torch.float32, device=actor.device)).squeeze(-1).detach()
             choice = torch.multinomial(lp.exp().cpu(), 1, generator=generator).squeeze(-1)
             actions = {p: ACTION_ORDER[int(a)] for p, a in zip(pids, choice)}
@@ -178,15 +188,25 @@ def collect(scenarios: Sequence[Any], actor, critic, cfg: Mapping[str, Any], vie
                 t["teacher"].append(_INDEX[gold[p]])
                 t["rewards"].append(rewards[p])
                 t["dones"].append(p not in views)       # resolved, or the episode ended
+                if preserve:
+                    t.setdefault("forward_group", []).append(next_group + i // size)
+            if preserve:
+                next_group += (len(vs) + size - 1) // size
         for p in sorted(tracks):
             t = tracks[p]
             adv, ret = gae(t["rewards"], t["values"], t["dones"], cfg["gamma"], cfg["gae_lambda"])
+            if preserve:
+                offset = len(batch["views"])
+                for i, group in enumerate(t["forward_group"]):
+                    forward_groups.setdefault(group, []).append(offset + i)
             for k in ("views", "masks", "actions", "old", "values", "features", "teacher"):
                 batch[k] += t[k]
             batch["advantages"] += adv
             batch["returns"] += ret
         episodes.append(stats.result(info))
     batch["episodes"] = summarize(episodes)
+    if preserve:
+        batch["forward_groups"] = [forward_groups[g] for g in sorted(forward_groups)]
     return batch
 
 
@@ -210,17 +230,44 @@ def optimize(actor, critic, optimizer, batch: Mapping[str, Any], cfg: Mapping[st
         lp = masked_log_probs(actor.logits([batch["views"][i] for i in idx.tolist()]), masks[idx])
         return lp, lp.gather(-1, actions[idx, None]).squeeze(-1)
 
-    with torch.enable_grad():   # on-policy audit before any update: the replay must reproduce sampling
-        probe = torch.arange(min(n, size), device=dev)
-        replay_error = float((forward(probe)[1] - old[probe]).detach().abs().max())
+    preserved = batch.get("forward_groups")
+    if getattr(actor, "preserve_forward_batches", False) and preserved is None:
+        raise ValueError("batch-sensitive actors require their sampling forward groups")
+    if preserved is not None:
+        if (not preserved or any(not g or len(g) > size for g in preserved)
+                or sorted(i for g in preserved for i in g) != list(range(n))):
+            raise ValueError("sampling forward groups must partition all person-decisions within minibatch size")
+        groups = [torch.tensor(g, dtype=torch.long) for g in preserved]
+    else:
+        groups = [torch.arange(i, min(i + size, n)) for i in range(0, n, size)]
+    replay_error = 0.0
+    with torch.enable_grad():   # audit EVERY sampling group before any optimizer step
+        for group in groups:
+            probe = group.to(dev)
+            replay_error = max(replay_error, float((forward(probe)[1] - old[probe]).detach().abs().max()))
     if replay_error > cfg["replay_tolerance"]:
         raise RuntimeError(f"on-policy probability replay differs: {replay_error}")
     logs, steps, stop = [], 0, False
     for epoch in range(cfg["ppo_epochs"]):
-        order = torch.randperm(n, generator=generator)
-        chunks = [order[i:i + size] for i in range(0, n, size)]
+        if preserved is None:
+            order = torch.randperm(n, generator=generator)
+            chunks = [[order[i:i + size]] for i in range(0, n, size)]
+        else:
+            # Shuffle whole sampling groups; pack them into minibatches without changing padding.
+            # Separate forwards/backwards bound graph memory while keeping per-person loss weights.
+            order = torch.randperm(len(groups), generator=generator).tolist()
+            chunks, pack, packed = [], [], 0
+            for i in order:
+                group = groups[i]
+                if pack and packed + len(group) > size:
+                    chunks.append(pack)
+                    pack, packed = [], 0
+                pack.append(group)
+                packed += len(group)
+            if pack:
+                chunks.append(pack)
         for start in range(0, len(chunks), accumulation):
-            block = chunks[start:start + accumulation]
+            block = [idx for pack in chunks[start:start + accumulation] for idx in pack]
             count = sum(len(c) for c in block)
             optimizer.zero_grad(set_to_none=True)
             kls = []

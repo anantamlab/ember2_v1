@@ -127,3 +127,42 @@ def test_train_smoke_writes_checkpoints_and_refuses_drafts(tmp_path):
     assert not (tmp_path / "draft").exists()
     with pytest.raises(ValueError):
         hp.check_config({"status": "authorized"})
+
+
+def test_optimize_audits_replay_beyond_the_first_minibatch():
+    torch.manual_seed(0)
+    cfg, actor, critic = config(), hp.SmallActor(4, 16), hp.make_critic()
+    gen = torch.Generator().manual_seed(3)
+    batch = hp.collect(scenarios(), actor, critic, cfg, ViewConfig(**cfg["view"]), HumanRewardConfig(**cfg["reward"]), gen)
+    assert len(batch["views"]) > cfg["minibatch"]
+    batch["old"][-1] -= 0.5
+    optimizer = torch.optim.Adam(actor.parameter_groups(cfg) + [{"params": list(critic.parameters()), "lr": 0.01}])
+    before = [p.detach().clone() for p in actor.parameters()]
+    with pytest.raises(RuntimeError, match="on-policy probability replay differs"):
+        hp.optimize(actor, critic, optimizer, batch, cfg, 0.0, gen)
+    assert all(torch.equal(a, b) for a, b in zip(before, actor.parameters()))
+
+
+def test_ppo_preserves_sampling_batches_for_batch_sensitive_actor():
+    # A deterministic batch-sensitive CPU actor models bf16 padded-forward drift.
+    # Regrouping its views changes probabilities even with identical parameters.
+    class BatchSensitiveActor(hp.SmallActor):
+        preserve_forward_batches = True
+
+        def logits(self, views):
+            z = super().logits(views)
+            context = len(views) * 0.03 + sum(v["step"] for v in views) * 0.01
+            return z + torch.tensor([context, -context, 0.0, 0.0, 0.0])
+
+    torch.manual_seed(0)
+    cfg = config(minibatch=3, accumulation=2, collect_with_grad=True, ppo_epochs=1, target_kl=10.0)
+    actor, critic = BatchSensitiveActor(4, 16), hp.make_critic()
+    gen = torch.Generator().manual_seed(3)
+    batch = hp.collect(scenarios(), actor, critic, cfg, ViewConfig(**cfg["view"]), HumanRewardConfig(**cfg["reward"]), gen)
+    optimizer = torch.optim.Adam(actor.parameter_groups(cfg) + [{"params": list(critic.parameters()), "lr": cfg["critic_lr"]}])
+    before = [p.detach().clone() for p in actor.parameters()]
+    stats = hp.optimize(actor, critic, optimizer, batch, cfg, 0.1, gen)
+    assert stats["replay_error"] < 1e-5 and stats["optimizer_steps"] > 0
+    assert any(not torch.equal(a, b) for a, b in zip(before, actor.parameters()))
+    assert max(map(len, batch["forward_groups"])) <= 3
+    assert sorted(i for group in batch["forward_groups"] for i in group) == list(range(len(batch["views"])))
