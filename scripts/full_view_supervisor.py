@@ -37,7 +37,10 @@ class Supervisor:
         receipts=[read(p) for p in (self.repo/'.git/ember-local-verify/receipts').glob(self.head+'*.json')]
         assert any(r['status']=='PASS' and r['tree_clean'] and sha256(r['log'])==r['log_sha256'].removeprefix('sha256:') for r in receipts)
         prior=list((self.ev/'attempts').glob('*.result.json'))
-        self.cpu=sum(read(p)['seconds'] for p in prior if read(p)['category']=='cpu')
+        initial=read(self.ev/'config/budget-initial.json') if (self.ev/'config/budget-initial.json').exists() else {}
+        overhead=initial.get('cpu_overhead_seconds',0.)
+        assert overhead>=0
+        self.cpu=overhead+sum(read(p)['seconds'] for p in prior if read(p)['category']=='cpu')
         self.gpu=sum(read(p)['seconds'] for p in prior if read(p)['category']=='gpu')
         self.started=time.monotonic()
 
@@ -47,7 +50,8 @@ class Supervisor:
         assert not subprocess.check_output(['git','status','--porcelain'],cwd=self.repo,text=True)
         if sum(p.stat().st_size for p in self.ev.rglob('*') if p.is_file())>150*1024**3:
             raise RuntimeError('evidence budget exhausted')
-        timeout=(60*3600-self.gpu) if category=='gpu' else (16*3600-self.cpu)
+        # Leave five minutes for termination and completion verification inside the hard limit.
+        timeout=(60*3600-self.gpu-300) if category=='gpu' else (16*3600-self.cpu-300)
         if cap is not None:timeout=min(timeout,cap)
         if timeout<=0:raise RuntimeError(category+' budget exhausted')
         command=[self.py]+list(map(str,args));env=self.base_env.copy()
