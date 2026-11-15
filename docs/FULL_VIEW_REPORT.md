@@ -100,6 +100,29 @@ The rejected s3 weights remain in evidence and the registry, clearly marked FAIL
 and phase processes are terminal; GPU compute processes0. No sealed FINAL, hidden benchmark, EMBERBench,
 reserved V1.1, cloud computation/spend, public resource, release tag or announcement was used .
 
+## Unresolved implementation review blockers
+
+The one fresh read-only review found three important defects in paths that did not run. They remain
+unresolved and independently block merging or reusing this implementation for another experiment:
+
+- The entry points do not enforce the frozen evidence-root and attempt-marker-root declarations. An
+  unchanged plan copied elsewhere could establish a fresh marker namespace. Bind resolved paths and
+  test relocation rejection before any further collection or reporting.
+- Reporting verifies frozen file tables but can load an unrestricted `--student` path; original V1
+  files are not rehashed immediately before loading. Bind each arm to its frozen checkpoint and test
+  wrong-path/tampered-byte rejection before consuming an invocation.
+- The cross-seed selector adds raw-parent utility/casualty conditions after the declared masked-parent
+  guard. Reconcile this against an explicitly frozen selection rule and test differing raw/masked
+  baselines before another PPO run. No guard or tolerance was relaxed during this closeout.
+
+The actual run used the declared root, reverified eight completed records without repeating them, and
+stopped before all three affected paths. These findings do not invalidate the retained phase hashes or
+make the failed fit pass. They are retained as draft-PR blockers rather than launching unrelated latent-path
+development after the experiment stop. Future reuse without correction risks duplicate invocations,
+wrong report weights or a selection rule that differs from the plan. The review also deferred minor
+spacing cleanup in generated historical ledger prose. Full disposition: external
+`verification/final-branch-review-01.json`. No second review or new experiment was run.
+
 ## Identity, storage and budgets
 
 Original plan SHA256 `389ff09bd8950d7fe9e0cfb77fd5b2f16f2482de8a3e2cfeb2c20b705749c8d6`. Control-only runtime supplement SHA256 `fbf97cd181b2412d89c0e7494e3f63df76a2a6f42a2bd8024ef1a96a4d15398c`. Controller source `8fb33d67738fc018ef8e3861ec4adf5b6b4f3320`. Per-phase producing sources and result/log hashes are in the compact summary and checkpoint registry.

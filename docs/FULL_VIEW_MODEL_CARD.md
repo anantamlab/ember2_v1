@@ -30,3 +30,5 @@ Do not claim a final model, passing convergence gate, report score, gain over or
 training-seed robustness, perfect planning, comparison with R19–R22, sealed/hidden-set or EMBERBench score.
 The static action mask is an external rule. CPU checkpoint continuation tests do not establish exact GPU
 continuation. See FULL_VIEW_REPORT.md for retained negative results, diagnosis and budgets.
+
+Three unexecuted-path implementation review blockers remain unresolved; see FULL_VIEW_REPORT.md. This snapshot is not approved for another experiment or report invocation.

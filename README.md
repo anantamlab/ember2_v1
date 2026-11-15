@@ -5,7 +5,7 @@ plus their own last action/outcome and neighbour-cell statuses. One row and one 
 The Python package stays `ember_v1`.
 
 The separate human-view project is `anantamlab/ember_v1`. Human-view and R19–R22 documents inherited
-here are historical evidence; no full-view result exists yet. Read [CURRENT_STATE](docs/CURRENT_STATE.md).
+here are historical evidence; no final candidate or report result exists. Read [CURRENT_STATE](docs/CURRENT_STATE.md).
 Full-view evidence root: `/home/darshith/ember-ws/ember2-evidence/`; private HF: `ember2-v1-models` under
 the account of environment `HF_TOKEN`. Human-view evidence and `sankalphs/ember-v1-models` stay separate.
 

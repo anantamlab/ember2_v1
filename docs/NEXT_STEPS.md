@@ -4,6 +4,8 @@ This authorization ended at the failed round3 fit gate. Nothing here runs now. E
 a new frozen plan and owner authorization; no reserved V1.1 data is available. The128-family report panel
 remains unspent, but this does not authorize running it after the stop.
 
+Before another experiment, resolve the three implementation blockers recorded in FULL_VIEW_REPORT.md: frozen evidence-root binding, report checkpoint/hash binding, and consistent PPO selection guards. Add CPU regressions before a newly frozen plan.
+
 Before increasing data, define a convergence diagnostic on fixed TRAIN examples before fitting. The
 current first-versus-last shuffled-group criterion failed and was preserved unchanged; a different
 metric belongs in a new plan. Audit loss scaling for partial accumulation groups, initialization,
