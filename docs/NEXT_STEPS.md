@@ -1,31 +1,23 @@
-# Deferred human-view work
+# Deferred full-view version2 work
 
-Status: the V1 human-view candidate is frozen LLM PPO update 20 of run
-`human-pov-ws-full-20261113t214243z`. Its report panel is spent. Nothing in this document runs now.
+This authorization ended at the failed round3 fit gate. Nothing here runs now. Every phase requires
+a new frozen plan and owner authorization; no reserved V1.1 data is available. The128-family report panel
+remains unspent, but this does not authorize running it after the stop.
 
-## Phase A — Does PPO add anything?
+Before increasing data, define a convergence diagnostic on fixed TRAIN examples before fitting. The
+current first-versus-last shuffled-group criterion failed and was preserved unchanged; a different
+metric belongs in a new plan. Audit loss scaling for partial accumulation groups, initialization,
+optimizer state and learning curves with CPU/mock checks before another authorized GPU attempt.
 
-Compare s0 against update 20 on a new 256-family report panel, with the belief teacher and random legal
-moves. Report paired bootstrap intervals over families, with 5,000 resamples.
+Test whether adding difficult student states improves teacher agreement and crowd coordination. Run
+matched ablations for neighbour status and action/outcome memory, stratified by geometry, crowd density,
+exits and fire. Keep crashes and length violations as results; check complete token lengths first.
 
-## Phase B — Where does the model break?
+Use at least three independent DAgger initializations before making seed-robustness claims. Increase
+TRAIN volume only if new held-out selection learning curves support a data limit. Preserve topology
+isolation and the raw zero-wall/boundary plus .05 teacher-utility prerequisite before PPO .
 
-Compare update 20 against the teacher at radius 2, radius 7, no memory, no line of sight,
-exit knowledge `one` and `all`, and no hints. A crash or truncation is a result.
-
-## Phase C — No-hint ablation
-
-Train one model with `--no-hints`, the same hyperparameters as s0 and the same DAgger stop rule;
-compare with the hinted model. Question: does the model plan or copy the route hint?
-
-## Phase D — PPO with freedom to pass the teacher
-
-First save critic and optimizer state in PPO checkpoints. Then run three seeds from s0 with
-`imitation_decay 0.90` and `reward.blocked -0.05`; select per seed; one report.
-
-Each phase needs a new frozen plan and a new owner authorization. Estimated total cost: about 15 GPU hours.
-
-Known limits: one training seed, 32 report families, and the route hint is part of the input.
-The selection improvement includes three fewer casualties among 353 people; evacuation increased by one
-person (311 to 312), not three. RL gain is not proven: s0 was not evaluated on the spent report panel.
-PPO checkpoints cannot resume exactly because critic and optimizer state were not saved.
+Verify exact GPU next-update actor/critic/optimizer/RNG restoration under a separately authorized plan.
+Then compare guarded PPO seeds against their DAgger parents and original V1 raw/masked on one new
+matched report, with 5,000 paired family resamples. Never select on report outcomes. Confirm private HF
+upload and download hashes using environment credentials. Sealed FINAL and EMBERBench remain sealed.

@@ -1,0 +1,577 @@
+{
+  "all_report_arms": {
+    "candidate_masked": {
+      "reason": "Stopped at fit completion gate before candidate freeze",
+      "status": "NOT_RUN"
+    },
+    "candidate_raw": {
+      "reason": "Stopped at fit completion gate before candidate freeze",
+      "status": "NOT_RUN"
+    },
+    "dagger_raw": {
+      "reason": "Stopped at fit completion gate before candidate freeze",
+      "status": "NOT_RUN"
+    },
+    "original_v1_masked": {
+      "reason": "Stopped at fit completion gate before candidate freeze",
+      "status": "NOT_RUN"
+    },
+    "original_v1_raw": {
+      "reason": "Stopped at fit completion gate before candidate freeze",
+      "status": "NOT_RUN"
+    },
+    "random_legal": {
+      "reason": "Stopped at fit completion gate before candidate freeze",
+      "status": "NOT_RUN"
+    },
+    "teacher": {
+      "reason": "Stopped at fit completion gate before candidate freeze",
+      "status": "NOT_RUN"
+    }
+  },
+  "audit_sha256": "5037bb8226870a351c73e9ab582e7cca0be7e01ba7cfebf61a8a5a224b514b3b",
+  "best_completed_select_snapshot": "s2",
+  "best_snapshot_is_final_candidate": false,
+  "candidate_frozen": false,
+  "cloud_spend_usd": 0,
+  "cpu_seconds_through_runtime": 2417.713440031989,
+  "datasets": [
+    {
+      "beta": 1.0,
+      "families": 256,
+      "manifest_sha256": "2fa62a6298383c22bf12d72378279b7c91bd2b1931a982d4f00f4590510c1030",
+      "round": "d0",
+      "rows": 27979,
+      "rows_sha256": "39f566261d08ad3d90aa4b685e128424f2e0879b41ecd9fcd19a476bc26f53fa",
+      "student_agreement": null
+    },
+    {
+      "beta": 0.5,
+      "families": 256,
+      "manifest_sha256": "91e0e9500b6b541dd44d5193dcf51c3831fac2b7406df85ead871d91428f4959",
+      "round": "d1",
+      "rows": 37677,
+      "rows_sha256": "f68d9f413603c526d278f997879c49938f31bc753322df847335a98dfbd8b7fa",
+      "student_agreement": 0.6773336168403147
+    },
+    {
+      "beta": 0.25,
+      "families": 256,
+      "manifest_sha256": "f6e17f74269a2d5ad452e21f3e83c65c689c05ec792a71b818c0b17b7e8b5f29",
+      "round": "d2",
+      "rows": 42005,
+      "rows_sha256": "b7ee6c9995fa0091f77e2b377a026b1c0d361035fc24632c419677d014eb7337",
+      "student_agreement": 0.6139811852649584
+    },
+    {
+      "beta": 0.0,
+      "families": 256,
+      "manifest_sha256": "372bd6b6ee9a68c1a5cb79de28ad7efb5eaf3dd32f10ed1f07448066a00cafb9",
+      "round": "d3",
+      "rows": 53639,
+      "rows_sha256": "d783975988fd58a42ae81dce6ec5f439d060eeae7f491c9869edfcbd20c51c0f",
+      "student_agreement": 0.41604056749752977
+    }
+  ],
+  "evidence_root": "/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f",
+  "failed_phase": "dagger-r3-fit-01",
+  "failures": [
+    {
+      "evidence": "verification/first-head/verify-local.log; verification/first-head-02/",
+      "fix": "Created a fresh state target and a new verification directory; added only /.local-test-logs to .git/info/exclude. No source/test input changed.",
+      "phase": "first-head verification setup",
+      "root_cause": "External verification-state symlink target was not created; external log directory symlink was not excluded in local Git metadata.",
+      "symptom": "Receipt creation failed; first log also reported one untracked change. Pytest itself returned 1458 passed,206 skipped,10 xfailed.",
+      "test": "New named first-head-02 clean DEFAULT verification PASS; receipt and log hashes in first-push.json."
+    },
+    {
+      "evidence": "Original focused failure output is retained in this task tool transcript; this compact record preserves counts, symptoms, cause and repair.",
+      "fix": "Corrected only newly authored, uncommitted fixture calls to the established dict API; preserved their assertions. Production teacher factory now inspects the retained constructor and supplies seed only when supported. No inherited test changed.",
+      "phase": "new uncommitted full-view test-fixture development",
+      "root_cause": "New fixtures incorrectly treated Simulator.observe() as an object with .to_dict(); the new teacher wrapper incorrectly passed seed to deterministic T1, whose retained constructor takes no seed.",
+      "symptom": "8 failed,8 passed in first focused run; errors occurred at test fixture construction and teacher construction.",
+      "test": "Full-view and inherited human PPO focused check:16 passed; with evidence/supervisor and human DAgger checks:35 passed. All new tests committed at32a10f42."
+    },
+    {
+      "fix": "Use ctypes bindings to the same libc pidfd functions, preserving process-identity protection.",
+      "phase": "Linux CPU handoff prototype",
+      "root_cause": "Those optional wrappers were not compiled into this interpreter; runtimeglibc2.39 has both functions.",
+      "symptom": "Pinned Python exposes neither os.pidfd_open nor signal.pidfd_send_signal.",
+      "test": "ActualLinux CPU lifecyclecheckPASS: parentheld/childnormalexit/noadvance/reaped."
+    },
+    {
+      "fix": "Build from the actual CIM class and pass uint16 ShowWindow0; ReturnValue0, PID43424.",
+      "phase": "WMI boundary launcher setup",
+      "root_cause": "The generic CIM startup instance used an untyped ShowWindow property.",
+      "symptom": "First Create rejected ProcessStartupInformation with Type mismatch; no process was created.",
+      "test": "Existing-launcher check confirmednone before the corrected invocation."
+    },
+    {
+      "fix": "Preserve setupfailure/log and attach a new handoff02 to the currentfit after expanding the same verified monitor for fitcompletion.",
+      "phase": "Boundary handoff01 attachment",
+      "root_cause": "Administrativepreparation overlapped phasecompletion; oldsupervisor legitimately advancedtofit.",
+      "symptom": "Startupguard rejected because collection had completed normally before attachment.",
+      "test": "No parent-held record; parent4320remainedrunning; d1collectPASS and fitPID22218live. No experimentrelaunched."
+    },
+    {
+      "fix": "Recovered actual monitor23876 from its own start record, verified /proc command identity, parentheld T and originalfit alive, preserved launcher source and recovery receipt, did NOT relaunch. Future launchers must reserve UNIQUEmetadata BEFORE spawning.",
+      "phase": "Handoff02 launcher bookkeeping",
+      "root_cause": "Mechanical replacement did not rename boundary-handoff-launch.json.",
+      "symptom": "Exclusive metadata creation failed after monitor spawn because generated launcher02 retained launcher01 unsuffixed filename.",
+      "test": "Actualmonitor command verifiedlive; parent-held record, heartbeat, fitPID22218live andGPUactive. Completionresults remainproduced by the independentmonitor."
+    },
+    {
+      "fix": "Call decide(obs).actions. Preserve the live original fit to normal completion via a pidfd boundary handoff, then activate a verified control-only runtime supplement before any report.",
+      "phase": "Original V1 control bridge, caught before reporting",
+      "root_cause": "The new wrapper used the wrong API for the inherited original V1 policy.",
+      "symptom": "Two CPU cases raised AttributeError; the wrapper called ArmPolicy.act, which does not exist.",
+      "test": "Real original encoder and ArmPolicy with CPU mock adapter: two RED cases, then five GREEN checks including full DAgger; final complete control/protocol checks49passed. No real report invocation was consumed."
+    },
+    {
+      "fix": "Treat a missing already-reaped child as terminal while still retiring the controller and closing pidfds. The active archived monitor was not hotpatched.",
+      "phase": "Boundary cleanup race",
+      "root_cause": "Cleanup assumed the child proc entry survived parent retirement.",
+      "symptom": "The new cleanup regression raised FileNotFoundError when the child was already reaped.",
+      "test": "test_reaped_child_does_not_interrupt_controller_retirement_or_descriptor_cleanup observed RED then GREEN; final49checks passed. Actual archived handoff02 independently completed PASS."
+    },
+    {
+      "fix": "Validate a frozen control-only supplement, source/archive/plan/auth/command/result/log/output hashes and the terminal original controller; read eight completed phases without launching them or charging their time twice.",
+      "phase": "Strict continuation CPU fixtures",
+      "root_cause": "The original supervisor intentionally supported only its initial write-once run, so no safe continuation protocol existed.",
+      "symptom": "New RED cases exposed missing source-amendment validation, completed-record reconstruction and live amendment-hash enforcement.",
+      "test": "amendment/resume/live-hash RED and GREEN logs retained; complete CPU control/protocol49passed; exact clean Windows and WSL DEFAULT1519passed206slow-skipped10xfail,exit0."
+    },
+    {
+      "fix": "Normalize the new controller files to LF in commit8fb33d6. Preserve the preceding local commit1e608bf; no failed-gate push occurred.",
+      "phase": "Controller source formatting gate",
+      "root_cause": "Windows source creation preserved CRLF in files checked by the formatting audit.",
+      "symptom": "A local source formatting check failed before push due to CRLF normalization in new controller code.",
+      "test": "Clean exact-head Windows and WSL DEFAULT receipts on8fb33d6 PASS; all source-control diffs remained control-only."
+    },
+    {
+      "fix": "Use the descriptive source_file variable in the credential audit, leaving the original copy block and test unchanged.",
+      "phase": "Unexecuted package snapshot regression after adding credential audit",
+      "root_cause": "Its AST selector identifies the top-level for-p-in-files payload-copy block; the added audit loop initially used the same iterator spelling.",
+      "symptom": "The unchanged snapshot harness selected the newly inserted credential loop and raised NameError before exercising copying.",
+      "test": "The unchanged snapshot regression passed again; package helper compiles."
+    },
+    {
+      "fix": "Validate the arm guard schema, panel and frozen-candidate hash, then require the existing report-arm-01 PASS/exit0 result. Never manufacture a new result. Status helpers use only actual phase markers for live-process checks.",
+      "phase": "Unexecuted publication helper start-marker audit",
+      "root_cause": "An overly broad start-marker glob confused the child one-shot arm guard with the parent supervisor phase. Only the parent has a result, with an -01 suffix.",
+      "symptom": "CPU fixture rejected a completed report because report-candidate_raw.result.json does not exist.",
+      "test": "Actual packaging guard extracted via AST: RED1failed assertion, then GREEN1passed. Independent package-copy snapshot check also PASS. No actual publication or report invocation ran."
+    },
+    {
+      "fix": "Copy each payload file to an independent inode before sealing",
+      "phase": "Unexecuted publication helper snapshot",
+      "root_cause": "Hardlinked inodes made the package mutable through its source paths",
+      "symptom": "RED: actual payload-copy block hardlinked source evidence, so a later durable-note write changed packaged bytes",
+      "test": "check_package_snapshot.py executes actual AST copy block: observed RED assertion, then GREEN unchanged packaged bytes and distinct inode"
+    },
+    {
+      "fix": "Use installed uv pip check --python, which passed",
+      "phase": "Isolated CPU dependency preparation",
+      "root_cause": "UV-managed CPU environment does not include pip",
+      "symptom": "python -m pip check: no pip module",
+      "test": "Corrected focused invocation: 10 passed, 0 failed, 0 skipped; uv pip check: 18 compatible packages."
+    },
+    {
+      "fix": "Set explicit PYTHONPATH to that clone src;10 passed, no source/test assertion changes",
+      "phase": "Isolated CPU dependency preparation",
+      "root_cause": "Noneditable isolated clone requires its src in PYTHONPATH, which verify_local supplies",
+      "symptom": "Direct focused pytest collection:3 import errors for ember_v1",
+      "test": "Corrected focused invocation: 10 passed, 0 failed, 0 skipped; uv pip check: 18 compatible packages."
+    },
+    {
+      "fix": "Move fcntl imports into GPU lock/unlock branches. The fix was developed and verified in an isolated clone while the active fit source stayed unchanged, then integrated after that fit and the controlled handoff finished.",
+      "phase": "Windows CPU completion-verifier import",
+      "root_cause": "The Linux-only fcntl GPU-lock module was imported unconditionally, preventing CPU-only module use on Windows.",
+      "symptom": "Two new regression cases failed on the real Windows CPU environment before the fix.",
+      "test": "Existing CPU supervisor tests plus new regressions: 4 passed in 2.66s; clean DEFAULT gate: 1474 passed, exit0. RED/GREEN logs and patch bundle retained."
+    },
+    {
+      "fix": "Disabled the webhook and enabled an internal same-thread continuation; no experiment phase was restarted.",
+      "phase": "Completion callback transport",
+      "root_cause": "The relay did not permit the external request.",
+      "symptom": "The filtered probe received HTTP403 before any completion trigger was used.",
+      "test": "Probe status and scheduler task state retained in supervisor/callback-probe-01.json and scheduler-state.json."
+    },
+    {
+      "fix": "None under current frozen gates. A revised diagnostic/optimization experiment requires a new frozen plan and authorization.",
+      "phase": "Round3 fit completion",
+      "root_cause": "The unchanged completion criterion compares the first and last shuffled minibatch-group loss. The last group is larger, so it fails. These are different examples (8 versus4 rows), not a matched before/after objective; this alone cannot establish overall convergence or lack of it. No code/hash/config fault was identified that justifies another training attempt.",
+      "symptom": "Child exit0, but last group loss 1.771141804754734 exceeded first group loss 0.7414049749495462; the controller stopped with exit1.",
+      "test": "The exact unchanged CPU completion verifier reproduces AssertionError on the retained full-fit.json. All20163loss groups and all saved floating tensors are finite; dataset/config/log hashes match. No retry or alternate gate was used."
+    },
+    {
+      "fix": "Used actual stopped/result/launcher records and an independent read-only terminal audit. No experiment source or attempt marker changed.",
+      "phase": "Read-only status helper after experiment stop",
+      "root_cause": "The helper was prepared for active successful phase records and asserted every result PASS.",
+      "symptom": "The helper asserted on the retained FAIL phase.",
+      "test": "stopped-run-audit-01.json reproduces the gate and verifies no related live processes and zero GPU compute processes."
+    }
+  ],
+  "first_loss": 0.7414049749495462,
+  "fits": [
+    {
+      "checkpoint": "s0",
+      "first_loss": 1.60362508893013,
+      "fit_sha256": "7c1cbd8fafe574c85da5016317f98f6a16f57c4951bdb5e206031a74a87572e3",
+      "last_loss": 0.7946755811572075,
+      "optimizer_steps": 3498,
+      "raw_selection": {
+        "attempted": 9828,
+        "blocked": 7091,
+        "blocked_per_attempt": 0.7215099715099715,
+        "casualties": 96,
+        "casualty_rate": 0.26666666666666666,
+        "episodes": 32,
+        "evacuated": 124,
+        "evacuated_rate": 0.34444444444444444,
+        "movements": {
+          "blocked_boundary": 0,
+          "blocked_conflict": 1668,
+          "blocked_cycle": 2188,
+          "blocked_fire": 0,
+          "blocked_occupied": 3235,
+          "blocked_wall": 0,
+          "moved": 2737,
+          "stayed": 995
+        },
+        "people": 360,
+        "repeated_ineffective": 6779,
+        "stay_rate": 0.09193384459022452,
+        "stayed": 995,
+        "unresolved": 140,
+        "unresolved_rate": 0.3888888888888889,
+        "utility": -0.48055555555555557
+      },
+      "result_sha256": "bedf2cd0680ea19dfe00487db51a93c7d850a53ff0c40a3f519b7428ed961725",
+      "rows": 27979,
+      "source_head": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+      "status": "PASS",
+      "train_probe": {
+        "agreement": 0.806,
+        "legal_rate": 1.0,
+        "rows": 2000
+      },
+      "weights_digest": "sha256:74a197ddcfb1b149e7c69cdbc5f864edfc6e8c2c7a645c69b93564a311610e37"
+    },
+    {
+      "checkpoint": "s1",
+      "first_loss": 0.23347267939243466,
+      "fit_sha256": "ce81a457431ddd918544fb058dbab144702aaefc79aebedeecda01756f65e21d",
+      "last_loss": 0.2137363021465717,
+      "optimizer_steps": 8207,
+      "raw_selection": {
+        "attempted": 6109,
+        "blocked": 2539,
+        "blocked_per_attempt": 0.41561630381404485,
+        "casualties": 57,
+        "casualty_rate": 0.15833333333333333,
+        "episodes": 32,
+        "evacuated": 225,
+        "evacuated_rate": 0.625,
+        "movements": {
+          "blocked_boundary": 0,
+          "blocked_conflict": 610,
+          "blocked_cycle": 400,
+          "blocked_fire": 0,
+          "blocked_occupied": 1529,
+          "blocked_wall": 0,
+          "moved": 3570,
+          "stayed": 1215
+        },
+        "people": 360,
+        "repeated_ineffective": 2221,
+        "stay_rate": 0.16589295466957946,
+        "stayed": 1215,
+        "unresolved": 78,
+        "unresolved_rate": 0.21666666666666667,
+        "utility": 0.14583333333333334
+      },
+      "result_sha256": "0a504ce684f1b08d3bdc04841d06d50b307ced110493a64176f1dbdd9f025edd",
+      "rows": 65656,
+      "source_head": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+      "status": "PASS",
+      "train_probe": {
+        "agreement": 0.703,
+        "legal_rate": 1.0,
+        "rows": 2000
+      },
+      "weights_digest": "sha256:52089fecd8c061be8400deb8cf56fc1a859b9c3841107a78999e4ee101e0213f"
+    },
+    {
+      "checkpoint": "s2",
+      "first_loss": 1.2113777394406497,
+      "fit_sha256": "b64606c5b8516b9daae7959c393f719bbdee563baf4c121c785724b522202e4c",
+      "last_loss": 0.25594897211994977,
+      "optimizer_steps": 13458,
+      "raw_selection": {
+        "attempted": 6243,
+        "blocked": 2920,
+        "blocked_per_attempt": 0.4677238507127983,
+        "casualties": 44,
+        "casualty_rate": 0.12222222222222222,
+        "episodes": 32,
+        "evacuated": 230,
+        "evacuated_rate": 0.6388888888888888,
+        "movements": {
+          "blocked_boundary": 0,
+          "blocked_conflict": 659,
+          "blocked_cycle": 376,
+          "blocked_fire": 0,
+          "blocked_occupied": 1885,
+          "blocked_wall": 0,
+          "moved": 3323,
+          "stayed": 1142
+        },
+        "people": 360,
+        "repeated_ineffective": 2600,
+        "stay_rate": 0.15463777928232905,
+        "stayed": 1142,
+        "unresolved": 86,
+        "unresolved_rate": 0.2388888888888889,
+        "utility": 0.2152777777777778
+      },
+      "result_sha256": "50f7a39902bd1c14ad372ea10b594b9d14a60df41e8f59f6d6541cd72d6c8182",
+      "rows": 107661,
+      "source_head": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+      "status": "PASS",
+      "train_probe": {
+        "agreement": 0.7105,
+        "legal_rate": 1.0,
+        "rows": 2000
+      },
+      "weights_digest": "sha256:c55a773cb1af8151fb5c051de911d5e3fd2ee604288971f594c34dd593701adc"
+    },
+    {
+      "checkpoint": "s3",
+      "first_loss": 0.7414049749495462,
+      "fit_sha256": "79575f1732f1014919b71eab8fd3e2eaa1b5bfcc574aee7ee1169bfccd8d82b2",
+      "last_loss": 1.771141804754734,
+      "optimizer_steps": 20163,
+      "result_sha256": "defab742179f92bc21d498f13d3554d91474e95a94651ee8382801d249c20175",
+      "rows": 161300,
+      "source_head": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+      "status": "FAIL",
+      "train_probe": {
+        "agreement": 0.4825,
+        "legal_rate": 1.0,
+        "rows": 2000
+      },
+      "weights_digest": "sha256:634754d430c09e01ef0e53f368e8f8659802bf4eec92f9a50c294213c59091dc"
+    }
+  ],
+  "gpu_seconds": 70804.7750085147,
+  "last_loss": 1.771141804754734,
+  "llm_ppo": "NOT_RUN",
+  "new_vs_original": "The stopped run does not establish that the new full-view model is better than original V1; no direct report comparison ran.",
+  "package_manifest_sha256": "940ffed4063b6eab7cfd5ddc3d7974f4957d3044fd0fcdde79f8d2e7a0da456c",
+  "package_payload_bytes": 2903030884,
+  "package_payload_files": 637,
+  "paired_intervals": null,
+  "phase_records": [
+    {
+      "category": "cpu",
+      "log_sha256": "d9021344921b520a5e1f2233b53a08a21d6a51d28a15fbf6402ba6b2157e9b54",
+      "phase": "dagger-r0-collect-01",
+      "result_sha256": "b99358e3a7ee9a8bf42f035c24f952f6dba93e9df0175916d0c16533dbb768f9",
+      "seconds": 9.37081342501915,
+      "source_head": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+      "status": "PASS"
+    },
+    {
+      "category": "gpu",
+      "log_sha256": "bb8c9091c91d705d03fb3f1b7078a3313757f447c2a97aba8cd9deeb7c4081fd",
+      "phase": "dagger-r0-fit-01",
+      "result_sha256": "bedf2cd0680ea19dfe00487db51a93c7d850a53ff0c40a3f519b7428ed961725",
+      "seconds": 4407.534978295997,
+      "source_head": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+      "status": "PASS"
+    },
+    {
+      "category": "gpu",
+      "log_sha256": "c5c33ecd2d10fc3089b0d6d4369c9e3f55931ce5d8c9b6a5a0eeb10f0c36f11d",
+      "phase": "dagger-r1-collect-01",
+      "result_sha256": "1863840bb971686dcaa137eee99e18ca1984e6f74a4b62361892e02d812a1b05",
+      "seconds": 2271.1515481760143,
+      "source_head": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+      "status": "PASS"
+    },
+    {
+      "category": "gpu",
+      "log_sha256": "f6ec012a783f57fc523728d6c0609707bc66df246fd6142c054d7e600cfbe01c",
+      "phase": "dagger-r1-fit-01",
+      "result_sha256": "0a504ce684f1b08d3bdc04841d06d50b307ced110493a64176f1dbdd9f025edd",
+      "seconds": 10524.30743958574,
+      "source_head": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+      "status": "PASS"
+    },
+    {
+      "category": "gpu",
+      "log_sha256": "5b5dcaf12088c031b6259d1fd026bde37a4880431bad925e0deb827aa5aaf60b",
+      "phase": "dagger-r2-collect-01",
+      "result_sha256": "10bda2f5fe7fbd6e15631926530f6d3f9fe3c59f0460c36b64df21244cc72c00",
+      "seconds": 2551.825752881996,
+      "source_head": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+      "status": "PASS"
+    },
+    {
+      "category": "gpu",
+      "log_sha256": "eface31519e348b0ab0cc62f9f15047a3da2586304fa16de149bb37f97b64da1",
+      "phase": "dagger-r2-fit-01",
+      "result_sha256": "50f7a39902bd1c14ad372ea10b594b9d14a60df41e8f59f6d6541cd72d6c8182",
+      "seconds": 17635.707025482,
+      "source_head": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+      "status": "PASS"
+    },
+    {
+      "category": "gpu",
+      "log_sha256": "cd5b600e7b82d1b8456ac8a64bfe929d743f77f608c7d99b5a68cee2f7a9227e",
+      "phase": "dagger-r3-collect-01",
+      "result_sha256": "71e82950c7669320b444f47a2394cd7db3fcf8d1d4420550e17230c2da99415b",
+      "seconds": 3442.5796818500094,
+      "source_head": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+      "status": "PASS"
+    },
+    {
+      "category": "gpu",
+      "log_sha256": "7c0a8bbe95109b36dd6b9562e67129716e851c0e5a0cab6bd1ed7a202ecca98b",
+      "phase": "dagger-r3-fit-01",
+      "result_sha256": "defab742179f92bc21d498f13d3554d91474e95a94651ee8382801d249c20175",
+      "seconds": 26714.591496823996,
+      "source_head": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+      "status": "FAIL"
+    },
+    {
+      "category": "gpu",
+      "log_sha256": "3f54f236c735b9853d1dc7bd8e3f996caa46ff35be244e0046c5616df4771f76",
+      "phase": "gpu-check-01",
+      "result_sha256": "726b80546a75bafb3cc72c0f875e2d3ec237d506b132c7cfe36b6a21554bacb2",
+      "seconds": 60.12212165200617,
+      "source_head": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+      "status": "PASS"
+    },
+    {
+      "category": "gpu",
+      "log_sha256": "7cd7b0c5fd5fb5cb55e6ede7760166ebf15ee620bb0df28e510fa35a956dc889",
+      "phase": "s0-select-candidate_masked-01",
+      "result_sha256": "6235e17284488e480ce6f31502e3cdeb90e319b9c248ef6e46e87df6636e7c65",
+      "seconds": 655.5990574589814,
+      "source_head": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+      "status": "PASS"
+    },
+    {
+      "category": "gpu",
+      "log_sha256": "21fe50e6a0f0c69b3b58c45baa9b193c95c1e922379aa1f08f798f20bd4445f5",
+      "phase": "s0-select-candidate_raw-01",
+      "result_sha256": "1e35bc68ef29288309b6657825be24251cbff9902be63e5953bb08133b3e3098",
+      "seconds": 659.3341481889947,
+      "source_head": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+      "status": "PASS"
+    },
+    {
+      "category": "gpu",
+      "log_sha256": "6c63c0229347015f44498bbbe87fd06c39785f07bc8212d07e14b52af90b7fd0",
+      "phase": "s1-select-candidate_masked-01",
+      "result_sha256": "0cfd2cabdc994d0943ece17ae9d55e3510f3fd6a49818f16b78397406348f061",
+      "seconds": 449.74075876298593,
+      "source_head": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+      "status": "PASS"
+    },
+    {
+      "category": "gpu",
+      "log_sha256": "9adacb147c408bf8c16f88dd6105d335c20282fbd3119d3a51a30f9c92a4c786",
+      "phase": "s1-select-candidate_raw-01",
+      "result_sha256": "9f3a4389019be2406944ea3d8a045383b9eebe213a7b28e179ce4225b27d25de",
+      "seconds": 449.0765834959748,
+      "source_head": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+      "status": "PASS"
+    },
+    {
+      "category": "gpu",
+      "log_sha256": "bb577c66b49962e74967345fe9ec924b65f7a803dde7c85d2d4a99381eb70280",
+      "phase": "s2-select-candidate_masked-01",
+      "result_sha256": "6b77f6ea43c773ed0f769c5bf175e67263d21631a651183b0a60e007f8e32a82",
+      "seconds": 494.96554579000804,
+      "source_head": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+      "status": "PASS"
+    },
+    {
+      "category": "gpu",
+      "log_sha256": "fea4eb76638cefecd9a40afde0e9e7ed2ee3d1a6d9787b92455bdf26b0f95ec6",
+      "phase": "s2-select-candidate_raw-01",
+      "result_sha256": "36daeb407e159f8d4fe5b85f96831e3e05a2459bf9c05c84a7307fc55385a116",
+      "seconds": 488.23887006999576,
+      "source_head": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+      "status": "PASS"
+    },
+    {
+      "category": "cpu",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "phase": "select-reference-01",
+      "result_sha256": "82f3cbf2b3d184b226830038f319eaf4cd190f3c89c1cd98af7ec3ffbf6d968c",
+      "seconds": 2.1751591389765963,
+      "source_head": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+      "status": "PASS"
+    },
+    {
+      "category": "cpu",
+      "log_sha256": "6f8b9d864464b5f8216b827de12a23d83ffb598485636111ad012ef9852fa104",
+      "phase": "teacher-reference-01",
+      "result_sha256": "65dc5f4f89740229052db808f32d1112a8b48207ae7c208c9c583b9b9eb019b3",
+      "seconds": 3.371331725997152,
+      "source_head": "32a10f42c76a1a79a0b0d8bee4735dc560876447",
+      "status": "PASS"
+    },
+    {
+      "category": "cpu",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "phase": "token-preflight-01",
+      "result_sha256": "329b663395bb23f9736bb003f51aa702f0e7c1e436221b85ee1764fb07a605c9",
+      "seconds": 3.478562245989451,
+      "source_head": "32a10f42c76a1a79a0b0d8bee4735dc560876447",
+      "status": "PASS"
+    }
+  ],
+  "plan_sha256": "389ff09bd8950d7fe9e0cfb77fd5b2f16f2482de8a3e2cfeb2c20b705749c8d6",
+  "ppo_vs_dagger": "PPO did not run, so no PPO gain over DAgger is established.",
+  "pre_ppo_gate": "NOT_REACHED",
+  "runtime_amendment_sha256": "fbf97cd181b2412d89c0e7494e3f63df76a2a6f42a2bd8024ef1a96a4d15398c",
+  "small_ppo": "NOT_RUN",
+  "source_heads_by_phase": {
+    "dagger-r0-collect-01": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+    "dagger-r0-fit-01": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+    "dagger-r1-collect-01": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+    "dagger-r1-fit-01": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+    "dagger-r2-collect-01": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+    "dagger-r2-fit-01": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+    "dagger-r3-collect-01": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+    "dagger-r3-fit-01": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+    "gpu-check-01": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+    "s0-select-candidate_masked-01": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+    "s0-select-candidate_raw-01": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+    "s1-select-candidate_masked-01": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+    "s1-select-candidate_raw-01": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+    "s2-select-candidate_masked-01": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+    "s2-select-candidate_raw-01": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+    "select-reference-01": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+    "teacher-reference-01": "32a10f42c76a1a79a0b0d8bee4735dc560876447",
+    "token-preflight-01": "32a10f42c76a1a79a0b0d8bee4735dc560876447"
+  },
+  "status": "STOPPED_FAILED_FIT_GATE",
+  "storage": {
+    "intended_repo_name": "ember2-v1-models",
+    "local_verification": "PASS",
+    "manifest_sha256": "940ffed4063b6eab7cfd5ddc3d7974f4957d3044fd0fcdde79f8d2e7a0da456c",
+    "package": "/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f/package",
+    "private": null,
+    "reason": "HF_TOKEN is absent from the environment; no credential from chat or saved login was used.",
+    "repo_id": null,
+    "revision": null,
+    "status": "upload pending",
+    "utc": "2026-11-15T10:41:57.975718+00:00"
+  }
+}

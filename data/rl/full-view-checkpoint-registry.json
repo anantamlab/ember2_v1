@@ -1,0 +1,464 @@
+{
+  "base_model": {
+    "repository": "unsloth/Qwen3.5-2B",
+    "revision": "fffbc0d8711cf87df6d1f97938c5e50ef94aadc7",
+    "tokenizer_sha256": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4"
+  },
+  "best_completed_select_snapshot": "s2",
+  "best_snapshot_is_final_candidate": false,
+  "candidate_frozen": false,
+  "checkpoints": [
+    {
+      "checkpoint": "s0",
+      "file_table_sha256": "709d1fbe53442d64256cafc4c7fcfd85e4138e9763df0280533aeb4cea6d2323",
+      "files": [
+        {
+          "path": "README.md",
+          "sha256": "4839c3850d0e52cafa33d37fa7a11983f5bbf5a4a689df90a3aa57a39f6cffe1",
+          "size": 5200
+        },
+        {
+          "path": "adapter_config.json",
+          "sha256": "0db1fd12dcab6a7ac615622dca7c20a2bfab2a71315a6c58945f448d112e88a0",
+          "size": 1768
+        },
+        {
+          "path": "adapter_model.safetensors",
+          "sha256": "39f841be4a68d552d18459f5517a0c035ef6792f43c6aacfeadbee444b16cdb5",
+          "size": 67332688
+        },
+        {
+          "path": "chat_template.jinja",
+          "sha256": "ea210e5b4997b7b1d3af5ee3ad34e7677ffe38df7469e8d88089789b5a27fae5",
+          "size": 7991
+        },
+        {
+          "path": "full-fit.json",
+          "sha256": "7c1cbd8fafe574c85da5016317f98f6a16f57c4951bdb5e206031a74a87572e3",
+          "size": 81620
+        },
+        {
+          "path": "joint_head.safetensors",
+          "sha256": "26d339f0a3f90b2852e9502c8cf7cb1ed5e912f9a9ff59434eed3f80bf996464",
+          "size": 121902840
+        },
+        {
+          "path": "joint_head_config.json",
+          "sha256": "9ec32207deca79a5ec809cb8306c8222d435163da3800e6fdb42e8789a69b8f8",
+          "size": 116
+        },
+        {
+          "path": "optimizer.pt",
+          "sha256": "aeb056fe0f64b9e150a41e1f958cacf1be40f3af02b24c0d764938f824b446bf",
+          "size": 378750829
+        },
+        {
+          "path": "processor_config.json",
+          "sha256": "14932921ca485d458a04dafd8069fbb0a4505622a48208d19ed247115801385b",
+          "size": 1300
+        },
+        {
+          "path": "tokenizer.json",
+          "sha256": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+          "size": 19989343
+        },
+        {
+          "path": "tokenizer_config.json",
+          "sha256": "50f7ac27a0406e04c3c7f9d9f3f1b628952d7f8449b365655e4ed89373f41c64",
+          "size": 7161
+        },
+        {
+          "path": "unsloth_decision_config.json",
+          "sha256": "38a82e265362e2e863d5108e78cfc9927f744b4befd3ceffab5be35c738fd31f",
+          "size": 240
+        }
+      ],
+      "final_candidate": false,
+      "first_loss": 1.60362508893013,
+      "fit_sha256": "7c1cbd8fafe574c85da5016317f98f6a16f57c4951bdb5e206031a74a87572e3",
+      "id": "ember2-full-view-full-view-20261114t133215z-37025f-s0",
+      "last_loss": 0.7946755811572075,
+      "local_path": "/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f/s0",
+      "optimizer_steps": 3498,
+      "parent_checkpoint": null,
+      "raw_selection": {
+        "attempted": 9828,
+        "blocked": 7091,
+        "blocked_per_attempt": 0.7215099715099715,
+        "casualties": 96,
+        "casualty_rate": 0.26666666666666666,
+        "episodes": 32,
+        "evacuated": 124,
+        "evacuated_rate": 0.34444444444444444,
+        "movements": {
+          "blocked_boundary": 0,
+          "blocked_conflict": 1668,
+          "blocked_cycle": 2188,
+          "blocked_fire": 0,
+          "blocked_occupied": 3235,
+          "blocked_wall": 0,
+          "moved": 2737,
+          "stayed": 995
+        },
+        "people": 360,
+        "repeated_ineffective": 6779,
+        "stay_rate": 0.09193384459022452,
+        "stayed": 995,
+        "unresolved": 140,
+        "unresolved_rate": 0.3888888888888889,
+        "utility": -0.48055555555555557
+      },
+      "result_sha256": "bedf2cd0680ea19dfe00487db51a93c7d850a53ff0c40a3f519b7428ed961725",
+      "role": "completed_sft_snapshot",
+      "rows": 27979,
+      "sft_optimizer_sha256": "aeb056fe0f64b9e150a41e1f958cacf1be40f3af02b24c0d764938f824b446bf",
+      "source_head": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+      "status": "PASS",
+      "train_probe": {
+        "agreement": 0.806,
+        "legal_rate": 1.0,
+        "rows": 2000
+      },
+      "weights_digest": "sha256:74a197ddcfb1b149e7c69cdbc5f864edfc6e8c2c7a645c69b93564a311610e37"
+    },
+    {
+      "checkpoint": "s1",
+      "file_table_sha256": "3f970365b9e6082dc8da02f2160528edd0ae9f6c4625d77ed98a7a4e5db450d4",
+      "files": [
+        {
+          "path": "README.md",
+          "sha256": "4839c3850d0e52cafa33d37fa7a11983f5bbf5a4a689df90a3aa57a39f6cffe1",
+          "size": 5200
+        },
+        {
+          "path": "adapter_config.json",
+          "sha256": "0db1fd12dcab6a7ac615622dca7c20a2bfab2a71315a6c58945f448d112e88a0",
+          "size": 1768
+        },
+        {
+          "path": "adapter_model.safetensors",
+          "sha256": "9595352eb202bb65d27a35aeea1da98e9e1352716890cc98e98faf6c4324d28b",
+          "size": 67332688
+        },
+        {
+          "path": "chat_template.jinja",
+          "sha256": "ea210e5b4997b7b1d3af5ee3ad34e7677ffe38df7469e8d88089789b5a27fae5",
+          "size": 7991
+        },
+        {
+          "path": "full-fit.json",
+          "sha256": "ce81a457431ddd918544fb058dbab144702aaefc79aebedeecda01756f65e21d",
+          "size": 189620
+        },
+        {
+          "path": "joint_head.safetensors",
+          "sha256": "1839e6c95db36d2ae86b510d9aa6843f0e9ec076af6930dc9729cd7eb0b75d3a",
+          "size": 121902840
+        },
+        {
+          "path": "joint_head_config.json",
+          "sha256": "9ec32207deca79a5ec809cb8306c8222d435163da3800e6fdb42e8789a69b8f8",
+          "size": 116
+        },
+        {
+          "path": "optimizer.pt",
+          "sha256": "bde5b873c4ece93239b71346ff51bd47b4606b1d51f6000f3d154435abe635fc",
+          "size": 378757677
+        },
+        {
+          "path": "processor_config.json",
+          "sha256": "14932921ca485d458a04dafd8069fbb0a4505622a48208d19ed247115801385b",
+          "size": 1300
+        },
+        {
+          "path": "tokenizer.json",
+          "sha256": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+          "size": 19989343
+        },
+        {
+          "path": "tokenizer_config.json",
+          "sha256": "50f7ac27a0406e04c3c7f9d9f3f1b628952d7f8449b365655e4ed89373f41c64",
+          "size": 7161
+        },
+        {
+          "path": "unsloth_decision_config.json",
+          "sha256": "38a82e265362e2e863d5108e78cfc9927f744b4befd3ceffab5be35c738fd31f",
+          "size": 240
+        }
+      ],
+      "final_candidate": false,
+      "first_loss": 0.23347267939243466,
+      "fit_sha256": "ce81a457431ddd918544fb058dbab144702aaefc79aebedeecda01756f65e21d",
+      "id": "ember2-full-view-full-view-20261114t133215z-37025f-s1",
+      "last_loss": 0.2137363021465717,
+      "local_path": "/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f/s1",
+      "optimizer_steps": 8207,
+      "parent_checkpoint": "/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f/s0",
+      "raw_selection": {
+        "attempted": 6109,
+        "blocked": 2539,
+        "blocked_per_attempt": 0.41561630381404485,
+        "casualties": 57,
+        "casualty_rate": 0.15833333333333333,
+        "episodes": 32,
+        "evacuated": 225,
+        "evacuated_rate": 0.625,
+        "movements": {
+          "blocked_boundary": 0,
+          "blocked_conflict": 610,
+          "blocked_cycle": 400,
+          "blocked_fire": 0,
+          "blocked_occupied": 1529,
+          "blocked_wall": 0,
+          "moved": 3570,
+          "stayed": 1215
+        },
+        "people": 360,
+        "repeated_ineffective": 2221,
+        "stay_rate": 0.16589295466957946,
+        "stayed": 1215,
+        "unresolved": 78,
+        "unresolved_rate": 0.21666666666666667,
+        "utility": 0.14583333333333334
+      },
+      "result_sha256": "0a504ce684f1b08d3bdc04841d06d50b307ced110493a64176f1dbdd9f025edd",
+      "role": "completed_sft_snapshot",
+      "rows": 65656,
+      "sft_optimizer_sha256": "bde5b873c4ece93239b71346ff51bd47b4606b1d51f6000f3d154435abe635fc",
+      "source_head": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+      "status": "PASS",
+      "train_probe": {
+        "agreement": 0.703,
+        "legal_rate": 1.0,
+        "rows": 2000
+      },
+      "weights_digest": "sha256:52089fecd8c061be8400deb8cf56fc1a859b9c3841107a78999e4ee101e0213f"
+    },
+    {
+      "checkpoint": "s2",
+      "file_table_sha256": "706620c21a39820df95281264914d046667b11f36275641cd0f92f003e59e017",
+      "files": [
+        {
+          "path": "README.md",
+          "sha256": "4839c3850d0e52cafa33d37fa7a11983f5bbf5a4a689df90a3aa57a39f6cffe1",
+          "size": 5200
+        },
+        {
+          "path": "adapter_config.json",
+          "sha256": "0db1fd12dcab6a7ac615622dca7c20a2bfab2a71315a6c58945f448d112e88a0",
+          "size": 1768
+        },
+        {
+          "path": "adapter_model.safetensors",
+          "sha256": "4b8c5ed797666c878e0a0b80924e00caa11fbabc97408f2551792a42f0d2c062",
+          "size": 67332688
+        },
+        {
+          "path": "chat_template.jinja",
+          "sha256": "ea210e5b4997b7b1d3af5ee3ad34e7677ffe38df7469e8d88089789b5a27fae5",
+          "size": 7991
+        },
+        {
+          "path": "full-fit.json",
+          "sha256": "b64606c5b8516b9daae7959c393f719bbdee563baf4c121c785724b522202e4c",
+          "size": 310488
+        },
+        {
+          "path": "joint_head.safetensors",
+          "sha256": "1bcea1483e21ef88a091782b8072a54f27bd8e1ef59a9cf699769a95778bc9a4",
+          "size": 121902840
+        },
+        {
+          "path": "joint_head_config.json",
+          "sha256": "9ec32207deca79a5ec809cb8306c8222d435163da3800e6fdb42e8789a69b8f8",
+          "size": 116
+        },
+        {
+          "path": "optimizer.pt",
+          "sha256": "4194559052ecba608a26997cfd63b4936f35c374849881413dfd95929b053a4c",
+          "size": 378757677
+        },
+        {
+          "path": "processor_config.json",
+          "sha256": "14932921ca485d458a04dafd8069fbb0a4505622a48208d19ed247115801385b",
+          "size": 1300
+        },
+        {
+          "path": "tokenizer.json",
+          "sha256": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+          "size": 19989343
+        },
+        {
+          "path": "tokenizer_config.json",
+          "sha256": "50f7ac27a0406e04c3c7f9d9f3f1b628952d7f8449b365655e4ed89373f41c64",
+          "size": 7161
+        },
+        {
+          "path": "unsloth_decision_config.json",
+          "sha256": "38a82e265362e2e863d5108e78cfc9927f744b4befd3ceffab5be35c738fd31f",
+          "size": 240
+        }
+      ],
+      "final_candidate": false,
+      "first_loss": 1.2113777394406497,
+      "fit_sha256": "b64606c5b8516b9daae7959c393f719bbdee563baf4c121c785724b522202e4c",
+      "id": "ember2-full-view-full-view-20261114t133215z-37025f-s2",
+      "last_loss": 0.25594897211994977,
+      "local_path": "/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f/s2",
+      "optimizer_steps": 13458,
+      "parent_checkpoint": "/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f/s1",
+      "raw_selection": {
+        "attempted": 6243,
+        "blocked": 2920,
+        "blocked_per_attempt": 0.4677238507127983,
+        "casualties": 44,
+        "casualty_rate": 0.12222222222222222,
+        "episodes": 32,
+        "evacuated": 230,
+        "evacuated_rate": 0.6388888888888888,
+        "movements": {
+          "blocked_boundary": 0,
+          "blocked_conflict": 659,
+          "blocked_cycle": 376,
+          "blocked_fire": 0,
+          "blocked_occupied": 1885,
+          "blocked_wall": 0,
+          "moved": 3323,
+          "stayed": 1142
+        },
+        "people": 360,
+        "repeated_ineffective": 2600,
+        "stay_rate": 0.15463777928232905,
+        "stayed": 1142,
+        "unresolved": 86,
+        "unresolved_rate": 0.2388888888888889,
+        "utility": 0.2152777777777778
+      },
+      "result_sha256": "50f7a39902bd1c14ad372ea10b594b9d14a60df41e8f59f6d6541cd72d6c8182",
+      "role": "completed_sft_snapshot",
+      "rows": 107661,
+      "sft_optimizer_sha256": "4194559052ecba608a26997cfd63b4936f35c374849881413dfd95929b053a4c",
+      "source_head": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+      "status": "PASS",
+      "train_probe": {
+        "agreement": 0.7105,
+        "legal_rate": 1.0,
+        "rows": 2000
+      },
+      "weights_digest": "sha256:c55a773cb1af8151fb5c051de911d5e3fd2ee604288971f594c34dd593701adc"
+    },
+    {
+      "checkpoint": "s3",
+      "file_table_sha256": "ab625c5f99b9e5539ff125e4848519c32c4d0514968103b19d1731f75dc5ffc4",
+      "files": [
+        {
+          "path": "README.md",
+          "sha256": "4839c3850d0e52cafa33d37fa7a11983f5bbf5a4a689df90a3aa57a39f6cffe1",
+          "size": 5200
+        },
+        {
+          "path": "adapter_config.json",
+          "sha256": "0db1fd12dcab6a7ac615622dca7c20a2bfab2a71315a6c58945f448d112e88a0",
+          "size": 1768
+        },
+        {
+          "path": "adapter_model.safetensors",
+          "sha256": "f90fe9ec1271767992fb7d2d668f2bd4b919dec381c4c7ead6a7cabb38b43021",
+          "size": 67332688
+        },
+        {
+          "path": "chat_template.jinja",
+          "sha256": "ea210e5b4997b7b1d3af5ee3ad34e7677ffe38df7469e8d88089789b5a27fae5",
+          "size": 7991
+        },
+        {
+          "path": "full-fit.json",
+          "sha256": "79575f1732f1014919b71eab8fd3e2eaa1b5bfcc574aee7ee1169bfccd8d82b2",
+          "size": 461364
+        },
+        {
+          "path": "joint_head.safetensors",
+          "sha256": "c33de20fbdd405dd528118cc7ed1e06bbef4685058fab859a4d1efd6ca079782",
+          "size": 121902840
+        },
+        {
+          "path": "joint_head_config.json",
+          "sha256": "9ec32207deca79a5ec809cb8306c8222d435163da3800e6fdb42e8789a69b8f8",
+          "size": 116
+        },
+        {
+          "path": "optimizer.pt",
+          "sha256": "0b21e6505518d9399a7c6801d42ea021a4eea9af978240ad2fec3e6ae9d9bc28",
+          "size": 378757677
+        },
+        {
+          "path": "processor_config.json",
+          "sha256": "14932921ca485d458a04dafd8069fbb0a4505622a48208d19ed247115801385b",
+          "size": 1300
+        },
+        {
+          "path": "tokenizer.json",
+          "sha256": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+          "size": 19989343
+        },
+        {
+          "path": "tokenizer_config.json",
+          "sha256": "50f7ac27a0406e04c3c7f9d9f3f1b628952d7f8449b365655e4ed89373f41c64",
+          "size": 7161
+        },
+        {
+          "path": "unsloth_decision_config.json",
+          "sha256": "38a82e265362e2e863d5108e78cfc9927f744b4befd3ceffab5be35c738fd31f",
+          "size": 240
+        }
+      ],
+      "final_candidate": false,
+      "first_loss": 0.7414049749495462,
+      "fit_sha256": "79575f1732f1014919b71eab8fd3e2eaa1b5bfcc574aee7ee1169bfccd8d82b2",
+      "id": "ember2-full-view-full-view-20261114t133215z-37025f-s3",
+      "last_loss": 1.771141804754734,
+      "local_path": "/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f/s3",
+      "optimizer_steps": 20163,
+      "parent_checkpoint": "/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f/s2",
+      "result_sha256": "defab742179f92bc21d498f13d3554d91474e95a94651ee8382801d249c20175",
+      "role": "rejected_fit",
+      "rows": 161300,
+      "sft_optimizer_sha256": "0b21e6505518d9399a7c6801d42ea021a4eea9af978240ad2fec3e6ae9d9bc28",
+      "source_head": "8fb33d67738fc018ef8e3861ec4adf5b6b4f3320",
+      "status": "FAIL",
+      "train_probe": {
+        "agreement": 0.4825,
+        "legal_rate": 1.0,
+        "rows": 2000
+      },
+      "weights_digest": "sha256:634754d430c09e01ef0e53f368e8f8659802bf4eec92f9a50c294213c59091dc"
+    }
+  ],
+  "evidence_root": "/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f",
+  "original_v1_control": {
+    "files_checked": 14,
+    "manifest_sha256": "fb7573a93f9630b8486eeaa6d3e2bfce58ad1e2e8e7db74ff3f39651949d0952",
+    "revision": "1fc405f723718e308c8a22b137fee4a025086fde",
+    "root": "/home/darshith/ember-ws/artifacts/models/1fc405f723718e308c8a22b137fee4a025086fde/v1/p1-18-v1-train@1"
+  },
+  "original_v1_report_status": "NOT_RUN",
+  "package_manifest_sha256": "940ffed4063b6eab7cfd5ddc3d7974f4957d3044fd0fcdde79f8d2e7a0da456c",
+  "plan_sha256": "389ff09bd8950d7fe9e0cfb77fd5b2f16f2482de8a3e2cfeb2c20b705749c8d6",
+  "project": "ember2_v1",
+  "registry_version": 1,
+  "run_id": "ember2-full-view-full-view-20261114t133215z-37025f",
+  "runtime_amendment_sha256": "fbf97cd181b2412d89c0e7494e3f63df76a2a6f42a2bd8024ef1a96a4d15398c",
+  "status": "STOPPED_FAILED_FIT_GATE",
+  "storage": {
+    "intended_repo_name": "ember2-v1-models",
+    "local_verification": "PASS",
+    "manifest_sha256": "940ffed4063b6eab7cfd5ddc3d7974f4957d3044fd0fcdde79f8d2e7a0da456c",
+    "package": "/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f/package",
+    "private": null,
+    "reason": "HF_TOKEN is absent from the environment; no credential from chat or saved login was used.",
+    "repo_id": null,
+    "revision": null,
+    "status": "upload pending",
+    "utc": "2026-11-15T10:41:57.975718+00:00"
+  }
+}

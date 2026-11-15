@@ -1,0 +1,12 @@
+{
+  "intended_repo_name": "ember2-v1-models",
+  "local_verification": "PASS",
+  "manifest_sha256": "940ffed4063b6eab7cfd5ddc3d7974f4957d3044fd0fcdde79f8d2e7a0da456c",
+  "package": "/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f/package",
+  "private": null,
+  "reason": "HF_TOKEN is absent from the environment; no credential from chat or saved login was used.",
+  "repo_id": null,
+  "revision": null,
+  "status": "upload pending",
+  "utc": "2026-11-15T10:41:57.975718+00:00"
+}

@@ -9,9 +9,14 @@ here are historical evidence; no full-view result exists yet. Read [CURRENT_STAT
 Full-view evidence root: `/home/darshith/ember-ws/ember2-evidence/`; private HF: `ember2-v1-models` under
 the account of environment `HF_TOKEN`. Human-view evidence and `sankalphs/ember-v1-models` stay separate.
 
-The inherited human-view branch could not merge: its full-tier Linux gate failed because a historical
-Windows evidence path resolves inside the checkout. This repository follows the owner-authorized
-fallback and preserves the complete `feat/human-pov` history. No failed gate was bypassed or merged.
+The full-view run stopped at the unchanged round3 fit gate. No final candidate was frozen; no report
+arm or PPO phase ran. PR1 remains draft and open. The report panel is unspent.
+
+Read the [report](docs/FULL_VIEW_REPORT.md), [research model card](docs/FULL_VIEW_MODEL_CARD.md),
+and [checkpoint registry](data/rl/full-view-checkpoint-registry.json). Upload pending: HF_TOKEN is absent from the environment. No new HF repository was created and no HF revision or private-visibility verification is claimed for ember2-v1-models. The intended destination is a private model repository under the HF_TOKEN account. The credential pasted in chat was not used .
+
+Human-view PR60 passed its unmodified full tier on Windows Python3.11 and merged. Its complete merged
+history is inherited here. The two projects retain separate evidence roots and private HF destinations.
 
 ## Run locally
 
