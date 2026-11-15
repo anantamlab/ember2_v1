@@ -14,7 +14,7 @@ import time
 import traceback
 
 from ember_v1.full_dagger import read_dataset,topology
-from ember_v1.full_evidence import assert_disjoint,file_table,paired_intervals,sha256,verify_table,write_once
+from ember_v1.full_evidence import assert_disjoint,file_table,paired_intervals,sha256,verify_table,write_once,validate_plan_roots,select_ppo_seed
 from ember_v1.full_resume import load_amendment,process_snapshot,reuse_completed
 from ember_v1.rl_online_scenarios import build_scenarios
 
@@ -28,6 +28,8 @@ class Supervisor:
         self.repo=Path(repo).resolve();self.ev=Path(evidence).resolve();self.py=sys.executable
         assert self.ev.is_relative_to(Path('/home/darshith/ember-ws/ember2-evidence'))
         assert not self.ev.is_relative_to(self.repo)
+        if (self.ev/'config/plan.json').exists():
+            validate_plan_roots(self.ev/'config/plan.json',read(self.ev/'config/plan.json'))
         self.base_env=dict(os.environ,PYTHONPATH=str(self.repo/'src'),OMP_NUM_THREADS='4',MKL_NUM_THREADS='4',
             HF_HOME='/home/darshith/ember-ws/hf-home',HF_HUB_DISABLE_IMPLICIT_TOKEN='1',HF_HUB_OFFLINE='1',
             TRANSFORMERS_OFFLINE='1',TOKENIZERS_PARALLELISM='false')
@@ -131,6 +133,7 @@ class Supervisor:
         from runpy import run_path
         plan=read(self.ev/'config/plan.json');assert sha256(self.ev/'config/plan.json')==(self.ev/'config/plan.sha256').read_text().split()[0]
         assert plan['status']=='frozen'
+        validate_plan_roots(self.ev/'config/plan.json',plan)
         assert plan['source_head']==self.head or (self.amendment is not None and self.amendment['new_source_head']==self.head)
         for name,digest in plan['config_hashes'].items():assert sha256(self.ev/'config'/name)==digest
         panels=read(self.ev/'config/family-panels.json');assert_disjoint(panels)
@@ -177,10 +180,9 @@ class Supervisor:
                 out=self.ev/f'ppo-llm-seed-{seed}'
                 summary=self.op(f'ppo-llm-seed-{seed}-01','ppo',out,'gpu',extra=['--actor','llm','--student',best,'--config',self.ev/f'config/ppo-llm-{seed}.json'],verify=lambda out=out:self.verify_ppo(out))
                 seeds.append(summary)
-            eligible=[x for x in seeds if x['guard_passed'] and x['selected_utility']>last['utility']
-                      and x['selected']['casualty_rate']<=last['casualty_rate']+.02]
-            if eligible:
-                winner=max(eligible,key=lambda x:(x['selected_utility'],-x['config']['seed']))
+            masked_parent=next(x for x in fits if x['checkpoint']==str(best))['selection']['candidate_masked']['summary']
+            winner=select_ppo_seed(seeds,masked_parent)
+            if winner is not None:
                 candidate=self.ev/f"ppo-llm-seed-{winner['config']['seed']}"/f"update-{winner['selected_update']:04d}"/'actor'
         write_once(self.ev/'candidate-freeze.json',{'utc':utc(),'checkpoint':str(candidate),'files':file_table(candidate),
             'dagger_checkpoint':str(best),'dagger_files':file_table(best),'pre_ppo_gate':gate,'ppo_seeds':seeds,

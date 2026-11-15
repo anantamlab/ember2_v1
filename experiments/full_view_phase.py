@@ -9,7 +9,7 @@ from pathlib import Path
 
 from ember_v1 import full_dagger as fd
 from ember_v1.full_encoding import view_row
-from ember_v1.full_evidence import assert_disjoint,file_table,sha256,verify_table,write_once
+from ember_v1.full_evidence import assert_disjoint,file_table,sha256,verify_table,write_once,validate_plan_roots,report_checkpoint,verify_original
 from ember_v1.full_view import FullObserver
 from ember_v1.rl_online_scenarios import build_scenarios
 from ember_v1.sim import Simulator
@@ -26,6 +26,9 @@ def check_plan(path):
     assert plan['status']=='frozen' and plan['id']=='ember2-v1-full-view@1'
     assert plan['authorization']['source']=='owner prompt'
     assert sha256(path)==path.with_suffix('.sha256').read_text().split()[0]
+    validate_plan_roots(path,plan)
+    if 'source_head' in plan and not plan.get('original_v1',{}).get('manifest_sha256'):
+        raise ValueError('production plan requires original manifest pin')
     for name,digest in plan['config_hashes'].items():assert sha256(path.parent/name)==digest
     return plan
 
@@ -107,11 +110,16 @@ def main():
         if a.split=='report':
             assert a.arm in plan['report_arms'];freeze=read(ev/'candidate-freeze.json')
             verify_table(freeze['checkpoint'],freeze['files']);verify_table(freeze['dagger_checkpoint'],freeze['dagger_files'])
+            if a.arm in ('candidate_raw','candidate_masked','dagger_raw'):
+                a.student=report_checkpoint(a.arm,freeze,a.student)
+            if a.arm in ('original_v1_raw','original_v1_masked'):
+                verify_original(plan['original_v1'])
             marker=ev/'attempts'/('report-'+a.arm+'.started.json')
             write_once(marker,{'arm':a.arm,'panel':panel,'candidate_freeze_sha256':sha256(ev/'candidate-freeze.json')})
         if a.arm=='teacher':policy=fd.teacher_policy(teacher,seed)
         elif a.arm=='random_legal':policy=fd.random_policy(0)
         elif a.arm in ('original_v1_raw','original_v1_masked'):
+            verify_original(plan['original_v1'])
             from ember_v1.policy_arms import ArmPolicy
             from ember_v1.student_train import ClefLoraAdapter
             cfg=config_from_protocol(load_protocol());adapter=ClefLoraAdapter(cfg,checkpoint=Path(plan['original_v1']['root'])/'final')

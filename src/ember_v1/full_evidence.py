@@ -8,6 +8,47 @@ from pathlib import Path
 import numpy as np
 
 
+def validate_plan_roots(path, plan):
+    """Bind real frozen plans to their durable evidence and attempt-marker roots."""
+    actual = Path(path).resolve().parent.parent
+    # Small CPU protocol fixtures predate source/root declarations. Production plans have source_head.
+    required = 'source_head' in plan or 'evidence_root' in plan or 'attempt_markers_root' in plan
+    if required and (not plan.get('evidence_root') or not plan.get('attempt_markers_root')
+            or Path(plan['evidence_root']).resolve() != actual
+            or Path(plan['attempt_markers_root']).resolve() != actual / 'attempts'):
+        raise ValueError('frozen evidence/attempt root mismatch')
+    return actual
+
+
+def report_checkpoint(arm, freeze, requested):
+    key = 'dagger_checkpoint' if arm == 'dagger_raw' else 'checkpoint'
+    expected = Path(freeze[key]).resolve()
+    if requested is not None and Path(requested).resolve() != expected:
+        raise ValueError('report checkpoint differs from frozen arm')
+    return expected
+
+
+def verify_original(pinned):
+    """Validate the pinned original artifact again at use, before model loading."""
+    if 'manifest_sha256' not in pinned:
+        # Legacy mock-only fixtures have no pinned artifact manifest.
+        return
+    root = Path(pinned['root']); manifest = root / 'ARTIFACT.json'
+    if sha256(manifest) != pinned['manifest_sha256']:
+        raise ValueError('original manifest hash mismatch')
+    table = json.loads(manifest.read_text())['files']
+    if len(table) != pinned['files_checked']:
+        raise ValueError('original manifest count mismatch')
+    verify_table(root, table)
+
+
+def select_ppo_seed(seeds, masked_parent):
+    eligible = [s for s in seeds if s['guard_passed']
+                and s['selected_utility'] > masked_parent['utility']
+                and s['selected']['casualty_rate'] <= masked_parent['casualty_rate'] + .02]
+    return max(eligible, key=lambda s: (s['selected_utility'], -s['config']['seed'])) if eligible else None
+
+
 def sha256(path):
     with Path(path).open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
 
