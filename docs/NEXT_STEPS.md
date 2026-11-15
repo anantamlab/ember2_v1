@@ -1,25 +1,16 @@
-# Deferred full-view version2 work
+# Full-view version 2 next steps (deferred)
 
-This authorization ended at the failed round3 fit gate. Nothing here runs now. Every phase requires
-a new frozen plan and owner authorization; no reserved V1.1 data is available. The128-family report panel
-remains unspent, but this does not authorize running it after the stop.
+Nothing here runs under this completed plan. A larger dataset/version 2 requires a new frozen plan and
+owner authorization, fresh namespaces/panels and the same protected-source, budget and privacy rules.
 
-Before another experiment, resolve the three implementation blockers recorded in FULL_VIEW_REPORT.md: frozen evidence-root binding, report checkpoint/hash binding, and consistent PPO selection guards. Add CPU regressions before a newly frozen plan.
-
-Before increasing data, define a convergence diagnostic on fixed TRAIN examples before fitting. The
-current first-versus-last shuffled-group criterion failed and was preserved unchanged; a different
-metric belongs in a new plan. Audit loss scaling for partial accumulation groups, initialization,
-optimizer state and learning curves with CPU/mock checks before another authorized GPU attempt.
-
-Test whether adding difficult student states improves teacher agreement and crowd coordination. Run
-matched ablations for neighbour status and action/outcome memory, stratified by geometry, crowd density,
-exits and fire. Keep crashes and length violations as results; check complete token lengths first.
-
-Use at least three independent DAgger initializations before making seed-robustness claims. Increase
-TRAIN volume only if new held-out selection learning curves support a data limit. Preserve topology
-isolation and the raw zero-wall/boundary plus .05 teacher-utility prerequisite before PPO .
-
-Verify exact GPU next-update actor/critic/optimizer/RNG restoration under a separately authorized plan.
-Then compare guarded PPO seeds against their DAgger parents and original V1 raw/masked on one new
-matched report, with 5,000 paired family resamples. Never select on report outcomes. Confirm private HF
-upload and download hashes using environment credentials. Sealed FINAL and EMBERBench remain sealed.
+- First establish a fixed matched TRAIN loss diagnostic before fitting; retain the stochastic curve
+  without comparing unrelated first/last minibatches as a convergence gate.
+- Diagnose per-label action imbalance, own-state teacher disagreement and crowd occupancy/conflict/cycle
+  blocks on SELECT before expanding collection. Verify legal raw actions independently of an external mask.
+- Test whether additional student-state coverage improves raw utility toward the realizable T1 teacher;
+  predeclare dataset sizes and stop rules, with multiple independent SFT seeds before strong claims.
+- Verify the raw zero-wall/boundary and within 0.05-teacher gate before any new PPO. Preserve actor/critic/
+  optimizer/RNG resume state, per-person masks/ratios, imitation anchor and unchanged replay/casualty gates.
+- Predeclare original-V1 / raw/masked/teacher/random/DAgger/PPO arms and fresh paired family panels;
+  reserve enough budget for every one-shot report arm. Never reuse this spent 128-family report panel.
+- Keep sealed final/EMBERBench/hidden benchmarks and reservedV1.1 data closed unless separately authorized.

@@ -1,22 +1,17 @@
 # ember2_v1 — Full-view Evacuation Decision Model
 
-Private project `anantamlab/ember2_v1`: every person sees the full public map, all people, fire and exits,
-plus their own last action/outcome and neighbour-cell statuses. One row and one decision per person.
-The Python package stays `ember_v1`.
+Private full-view project anantamlab/ember2_v1: whole public map, people, fire and exits per person,
+own last action/outcome and neighbour status. Package name remains ember_v1. Full-view recovery and
+seven-arm report completed; report panel spent. On this report panel, the new raw full-view model is better than original V1 on utility. PPO did not run because the pre-PPO gate failed; no PPO gain over DAgger is established.
 
-The separate human-view project is `anantamlab/ember_v1`. Human-view and R19–R22 documents inherited
-here are historical evidence; no final candidate or report result exists. Read [CURRENT_STATE](docs/CURRENT_STATE.md).
-Full-view evidence root: `/home/darshith/ember-ws/ember2-evidence/`; private HF: `ember2-v1-models` under
-the account of environment `HF_TOKEN`. Human-view evidence and `sankalphs/ember-v1-models` stay separate.
+Read [report](docs/FULL_VIEW_REPORT.md), [model card](docs/FULL_VIEW_MODEL_CARD.md),
+[state](docs/CURRENT_STATE.md) and [checkpoint registry](data/rl/full-view-checkpoint-registry.json).
+Upload pending. No usable environment HF_TOKEN with write access was available; the evidence remains local. No chat credential or saved login was used. No new HF revision or private-visibility verification is claimed. Intended private repo: the HF_TOKEN account’s ember2-v1-models.
 
-The full-view run stopped at the unchanged round3 fit gate. No final candidate was frozen; no report
-arm or PPO phase ran. PR1 remains draft and open. The report panel is unspent.
-
-Read the [report](docs/FULL_VIEW_REPORT.md), [research model card](docs/FULL_VIEW_MODEL_CARD.md),
-and [checkpoint registry](data/rl/full-view-checkpoint-registry.json). Upload pending: HF_TOKEN is absent from the environment. No new HF repository was created and no HF revision or private-visibility verification is claimed for ember2-v1-models. The intended destination is a private model repository under the HF_TOKEN account. The credential pasted in chat was not used .
-
-Human-view PR60 passed its unmodified full tier on Windows Python3.11 and merged. Its complete merged
-history is inherited here. The two projects retain separate evidence roots and private HF destinations.
+Human-view anantamlab/ember_v1 is separate. Its PR60 merged, full human-main history is included here;
+inherited human/R19–R22 documents are historical. Human evidence and private sankalphs/ember-v1-models
+stay unchanged. Full-view evidence root /home/darshith/ember-ws/ember2-evidence; its private HF target
+is the environment HF_TOKEN account’s ember2-v1-models. Final integration gates are recorded on PR1.
 
 ## Run locally
 

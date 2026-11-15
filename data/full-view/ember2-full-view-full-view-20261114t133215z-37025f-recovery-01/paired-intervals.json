@@ -1,0 +1,86 @@
+{
+  "candidate_masked-minus-original_v1_masked": {
+    "families": 128,
+    "method": "paired-family percentile, weighted totals",
+    "metrics": {
+      "casualty_rate": {
+        "delta": -0.025174825174825166,
+        "high": 0.015964207548176977,
+        "low": -0.06876164835686159
+      },
+      "evacuated_rate": {
+        "delta": -0.005594405594405605,
+        "high": 0.03852153181268521,
+        "low": -0.04804426748351215
+      },
+      "unresolved_rate": {
+        "delta": 0.03076923076923077,
+        "high": 0.06169597381581027,
+        "low": 0.0
+      },
+      "utility": {
+        "delta": 0.021678321678321677,
+        "high": 0.14833981998372867,
+        "low": -0.09538065686480654
+      }
+    },
+    "resamples": 5000,
+    "seed": 0
+  },
+  "candidate_raw-minus-dagger_raw": {
+    "families": 128,
+    "method": "paired-family percentile, weighted totals",
+    "metrics": {
+      "casualty_rate": {
+        "delta": 0.0,
+        "high": 0.0,
+        "low": 0.0
+      },
+      "evacuated_rate": {
+        "delta": 0.0,
+        "high": 0.0,
+        "low": 0.0
+      },
+      "unresolved_rate": {
+        "delta": 0.0,
+        "high": 0.0,
+        "low": 0.0
+      },
+      "utility": {
+        "delta": 0.0,
+        "high": 0.0,
+        "low": 0.0
+      }
+    },
+    "resamples": 5000,
+    "seed": 0
+  },
+  "candidate_raw-minus-original_v1_raw": {
+    "families": 128,
+    "method": "paired-family percentile, weighted totals",
+    "metrics": {
+      "casualty_rate": {
+        "delta": -0.1020979020979021,
+        "high": -0.05941881543943036,
+        "low": -0.14605633326570638
+      },
+      "evacuated_rate": {
+        "delta": 0.11188811188811193,
+        "high": 0.1618414005412843,
+        "low": 0.06355484722624685
+      },
+      "unresolved_rate": {
+        "delta": -0.00979020979020978,
+        "high": 0.025856949414127518,
+        "low": -0.04795473121235475
+      },
+      "utility": {
+        "delta": 0.3234265734265734,
+        "high": 0.4538767441376483,
+        "low": 0.19350121414306465
+      }
+    },
+    "resamples": 5000,
+    "seed": 0
+  }
+}

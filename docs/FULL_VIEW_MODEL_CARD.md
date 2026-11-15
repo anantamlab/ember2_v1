@@ -1,34 +1,40 @@
-# Full-view research model card: no final candidate
+# Full-view model card
 
-Run `ember2-full-view-full-view-20261114t133215z-37025f` stopped at the unchanged round3 fit gate. No final candidate was frozen or approved.
-Snapshots s0–s2 completed fit/SELECT; s3 is rejected and retained only for audit. The best completed
-SELECT snapshot is `s2`, with raw SELECT utility 0.215278;
-this is not a report score. Registry: `data/rl/full-view-checkpoint-registry.json`, with producing
-source/result hashes, complete file tables, optimizer hashes and the rejected checkpoint status.
+The frozen candidate is the S2 DAgger checkpoint, `/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f/s2`. PPO was skipped by the frozen
+utility gate. Producing source: `8fb33d67738fc018ef8e3861ec4adf5b6b4f3320`; original fit result: PASS.
+The separate rejected S3 fit remains FAIL in the registry, with its later TRAIN diagnostic acceptance
+recorded separately. It is not the final candidate.
 
-Base `unsloth/Qwen3.5-2B@fffbc0d8711cf87df6d1f97938c5e50ef94aadc7`; frozen backbone, LoRA r16,
+Base `unsloth/Qwen3.5-2B@fffbc0d8711cf87df6d1f97938c5e50ef94aadc7`, frozen backbone, LoRA rank 16,
 float32 Clef five-option head. Action order: east, north, south, stay, west. Input is one complete public
-full-view observation per active person, self marker, own last action/outcome and four neighbour-cell
-statuses. Separate map layers are preserved. No hidden state, route hint or input truncation.
+full-map observation per active person, marked self, all public people/status, fire, exits and rules,
+their last action/outcome and four neighbour statuses. No hidden state or route hint is supplied.
+T1 labels and all DAgger fitting used TRAIN data; candidate selection used SELECT only.
 
-| Frozen report arm | Outcome | Paired interval |
-|---|---|---|
-| New model, raw | NOT RUN: stopped before candidate freeze | Unavailable |
-| New model + legal mask | NOT RUN: stopped before candidate freeze | Unavailable |
-| DAgger before PPO, raw | NOT RUN: stopped before candidate freeze | Unavailable |
-| T1 teacher | NOT RUN: stopped before candidate freeze | Unavailable |
-| Random legal moves | NOT RUN: stopped before candidate freeze | Unavailable |
-| Original V1, raw | NOT RUN: stopped before candidate freeze | Unavailable |
-| Original V1 + legal mask | NOT RUN: stopped before candidate freeze | Unavailable |
+| Arm | Evacuated | Casualties | Unresolved | Utility | Blocked / attempted | Wall / boundary |
+|---|---:|---:|---:|---:|---:|---:|
+| New candidate, raw | 863/1,430 | 340 | 227 | 0.008916 | 39.03% | 0 / 0 |
+| New candidate + mask | 863/1,430 | 340 | 227 | 0.008916 | 39.03% | 0 / 0 |
+| DAgger before PPO, raw | 863/1,430 | 340 | 227 | 0.008916 | 39.03% | 0 / 0 |
+| T1 teacher | 1,294/1,430 | 51 | 85 | 0.788986 | 0.00% | 0 / 0 |
+| Random legal moves | 255/1,430 | 718 | 457 | -1.065559 | 11.01% | 0 / 0 |
+| Original V1, raw | 703/1,430 | 486 | 241 | -0.314510 | 71.80% | 9,028 / 419 |
+| Original V1 + mask | 871/1,430 | 376 | 183 | -0.012762 | 45.07% | 0 / 0 |
 
-The stopped run does not establish that the new full-view model is better than original V1; no direct report comparison ran. PPO did not run, so no PPO gain over DAgger is established.
+The new raw model is better than original raw V1 on this panel: utility difference +0.323427,
+95% paired-family interval [0.193501, 0.453877]. A masked advantage is not established: +0.021678,
+interval [-0.095381, 0.148340]. PPO did not run, so no PPO gain over DAgger is established.
+The report panel contains 128 families and 1,430 people and is spent. Full intervals and failures are
+in [FULL_VIEW_REPORT](FULL_VIEW_REPORT.md) and [FULL_VIEW_FAILURES](FULL_VIEW_FAILURES.md).
 
-Original plan SHA256 `389ff09bd8950d7fe9e0cfb77fd5b2f16f2482de8a3e2cfeb2c20b705749c8d6`. Control-only runtime supplement SHA256 `fbf97cd181b2412d89c0e7494e3f63df76a2a6f42a2bd8024ef1a96a4d15398c`. Controller source `8fb33d67738fc018ef8e3861ec4adf5b6b4f3320`. Per-phase producing sources and result/log hashes are in the compact summary and checkpoint registry.
-Package manifest SHA256 `940ffed4063b6eab7cfd5ddc3d7974f4957d3044fd0fcdde79f8d2e7a0da456c`. Upload pending: HF_TOKEN is absent from the environment. No new HF repository was created and no HF revision or private-visibility verification is claimed for ember2-v1-models. The intended destination is a private model repository under the HF_TOKEN account. The credential pasted in chat was not used .
+Weights digest `sha256:c55a773cb1af8151fb5c051de911d5e3fd2ee604288971f594c34dd593701adc`; file-table SHA256 `706620c21a39820df95281264914d046667b11f36275641cd0f92f003e59e017`.
+Candidate-freeze SHA256 `d93ff510f54ae85b27e68d67993b6d59e28962f4ff49a45a19f6ef9e5322ebfe`. All file hashes are in the checkpoint registry.
+Original plan `389ff09bd8950d7fe9e0cfb77fd5b2f16f2482de8a3e2cfeb2c20b705749c8d6`; recovery plan `3a7f5bfe3bcc584c77f4483f5e16b1d7f9e2bc18d1352649d5358d9268fe0483`.
+Local evidence `/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f`; package manifest `9fc70001cf9627215d149269f3c35a87ac6203bea2b40e0736a1f860321daa63`.
 
-Do not claim a final model, passing convergence gate, report score, gain over original V1, PPO gain,
-training-seed robustness, perfect planning, comparison with R19–R22, sealed/hidden-set or EMBERBench score.
-The static action mask is an external rule. CPU checkpoint continuation tests do not establish exact GPU
-continuation. See FULL_VIEW_REPORT.md for retained negative results, diagnosis and budgets.
+Upload pending: HF_TOKEN is absent from the environment. The package remains local; no full-view HF repository, revision or private-visibility check is claimed. The intended private destination is the HF_TOKEN account’s ember2-v1-models. The chat credential and saved logins were not used.
 
-Three unexecuted-path implementation review blockers remain unresolved; see FULL_VIEW_REPORT.md. This snapshot is not approved for another experiment or report invocation.
+Do not claim multiple independent SFT seeds, a PPO benefit, superiority over masked original V1,
+teacher-level performance, component-specific causal gains, exact GPU trainer continuation, or a
+sealed/hidden/EMBERBench score. No reserved V1.1 data was used. Raw legality does not solve crowd
+coordination: the new model still had 340 casualties and 8,242 crowd blocks on this panel.

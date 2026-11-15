@@ -1,22 +1,28 @@
 # ember2_v1 current state
 
-**STOPPED: round3 fit completion gate failed . No final candidate, report results or PPO run . PR1 stays
-draft and open; no failed-gate merge.**
+The full-view scientific run is complete. All seven one-shot arms ran on 128 shared report families
+(1,430 people); the panel is spent. The controller exited 0, and no training, collection or evaluation remains active.
 
-The stopped run does not establish that the new full-view model is better than original V1; no direct report comparison ran. PPO did not run, so no PPO gain over DAgger is established.
+The final candidate is S2 DAgger: raw utility 0.008916 versus original raw V1 -0.314510, difference
++0.323427 (95% interval [0.193501, 0.453877]). The masked comparison is inconclusive. PPO was skipped
+because the SELECT utility gap to T1 exceeded 0.05, so no PPO gain is established.
 
-Private full-view repository: `anantamlab/ember2_v1`. Separate private human-view project:
-`anantamlab/ember_v1`, PR60 merged at`4ef795a7f3efb2a720d3b2e63ad723dc8fa1cb02`. Human-view results in
-inherited history are not full-view results. Its private HF location stays`sankalphs/ember-v1-models`;
-human evidence stays under`/home/darshith/ember-ws/rl-evidence/human-pov/`. No new human experiment ran.
+The old S3 fit FAIL and stopped closeout remain preserved. A new frozen, optimizer-free matched-TRAIN
+audit passed a strict small loss decrease, then the unstarted SELECT/report phases ran once.
+S3 did not replace S2. Review blockers were repaired with CPU regressions; no completed phase was repeated.
 
-Full-view evidence:`/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f`. Original plan SHA256 `389ff09bd8950d7fe9e0cfb77fd5b2f16f2482de8a3e2cfeb2c20b705749c8d6`. Control-only runtime supplement SHA256 `fbf97cd181b2412d89c0e7494e3f63df76a2a6f42a2bd8024ef1a96a4d15398c`. Controller source `8fb33d67738fc018ef8e3861ec4adf5b6b4f3320`. Per-phase producing sources and result/log hashes are in the compact summary and checkpoint registry.
-Manifest SHA256:`940ffed4063b6eab7cfd5ddc3d7974f4957d3044fd0fcdde79f8d2e7a0da456c`. Upload pending: HF_TOKEN is absent from the environment. No new HF repository was created and no HF revision or private-visibility verification is claimed for ember2-v1-models. The intended destination is a private model repository under the HF_TOKEN account. The credential pasted in chat was not used .
+Candidate `/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f/s2`. Weights digest `sha256:c55a773cb1af8151fb5c051de911d5e3fd2ee604288971f594c34dd593701adc`.
+Original plan `389ff09bd8950d7fe9e0cfb77fd5b2f16f2482de8a3e2cfeb2c20b705749c8d6`; recovery `3a7f5bfe3bcc584c77f4483f5e16b1d7f9e2bc18d1352649d5358d9268fe0483`.
+Evidence `/home/darshith/ember-ws/ember2-evidence/2026-11-14/full-view-20261114T133215Z-37025f`. Package manifest `9fc70001cf9627215d149269f3c35a87ac6203bea2b40e0736a1f860321daa63`.
+Upload pending: HF_TOKEN is absent from the environment. The package remains local; no full-view HF repository, revision or private-visibility check is claimed. The intended private destination is the HF_TOKEN account’s ember2-v1-models. The chat credential and saved logins were not used.
 
-Three unexecuted-path review blockers also remain unresolved: evidence-root binding, report checkpoint/hash binding and a PPO selection-rule discrepancy. They independently prevent merge or further use.
+Private full-view project: anantamlab/ember2_v1. Integration and exact final-head verification are recorded
+on [PR1](https://github.com/anantamlab/ember2_v1/pull/1) and in the external final ledger.
+Private human-view anantamlab/ember_v1 is separate; PR60 merged at
+`4ef795a7f3efb2a720d3b2e63ad723dc8fa1cb02`, with full history inherited here. Human evidence and private
+`sankalphs/ember-v1-models` are unchanged. No new human experiment ran.
 
 See [report](FULL_VIEW_REPORT.md), [model card](FULL_VIEW_MODEL_CARD.md),
-[registry](../data/rl/full-view-checkpoint-registry.json) and [deferred work](NEXT_STEPS.md).
-All attempts and the failed s3 weights remain preserved. The128-family report panel remains unspent.
-Exact final-head local receipts, push identity, final reviewer comments and shutdown/scheduler checks
-are recorded in the PR and external final ledger. No further experiment is authorized by these documents.
+[failure ledger](FULL_VIEW_FAILURES.md), [registry](../data/rl/full-view-checkpoint-registry.json)
+and [deferred version2 work](NEXT_STEPS.md). All checkpoint identities, raw report hashes, limits and
+storage status match the evidence. New work requires a new frozen plan and owner authorization.
