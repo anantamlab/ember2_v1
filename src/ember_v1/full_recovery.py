@@ -69,8 +69,9 @@ def validate_reused(ev,name,command,category,plan_hash,declaration,*,failed_fit=
     return record
 
 
-def load_recovery(path,head):
+def load_recovery(path,head,*,evidence):
     path=Path(path).resolve();ev=path.parent.parent
+    if ev!=Path(evidence).resolve():raise ValueError('recovery/controller evidence root mismatch')
     if sha256(path)!=path.with_suffix('.sha256').read_text().split()[0]:raise ValueError('recovery hash mismatch')
     value=json.loads(path.read_text());plan_path=ev/'config/plan.json';plan=json.loads(plan_path.read_text())
     validate_plan_roots(plan_path,plan)

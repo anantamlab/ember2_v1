@@ -122,12 +122,14 @@ def main():
             verify_original(plan['original_v1'])
             from ember_v1.policy_arms import ArmPolicy
             from ember_v1.student_train import ClefLoraAdapter
-            cfg=config_from_protocol(load_protocol());adapter=ClefLoraAdapter(cfg,checkpoint=Path(plan['original_v1']['root'])/'final')
+            a.student=Path(plan['original_v1']['root'])/'final'
+            cfg=config_from_protocol(load_protocol());adapter=ClefLoraAdapter(cfg,checkpoint=a.student)
             original=ArmPolicy(adapter,cfg,a.arm,'A_raw' if a.arm.endswith('_raw') else 'B_static_mask')
             policy=lambda views:original.decide(next(iter(views.values()))['observation']).actions
         else:
             policy=fd.adapter_policy(fd.load_adapter('clef',a.student),masked=a.arm=='candidate_masked')
         result=fd.evaluate(ss,policy);result.update(arm=a.arm,split=a.split,panel=panel,student=str(a.student or ''))
+        if a.arm in ('original_v1_raw','original_v1_masked'):result['original_v1_identity']=plan['original_v1']
         write_once(a.out,result);print(json.dumps(result['summary']))
     else:
         import torch

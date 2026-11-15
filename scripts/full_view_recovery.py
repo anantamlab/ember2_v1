@@ -14,7 +14,7 @@ from ember_v1.full_recovery import load_recovery,validate_reused,compare_losses
 class RecoverySupervisor(Supervisor):
     def __init__(self,repo,evidence,recovery_path):
         super().__init__(repo,evidence)
-        self.recovery_path=Path(recovery_path).resolve();self.recovery=load_recovery(self.recovery_path,self.head)
+        self.recovery_path=Path(recovery_path).resolve();self.recovery=load_recovery(self.recovery_path,self.head,evidence=self.ev)
         self.recovery_hash=sha256(self.recovery_path)
         ledger=read(self.ev/self.recovery['budget_ledger']['path'])['budget']
         self.cpu=ledger['cpu_seconds_total_conservatively_charged']+self.recovery['additional_cpu_seconds']
