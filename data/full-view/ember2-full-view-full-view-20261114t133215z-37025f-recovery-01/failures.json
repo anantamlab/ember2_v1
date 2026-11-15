@@ -1,0 +1,178 @@
+{
+  "failures": [
+    {
+      "evidence": "verification/first-head/verify-local.log; verification/first-head-02/",
+      "fix": "Created a fresh state target and a new verification directory; added only /.local-test-logs to .git/info/exclude. No source/test input changed.",
+      "phase": "first-head verification setup",
+      "root_cause": "External verification-state symlink target was not created; external log directory symlink was not excluded in local Git metadata.",
+      "source": "development-failures.json",
+      "symptom": "Receipt creation failed; first log also reported one untracked change. Pytest itself returned 1458 passed,206 skipped,10 xfailed.",
+      "test": "New named first-head-02 clean DEFAULT verification PASS; receipt and log hashes in first-push.json."
+    },
+    {
+      "evidence": "Original focused failure output is retained in this task tool transcript; this compact record preserves counts, symptoms, cause and repair.",
+      "fix": "Corrected only newly authored, uncommitted fixture calls to the established dict API; preserved their assertions. Production teacher factory now inspects the retained constructor and supplies seed only when supported. No inherited test changed.",
+      "phase": "new uncommitted full-view test-fixture development",
+      "root_cause": "New fixtures incorrectly treated Simulator.observe() as an object with .to_dict(); the new teacher wrapper incorrectly passed seed to deterministic T1, whose retained constructor takes no seed.",
+      "source": "development-failures.json",
+      "symptom": "8 failed,8 passed in first focused run; errors occurred at test fixture construction and teacher construction.",
+      "test": "Full-view and inherited human PPO focused check:16 passed; with evidence/supervisor and human DAgger checks:35 passed. All new tests committed at32a10f42."
+    },
+    {
+      "fix": "Implement new bindings/audit/reuse helpers.",
+      "root_cause": "Intentional RED before new helpers/modules existed.",
+      "source": "verification/recovery-development-failures-01.json",
+      "symptom": "Initial binding tests ImportError; saved-audit tests ModuleNotFoundError.",
+      "test": "New regressions GREEN, then full focused41passed."
+    },
+    {
+      "fix": "Explicit --cd target and PYTHONPATH=src; no test/source bypass.",
+      "root_cause": "WSL invocation lacked checkout PYTHONPATH.",
+      "source": "verification/recovery-development-failures-01.json",
+      "symptom": "One focused command imported old editable-install package and could not find full_evidence/full_recovery.",
+      "test": "Same new test selection GREEN; official verify_local independently checks import provenance."
+    },
+    {
+      "fix": "Require explicit controller evidence root; record actual original/final.",
+      "root_cause": "Missing controller-root equality; metadata used unrelated CLI value.",
+      "source": "verification/recovery-development-failures-01.json",
+      "symptom": "Fresh review RED root-loader keyword and original checkpoint metadata.",
+      "test": "Both reproductions GREEN within41focusedtests."
+    },
+    {
+      "fix": "Add a real CPU fixture member; assertions unchanged; no inherited/existing test weakened.",
+      "root_cause": "Empty PAX tar fixture had global metadata without a member.",
+      "source": "verification/recovery-development-failures-01.json",
+      "symptom": "New review test fixture tarfile.ReadError end of file header.",
+      "test": "Real recovery loader/tamper regression GREEN."
+    },
+    {
+      "fix": "Inspect actual JSON keys; use direct WSL --cd/env or Python scripts and UNC reads.",
+      "root_cause": "Plan key is budget; PowerShell-to-WSL shell quoting.",
+      "source": "verification/recovery-development-failures-01.json",
+      "symptom": "Read-only status query KeyError budgets; one Bash quote/pipe command failed.",
+      "test": "Frozen recovery helper completed and actual records parsed; no experiment started."
+    },
+    {
+      "fix": "Use ctypes bindings to the same libc pidfd functions, preserving process-identity protection.",
+      "phase": "Linux CPU handoff prototype",
+      "root_cause": "Those optional wrappers were not compiled into this interpreter; runtimeglibc2.39 has both functions.",
+      "source": "verification/controller-transition-development-01.json",
+      "symptom": "Pinned Python exposes neither os.pidfd_open nor signal.pidfd_send_signal.",
+      "test": "ActualLinux CPU lifecyclecheckPASS: parentheld/childnormalexit/noadvance/reaped."
+    },
+    {
+      "fix": "Build from the actual CIM class and pass uint16 ShowWindow0; ReturnValue0, PID43424.",
+      "phase": "WMI boundary launcher setup",
+      "root_cause": "The generic CIM startup instance used an untyped ShowWindow property.",
+      "source": "verification/controller-transition-development-01.json",
+      "symptom": "First Create rejected ProcessStartupInformation with Type mismatch; no process was created.",
+      "test": "Existing-launcher check confirmednone before the corrected invocation."
+    },
+    {
+      "fix": "Preserve setupfailure/log and attach a new handoff02 to the currentfit after expanding the same verified monitor for fitcompletion.",
+      "phase": "Boundary handoff01 attachment",
+      "root_cause": "Administrativepreparation overlapped phasecompletion; oldsupervisor legitimately advancedtofit.",
+      "source": "verification/controller-transition-development-01.json",
+      "symptom": "Startupguard rejected because collection had completed normally before attachment.",
+      "test": "No parent-held record; parent4320remainedrunning; d1collectPASS and fitPID22218live. No experimentrelaunched."
+    },
+    {
+      "fix": "Recovered actual monitor23876 from its own start record, verified /proc command identity, parentheld T and originalfit alive, preserved launcher source and recovery receipt, did NOT relaunch. Future launchers must reserve UNIQUEmetadata BEFORE spawning.",
+      "phase": "Handoff02 launcher bookkeeping",
+      "root_cause": "Mechanical replacement did not rename boundary-handoff-launch.json.",
+      "source": "verification/controller-transition-development-02.json",
+      "symptom": "Exclusive metadata creation failed after monitor spawn because generated launcher02 retained launcher01 unsuffixed filename.",
+      "test": "Actualmonitor command verifiedlive; parent-held record, heartbeat, fitPID22218live andGPUactive. Completionresults remainproduced by the independentmonitor."
+    },
+    {
+      "fix": "Call decide(obs).actions. Preserve the live original fit to normal completion via a pidfd boundary handoff, then activate a verified control-only runtime supplement before any report.",
+      "phase": "Original V1 control bridge, caught before reporting",
+      "root_cause": "The new wrapper used the wrong API for the inherited original V1 policy.",
+      "source": "verification/controller-transition-development-03.json",
+      "symptom": "Two CPU cases raised AttributeError; the wrapper called ArmPolicy.act, which does not exist.",
+      "test": "Real original encoder and ArmPolicy with CPU mock adapter: two RED cases, then five GREEN checks including full DAgger; final complete control/protocol checks49passed. No real report invocation was consumed."
+    },
+    {
+      "fix": "Treat a missing already-reaped child as terminal while still retiring the controller and closing pidfds. The active archived monitor was not hotpatched.",
+      "phase": "Boundary cleanup race",
+      "root_cause": "Cleanup assumed the child proc entry survived parent retirement.",
+      "source": "verification/controller-transition-development-03.json",
+      "symptom": "The new cleanup regression raised FileNotFoundError when the child was already reaped.",
+      "test": "test_reaped_child_does_not_interrupt_controller_retirement_or_descriptor_cleanup observed RED then GREEN; final49checks passed. Actual archived handoff02 independently completed PASS."
+    },
+    {
+      "fix": "Validate a frozen control-only supplement, source/archive/plan/auth/command/result/log/output hashes and the terminal original controller; read eight completed phases without launching them or charging their time twice.",
+      "phase": "Strict continuation CPU fixtures",
+      "root_cause": "The original supervisor intentionally supported only its initial write-once run, so no safe continuation protocol existed.",
+      "source": "verification/controller-transition-development-03.json",
+      "symptom": "New RED cases exposed missing source-amendment validation, completed-record reconstruction and live amendment-hash enforcement.",
+      "test": "amendment/resume/live-hash RED and GREEN logs retained; complete CPU control/protocol49passed; exact clean Windows and WSL DEFAULT1519passed206slow-skipped10xfail,exit0."
+    },
+    {
+      "fix": "Normalize the new controller files to LF in commit8fb33d6. Preserve the preceding local commit1e608bf; no failed-gate push occurred.",
+      "phase": "Controller source formatting gate",
+      "root_cause": "Windows source creation preserved CRLF in files checked by the formatting audit.",
+      "source": "verification/controller-transition-development-03.json",
+      "symptom": "A local source formatting check failed before push due to CRLF normalization in new controller code.",
+      "test": "Clean exact-head Windows and WSL DEFAULT receipts on8fb33d6 PASS; all source-control diffs remained control-only."
+    },
+    {
+      "fix": "Preserve FAIL, weights and curve. Frozen new optimizer-free4096-row S2/S3 comparison; no fit or collection repeat.",
+      "phase": "Round-3 fit completion",
+      "root_cause": "First8-row and final4-row shuffled groups contain different examples; their means are not a matched objective.",
+      "symptom": "Trainer exit0; first .7414049749495462 vs last1.771141804754734 caused verifier FAIL.",
+      "test": "Fixed-panel CPU regressions and one-shot audit PASS .9402037267196481 to .936353487933297."
+    },
+    {
+      "fix": "Bind roots/checkpoints, reverify original14-file artifact at load, use masked parent; preserve all .02/.001 thresholds.",
+      "phase": "Review provenance/selection blockers",
+      "root_cause": "Missing production root/evidence equality, manifest-at-load and checkpoint checks; inconsistent selector baseline.",
+      "symptom": "Evidence roots and report CLI checkpoint were not bound; extra raw-parent guard differed from declared masked-parent rule.",
+      "test": "Fresh independent review, one RED\u2192GREEN fix pass;41focused CPU tests, official full-tier receipt."
+    },
+    {
+      "fix": "Run unmodified FULL on Windows Python3.11 at exact same clean source; WSL DEFAULT separately. No skip or tolerance change.",
+      "phase": "Inherited WSL full-tier portability",
+      "root_cause": "Inherited test assumes a Windows path; protected test unchanged.",
+      "symptom": "Historical Windows D:/evidence-path assertion fails on WSL.",
+      "test": "Human1662/full; full-view1740/full before final doc commit, plus10torchPPO0skip; final-head receipts on PR."
+    },
+    {
+      "fix": "Bind receipts by new/changed log identity without repeating the already completed run; restore actual remote main reference.",
+      "phase": "Gate wrapper bookkeeping",
+      "root_cause": "Lookup counted every historical receipt; cloned history reference was missing.",
+      "symptom": "Multiple same-head receipts made a wrapper assert; missing origin/main initially hid history checks.",
+      "test": "Recovered receipt hashes and later exact-head complete gates; history checks restored."
+    },
+    {
+      "fix": "Typed hidden startup; never replay advanced phase; recover existing child identity; reserve before spawn; handle reaped child.",
+      "phase": "Hidden persistent launcher/handoff",
+      "root_cause": "Generic CIM startup typing, phase advanced normally, reservation after spawn, and disappearing /proc entry.",
+      "symptom": "Typed WMI setup failure, late attachment guard, metadata-name collision and already-reaped-child fixture.",
+      "test": "Linux lifecycle regressions and successful normal-exit handoff; no model attempt repeated."
+    },
+    {
+      "fix": "Independent file copies; old package and manifest preserved.",
+      "phase": "Publication snapshot",
+      "root_cause": "Hardlink shared the mutable inode.",
+      "symptom": "Hardlinked snapshot could change when operational notes were appended.",
+      "test": "Mutation regression, every manifest hash verified for both immutable packages."
+    },
+    {
+      "fix": "Disable webhook; use internal scheduled continuation.",
+      "phase": "Completion webhook",
+      "root_cause": "Completion relay rejected external request.",
+      "symptom": "Probe HTTP403.",
+      "test": "Scheduler API shows webhook disabled; internal fallback active until final shutdown."
+    },
+    {
+      "fix": "Preserve failed helper/empty output; separate Python3.11 plotting environment and new named figure02/03.",
+      "phase": "Scientific figure helper01",
+      "root_cause": "Training environment has no plotting dependency.",
+      "symptom": "ModuleNotFoundError matplotlib; no model invocation.",
+      "test": "Matplotlib3.11.2/NumPy2.4.6 import PASS; PNG/PDF generated and visually checked. Figure03 fixes clipped annotation; earlier artifacts retained."
+    }
+  ],
+  "scope": "Compact symptoms/root causes/fixes/tests; raw logs and original records stay in external evidence."
+}

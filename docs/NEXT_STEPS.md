@@ -1,31 +1,16 @@
-# Deferred human-view work
+# Full-view version 2 next steps (deferred)
 
-Status: the V1 human-view candidate is frozen LLM PPO update 20 of run
-`human-pov-ws-full-20261113t214243z`. Its report panel is spent. Nothing in this document runs now.
+Nothing here runs under this completed plan. A larger dataset/version 2 requires a new frozen plan and
+owner authorization, fresh namespaces/panels and the same protected-source, budget and privacy rules.
 
-## Phase A — Does PPO add anything?
-
-Compare s0 against update 20 on a new 256-family report panel, with the belief teacher and random legal
-moves. Report paired bootstrap intervals over families, with 5,000 resamples.
-
-## Phase B — Where does the model break?
-
-Compare update 20 against the teacher at radius 2, radius 7, no memory, no line of sight,
-exit knowledge `one` and `all`, and no hints. A crash or truncation is a result.
-
-## Phase C — No-hint ablation
-
-Train one model with `--no-hints`, the same hyperparameters as s0 and the same DAgger stop rule;
-compare with the hinted model. Question: does the model plan or copy the route hint?
-
-## Phase D — PPO with freedom to pass the teacher
-
-First save critic and optimizer state in PPO checkpoints. Then run three seeds from s0 with
-`imitation_decay 0.90` and `reward.blocked -0.05`; select per seed; one report.
-
-Each phase needs a new frozen plan and a new owner authorization. Estimated total cost: about 15 GPU hours.
-
-Known limits: one training seed, 32 report families, and the route hint is part of the input.
-The selection improvement includes three fewer casualties among 353 people; evacuation increased by one
-person (311 to 312), not three. RL gain is not proven: s0 was not evaluated on the spent report panel.
-PPO checkpoints cannot resume exactly because critic and optimizer state were not saved.
+- First establish a fixed matched TRAIN loss diagnostic before fitting; retain the stochastic curve
+  without comparing unrelated first/last minibatches as a convergence gate.
+- Diagnose per-label action imbalance, own-state teacher disagreement and crowd occupancy/conflict/cycle
+  blocks on SELECT before expanding collection. Verify legal raw actions independently of an external mask.
+- Test whether additional student-state coverage improves raw utility toward the realizable T1 teacher;
+  predeclare dataset sizes and stop rules, with multiple independent SFT seeds before strong claims.
+- Verify the raw zero-wall/boundary and within 0.05-teacher gate before any new PPO. Preserve actor/critic/
+  optimizer/RNG resume state, per-person masks/ratios, imitation anchor and unchanged replay/casualty gates.
+- Predeclare original-V1 / raw/masked/teacher/random/DAgger/PPO arms and fresh paired family panels;
+  reserve enough budget for every one-shot report arm. Never reuse this spent 128-family report panel.
+- Keep sealed final/EMBERBench/hidden benchmarks and reservedV1.1 data closed unless separately authorized.

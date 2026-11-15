@@ -1,0 +1,176 @@
+{
+  "authorization": {
+    "source": "owner prompt",
+    "text": "OWNER AUTHORIZATION (I am the repository owner. This text is my explicit authorization.)\nFor plan ids \"ember-v1-closeout@1\" and \"ember2-v1-full-view@1\" I authorize exactly:\n- In anantamlab/ember_v1: documentation commits on feat/human-pov, marking PR #60 ready, and merging it into\n  main with a merge commit, if the merge gates in PART 1 pass.\n- Creating the PRIVATE repository anantamlab/ember2_v1 and pushing to it.\n- In ember2_v1: code changes, TRAIN-split collection, DAgger fitting, small-network PPO and LLM PPO on this\n  workstation, one report-split evaluation per arm on each panel that the frozen plan names before it runs,\n  and merging the work PR into main if the merge gates in PART 2 pass.\n- Creating one PRIVATE Hugging Face model repo named ember2-v1-models under the account of the HF_TOKEN in\n  the environment, and uploading the evidence package to it.\nBudget for ember2_v1: 60 local GPU hours, 16 local CPU hours, 150 GiB evidence, 0 USD cloud spend, one GPU job\nat a time. No further confirmation is needed between steps.\nRecord this text in each frozen plan under \"authorization\", source \"owner prompt\"."
+  },
+  "budget": {
+    "charging": "Sequential phase wall time by CPU/GPU category, including loading and completion checks; conservative preparation CPU reservation; no double charge. 300-second termination/verification reserve before hard deadlines.",
+    "cloud_spend_usd": 0,
+    "evidence_bytes": 161061273600,
+    "gpu_jobs_at_once": 1,
+    "local_cpu_seconds": 57600,
+    "local_gpu_seconds": 216000
+  },
+  "dagger": {
+    "adapter_initialization_seed": 20261121,
+    "fit": {
+      "epochs": 1,
+      "grad_accum_draws": 8,
+      "head_lr": 0.0001,
+      "lr": 0.0002,
+      "warmup_ratio": 0.03
+    },
+    "rounds": [
+      {
+        "beta": 1.0,
+        "count": 256,
+        "namespace": "ember2-full-view-full-view-20261114t133215z-37025f-dagger-r0",
+        "round": 0,
+        "split": "train"
+      },
+      {
+        "beta": 0.5,
+        "count": 256,
+        "namespace": "ember2-full-view-full-view-20261114t133215z-37025f-dagger-r1",
+        "round": 1,
+        "split": "train"
+      },
+      {
+        "beta": 0.25,
+        "count": 256,
+        "namespace": "ember2-full-view-full-view-20261114t133215z-37025f-dagger-r2",
+        "round": 2,
+        "split": "train"
+      },
+      {
+        "beta": 0.0,
+        "count": 256,
+        "namespace": "ember2-full-view-full-view-20261114t133215z-37025f-dagger-r3",
+        "round": 3,
+        "split": "train"
+      }
+    ],
+    "selection": "retain highest raw selection utility; earlier checkpoint wins ties; report never used",
+    "shuffle_seed": 0,
+    "stop": "student-executed decisions agreement >= 0.99; teacher-executed rows excluded; r0 cannot stop",
+    "student_execution_masked": true
+  },
+  "id": "ember2-v1-full-view@1",
+  "namespace": "ember2-full-view-full-view-20261114t133215z-37025f",
+  "observer": {
+    "encoding": "full-view@1 lossless layered ASCII",
+    "four_neighbour_statuses": true,
+    "full_public_observation": true,
+    "hidden_information": false,
+    "last_action_outcome": true,
+    "per_person_rows": true,
+    "route_hint": false,
+    "version": "full-view@1"
+  },
+  "ppo": {
+    "blocked_reward": -0.05,
+    "casualty_guard_pp": 2,
+    "imitation_decay": 0.9,
+    "llm_seeds": [
+      0,
+      1,
+      2
+    ],
+    "per_person_ratio": true,
+    "replay_every_forward_group": true,
+    "resume": "Save actor, critic, optimizer, update, config, selection history, sampler/Python/NumPy/Torch CPU/CUDA RNG. Exact CPU next-update test passed. Started attempts are never restarted.",
+    "sampling_and_loss_mask": true,
+    "selection": "Each seed: utility > immutable masked DAgger parent and casualty rate <= parent + .02. Earliest update wins ties. Across eligible seeds: maximum selection utility, lower seed wins ties. Retain DAgger if none qualifies.",
+    "small_seed": 0
+  },
+  "pre_ppo_gate": {
+    "maximum_utility_gap_to_teacher": 0.05,
+    "on_failure": "Preserve SFT; skip small and LLM PPO; freeze SFT candidate then report seven declared arms.",
+    "raw_boundary_blocks": 0,
+    "raw_wall_blocks": 0
+  },
+  "report_arms": [
+    "candidate_raw",
+    "candidate_masked",
+    "dagger_raw",
+    "teacher",
+    "random_legal",
+    "original_v1_raw",
+    "original_v1_masked"
+  ],
+  "report_protocol": {
+    "bootstrap_resamples": 5000,
+    "bootstrap_seed": 0,
+    "candidate_freeze_before_report": true,
+    "contrasts": [
+      "candidate_raw minus original_v1_raw",
+      "candidate_masked minus original_v1_masked",
+      "candidate_raw minus dagger_raw"
+    ],
+    "families": 128,
+    "interval": "95% paired-family percentile; aggregate population-weighted rates after resampling",
+    "invocations_per_arm": 1,
+    "same_scenarios_for_all_arms": true,
+    "seed": 0,
+    "selection_after_report": false
+  },
+  "source_head": "7ddda7dab95c87893848ce7d1bab9bab6b6fa6eb",
+  "status": "frozen",
+  "stop_rules": [
+    "non-finite loss",
+    "replay error above frozen tolerance",
+    "topology overlap above zero",
+    "hash mismatch",
+    "budget limit",
+    "A failed attempt remains preserved. No in-place rerun, tolerance increase, skipped/deselected/edited inherited test, or input truncation.",
+    "No simulator, generator, T0-T4 teacher or handoff/FILES.sha256-listed file changes.",
+    "No sealed FINAL, EMBERBench, hidden benchmark, p1-18-expand@1, p1-18-dataset-v2 or reserved V1.1.",
+    "No Modal, cloud compute/spend, public resource, release tag/announcement, force push, direct development push to main or failed-gate merge.",
+    "No human-view experiment collection/training/evaluation. HF credentials only from HF_TOKEN; never print/log/commit/upload them."
+  ],
+  "teacher": {
+    "identity": {
+      "config": {
+        "alt_exit_margin": 2.0,
+        "budget_fallback": "reservation_consistent_greedy_descent",
+        "candidate_exits": 3,
+        "congestion_cells": "safe_exits_and_corridor_cells_with_at_most_2_open_neighbours",
+        "exit_cost": "nominal_space_time_arrival + alt_exit_margin*[not_nearest] + risk_weight*sum_hazard",
+        "fire_forecast": "public_rule_layer_bfs; deterministic exact; stochastic single_front_binomial_lower_bound",
+        "follow_dependency": "leader_vacates_if_a_full_plan_exists_else_may_stay",
+        "move_extra_cost": 0.25,
+        "move_order": [
+          "north",
+          "south",
+          "east",
+          "west",
+          "stay"
+        ],
+        "no_route_mode": "shelter_max_fire_layer",
+        "no_successor_fallback": "least_hazard_action",
+        "node_budget_per_person": 256,
+        "node_budget_total": 16000,
+        "planning_order": "ascending_person_id",
+        "repair_rounds": 6,
+        "reservation_horizon": 8,
+        "risk_hard": 0.5,
+        "risk_weight": 20.0,
+        "search": "windowed_space_time_astar_vertex_and_edge_reservations",
+        "search_tie_break": [
+          "f",
+          "h",
+          "generation_order"
+        ],
+        "unrepaired_blocked_moves": "stay"
+      },
+      "config_hash": "sha256:5047e942db3326706b6184c9f29e0b992078920f03c8a53adc8cc24258345361",
+      "name": "T1",
+      "policy": "congestion_aware_cooperative_planner",
+      "version": "1.0.0"
+    },
+    "name": "T1",
+    "preflight_source_head": "32a10f42c76a1a79a0b0d8bee4735dc560876447",
+    "seed": null,
+    "train_reference_sha256": "5ce80429a58c1f8780c23707359ca9e8659f2f62ed53b48e2ddec59845262c2b"
+  }
+}

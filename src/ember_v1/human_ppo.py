@@ -143,7 +143,8 @@ def critic_features(observation: Mapping[str, Any], pids: Sequence[str]) -> list
 
 
 def collect(scenarios: Sequence[Any], actor, critic, cfg: Mapping[str, Any], view: ViewConfig,
-            reward: HumanRewardConfig, generator: torch.Generator) -> dict[str, Any]:
+            reward: HumanRewardConfig, generator: torch.Generator, *,
+            env_factory=None, teacher_fn=belief_policy) -> dict[str, Any]:
     """Sample one episode per scenario. Returns flat per-person-decision lists with GAE advantages."""
     batch: dict[str, list] = {k: [] for k in ("views", "masks", "actions", "old", "values", "features",
                                                "teacher", "advantages", "returns")}
@@ -152,14 +153,15 @@ def collect(scenarios: Sequence[Any], actor, critic, cfg: Mapping[str, Any], vie
     forward_groups: dict[int, list[int]] = {}
     next_group = 0
     for scenario in scenarios:
-        env = HumanEvacuationEnv(scenario, view, reward)
+        env = (HumanEvacuationEnv(scenario, view, reward) if env_factory is None
+               else env_factory(scenario, reward))
         views, info = env.reset()
         stats, done = EpisodeStats(scenario.scenario_id), False
         tracks: dict[str, dict[str, list]] = {}
         while not done:
             pids = sorted(views)
             vs = [views[p] for p in pids]
-            gold = belief_policy(views, env.observer.plans())
+            gold = teacher_fn(views, env.observer.plans())
             feats = critic_features(env.observation, pids)
             mask = mask_tensor(vs, actor.device, cfg["mask"])
             # Optional grad-enabled forward: R20 found that a no-grad bf16 forward differs from the
